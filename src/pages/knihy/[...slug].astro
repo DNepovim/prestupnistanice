@@ -2,28 +2,22 @@
 import { client } from "../../../tina/__generated__/client.ts";
 import Layout from "../../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { getCollection } from "astro:content";
+
 
 export async function getStaticPaths() {
-  return [
-    "cesty-do-utopie",
-    "dopisy-z-nerevolucni-doby",
-    "elixir-neviditelnosti",
-    "eseje-o-stesku-upadku-a-filosofii",
-    "filosoficke-eseje",
-    "hluk",
-    "lidska-geneze",
-    "neviditelný-slon",
-    "nevychovne-eseje-o-vychove",
-    // "od-subjektu-k-projektu",
-    "pesimismus",
-    "postdejiny",
-    "prometheus-spitteler",
-    "provincionalistovo-bloudeni-akademickymi-chodbami",
-    "ta-moje-realita",
-    "tati",
-  ].map((edge) => ({
-    params: { slug: edge },
-  }));
+	const posts = await getCollection("book");
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: {
+			post,
+			getTinaProps: async () =>
+				client.queries.books({
+					relativePath: post.data.tinaInfo?.relativePath ?? "",
+				}),
+		},
+	}));
 }
 
 const { slug } = Astro.params;

@@ -2,22 +2,22 @@
 import { client } from "../../../tina/__generated__/client.ts";
 import Layout from "../../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { getCollection } from "astro:content";
+
 
 export async function getStaticPaths() {
-  return [
-    "anna-anisimova",
-    "jiri-soucek",
-    "karl-spitteler",
-    "marie-blahova",
-    "martin-buber",
-    "oswald-spengler",
-    "petr-blaha",
-    "philippe-corentin",
-    "theodor-lessing",
-    "vilem-flusser",
-  ].map((edge) => ({
-    params: { slug: edge },
-  }));
+	const posts = await getCollection("author");
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: {
+			post,
+			getTinaProps: async () =>
+				client.queries.authors({
+					relativePath: post.data.tinaInfo?.relativePath ?? "",
+				}),
+		},
+	}));
 }
 
 const { slug } = Astro.params;

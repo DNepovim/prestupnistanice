@@ -2,11 +2,11 @@ import { defineCollection, z } from "astro:content";
 import client from "../tina/__generated__/client";
 
 const authorSchema = z.object({
-  tinainfo: z.object({
+  tinaInfo: z.object({
     filename: z.string(),
     basename: z.string(),
     path: z.string(),
-    relativepath: z.string(),
+    relativePath: z.string(),
   }).nullish(),
   firstname: z.string(),
   surname: z.string(),
