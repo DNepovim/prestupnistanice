@@ -1,0 +1,33 @@
+---
+import { client } from "../../../tina/__generated__/client.ts";
+import Layout from "../../layouts/Layout.astro";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+
+export async function getStaticPaths() {
+  return [
+    "anna-anisimova",
+    "jiri-soucek",
+    "karl-spitteler",
+    "marie-blahova",
+    "martin-buber",
+    "oswald-spengler",
+    "petr-blaha",
+    "philippe-corentin",
+    "theodor-lessing",
+    "vilem-flusser",
+  ].map((edge) => ({
+    params: { slug: edge },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const relativePath = `${slug}.md`;
+const res = await client.queries.authors({ relativePath });
+const author = res.data.authors;
+---
+
+<Layout>
+  <h1>{author.firstname} {author.surname}</h1>
+  <TinaMarkdown content={author.description} />
+</Layout>

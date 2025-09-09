@@ -1,0 +1,15 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Přestupní stanice" description="Rodinné knižní nakladatelství" />
+  </head>
+  <body class="min-w-full font-display">
+    <Header />
+    <main class="pb-16 max-w-[56rem] mx-auto"><slot /></main>
+  </body>
+</html>

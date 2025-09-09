@@ -1,19 +1,54 @@
 import { defineCollection, z } from "astro:content";
 import client from "../tina/__generated__/client";
 
-const blog = defineCollection({
+const authorSchema = z.object({
+  tinainfo: z.object({
+    filename: z.string(),
+    basename: z.string(),
+    path: z.string(),
+    relativepath: z.string(),
+  }).nullish(),
+  firstname: z.string(),
+  surname: z.string(),
+  birthdate: z.string().nullish(),
+  deathdate: z.string().nullish(),
+  description: z.any(),
+  image: z.string().nullish(),
+});
+
+const author = defineCollection({
   loader: async () => {
-    const postsResponse = await client.queries.blogConnection();
+    const authorsResponse = await client.queries.authorsConnection();
 
     // Map Tina posts to the correct format for Astro
-    return postsResponse.data.blogConnection.edges
-      ?.filter((post) => !!post)
-      .map((post) => {
-        const node = post?.node;
+    return (authorsResponse.data.authorsConnection.edges ?? [])
+      .filter((author) => !!author)
+      .map((author) => {
+        const node = author?.node;
 
         return {
           ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, ""), // Generate clean URLs
+          id: node?._sys.relativePath.replace(/\.mdx?$/, "") ?? "", // Generate clean URLs
+          tinaInfo: node?._sys, // Include Tina system info if needed
+        };
+      });
+  },
+  schema: authorSchema,
+});
+
+const book = defineCollection({
+  loader: async () => {
+    const booksResponse = await client.queries.booksConnection();
+
+    // Map Tina posts to the correct format for Astro
+    return (booksResponse.data.booksConnection.edges ?? [])
+      .filter((book) => !!book)
+      .map((book) => {
+        const node = book?.node;
+
+        return {
+          ...node,
+          id: node?._sys.relativePath.replace(/\.mdx?$/, "") ?? "", // Generate clean URLs
           tinaInfo: node?._sys, // Include Tina system info if needed
         };
       });
@@ -26,26 +61,31 @@ const blog = defineCollection({
       relativePath: z.string(),
     }),
     title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    heroImage: z.string().nullish(),
+    description: z.any(),
+    date: z.string().nullish(),
+    authors: z.array(
+      z.object({
+        author: authorSchema,
+        role: z.enum(["author", "transalte", "editor"]),
+      }),
+    ),
+    image: z.string().nullish(),
   }),
 });
 
 const page = defineCollection({
   loader: async () => {
-    const postsResponse = await client.queries.pageConnection();
+    const postsResponse = await client.queries.pagesConnection();
 
     // Map Tina posts to the correct format for Astro
-    return postsResponse.data.pageConnection.edges
-      ?.filter((p) => !!p)
+    return (postsResponse.data.pagesConnection.edges ?? [])
+      .filter((p) => !!p)
       .map((p) => {
         const node = p?.node;
 
         return {
           ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, ""), // Generate clean URLs
+          id: node?._sys.relativePath.replace(/\.mdx?$/, "") ?? "", // Generate clean URLs
           tinaInfo: node?._sys, // Include Tina system info if needed
         };
       });
@@ -57,8 +97,8 @@ const page = defineCollection({
       path: z.string(),
       relativePath: z.string(),
     }),
-    seoTitle: z.string(),
-    body: z.any(),
+    title: z.string(),
+    content: z.any().nullish(),
   }),
-})
-export const collections = { blog, page };
+});
+export const collections = { book, author, page };

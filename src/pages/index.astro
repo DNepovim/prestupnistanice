@@ -1,22 +1,54 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import config from '../content/config/config.json';
-import client from '../../tina/__generated__/client';
-import HomePage from "../../tina/pages/HomePage.tsx";
-const data = await client.queries.page({relativePath: "home.mdx"});
+import { Image } from "astro:assets";
+import { client } from "../../tina/__generated__/client.ts";
+import Layout from "../layouts/Layout.astro";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
 
+const res = await client.queries.booksConnection();
+const books = (res.data.booksConnection.edges ?? []).reverse();
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={config.seo.title} description={config.seo.description} />
-	</head>
-	<body>
-		<Header />
-		<HomePage {...data} client:tina />
-		<Footer />
-	</body>
-</html>
+<Layout>
+  <sectino>
+    <p class="text-2xl text-shadow-lg text-center font-head my-16 italic px-6">
+      Roddinné knižní nakladatelství, které se ve své ediční činnosti soustředí
+      na kvalitní nekomerční tituly.
+    </p>
+  </sectino>
+  <section class="flex flex-col gap-16 mt-12">
+    {
+      books.map((book, index) => (
+        <article class={`flex gap-8 ${index % 2 === 0 ? "" : "pl-8"}`}>
+          {book?.node?.cover && (
+            <Image
+              alt={book?.node?.title}
+              src={book?.node?.cover as string}
+              width={157.5}
+              height={225}
+              class="shadow-2xl"
+            />
+          )}
+          <div class="flex flex-col gap-4">
+            <h2 class="text-4xl font-head">
+              <a href={`/knihy/${book?.node?._sys.filename}`}>
+                {book?.node?.title}
+              </a>
+            </h2>
+
+            <div class="pl-8">
+              <div class="line-clamp-3">
+                <TinaMarkdown content={book?.node?.description} />
+              </div>
+              <a
+                class="underline hover:no-underline"
+                href={`/knihy/${book?.node?._sys.filename}`}
+              >
+                Více →
+              </a>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</Layout>

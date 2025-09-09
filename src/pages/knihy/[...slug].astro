@@ -1,0 +1,49 @@
+---
+import { client } from "../../../tina/__generated__/client.ts";
+import Layout from "../../layouts/Layout.astro";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+
+export async function getStaticPaths() {
+  return [
+    "cesty-do-utopie",
+    "dopisy-z-nerevolucni-doby",
+    "elixir-neviditelnosti",
+    "eseje-o-stesku-upadku-a-filosofii",
+    "filosoficke-eseje",
+    "hluk",
+    "lidska-geneze",
+    "neviditelný-slon",
+    "nevychovne-eseje-o-vychove",
+    // "od-subjektu-k-projektu",
+    "pesimismus",
+    "postdejiny",
+    "prometheus-spitteler",
+    "provincionalistovo-bloudeni-akademickymi-chodbami",
+    "ta-moje-realita",
+    "tati",
+  ].map((edge) => ({
+    params: { slug: edge },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const relativePath = `${slug}.md`;
+const res = await client.queries.books({ relativePath });
+const book = res.data.books;
+const authors = (book.authors ?? []).filter((a) => a?.role === "author");
+---
+
+<Layout>
+  <h1>{book.title}</h1>
+  <p>
+    {
+      authors.map((a) => (
+        <a href={`/autori/${a?.author?._sys.filename}`}>
+          {a?.author?.firstname} {a?.author?.surname}
+        </a>
+      ))
+    }
+  </p>
+  <TinaMarkdown content={book.description} />
+</Layout>
