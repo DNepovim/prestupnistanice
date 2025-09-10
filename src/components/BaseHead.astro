@@ -1,6 +1,7 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import type { ImageMetadata } from "astro";
 
@@ -67,3 +68,5 @@ const { title, description } = Astro.props;
 <!-- <meta property="twitter:image" content={new URL(image.src, Astro.url)} /> -->
 
 <link rel="stylesheet" href="https://use.typekit.net/fck4lqn.css" />
+
+<ClientRouter />
