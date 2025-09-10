@@ -75,6 +75,11 @@ export const BooksCollection: Collection = {
       ],
     },
     {
+      type: "string",
+      name: "color",
+      label: "Barva",
+    },
+    {
       type: "rich-text",
       name: "description",
       label: "Popis",

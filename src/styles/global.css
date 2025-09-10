@@ -7,5 +7,5 @@ body {
 @theme {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;
-  /* alt: ["montserrat-alternates", "sans-serif"], */
+  --font-alt: "montserrat-alternates", sans-serif;
 }

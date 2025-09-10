@@ -6,6 +6,7 @@ authors:
     role: author
 cover: /lidska-geneze.png
 category: philosophy
+color: '#564019'
 ---
 
 Po dovršení sedmdesátého roku svého života nabyl Vilém Flusser dojmu, že dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou. Tehdy ještě netušil, že tato suma se podivnou souhrou okolností stane i jeho nedokončenou filosofickou závětí.

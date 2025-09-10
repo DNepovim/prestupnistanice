@@ -8,6 +8,7 @@ authors:
     role: author
 cover: /Kachna-smrt-a%C2%A0tulip%C3%A1n__cover.jpg
 category: forKids
+color: '#c05d43'
 ---
 
 Je to příběh života, umírání a smrti. Pozoruhodná a do řady světových jazyků přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí. Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile. Závažné téma je pro dětského čtenáře působivě podáno jemně a s velkou mírou laskavosti a soucitu. Smrt není děsivá, ani dotěrná, její zobrazení balancuje na tenké hranici vytříbeného smutku. Smrt tu není vylíčena jako ta, co bere život, ale ta, která čeká. Čeká až přijde nemoc, nehoda nebo liška. Mezitím tu je na blízku. Smrt nezapomíná na nikoho ze svého stáda. Jako by představená smrt měla v sobě něco z dobrého pastýře.
