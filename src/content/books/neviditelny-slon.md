@@ -6,7 +6,7 @@ authors:
     role: author
   - author: src/content/authors/julia-sidneva.md
     role: illustration
-cover: /neviditeln%C3%BD%20slon%20-%20ob%C3%A1lka.GIF
+cover: /neviditelný slon - obálka.GIF
 category: forKids
 color: '#634c80'
 ---
