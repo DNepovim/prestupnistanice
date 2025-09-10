@@ -1,10 +1,11 @@
 ---
-title: "Pesimismus?: a další úvahy"
+title: "Pesimismus?: a\_další úvahy"
+date: 2022
 authors:
   - author: src/content/authors/oswald-spengler.md
     role: author
-# date: "2022"
-cover: "/pesimismus.jpg"
+cover: /pesimismus.jpg
+category: philosophy
 ---
 
 Soubor pěti kratších úvah představuje německého filosofa Oswalda Spenglera, známého svou objemnou a provokativní koncepcí dějin, nejen jako polemika, ale také jako osobnost s širokým rejstříkem znalostí a zájmů.

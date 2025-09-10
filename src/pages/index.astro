@@ -4,44 +4,72 @@ import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-const res = await client.queries.booksConnection();
-const books = (res.data.booksConnection.edges ?? []).reverse();
+function isDefined<T>(value: T | undefined | null): value is T {
+  return value !== undefined && value !== null;
+}
+
+const recentBooks = (
+  (await client.queries.booksConnection({ sort: "date", last: 3 })).data
+    .booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined);
 ---
 
 <Layout>
   <sectino>
-    <p class="text-2xl text-shadow-lg text-center font-head my-16 italic px-6">
+    <p class="text-2xl text-center font-head my-16 italic px-6">
       Roddinné knižní nakladatelství, které se ve své ediční činnosti soustředí
       na kvalitní nekomerční tituly.
     </p>
   </sectino>
   <section class="flex flex-col gap-16 mt-12">
     {
-      books.map((book, index) => (
+      recentBooks.map((book, index) => (
         <article class={`flex gap-8 ${index % 2 === 0 ? "" : "pl-8"}`}>
-          {book?.node?.cover && (
+          {book.cover && (
             <Image
-              alt={book?.node?.title}
-              src={book?.node?.cover as string}
+              alt={book.title}
+              src={book.cover as string}
               width={157.5}
               height={225}
               class="shadow-2xl"
             />
           )}
           <div class="flex flex-col gap-4">
-            <h2 class="text-4xl font-head">
-              <a href={`/knihy/${book?.node?._sys.filename}`}>
-                {book?.node?.title}
-              </a>
-            </h2>
+            <div>
+              <h2 class="inline text-4xl font-head">
+                <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+              </h2>
+              <div class="inline-block w-8 h-[1px] mb-2 mr-2 bg-gray-500" />
+              <p class="text-xl inline">
+                {" "}
+                {book.authors
+                  ?.filter((a) => a?.role === "author")
+                  .map((a, index) => (
+                    <span class="whitespace-nowrap">
+                      {index !== 0 ? ", " : ""}
+                      <a
+                        class="group text-gray-500 hover:text-black transition-colors"
+                        href={`autori/${a?.author?._sys.filename}`}
+                      >
+                        {a?.author?.firstname} {a?.author?.surname}
+                        <span class="transition-all group-hover:opacity-100 opacity-0 text-gray-500 translate-x-8 group-hover:translate-x-8">
+                          →
+                        </span>
+                      </a>
+                    </span>
+                  ))}
+              </p>
+            </div>
 
             <div class="pl-8">
               <div class="line-clamp-3">
-                <TinaMarkdown content={book?.node?.description} />
+                <TinaMarkdown content={book.description} />
               </div>
               <a
                 class="underline hover:no-underline"
-                href={`/knihy/${book?.node?._sys.filename}`}
+                href={`/knihy/${book._sys.filename}`}
               >
                 Více →
               </a>

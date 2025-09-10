@@ -1,10 +1,11 @@
 ---
-title: "Lidská geneze"
+title: Lidská geneze
+date: 2023
 authors:
   - author: src/content/authors/vilem-flusser.md
     role: author
-# date: "2023"
-cover: "/lidska-geneze.png"
+cover: /lidska-geneze.png
+category: philosophy
 ---
 
 Po dovršení sedmdesátého roku svého života nabyl Vilém Flusser dojmu, že dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou. Tehdy ještě netušil, že tato suma se podivnou souhrou okolností stane i jeho nedokončenou filosofickou závětí.

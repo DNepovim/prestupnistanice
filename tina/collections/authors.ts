@@ -43,7 +43,7 @@ export const AuthorsCollection: Collection = {
       name: "deathDate",
       label: "Datum úmrtí",
     },
-    { type: "image", name: "cover", label: "Obálka" },
+    { type: "image", name: "image", label: "Fotka" },
 
     {
       type: "rich-text",

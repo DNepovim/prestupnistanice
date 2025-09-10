@@ -1,10 +1,11 @@
 ---
-title: "Provincionalistovo bloudění akademickými chodbami"
+title: Provincionalistovo bloudění akademickými chodbami
+date: 2021
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-# date: "2021"
-cover: "/provincionalistovo-bloudeni-akademickými-chodbami.jpg"
+cover: /provincionalistovo-bloudeni-akademickými-chodbami.jpg
+category: philosophy
 ---
 
 Kniha Provincionalistovo bloudění akademickými chodbami žánrově navazuje na východiska dřívější charakteristiky filosofa provincionalismu. Tentokrát se jedná o aplikaci těchto východisek na autorovu dlouhodobou zkušenost s univerzitním prostředím. Své úvahy podrobuje pátrání po dějinných podmíněnostech toho, co bývá nazýváno ideou univerzity, a svá zjištění konfrontuje s tím, jak se mu jeví základní rysy současné situace.

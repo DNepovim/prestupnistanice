@@ -1,10 +1,11 @@
 ---
-title: "Nevýchovné eseje o výchově"
+title: "Nevýchovné eseje o\_výchově"
+date: 2019
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-# date: "2019"
-cover: "/nevychovne-eseje-o-vychove.jpg"
+cover: /nevychovne-eseje-o-vychove.jpg
+category: philosophy
 ---
 
 Kniha nabízí tematicky uspořádané eseje, které se soustřeďují vždy na jeden aspekt výchovného úsilí. Pro vyhodnocování závažnosti těchto aspektů autor vybírá reprezentativní osobnosti, jejichž názory na výchovu vzájemně konfrontuje. Mezi zvolenými tématy se objevuje například otázka, jak souvisí výchova s lidskou přirozeností. Teprve po vyjasňování předpokladů výchovy mohou následovat otázky po úloze učitele či úloze odměn a trestů ve výchově.

@@ -25,6 +25,16 @@ export const BooksCollection: Collection = {
       label: "Rok vydání",
     },
     {
+      type: "number",
+      name: "pagesCount",
+      label: "Počet stran",
+    },
+    {
+      type: "string",
+      name: "isbn",
+      label: "ISBN",
+    },
+    {
       name: "authors",
       label: "Autoři",
       type: "object",
@@ -44,11 +54,26 @@ export const BooksCollection: Collection = {
             { label: "Autor", value: "author" },
             { label: "Překladatel", value: "translate" },
             { label: "Redaktor", value: "editor" },
+            { label: "Ilustrace", value: "illustration" },
+            { label: "Obálka", value: "cover" },
+            { label: "Sazba", value: "typesetting" },
+            { label: "Recenzent", value: "reviewertypesetting" },
           ],
         },
       ],
     },
     { type: "image", name: "cover", label: "Obálka" },
+    {
+      type: "string",
+      name: "category",
+      label: "Kategorie",
+      options: [
+        { label: "Pro děti", value: "forKids" },
+        { label: "Filosofie", value: "philosophy" },
+        { label: "Román", value: "novel" },
+        { label: "Poesie", value: "poetry" },
+      ],
+    },
     {
       type: "rich-text",
       name: "description",

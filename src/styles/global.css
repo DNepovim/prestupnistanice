@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  font-size: 18px;
+}
+
 @theme {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;

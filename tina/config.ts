@@ -4,15 +4,8 @@ import { BooksCollection } from "./collections/books";
 import { AuthorsCollection } from "./collections/authors";
 import { PagesCollection } from "./collections/pages";
 
-// Your hosting provider likely exposes this as an environment variable
-const branch =
-  process.env.GITHUB_BRANCH ||
-  process.env.VERCEL_GIT_COMMIT_REF ||
-  process.env.HEAD ||
-  "main";
-
 export default defineConfig({
-  branch,
+  branch: "main",
 
   // Get this from tina.io
   clientId: process.env.PUBLIC_TINA_CLIENT_ID,

@@ -1,10 +1,11 @@
 ---
-title: "Tati!"
+title: Tati!
+date: 2022
 authors:
   - author: src/content/authors/philippe-corentin.md
     role: author
-# date: "2022"
-cover: "/tati.jpg"
+cover: /tati.jpg
+category: forKids
 ---
 
 Dílo nedávno zesnulého francouzského autora a ilustrátora dětských knížek Philippa Corentina je českému čtenáři dosud neznámé. Půvabná knížka Tati! hodlá tuto mezeru zaplnit a nabídnout nezaměnitelný humor a nadsázku, které jsou Corentinovi vlastní a jejichž podmanivostí získal během svého života řadu ocenění a uznání.
