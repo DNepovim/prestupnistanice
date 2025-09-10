@@ -1,3 +1,4 @@
+import slugify from "@sindresorhus/slugify";
 import type { Collection } from "tinacms";
 
 export const AuthorsCollection: Collection = {
@@ -13,13 +14,17 @@ export const AuthorsCollection: Collection = {
       }: {
         firstname?: string;
         surname?: string;
-      }) =>
-        firstname && surname
-          ? `${firstname}-${surname}`.toLowerCase().replace(/ /g, "-")
-          : "",
+      }) => (firstname && surname ? slugify(`${firstname} ${surname}`) : ""),
+    },
+    beforeSubmit: ({ values }) => {
+      return {
+        ...values,
+        slug: slugify(`${values.firstname} ${values.surname}`),
+      };
     },
   },
   fields: [
+    { type: "string", name: "slug", ui: { component: "hidden" } },
     {
       type: "string",
       name: "firstname",

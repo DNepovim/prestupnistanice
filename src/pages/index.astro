@@ -9,7 +9,7 @@ function isDefined<T>(value: T | undefined | null): value is T {
 }
 
 const recentBooks = (
-  (await client.queries.booksConnection({ sort: "date", last: 3 })).data
+  (await client.queries.booksConnection({ sort: "date", last: 13 })).data
     .booksConnection.edges ?? []
 )
   .map((item) => item?.node)

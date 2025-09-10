@@ -10,6 +10,8 @@ const authorSchema = z.object({
       relativePath: z.string(),
     })
     .nullish(),
+  // TODO doplnit slugy vsude
+  slug: z.string().nullish(),
   firstname: z.string(),
   surname: z.string(),
   birthdate: z.string().nullish(),
@@ -62,6 +64,8 @@ const book = defineCollection({
       path: z.string(),
       relativePath: z.string(),
     }),
+    // TODO doplnit slugy vsude
+    slug: z.string().nullish(),
     title: z.string(),
     date: z.number().nullish(),
     pagesCount: z.number().nullish(),

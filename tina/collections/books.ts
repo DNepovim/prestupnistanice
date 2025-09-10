@@ -1,3 +1,4 @@
+import slugify from "@sindresorhus/slugify";
 import type { Collection } from "tinacms";
 
 export const BooksCollection: Collection = {
@@ -7,11 +8,15 @@ export const BooksCollection: Collection = {
   ui: {
     filename: {
       readonly: true,
-      slugify: (v?: { title?: string }) =>
-        (v?.title ?? "").toLowerCase().replace(/ /g, "-"),
+      slugify: (v?: { title?: string }) => (v?.title ? slugify(v.title) : ""),
     },
+    beforeSubmit: ({ values }) => ({
+      ...values,
+      slug: slugify(values.title),
+    }),
   },
   fields: [
+    { type: "string", name: "slug", ui: { component: "hidden" } },
     {
       type: "string",
       name: "title",

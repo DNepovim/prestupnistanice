@@ -4,30 +4,47 @@ import Layout from "../../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { getCollection } from "astro:content";
 
+function isDefined<T>(value: T | undefined | null): value is T {
+  return value !== undefined && value !== null;
+}
 
 export async function getStaticPaths() {
-	const posts = await getCollection("author");
+  const posts = await getCollection("author");
 
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: {
-			post,
-			getTinaProps: async () =>
-				client.queries.authors({
-					relativePath: post.data.tinaInfo?.relativePath ?? "",
-				}),
-		},
-	}));
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      getTinaProps: async () =>
+        client.queries.authors({
+          relativePath: post.data.tinaInfo?.relativePath ?? "",
+        }),
+    },
+  }));
 }
 
 const { slug } = Astro.params;
 
-const relativePath = `${slug}.md`;
-const res = await client.queries.authors({ relativePath });
+const res = await client.queries.authors({ relativePath: `${slug}.md` });
 const author = res.data.authors;
+
+const books = (
+  (
+    await client.queries.booksConnection({
+      filter: {
+        authors: {
+          author: { authors: { slug: { eq: slug } } },
+        },
+      },
+    })
+  ).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined);
 ---
 
 <Layout>
   <h1>{author.firstname} {author.surname}</h1>
   <TinaMarkdown content={author.description} />
+  {books.map((book) => <h2>{book.title}</h2>)}
 </Layout>
