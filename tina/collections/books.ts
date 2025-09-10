@@ -57,7 +57,7 @@ export const BooksCollection: Collection = {
             { label: "Ilustrace", value: "illustration" },
             { label: "Obálka", value: "cover" },
             { label: "Sazba", value: "typesetting" },
-            { label: "Recenzent", value: "reviewertypesetting" },
+            { label: "Recenzent", value: "reviewer" },
           ],
         },
       ],

@@ -2,12 +2,14 @@ import { defineCollection, z } from "astro:content";
 import client from "../tina/__generated__/client";
 
 const authorSchema = z.object({
-  tinaInfo: z.object({
-    filename: z.string(),
-    basename: z.string(),
-    path: z.string(),
-    relativePath: z.string(),
-  }).nullish(),
+  tinaInfo: z
+    .object({
+      filename: z.string(),
+      basename: z.string(),
+      path: z.string(),
+      relativePath: z.string(),
+    })
+    .nullish(),
   firstname: z.string(),
   surname: z.string(),
   birthdate: z.string().nullish(),
@@ -24,7 +26,7 @@ const author = defineCollection({
     return (authorsResponse.data.authorsConnection.edges ?? [])
       .filter((author) => !!author)
       .map((author) => {
-        const node = author?.node;
+        const node = author.node;
 
         return {
           ...node,
@@ -44,7 +46,7 @@ const book = defineCollection({
     return (booksResponse.data.booksConnection.edges ?? [])
       .filter((book) => !!book)
       .map((book) => {
-        const node = book?.node;
+        const node = book.node;
 
         return {
           ...node,
@@ -61,15 +63,26 @@ const book = defineCollection({
       relativePath: z.string(),
     }),
     title: z.string(),
-    description: z.any(),
-    date: z.string().nullish(),
+    date: z.number().nullish(),
+    pagesCount: z.number().nullish(),
+    isbn: z.string().nullish(),
     authors: z.array(
       z.object({
         author: authorSchema,
-        role: z.enum(["author", "transalte", "editor"]),
+        role: z.enum([
+          "author",
+          "transalte",
+          "editor",
+          "illustration",
+          "cover",
+          "typesetting",
+          "reviewer",
+        ]),
       }),
     ),
+    category: z.string().nullish(),
     image: z.string().nullish(),
+    description: z.any(),
   }),
 });
 
@@ -81,7 +94,7 @@ const page = defineCollection({
     return (postsResponse.data.pagesConnection.edges ?? [])
       .filter((p) => !!p)
       .map((p) => {
-        const node = p?.node;
+        const node = p.node;
 
         return {
           ...node,
