@@ -25,6 +25,11 @@ export const BooksCollection: Collection = {
       required: true,
     },
     {
+      type: "string",
+      name: "originlName",
+      label: "Původní název",
+    },
+    {
       type: "number",
       name: "date",
       label: "Rok vydání",

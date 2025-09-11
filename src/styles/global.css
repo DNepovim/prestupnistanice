@@ -4,6 +4,10 @@ body {
   font-size: 18px;
 }
 
+p {
+  margin-bottom: 1rem;
+}
+
 @theme {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;

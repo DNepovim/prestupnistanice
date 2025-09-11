@@ -1,18 +1,48 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import { cn } from "../utils/cn";
+
+interface Props {
+  isHome?: boolean;
+}
+
+const { isHome } = Astro.props;
+
+const navigations = [
+  {
+    link: "/knihy",
+    label: "Naše knihy",
+  },
+  {
+    link: "/o-nakladatelstvi",
+    label: "O nakladatelství",
+  },
+];
 ---
 
 <menu
   class="max-w-[90rem] mx-auto items-center flex justify-between px-6 py-4 transition-colors"
 >
-  <h2 class="m-0 text-6xl font-head text-gray-600 hover:text-black">
+  <h2
+    class={cn(
+      "m-0 text-3xl font-head text-gray-600 hover:text-black",
+      isHome && "text-6xl",
+    )}
+  >
     <a class="no-underline" href="/">Přestupní stanice</a>
   </h2>
   <div class="internal-links flex gap-4 items-center">
-    <HeaderLink href="/">Úvod</HeaderLink>
-    <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200"></div>
-    <HeaderLink href="/o-nakladatelstvi">O nakladatelství</HeaderLink>
-    <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200"></div>
-    <HeaderLink href="/kontakty">Kontakty</HeaderLink>
+    {
+      navigations.map(({ link, label }, index) => (
+        <>
+          {index !== 0 && (
+            <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200" />
+          )}
+          <HeaderLink isSmall href={link}>
+            {label}
+          </HeaderLink>
+        </>
+      ))
+    }
   </div>
 </menu>

@@ -1,4 +1,5 @@
 ---
+import { cn } from "../utils/cn";
 import { Image } from "astro:assets";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
@@ -16,7 +17,7 @@ const recentBooks = (
   .filter(isDefined);
 ---
 
-<Layout>
+<Layout isHome>
   <sectino>
     <p
       class="text-2xl font-alt mt-16 text-center mb-24 italic px-6 text-gray-800"
@@ -28,26 +29,27 @@ const recentBooks = (
   <section class="flex flex-col gap-16 mt-12">
     {
       recentBooks.map((book, index) => (
-        <article class={`flex gap-8 ${index % 2 === 0 ? "" : "pl-8"}`}>
+      <article class={cn("flex gap-8", index % 2 === 0 ? "pr-8" : "pl-8")}>
           {book.cover && (
             <Image
               alt={book.title}
               src={book.cover as string}
               width={157.5}
               height={225}
-              class="shadow-2xl"
+              class="shadow-2xl border border-gray-200"
             />
           )}
           <div class="flex flex-col gap-4">
             <div>
               <h2
-                class="inline text-4xl font-head relative group"
+                class="peer inline text-4xl font-head relative group"
                 style={{ color: book.color ?? "black" }}
               >
                 <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
-                <span class="absolute left-0 bottom-0 h-[1px] w-0 transition-all group-hover:w-full bg-gray-400 duration-600" />
               </h2>
-              <div class="inline-block w-8 h-[1px] mb-2 mr-2 bg-gray-400" />
+              <div class="relative w-8 inline-block mb-2">
+                <div class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 transition-all absolute w-8 h-[1px] b-2 bg-gray-400" />
+              </div>
               <p class="text-xl inline">
                 {" "}
                 {book.authors
@@ -57,7 +59,7 @@ const recentBooks = (
                       {index !== 0 ? ", " : ""}
                       <a
                         class="group text-gray-500 hover:text-black transition-colors font-alt"
-                        href={`autori/${a?.author?._sys.filename}`}
+                href={`/autori/${a?.author?._sys.filename}`}
                       >
                         {a?.author?.firstname} {a?.author?.surname}
                       </a>
@@ -73,11 +75,19 @@ const recentBooks = (
             </div>
             <div class="flex justify-end">
               <a
-                class="tracking-wider text-gray-600 uppercase text-sm font-alt"
+                class="tracking-wider text-gray-600 uppercase text-sm font-alt relative group"
                 href={`/knihy/${book._sys.filename}`}
                 style={{ color: book.color ?? "black" }}
               >
-                více o knize →
+                více o knize
+                <span
+                  class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
+                  style={{ borderColor: book.color ?? "black" }}
+                />
+                <span
+                  class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2"
+                  style={{ backgroundColor: book.color ?? "black" }}
+                />
               </a>
             </div>
           </div>

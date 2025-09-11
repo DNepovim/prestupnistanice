@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { client } from "../../../tina/__generated__/client.ts";
 import Layout from "../../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -44,7 +45,22 @@ const books = (
 ---
 
 <Layout>
-  <h1>{author.firstname} {author.surname}</h1>
+  <h1 class="mt-6 mb-6 font-head text-8xl">
+    {author.firstname}
+    {author.surname}
+  </h1>
+  {
+    author.image && (
+      <Image
+        alt={`${author.firstname} ${author.surname}`}
+        src={author.image as string}
+        width={420}
+        height={600}
+        class="float-left shadow-2xl border border-gray-200 -translate-x-8"
+      />
+    )
+  }
+
   <TinaMarkdown content={author.description} />
   {books.map((book) => <h2>{book.title}</h2>)}
 </Layout>

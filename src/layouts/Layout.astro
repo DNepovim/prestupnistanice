@@ -2,6 +2,16 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import TrainImage from "../assets/vlak.png";
+import { cn } from "../utils/cn";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  isHome?: boolean;
+  bgColor?: string;
+}
+
+const { isHome, bgColor } = Astro.props;
+const color = bgColor ?? "#fdba74"
 ---
 
 <!doctype html>
@@ -12,8 +22,13 @@ import TrainImage from "../assets/vlak.png";
       description="Rodinné knižní nakladatelství"
     />
   </head>
-  <body class="min-w-full font-display">
-    <Header />
+  <body
+    class={cn("min-w-full font-display min-h-screen")}
+    style={{
+      background: `linear-gradient(180deg, transparent 60%, ${color}44 90%, ${color}99)`,
+    }}
+  >
+    <Header isHome={isHome} />
 
     <!-- Train Animation -->
     <div
@@ -29,13 +44,7 @@ import TrainImage from "../assets/vlak.png";
       />
     </div>
 
-    <main
-      class="pb-16 max-w-[56rem] mx-auto"
-      style={{
-        background:
-          "linear-gradient(90deg, transparent, #ffffffdd 10% 90%, transparent)",
-      }}
-    >
+    <main class="pb-16 max-w-[56rem] mx-auto">
       <slot />
     </main>
 
