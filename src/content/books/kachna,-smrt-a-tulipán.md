@@ -10,7 +10,8 @@ authors:
     role: author
 cover: "/Kachna-smrt-a\_tulipán__cover.jpg"
 category: forKids
-color: '#c05d43'
+color: '#c7403c'
+bgColor: '#f9cd36'
 ---
 
 *Je to příběh života, umírání a smrti.*
