@@ -28,7 +28,7 @@ const book = res.data.books;
 const authors = (book.authors ?? []).filter((a) => a?.role === "author");
 ---
 
-<Layout bgColor={book.bgColor ?? undefined}>
+<Layout bgColor={book.bgColor ?? book.color ?? undefined}>
   <h1
     class="mt-6 mb-6 font-head text-8xl"
     style={{ color: book.color ?? "black" }}
