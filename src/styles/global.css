@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 body {
   font-size: 18px;
@@ -12,4 +15,6 @@ p {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;
   --font-alt: "montserrat-alternates", sans-serif;
+
+  --color-brand: "#fdba74"
 }

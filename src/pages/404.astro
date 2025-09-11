@@ -2,7 +2,10 @@
 import { Image } from "astro:assets";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
-import { uppercaseFirstLetter } from "../utils/uppercaseFirstLetter";
+import {
+  uppercaseFirstLetter,
+  uppercaseEveryFirstLetters,
+} from "../utils/uppercaseFirstLetter";
 
 const req = Astro.request;
 const url = new URL(req.url);
@@ -21,13 +24,27 @@ const recentBooks = (
 ---
 
 <Layout>
-  <h1 class="mt-6 mb-6 font-head text-8xl">
+  <h1 class="pt-20 mb-40 font-alt text-4xl text-gray-600">
     {
-      segments.length === 2 && segments[0] === "knihy"
-        ? `Knihu ${uppercaseFirstLetter(segments[1].replace(/-/g, " "))} jsme zatím nevydali.`
-        : segments.length === 2 && segments[0] === "autori"
-          ? `Od autora ${uppercaseFirstLetter(segments[1].replace(/-/g, " "))} jsme zatím nic nevydali`
-          : "Tuto knihu jsme ještě nevydali"
+      segments.length === 2 && segments[0] === "knihy" ? (
+        <>
+          Knihu{" "}
+          <span class="block my-4 font-head text-7xl text-orange-900">
+            {uppercaseFirstLetter(segments[1].replace(/-/g, " "))}
+          </span>{" "}
+          jsme zatím nevydali.
+        </>
+      ) : segments.length === 2 && segments[0] === "autori" ? (
+        <>
+          Od autora{" "}
+          <span class="block my-4 font-head text-7xl text-orange-900">
+            {uppercaseEveryFirstLetters(segments[1].replace(/-/g, " "))}
+          </span>{" "}
+          jsme zatím nic nevydali
+        </>
+      ) : (
+        "Tuto knihu jsme ještě nevydali"
+      )
     }
   </h1>
   <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
@@ -45,27 +62,29 @@ const recentBooks = (
             />
           )}
 
-          <div><h2
-            class="font-head text-2xl"
-            style={{ color: book.color ?? "black" }}
-          >
-            <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
-          </h2>
-          <p>
-            {book.authors
-              ?.filter((a) => a?.role === "author")
-              .map((a, index) => (
-                <span class="whitespace-nowrap">
-                  {index !== 0 ? ", " : ""}
-                  <a
-                    class="group text-gray-500 hover:text-black transition-colors font-alt"
-                    href={`/autori/${a?.author?._sys.filename}`}
-                  >
-                    {a?.author?.firstname} {a?.author?.surname}
-                  </a>
-                </span>
-              ))}
-          </p></div>
+          <div>
+            <h2
+              class="font-head text-2xl"
+              style={{ color: book.color ?? "black" }}
+            >
+              <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+            </h2>
+            <p>
+              {book.authors
+                ?.filter((a) => a?.role === "author")
+                .map((a, index) => (
+                  <span class="whitespace-nowrap">
+                    {index !== 0 ? ", " : ""}
+                    <a
+                      class="group text-gray-500 hover:text-black transition-colors font-alt"
+                      href={`/autori/${a?.author?._sys.filename}`}
+                    >
+                      {a?.author?.firstname} {a?.author?.surname}
+                    </a>
+                  </span>
+                ))}
+            </p>
+          </div>
         </article>
       ))
     }

@@ -87,7 +87,12 @@ export const BooksCollection: Collection = {
     {
       type: "string",
       name: "color",
-      label: "Barva",
+      label: "Barva popředí",
+    },
+    {
+      type: "string",
+      name: "bgColor",
+      label: "Barva pozadí",
     },
     {
       type: "rich-text",

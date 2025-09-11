@@ -1,7 +1,62 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { client } from "../../../tina/__generated__/client.ts";
+
+function isDefined<T>(value: T | undefined | null): value is T {
+  return value !== undefined && value !== null;
+}
+
+const books = (
+  (await client.queries.booksConnection({ sort: "date" })).data.booksConnection
+    .edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined)
+  .reverse();
 ---
 
 <Layout>
   <h1 class="mt-6 mb-6 font-head text-8xl">Naše knihy</h1>
+  <section class="grid grid-cols-3 gap-4">
+    {
+      books.map((book) => (
+        <article class="flex flex-col gap-4 justify-end">
+          {book.cover && (
+            <Image
+              alt={book.title}
+              src={book.cover as string}
+              width={157.5}
+              height={225}
+              class="shadow-2xl border border-gray-200"
+            />
+          )}
+
+          <div>
+            <h2
+              class="font-head text-2xl"
+              style={{ color: book.color ?? "black" }}
+            >
+              <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+            </h2>
+            <p>
+              {book.authors
+                ?.filter((a) => a?.role === "author")
+                .map((a, index) => (
+                  <span class="whitespace-nowrap">
+                    {index !== 0 ? ", " : ""}
+                    <a
+                      class="group text-gray-500 hover:text-black transition-colors font-alt"
+                      href={`/autori/${a?.author?._sys.filename}`}
+                    >
+                      {a?.author?.firstname} {a?.author?.surname}
+                    </a>
+                  </span>
+                ))}
+            </p>
+          </div>
+        </article>
+      ))
+    }
+  </section>
 </Layout>
