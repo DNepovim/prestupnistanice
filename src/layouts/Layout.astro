@@ -11,7 +11,9 @@ interface Props {
 }
 
 const { isHome, bgColor } = Astro.props;
-const color = bgColor ?? "#fdba74"
+const color = bgColor ?? "#fdba74";
+
+const isDev = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -23,7 +25,7 @@ const color = bgColor ?? "#fdba74"
     />
   </head>
   <body
-    class={cn("min-w-full font-display min-h-screen")}
+    class={cn("min-w-full font-display min-h-screen", isDev && "debug-screens")}
     style={{
       background: `linear-gradient(180deg, transparent 60%, ${color}44 90%, ${color}99)`,
     }}
@@ -44,7 +46,7 @@ const color = bgColor ?? "#fdba74"
       />
     </div>
 
-    <main class="pb-16 max-w-[56rem] mx-auto">
+    <main class="pb-16 max-w-[56rem] mx-auto px-6">
       <slot />
     </main>
 

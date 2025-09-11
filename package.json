@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@tinacms/cli": "^1.10.2",
-    "@types/node": "^22.18.0"
+    "@types/node": "^22.18.0",
+    "tailwindcss-debug-screens": "^3.0.1"
   }
 }

@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@plugin "tailwindcss-debug-screens";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -7,14 +7,11 @@ body {
   font-size: 18px;
 }
 
-p {
-  margin-bottom: 1rem;
-}
-
 @theme {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;
   --font-alt: "montserrat-alternates", sans-serif;
 
-  --color-brand: "#fdba74"
+  --color-brand: "#fdba74";
+  --breakpoint-xs: 30rem;
 }
