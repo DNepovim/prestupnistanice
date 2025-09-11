@@ -1,9 +1,8 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
-import TrainImage from "../assets/vlak.png";
 import { cn } from "../utils/cn";
-import Footer from "../components/Footer.astro";
+import Trains from "../components/Trains";
 
 interface Props {
   isHome?: boolean;
@@ -32,162 +31,12 @@ const isDev = import.meta.env.DEV;
   >
     <Header isHome={isHome} />
 
-    <!-- Train Animation -->
-    <div
-      id="train-container"
-      class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10 opacity-20"
-    >
-      <img
-        id="train"
-        src={TrainImage.src}
-        alt="Vlak"
-        class="absolute top-1/2 transform -translate-y-1/2 w-80 h-auto"
-        style="left: -200px;"
-      />
-    </div>
+    <Trains client:only />
 
     <main class="pb-16 max-w-[56rem] mx-auto px-6">
       <slot />
     </main>
 
-    <!-- GSAP Script -->
-    <script>
-      import { gsap } from "gsap";
-      import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-      // Register ScrollTrigger plugin
-      gsap.registerPlugin(ScrollTrigger);
-
-      // Train animation
-      const train = document.getElementById("train");
-      const trainContainer = document.getElementById("train-container");
-
-      if (train && trainContainer) {
-        // Create timeline with two phases
-        const tl = gsap.timeline();
-
-        // Set initial position
-        gsap.set(train, { x: -200 });
-
-        // Phase 1: Quick entrance to viewport (fast)
-        tl.to(train, {
-          x: 100, // Stop at viewport edge
-          duration: 2,
-          ease: "power2.out",
-        });
-
-        // Phase 2: Slow journey across the screen
-        tl.to(train, {
-          x: window.innerWidth + 200,
-          duration: 20,
-          ease: "none",
-        });
-
-        // Variables for scroll speed tracking
-        let lastScrollTime = Date.now();
-        let lastScrollY = window.scrollY;
-        let scrollSpeed = 0;
-        let speedTimeout;
-        let speedTween;
-
-        // Variables for parallax
-        let parallaxTween;
-        let parallaxTimeout;
-
-        // Track scroll speed
-        const updateScrollSpeed = () => {
-          const now = Date.now();
-          const currentScrollY = window.scrollY;
-          const timeDiff = now - lastScrollTime;
-          const scrollDiff = Math.abs(currentScrollY - lastScrollY);
-
-          if (timeDiff > 0) {
-            scrollSpeed = scrollDiff / timeDiff; // pixels per millisecond
-          }
-
-          lastScrollTime = now;
-          lastScrollY = currentScrollY;
-
-          // Calculate target speed multiplier (1 = normal speed, up to 5x faster)
-          const targetSpeedMultiplier = Math.min(1 + scrollSpeed * 10, 5);
-
-          // Kill existing speed tween
-          if (speedTween) {
-            speedTween.kill();
-          }
-
-          // Animate to new speed smoothly
-          speedTween = gsap.to(tl, {
-            timeScale: targetSpeedMultiplier,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-
-          // Clear existing timeout
-          clearTimeout(speedTimeout);
-
-          // Reset to normal speed after 200ms of no scrolling
-          speedTimeout = setTimeout(() => {
-            if (speedTween) {
-              speedTween.kill();
-            }
-            speedTween = gsap.to(tl, {
-              timeScale: 1,
-              duration: 0.5,
-              ease: "power2.out",
-            });
-          }, 200);
-        };
-
-        // Smooth parallax effect for train container
-        const updateParallax = () => {
-          const scrollY = window.scrollY;
-          const targetParallaxOffset = -scrollY * 0.3; // Negative value for opposite direction
-
-          // Kill existing parallax tween
-          if (parallaxTween) {
-            parallaxTween.kill();
-          }
-
-          // Animate to new parallax position smoothly
-          parallaxTween = gsap.to(trainContainer, {
-            y: targetParallaxOffset,
-            duration: 0.2,
-            ease: "power2.out",
-          });
-
-          // Clear existing timeout
-          clearTimeout(parallaxTimeout);
-
-          // Reset parallax after 100ms of no scrolling
-          parallaxTimeout = setTimeout(() => {
-            if (parallaxTween) {
-              parallaxTween.kill();
-            }
-            parallaxTween = gsap.to(trainContainer, {
-              y: -scrollY * 0.3,
-              duration: 0.4,
-              ease: "power2.out",
-            });
-          }, 100);
-        };
-
-        // Listen for scroll events
-        window.addEventListener(
-          "scroll",
-          () => {
-            updateScrollSpeed();
-            updateParallax();
-          },
-          { passive: true },
-        );
-
-        // Reset animation when it reaches the end
-        tl.eventCallback("onComplete", () => {
-          gsap.set(train, { x: -200 });
-          tl.restart();
-        });
-      }
-    </script>
+    <script></script>
   </body>
 </html>
