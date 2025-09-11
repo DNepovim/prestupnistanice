@@ -1,6 +1,9 @@
 ---
+slug: neviditelny-slon
 title: Neviditelný slon
 date: 2025
+pagesCount: 108
+isbn: 978-80-909036-3-0
 authors:
   - author: src/content/authors/anna-anisimova.md
     role: author
