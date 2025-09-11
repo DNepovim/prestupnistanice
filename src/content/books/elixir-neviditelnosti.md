@@ -1,5 +1,6 @@
 ---
 author: marie-blahova
+slug: elixir-nevidtelnosti
 title: Elixír nevidtelnosti
 date: 2023
 authors:
@@ -7,6 +8,8 @@ authors:
     role: author
 cover: /elixir-neviditelnosti.jpg
 category: novel
+color: '#3d6431'
+bgColor: '#bdd743'
 ---
 
 Během prázdnin, které tráví dospívající Klára se svými rodiči, dojde k jejímu seznámení s mužem, který se k jejímu velkému překvapení objeví na začátku nového školního roku za katedrou, a to dokonce v roli třídního učitele. Klára nastupuje do maturitního ročníku na technicky orientované střední škole, přestože disponuje spíše uměleckými sklony.

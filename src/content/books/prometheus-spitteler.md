@@ -1,4 +1,5 @@
 ---
+slug: prometheus-spitteler
 title: Prométheus Spitteler
 date: 2022
 authors:
@@ -6,6 +7,8 @@ authors:
     role: author
 cover: /prometheus-spitteler.jpg
 category: philosophy
+color: '#461200'
+bgColor: '#872f01'
 ---
 
 „Extramundánní básník“, tvůrce eposů, básní a povídek, esejista a znalec hudby Karl Spitteler (1845 až 1924), dodnes jediný švýcarský nositel Nobelovy ceny za literaturu, je v Čechách zcela neznámou postavou. Petr Babka jej v objemném svazku obsáhle představuje takřka ve všech žánrech.
