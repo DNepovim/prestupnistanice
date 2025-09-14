@@ -1,11 +1,13 @@
 ---
+slug: vilem-flusser
 firstname: Vilém
 surname: Flusser
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
+image: '/Vilém_Flusser_an_der_FH_Bielefeld,_1984.jpg'
 ---
 
-_Myslitel Vilém Flusser se vzdálil české domovině natolik, že se stal známějším ve světě než doma. A tak není divu, že je potřeba jeho dílo překládat do češtiny._
+*Myslitel Vilém Flusser se vzdálil české domovině natolik, že se stal známějším ve světě než doma. A tak není divu, že je potřeba jeho dílo překládat do češtiny.*
 
 Jaký je životní příběh Viléma Flussera? Narodil se v Praze roku 1920 v židovské rodině. Měl blízko k židovskému, českému a německému kulturnímu a jazykovému prostředí. V březnu roku 1939 prchá z Prahy před nacisty do Londýna, odkud ho osud zavál do Brazílie. Jeho rodina byla nacisty vyvražděna.
 
