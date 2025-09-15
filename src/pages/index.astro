@@ -12,6 +12,30 @@ const recentBooks = (
 )
   .map((item) => item?.node)
   .filter(isDefined);
+
+const forKidsBooks = (
+  (
+    await client.queries.booksConnection({
+      sort: "date",
+      last: 3,
+      filter: { category: { eq: "forKids" } },
+    })
+  ).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined);
+
+const philosophyBooks = (
+  (
+    await client.queries.booksConnection({
+      sort: "date",
+      last: 3,
+      filter: { category: { eq: "philosophy" } },
+    })
+  ).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined);
 ---
 
 <Layout isHome>
@@ -23,82 +47,85 @@ const recentBooks = (
       na kvalitní nekomerční tituly.
     </p>
   </sectino>
-  <section class="flex flex-col gap-16 mt-12">
-    {
-      recentBooks.map((book, index) => (
-        <article
-          class={cn(
-            "flex gap-8",
-            "max-xs:flex max-xs:flex-col",
-            index % 2 === 0 ? "min-sm:pr-8" : "min-sm:pl-8",
-          )}
-        >
-          {book.cover && (
-            <a class="flex-1 w-[20rem]" href={`/knihy/${book._sys.filename}`}>
-              <Image
-                alt={book.title}
-                src={book.cover as string}
-                width={157.5}
-                height={225}
-                class="shadow-2xl border border-gray-200"
-              />
-            </a>
-          )}
-          <div class="flex flex-col gap-4 flex-3">
-            <div class="max-sm:flex max-sm:flex-col">
-              <h2
-                class="peer inline text-4xl font-head relative group"
-                style={{ color: book.color ?? "black" }}
-              >
-                <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
-              </h2>
-              <div class="relative w-8 inline-block mb-2">
-                <div class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 transition-all absolute w-8 h-[1px] b-2 bg-gray-400 max-sm:hidden" />
-              </div>
-              <p class="text-xl inline">
-                {" "}
-                {book.authors
-                  ?.filter((a) => a?.role === "author")
-                  .map((a, index) => (
-                    <span class="whitespace-nowrap">
-                      {index !== 0 ? ", " : ""}
-                      <a
-                        class="group text-gray-500 hover:text-black transition-colors font-alt"
-                        href={`/autori/${a?.author?._sys.filename}`}
-                      >
-                        {a?.author?.firstname} {a?.author?.surname}
-                      </a>
-                    </span>
-                  ))}
-              </p>
-            </div>
-
-            <div class="min-sm:pl-8">
-              <div class="line-clamp-3">
-                <TinaMarkdown content={book.description} />
-              </div>
-            </div>
-            <div class="flex justify-end pr-4">
-              <a
-                class="tracking-wider text-gray-600 uppercase text-sm font-alt relative group"
-                href={`/knihy/${book._sys.filename}`}
-                style={{ color: book.color ?? "black" }}
-              >
-                více o knize
-                <span
-                  class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
-                  style={{ borderColor: book.color ?? "black" }}
-                />
-                <span
-                  class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2"
-                  style={{ backgroundColor: book.color ?? "black" }}
+  <section class="mt-12">
+    <h2 class="font-head text-2xl text-gray-600 mb-8">Nejnovější knihy</h2>
+    <div class="flex flex-col gap-16">
+      {
+        recentBooks.map((book, index) => (
+          <article
+            class={cn(
+              "flex gap-8",
+              "max-xs:flex max-xs:flex-col",
+              index % 2 === 0 ? "min-sm:pr-8" : "min-sm:pl-8",
+            )}
+          >
+            {book.cover && (
+              <a class="flex-1 w-[20rem]" href={`/knihy/${book._sys.filename}`}>
+                <Image
+                  alt={book.title}
+                  src={book.cover as string}
+                  width={157.5}
+                  height={225}
+                  class="shadow-2xl border border-gray-200"
                 />
               </a>
+            )}
+            <div class="flex flex-col gap-4 flex-3">
+              <div class="max-sm:flex max-sm:flex-col">
+                <h2
+                  class="peer inline text-4xl font-head relative group"
+                  style={{ color: book.color ?? "black" }}
+                >
+                  <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+                </h2>
+                <div class="relative w-8 inline-block mb-2">
+                  <div class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 transition-all absolute w-8 h-[1px] b-2 bg-gray-400 max-sm:hidden" />
+                </div>
+                <p class="text-xl inline">
+                  {" "}
+                  {book.authors
+                    ?.filter((a) => a?.role === "author")
+                    .map((a, index) => (
+                      <span class="whitespace-nowrap">
+                        {index !== 0 ? ", " : ""}
+                        <a
+                          class="group text-gray-500 hover:text-black transition-colors font-alt"
+                          href={`/autori/${a?.author?._sys.filename}`}
+                        >
+                          {a?.author?.firstname} {a?.author?.surname}
+                        </a>
+                      </span>
+                    ))}
+                </p>
+              </div>
+
+              <div class="min-sm:pl-8">
+                <div class="line-clamp-3">
+                  <TinaMarkdown content={book.description} />
+                </div>
+              </div>
+              <div class="flex justify-end pr-4">
+                <a
+                  class="tracking-wider text-gray-600 uppercase text-sm font-alt relative group"
+                  href={`/knihy/${book._sys.filename}`}
+                  style={{ color: book.color ?? "black" }}
+                >
+                  více o knize
+                  <span
+                    class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
+                    style={{ borderColor: book.color ?? "black" }}
+                  />
+                  <span
+                    class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2"
+                    style={{ backgroundColor: book.color ?? "black" }}
+                  />
+                </a>
+              </div>
             </div>
-          </div>
-        </article>
-      ))
-    }
+          </article>
+        ))
+      }
+    </div>
   </section>
   <div class="flex justify-center my-20">
     <a
@@ -114,4 +141,100 @@ const recentBooks = (
       ></span>
     </a>
   </div>
+  {
+    forKidsBooks.length > 0 && (
+      <section>
+        <h2 class="font-head text-2xl text-gray-600 mb-8">Knihy pro děti</h2>
+
+        <div class="grid min-sm:grid-cols-2 min-md:grid-cols-3 gap-4">
+          {forKidsBooks.map((book) => (
+            <article class="min-md:mb-12 flex flex-col gap-4 justify-end">
+              {book.cover && (
+                <Image
+                  alt={book.title}
+                  src={book.cover as string}
+                  width={157.5}
+                  height={225}
+                  class="shadow-2xl border border-gray-200"
+                />
+              )}
+
+              <div class="min-h-30">
+                <h2
+                  class="font-head text-2xl"
+                  style={{ color: book.color ?? "black" }}
+                >
+                  <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+                </h2>
+                <p>
+                  {book.authors
+                    ?.filter((a) => a?.role === "author")
+                    .map((a, index) => (
+                      <span class="whitespace-nowrap">
+                        {index !== 0 ? ", " : ""}
+                        <a
+                          class="group text-gray-500 hover:text-black transition-colors font-alt"
+                          href={`/autori/${a?.author?._sys.filename}`}
+                        >
+                          {a?.author?.firstname} {a?.author?.surname}
+                        </a>
+                      </span>
+                    ))}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+  {
+    philosophyBooks.length > 0 && (
+      <section>
+        <h2 class="font-head text-2xl text-gray-600 mb-8">
+          Knihy pro filosofy
+        </h2>
+
+        <div class="grid min-sm:grid-cols-2 min-md:grid-cols-3 gap-4">
+          {philosophyBooks.map((book) => (
+            <article class="min-md:mb-12 flex flex-col gap-4 justify-end">
+              {book.cover && (
+                <Image
+                  alt={book.title}
+                  src={book.cover as string}
+                  width={157.5}
+                  height={225}
+                  class="shadow-2xl border border-gray-200"
+                />
+              )}
+
+              <div class="min-h-30">
+                <h2
+                  class="font-head text-2xl"
+                  style={{ color: book.color ?? "black" }}
+                >
+                  <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+                </h2>
+                <p>
+                  {book.authors
+                    ?.filter((a) => a?.role === "author")
+                    .map((a, index) => (
+                      <span class="whitespace-nowrap">
+                        {index !== 0 ? ", " : ""}
+                        <a
+                          class="group text-gray-500 hover:text-black transition-colors font-alt"
+                          href={`/autori/${a?.author?._sys.filename}`}
+                        >
+                          {a?.author?.firstname} {a?.author?.surname}
+                        </a>
+                      </span>
+                    ))}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
 </Layout>
