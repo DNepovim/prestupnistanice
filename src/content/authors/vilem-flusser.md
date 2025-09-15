@@ -4,7 +4,7 @@ firstname: Vilém
 surname: Flusser
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
-image: ''
+image: '/Vil%C3%A9m_Flusser_an_der_FH_Bielefeld,_1984.jpg'
 ---
 
 *Myslitel Vilém Flusser se vzdálil české domovině natolik, že se stal známějším ve světě než doma. A tak není divu, že je potřeba jeho dílo překládat do češtiny.*
