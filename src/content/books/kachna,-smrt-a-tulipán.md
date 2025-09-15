@@ -8,7 +8,7 @@ isbn: 978–80–909036–2–3
 authors:
   - author: src/content/authors/wolf-erlbruch.md
     role: author
-cover: ''
+cover: /Kachna-smrt-a%C2%A0tulip%C3%A1n__cover.jpg
 category: forKids
 color: '#c7403c'
 bgColor: '#f9cd36'
