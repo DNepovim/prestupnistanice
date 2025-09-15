@@ -2,7 +2,6 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import { cn } from "../utils/cn";
-import Trains from "../components/Trains";
 
 interface Props {
   isHome?: boolean;
@@ -31,7 +30,7 @@ const isDev = import.meta.env.DEV;
   >
     <Header isHome={isHome} />
 
-    <Trains client:only />
+    <!-- <Trains client:only /> -->
 
     <main class="pb-16 max-w-[56rem] mx-auto px-6">
       <slot />
