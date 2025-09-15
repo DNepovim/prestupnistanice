@@ -1,111 +1,47 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import TrainImage from '../assets/vlak.png';
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Train } from "./Train";
+
+interface TrainState {
+  id: number;
+  direction: "rl" | "lr";
+  y: number;
+}
 
 export default function Trains() {
-  const trainRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [trains, setTrains] = useState<TrainState[]>([]);
+  const trainIdCounter = useRef(0);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const train = trainRef.current;
     const trainContainer = containerRef.current;
 
-    if (!train || !trainContainer) return;
+    if (!trainContainer) return;
 
-    const tl = gsap.timeline();
-
-    gsap.set(train, { x: -200 });
-
-    tl.to(train, {
-      x: 100, // Stop at viewport edge
-      duration: 2,
-      ease: "power2.out",
-    });
-
-    tl.to(train, {
-      x: window.innerWidth + 200,
-      duration: 20,
-      ease: "none",
-    });
-
-    let lastScrollTime = Date.now();
-    let lastScrollY = window.scrollY;
-    let scrollSpeed = 0;
-    let speedTimeout: NodeJS.Timeout;
-    let speedTween: gsap.core.Tween;
-
-    let parallaxTween: gsap.core.Tween;
+    let speedTween: gsap.core.Tween | undefined;
+    let parallaxTween: gsap.core.Tween | undefined;
     let parallaxTimeout: NodeJS.Timeout;
+    let trainSpawnInterval: NodeJS.Timeout;
 
-    // Track scroll speed
-    const updateScrollSpeed = () => {
-      const now = Date.now();
-      const currentScrollY = window.scrollY;
-      const timeDiff = now - lastScrollTime;
-      const scrollDiff = Math.abs(currentScrollY - lastScrollY);
-
-      if (timeDiff > 0) {
-        scrollSpeed = scrollDiff / timeDiff; // pixels per millisecond
-      }
-
-      lastScrollTime = now;
-      lastScrollY = currentScrollY;
-
-      // Calculate target speed multiplier (1 = normal speed, up to 5x faster)
-      const targetSpeedMultiplier = Math.min(1 + scrollSpeed * 10, 5);
-
-      // Kill existing speed tween
-      if (speedTween) {
-        speedTween.kill();
-      }
-
-      // Animate to new speed smoothly
-      speedTween = gsap.to(tl, {
-        timeScale: targetSpeedMultiplier,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-
-      // Clear existing timeout
-      clearTimeout(speedTimeout);
-
-      // Reset to normal speed after 200ms of no scrolling
-      speedTimeout = setTimeout(() => {
-        if (speedTween) {
-          speedTween.kill();
-        }
-        speedTween = gsap.to(tl, {
-          timeScale: 1,
-          duration: 0.5,
-          ease: "power2.out",
-        });
-      }, 200);
-    };
-
-    // Smooth parallax effect for train container
     const updateParallax = () => {
       const scrollY = window.scrollY;
-      const targetParallaxOffset = -scrollY * 0.3; // Negative value for opposite direction
+      const targetParallaxOffset = -scrollY * 0.3;
 
-      // Kill existing parallax tween
       if (parallaxTween) {
         parallaxTween.kill();
       }
 
-      // Animate to new parallax position smoothly
       parallaxTween = gsap.to(trainContainer, {
         y: targetParallaxOffset,
         duration: 0.2,
         ease: "power2.out",
       });
 
-      // Clear existing timeout
       clearTimeout(parallaxTimeout);
 
-      // Reset parallax after 100ms of no scrolling
       parallaxTimeout = setTimeout(() => {
         if (parallaxTween) {
           parallaxTween.kill();
@@ -118,28 +54,42 @@ export default function Trains() {
       }, 100);
     };
 
-    // Listen for scroll events
-    const handleScroll = () => {
-      updateScrollSpeed();
-      updateParallax();
+    // Function to spawn new trains
+    const spawnTrain = () => {
+      const newTrain: TrainState = {
+        id: trainIdCounter.current++,
+        direction: Math.random() < 0.5 ? "rl" : "lr",
+        y: Math.random() * (window.innerHeight - 100) + 50, // Random between 50 and window height - 50
+      };
+
+      setTrains(prevTrains => [...prevTrains, newTrain]);
+
+      // Remove train after animation completes (adjust duration based on your train animation)
+      setTimeout(() => {
+        setTrains(prevTrains => prevTrains.filter(train => train.id !== newTrain.id));
+      }, 15000); // Remove after 15 seconds (adjust based on your animation duration)
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Set up train spawning interval
+    const scheduleNextSpawn = () => {
+      const delay = Math.random() * 1000 + 2000; // Random delay between 2-3 seconds
+      trainSpawnInterval = setTimeout(() => {
+        spawnTrain();
+        scheduleNextSpawn(); // Schedule next spawn
+      }, delay);
+    };
 
-    // Reset animation when it reaches the end
-    tl.eventCallback("onComplete", () => {
-      gsap.set(train, { x: -200 });
-      tl.restart();
-    });
+    // Start spawning trains
+    scheduleNextSpawn();
 
-    // Cleanup function
+    window.addEventListener("scroll", updateParallax, { passive: true });
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(speedTimeout);
+      window.removeEventListener("scroll", updateParallax);
       clearTimeout(parallaxTimeout);
+      clearTimeout(trainSpawnInterval);
       if (speedTween) speedTween.kill();
       if (parallaxTween) parallaxTween.kill();
-      tl.kill();
     };
   }, []);
 
@@ -148,13 +98,9 @@ export default function Trains() {
       ref={containerRef}
       className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10 opacity-20"
     >
-      <img
-        ref={trainRef}
-        src={TrainImage.src}
-        alt="Vlak"
-        className="absolute top-1/2 transform -translate-y-1/2 w-80 h-auto"
-        style={{ left: '-200px' }}
-      />
+      {trains.map((train) => (
+        <Train key={train.id} direction={train.direction} y={train.y} />
+      ))}
     </div>
   );
 }
