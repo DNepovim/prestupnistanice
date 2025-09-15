@@ -1,4 +1,5 @@
 ---
+import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import { client } from "../../../tina/__generated__/client.ts";
@@ -16,12 +17,12 @@ const books = (
   .reverse();
 ---
 
-<Layout>
-  <h1 class="mt-6 mb-6 font-head text-8xl">Naše knihy</h1>
+<Layout siteTitle="Naše knihy" isWide>
+  <PageTitle class="max-w-[56rem] mx-auto">Naše knihy</PageTitle>
   <section class="grid grid-cols-3 gap-4">
     {
       books.map((book) => (
-        <article class="flex flex-col gap-4 justify-end">
+        <article class="mb-12 flex flex-col gap-4 justify-end">
           {book.cover && (
             <Image
               alt={book.title}

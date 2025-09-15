@@ -4,10 +4,7 @@ import { Image } from "astro:assets";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-
-function isDefined<T>(value: T | undefined | null): value is T {
-  return value !== undefined && value !== null;
-}
+import { isDefined } from "../utils/isDefined";
 
 const recentBooks = (
   (await client.queries.booksConnection({ sort: "date", last: 3 })).data
@@ -37,15 +34,17 @@ const recentBooks = (
           )}
         >
           {book.cover && (
-            <Image
-              alt={book.title}
-              src={book.cover as string}
-              width={157.5}
-              height={225}
-              class="shadow-2xl border border-gray-200"
-            />
+            <a class="flex-1 w-[20rem]" href={`/knihy/${book._sys.filename}`}>
+              <Image
+                alt={book.title}
+                src={book.cover as string}
+                width={157.5}
+                height={225}
+                class="shadow-2xl border border-gray-200"
+              />
+            </a>
           )}
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4 flex-3">
             <div class="max-sm:flex max-sm:flex-col">
               <h2
                 class="peer inline text-4xl font-head relative group"

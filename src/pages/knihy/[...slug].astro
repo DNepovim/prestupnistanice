@@ -4,6 +4,18 @@ import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { getCollection } from "astro:content";
+import PageTitle from "../../components/PageTitle.astro";
+import { isDefined } from "../../utils/isDefined";
+
+const rolesMap: Record<string, string> = {
+  author: "Autor",
+  translate: "Překladatel",
+  editor: "Redaktor",
+  illustration: "Ilustrace",
+  cover: "Obálka",
+  typesetting: "Sazba",
+  reviewr: "Recenzent",
+};
 
 export async function getStaticPaths() {
   const posts = await getCollection("book");
@@ -25,42 +37,171 @@ const { slug } = Astro.params;
 const relativePath = `${slug}.md`;
 const res = await client.queries.books({ relativePath });
 const book = res.data.books;
-const authors = (book.authors ?? []).filter((a) => a?.role === "author");
+const authors = (book.authors ?? []).filter(isDefined);
+
+const mainAuthor = authors.find((a) => a.role === "author");
+
+const authorsBooks = (
+  (
+    await client.queries.booksConnection({
+      filter: {
+        authors: {
+          author: { authors: { slug: { eq: mainAuthor?.author?.slug } } },
+        },
+      },
+    })
+  ).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter((item) => item?.slug !== slug)
+  .filter(isDefined);
 ---
 
-<Layout bgColor={book.bgColor ?? book.color ?? undefined}>
-  <h1
-    class="mt-6 mb-6 font-head text-8xl"
-    style={{ color: book.color ?? "black" }}
-  >
-    {book.title}
-  </h1>
+<Layout siteTitle={book.title} bgColor={book.bgColor ?? book.color ?? undefined}>
+  <PageTitle color={book.color ?? undefined}>{book.title}</PageTitle>
 
-  <p class="text-2xl mb-8">
+  <section>
+    <p class="text-2xl mb-8">
+      {
+        authors.map((a, index) => (
+          <span class="whitespace-nowrap">
+            {index !== 0 ? ", " : ""}
+            <a
+              class="group text-gray-500 hover:text-black transition-colors font-alt"
+              href={`/autori/${a.author?._sys.filename}`}
+            >
+              {a.author?.firstname} {a.author?.surname}
+            </a>
+          </span>
+        ))
+      }
+    </p>
     {
-      authors.map((a, index) => (
-        <span class="whitespace-nowrap">
-          {index !== 0 ? ", " : ""}
-          <a
-            class="group text-gray-500 hover:text-black transition-colors font-alt"
-            href={`/autori/${a?.author?._sys.filename}`}
-          >
-            {a?.author?.firstname} {a?.author?.surname}
-          </a>
-        </span>
+      book.cover && (
+        <Image
+          alt={book.title}
+          src={book.cover as string}
+          width={420}
+          height={600}
+          class="mb-4 min-sm:float-left max-sm:w-full shadow-2xl border border-gray-200 min-sm:-ml-4 min-sm:mr-8"
+        />
+      )
+    }
+    <TinaMarkdown content={book.description} />
+  </section>
+  <section class="clear-both mt-20">
+    {
+      authors.map((a) => (
+        <article class="flex gap-8 max-xs:flex max-xs:flex-col">
+          {a.author?.image && (
+            <a
+              class="flex-1 w-[20rem]"
+              href={`/autori/${a.author?._sys.filename}`}
+            >
+              <Image
+                alt={`${a.author?.firstname} ${a.author?.surname}`}
+                src={a.author?.image}
+                width={157.5}
+                height={225}
+                class="shadow-2xl border border-gray-200"
+              />
+            </a>
+          )}
+          <div class="flex flex-col gap-10 flex-3">
+            <div class="max-sm:flex max-sm:flex-col">
+              <h2 class="peer inline text-4xl font-head relative group">
+                <a href={`/autori/${a.author?._sys.filename}`}>
+                  {a.author?.firstname} {a.author?.surname}
+                </a>
+              </h2>
+              <div class="relative w-8 inline-block mb-2">
+                <div class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 transition-all absolute w-8 h-[1px] b-2 bg-gray-400 max-sm:hidden" />
+              </div>
+              {a.role && (
+                <p
+                  class="text-xl inline"
+                  style={{ color: book.color ?? "black" }}
+                >
+                  {rolesMap[a.role]}
+                </p>
+              )}
+            </div>
+
+            <div class="min-sm:pl-8">
+              <div class="line-clamp-3">
+                <TinaMarkdown content={a.author?.description} />
+              </div>
+            </div>
+            <div class="flex justify-end pr-4">
+              <a
+                class="tracking-wider text-gray-600 uppercase text-sm font-alt relative group"
+                href={`/author/${a.author?._sys.filename}`}
+                style={{ color: book.color ?? "black" }}
+              >
+                více o autorovi
+                <span
+                  class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
+                  style={{ borderColor: book.color ?? "black" }}
+                />
+                <span
+                  class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2"
+                  style={{ backgroundColor: book.color ?? "black" }}
+                />
+              </a>
+            </div>
+          </div>
+        </article>
       ))
     }
-  </p>
+  </section>
   {
-    book.cover && (
-      <Image
-        alt={book.title}
-        src={book.cover as string}
-        width={420}
-        height={600}
-        class="mb-4 min-sm:float-left max-sm:w-full shadow-2xl border border-gray-200 min-sm:-ml-4 min-sm:mr-8"
-      />
+    authorsBooks.length > 0 && (
+      <section class="mt-16">
+        <h2 class="text-4xl font-head" style={{ color: book.color ?? "black" }}>
+          Další knihy autora
+        </h2>
+        <div class="grid grid-cols-3 gap-4 mt-10">
+          {authorsBooks.map((book) => (
+            <article class="flex flex-col gap-4 justify-end">
+              {book.cover && (
+                <a href={`/knihy/${book._sys.filename}`}>
+                  <Image
+                    alt={book.title}
+                    src={book.cover as string}
+                    width={157.5}
+                    height={225}
+                    class="shadow-2xl border border-gray-200"
+                  />
+                </a>
+              )}
+
+              <div class="min-h-30">
+                <h2
+                  class="font-head text-2xl"
+                  style={{ color: book.color ?? "black" }}
+                >
+                  <a href={`/knihy/${book._sys.filename}`}>{book.title}</a>
+                </h2>
+                <p>
+                  {book.authors
+                    ?.filter((a) => a?.role === "author")
+                    .map((a, index) => (
+                      <span class="whitespace-nowrap">
+                        {index !== 0 ? ", " : ""}
+                        <a
+                          class="group text-gray-500 hover:text-black transition-colors font-alt"
+                          href={`/autori/${a?.author?._sys.filename}`}
+                        >
+                          {a?.author?.firstname} {a?.author?.surname}
+                        </a>
+                      </span>
+                    ))}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     )
   }
-  <TinaMarkdown content={book.description} />
 </Layout>

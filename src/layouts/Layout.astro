@@ -1,14 +1,18 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import { cn } from "../utils/cn";
 
 interface Props {
+  siteTitle?: string;
   isHome?: boolean;
+  isWide?: boolean;
   bgColor?: string;
 }
 
-const { isHome, bgColor } = Astro.props;
+const { siteTitle, isHome, bgColor, isWide } = Astro.props;
+
 const color = bgColor ?? "#fdba74";
 
 const isDev = import.meta.env.DEV;
@@ -18,12 +22,15 @@ const isDev = import.meta.env.DEV;
 <html lang="en">
   <head>
     <BaseHead
-      title="Přestupní stanice"
+      title={`${siteTitle ? `${siteTitle} | ` : ""}Přestupní stanice`}
       description="Rodinné knižní nakladatelství"
     />
   </head>
   <body
-    class={cn("min-w-full font-display min-h-screen", isDev && "debug-screens")}
+    class={cn(
+      "flex flex-col min-w-full font-display min-h-screen",
+      isDev && "debug-screens",
+    )}
     style={{
       background: `linear-gradient(180deg, transparent 60%, ${color}44 90%, ${color}99)`,
     }}
@@ -32,9 +39,16 @@ const isDev = import.meta.env.DEV;
 
     <!-- <Trains client:only /> -->
 
-    <main class="pb-16 max-w-[56rem] mx-auto px-6">
+    <main
+      class={cn(
+        "pb-16 mx-auto px-6 flex-1",
+        isWide ? "max-w-[70rem]" : "max-w-[56rem]",
+      )}
+    >
       <slot />
     </main>
+
+    <Footer />
 
     <script></script>
   </body>

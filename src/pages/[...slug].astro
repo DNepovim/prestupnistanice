@@ -1,7 +1,8 @@
 ---
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { RichText } from "../components/RichText";
+import PageTitle from "../components/PageTitle.astro";
 
 export async function getStaticPaths() {
   return ["kontakty", "o-nakladatelstvi"].map((edge) => ({
@@ -16,9 +17,7 @@ const res = await client.queries.pages({ relativePath });
 const page = res.data.pages;
 ---
 
-<Layout>
-  <h1 class="mt-6 mb-6 font-head text-8xl">
-    {page.title}
-  </h1>
-  <TinaMarkdown content={page.content} />
+<Layout siteTitle={page.title}>
+  <PageTitle>{page.title}</PageTitle>
+  <RichText content={page.content} />
 </Layout>

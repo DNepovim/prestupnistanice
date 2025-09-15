@@ -20,29 +20,31 @@ const navigations = [
 ];
 ---
 
-<menu
-  class="max-w-[90rem] mx-auto items-center flex justify-between px-6 py-4 transition-colors max-lg:flex-col gap-4"
->
-  <h2
-    class={cn(
-      "m-0 text-3xl font-head text-gray-600 hover:text-black max-sm:text-[10vw]",
-      isHome && "text-6xl",
-    )}
+<div class="min-w-full">
+  <menu
+    class="max-w-[90rem] mx-auto items-center flex justify-between px-6 py-4 transition-colors max-lg:flex-col gap-4"
   >
-    <a class="no-underline" href="/">Přestupní stanice</a>
-  </h2>
-  <div class="internal-links flex gap-4 items-center">
-    {
-      navigations.map(({ link, label }, index) => (
-        <>
-          {index !== 0 && (
-            <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200 max-sm:hidden" />
-          )}
-          <HeaderLink isSmall href={link}>
-            {label}
-          </HeaderLink>
-        </>
-      ))
-    }
-  </div>
-</menu>
+    <h2
+      class={cn(
+        "m-0 text-3xl font-head text-gray-600 hover:text-black",
+        isHome && "text-6xl max-sm:text-[10vw]",
+      )}
+    >
+      <a class="no-underline" href="/">Přestupní stanice</a>
+    </h2>
+    <div class="internal-links flex gap-4 items-center max-xs:flex-col">
+      {
+        navigations.map(({ link, label }, index) => (
+          <>
+            {index !== 0 && (
+              <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200 max-sm:hidden" />
+            )}
+            <HeaderLink isSmall href={link}>
+              {label}
+            </HeaderLink>
+          </>
+        ))
+      }
+    </div>
+  </menu>
+</div>
