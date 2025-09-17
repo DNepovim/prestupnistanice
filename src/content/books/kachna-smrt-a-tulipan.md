@@ -15,7 +15,7 @@ color: '#c7403c'
 bgColor: '#f9cd36'
 ---
 
-*Je to příběh života, umírání a smrti.*
+Je to příběh života, umírání a smrti.
 
 Pozoruhodná a do řady světových jazyků přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí. Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.
 
