@@ -85,7 +85,10 @@ const philosophyBooks = (
           <div class="line-clamp-3 text-xl">
             {
               lastBook.description && (
-                <TinaMarkdown content={lastBook.description} />
+                <TinaMarkdown
+                  content={lastBook.description}
+                  components={{ p: (props) => props?.children }}
+                />
               )
             }
           </div>
