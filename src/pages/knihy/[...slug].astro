@@ -104,8 +104,10 @@ const authorsBooks = (
             link={`/autori/${a._sys?.filename}`}
             color={book.color ?? undefined}
             description={a.description}
-            label={a.role ? rolesMap[a.role] : undefined}
-          />
+            moreLabel="více o autorovi"
+          >
+            {a.role ? rolesMap[a.role] : undefined}
+          </Excerpt>
         ))
     }
   </section>

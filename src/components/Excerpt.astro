@@ -11,10 +11,10 @@ interface Props {
   title?: string;
   color?: string;
   description?: TinaMarkdownContent | TinaMarkdownContent[] | string;
-  label?: any;
+  moreLabel?: string;
 }
 
-const { image, link, title, color, description, label, className } =
+const { image, link, title, color, description, moreLabel, className } =
   Astro.props;
 ---
 
@@ -67,7 +67,7 @@ const { image, link, title, color, description, label, className } =
         href={link}
         style={{ color: color ?? "black" }}
       >
-        více o knize
+        {moreLabel ?? "více o knize"}
         <span
           class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
           style={{ borderColor: color ?? "black" }}></span>
