@@ -69,7 +69,10 @@ const {
             (isString(description) ? (
               description
             ) : (
-              <TinaMarkdown content={description} />
+              <TinaMarkdown
+                content={description}
+                components={{ p: (props) => props?.children }}
+              />
             ))
         }
       </div>
