@@ -4,7 +4,7 @@ date: 2019
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-cover: /nevychovne-eseje-o-vychove.jpg
+cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 ---
 

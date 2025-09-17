@@ -4,7 +4,7 @@ date: 2011
 authors:
   - author: src/content/authors/jiri-soucek.md
     role: author
-cover: /ta-moje-realita.jpg
+cover: /images/ta-moje-realita.jpg
 category: poetry
 ---
 

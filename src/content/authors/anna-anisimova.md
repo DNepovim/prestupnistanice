@@ -2,7 +2,7 @@
 slug: anna-anisimova
 firstname: Anna
 surname: Anisimová
-image: /anisimova.webp
+image: /images/anisimova.webp
 ---
 
 *Ruská novinářka, redaktorka a spisovatelka knih pro děti.*

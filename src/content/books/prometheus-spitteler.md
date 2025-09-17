@@ -5,7 +5,7 @@ date: 2022
 authors:
   - author: src/content/authors/karl-spitteler.md
     role: author
-cover: /prometheus-spitteler.jpg
+cover: /images/prometheus-spitteler.jpg
 category: philosophy
 color: '#461200'
 bgColor: '#872f01'

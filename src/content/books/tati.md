@@ -5,7 +5,7 @@ date: 2022
 authors:
   - author: src/content/authors/philippe-corentin.md
     role: author
-cover: /tati.jpg
+cover: /images/tati.jpg
 category: forKids
 color: '#775c4b'
 ---

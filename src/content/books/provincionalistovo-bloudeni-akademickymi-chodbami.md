@@ -1,10 +1,11 @@
 ---
+slug: provincionalistovo-bloudeni-akademickymi-chodbami
 title: Provincionalistovo bloudění akademickými chodbami
 date: 2021
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-cover: /provincionalistovo-bloudeni-akademickými-chodbami.jpg
+cover: /images/provincionalistovo-bloudeni-akademickymi-chodbami.jpg
 category: philosophy
 ---
 

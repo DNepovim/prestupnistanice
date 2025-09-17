@@ -4,7 +4,7 @@ date: 2022
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-cover: /eseje-o-stesku-upadku-a-filosofii.jpg
+cover: /images/eseje-o-stesku-upadku-a-filosofii.jpg
 category: philosophy
 ---
 

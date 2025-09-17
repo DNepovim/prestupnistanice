@@ -5,7 +5,7 @@ date: 2023
 authors:
   - author: src/content/authors/vilem-flusser.md
     role: author
-cover: /lidska-geneze.png
+cover: /images/lidska-geneze.png
 category: philosophy
 color: '#564019'
 bgColor: '#b87600'

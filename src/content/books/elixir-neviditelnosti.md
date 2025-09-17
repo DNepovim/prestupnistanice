@@ -6,7 +6,7 @@ date: 2023
 authors:
   - author: src/content/authors/marie-blahova.md
     role: author
-cover: /elixir-neviditelnosti.jpg
+cover: /images/elixir-neviditelnosti.jpg
 category: novel
 color: '#3d6431'
 bgColor: '#bdd743'

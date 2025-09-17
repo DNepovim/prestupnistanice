@@ -7,6 +7,7 @@ import {
   uppercaseFirstLetter,
   uppercaseEveryFirstLetters,
 } from "../utils/uppercaseFirstLetter";
+import { routes } from "../routes";
 
 const req = Astro.request;
 const url = new URL(req.url);
@@ -55,14 +56,14 @@ const recentBooks = (
         recentBooks.map((book) => (
           <Book
             title={book.title}
-            link={`/knihy/${book._sys.filename}`}
+            link={routes.books.detail(book)}
             image={book.cover ?? undefined}
             color={book.color ?? undefined}
             authors={(book.authors ?? [])
               .filter((a) => a?.role === "author")
               .map((author) => author?.author)
               .filter(isDefined)
-              .map((a) => ({ ...a, link: `/authori/${a._sys.filename}` }))}
+              .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
           />
         ))
       }

@@ -8,6 +8,7 @@ import { RichText } from "../../components/RichText";
 import { isDefined } from "../../utils/isDefined";
 import BooksGrid from "../../components/BooksGrid.astro"
 import Book from "../../components/Book.astro"
+import { routes } from "../../routes";
 
 export async function getStaticPaths() {
   const posts = await getCollection("author");
@@ -68,14 +69,14 @@ const books = (
         {books.map((book) => (
           <Book
             title={book.title}
-            link={`/knihy/${book._sys.filename}`}
+            link={routes.books.detail(book)}
             image={book.cover ?? undefined}
             color={book.color ?? undefined}
             authors={(book.authors ?? [])
               .filter((a) => a?.role === "author")
               .map((author) => author?.author)
               .filter(isDefined)
-              .map((a) => ({ ...a, link: `/authori/${a._sys.filename}` }))}
+              .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
           />
         ))}
       </BooksGrid>

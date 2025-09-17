@@ -4,7 +4,7 @@ date: 2018
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-cover: /filosoficke-eseje.jpg
+cover: /images/filosoficke-eseje.jpg
 category: philosophy
 ---
 

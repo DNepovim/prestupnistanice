@@ -9,7 +9,7 @@ authors:
     role: author
   - author: src/content/authors/julia-sidneva.md
     role: illustration
-cover: /neviditeln%C3%BD-slon.GIF
+cover: /images/neviditelny-slon.GIF
 category: forKids
 color: '#634c80'
 bgColor: '#72a1c9'

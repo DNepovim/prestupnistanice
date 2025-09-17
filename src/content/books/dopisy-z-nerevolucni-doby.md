@@ -4,7 +4,7 @@ date: 2019
 authors:
   - author: src/content/authors/petr-blaha.md
     role: author
-cover: /dopisy-z-nerevolucni-doby.jpg
+cover: /images/dopisy-z-nerevolucni-doby.jpg
 category: philosophy
 ---
 

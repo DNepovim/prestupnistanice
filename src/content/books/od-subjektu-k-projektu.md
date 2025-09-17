@@ -4,7 +4,7 @@ date: 2020
 authors:
   - author: src/content/authors/vilem-flusser.md
     role: author
-cover: /20FlusserOSKO_obalka.jpg
+cover: /images/od-subjektu-k-projektu.jpg
 category: philosophy
 ---
 

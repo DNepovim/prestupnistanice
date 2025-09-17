@@ -4,7 +4,7 @@ date: 2020
 authors:
   - author: src/content/authors/martin-buber.md
     role: author
-cover: /cesty-do-utopie.jpg
+cover: /images/cesty-do-utopie.jpg
 category: philosophy
 ---
 

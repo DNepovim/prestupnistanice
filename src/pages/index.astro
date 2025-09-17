@@ -1,4 +1,5 @@
 ---
+import { routes } from "../routes";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
 import Section from "../components/Section.astro";
@@ -59,18 +60,20 @@ const philosophyBooks = (
             description={book.description}
             image={book.cover ?? undefined}
             color={book.color ?? undefined}
-            link={`/knihy/${book._sys.filename}`}
+            link={routes.books.detail(book)}
           >
             {book.authors
               ?.filter((a) => a?.role === "author")
+              .map((a) => a?.author)
+              .filter(isDefined)
               .map((a, index) => (
                 <span class="whitespace-nowrap">
                   {index !== 0 ? ", " : ""}
                   <a
                     class="group text-gray-500 hover:text-black transition-colors font-alt"
-                    href={`/autori/${a?.author?._sys.filename}`}
+                    href={routes.authors.detail(a)}
                   >
-                    {a?.author?.firstname} {a?.author?.surname}
+                    {a.firstname} {a.surname}
                   </a>
                 </span>
               ))}
@@ -79,7 +82,7 @@ const philosophyBooks = (
       }
     </div>
     <div class="flex justify-center my-20">
-      <ArrowLink href="/knihy">všechny knihy</ArrowLink>
+      <ArrowLink href={routes.books.list()}>všechny knihy</ArrowLink>
     </div>
   </Section>
   {
@@ -89,14 +92,14 @@ const philosophyBooks = (
           {forKidsBooks.map((book) => (
             <Book
               title={book.title}
-              link={`/knihy/${book._sys.filename}`}
+              link={routes.books.detail(book)}
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
                 .filter((a) => a?.role === "author")
                 .map((author) => author?.author)
                 .filter(isDefined)
-                .map((a) => ({ ...a, link: `/authori/${a._sys.filename}` }))}
+                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
             />
           ))}
         </BooksGrid>
@@ -117,7 +120,7 @@ const philosophyBooks = (
                 .filter((a) => a?.role === "author")
                 .map((author) => author?.author)
                 .filter(isDefined)
-                .map((a) => ({ ...a, link: `/authori/${a._sys.filename}` }))}
+                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
             />
           ))}
         </BooksGrid>

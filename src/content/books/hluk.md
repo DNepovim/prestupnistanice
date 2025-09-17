@@ -4,7 +4,7 @@ date: 2022
 authors:
   - author: src/content/authors/theodor-lessing.md
     role: author
-cover: /hluk.jpg
+cover: /images/hluk.jpg
 category: philosophy
 ---
 

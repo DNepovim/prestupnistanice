@@ -1,6 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import { cn } from "../utils/cn";
+import { routes } from "../routes";
 
 interface Props {
   isHome?: boolean;
@@ -10,7 +11,7 @@ const { isHome } = Astro.props;
 
 const navigations = [
   {
-    link: "/knihy",
+    link: routes.books.list(),
     label: "Naše knihy",
   },
   {
