@@ -50,7 +50,7 @@ const philosophyBooks = (
   .filter(isDefined);
 ---
 
-<Layout>
+<Layout bgColor={lastBook.bgColor ?? undefined}>
   <Section isWide>
     <div
       class="rounded-xl flex min-md:h-64 mt-8 min-sm:mt-20 max-sm:flex-col"
