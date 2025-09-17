@@ -6,12 +6,10 @@ import { cn } from "../utils/cn";
 
 interface Props {
   siteTitle?: string;
-  isHome?: boolean;
-  isWide?: boolean;
   bgColor?: string;
 }
 
-const { siteTitle, isHome, bgColor, isWide } = Astro.props;
+const { siteTitle, bgColor } = Astro.props;
 
 const color = bgColor ?? "#fdba74";
 
@@ -35,16 +33,11 @@ const isDev = import.meta.env.DEV;
       background: `linear-gradient(180deg, transparent 60%, ${color}44 90%, ${color}99)`,
     }}
   >
-    <Header isHome={isHome} />
+    <Header  />
 
     <!-- <Trains client:only /> -->
 
-    <main
-      class={cn(
-        "pb-16 mx-auto px-6 flex-1",
-        isWide ? "max-w-[70rem]" : "max-w-[56rem]",
-      )}
-    >
+    <main class="pb-16 pt-8 px-6 flex-1">
       <slot />
     </main>
 

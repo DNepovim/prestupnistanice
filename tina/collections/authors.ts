@@ -48,6 +48,21 @@ export const AuthorsCollection: Collection = {
       name: "deathDate",
       label: "Datum úmrtí",
     },
+    {
+      type: "string",
+      name: "gender",
+      label: "Pohlaví",
+      options: [
+        {
+          label: "Žena",
+          value: "female",
+        },
+        {
+          label: "Muž",
+          value: "male",
+        },
+      ],
+    },
     { type: "image", name: "image", label: "Fotka" },
 
     {

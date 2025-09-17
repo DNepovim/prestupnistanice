@@ -1,6 +1,7 @@
 ---
 import { routes } from "../routes";
 import { client } from "../../tina/__generated__/client.ts";
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Section from "../components/Section.astro";
 import Excerpt from "../components/Excerpt.astro";
@@ -8,12 +9,20 @@ import BooksGrid from "../components/BooksGrid.astro";
 import ArrowLink from "../components/ArrowLink.astro";
 import Book from "../components/Book.astro";
 import { isDefined } from "../utils/isDefined";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { rolesMap } from "../utils/rolesMap";
 
-const recentBooks = (
-  (await client.queries.booksConnection({ sort: "date", last: 3 })).data
+const [lastBook, ...recentBooks] = (
+  (await client.queries.booksConnection({ sort: "date", last: 4 })).data
     .booksConnection.edges ?? []
 )
   .map((item) => item?.node)
+  .filter(isDefined);
+
+const lastBookAuthors = lastBook.authors
+  ?.filter((a) => a?.isMain)
+  .filter(isDefined)
+  .map((a) => ({ ...a.author, role: a.role }))
   .filter(isDefined);
 
 const forKidsBooks = (
@@ -41,15 +50,95 @@ const philosophyBooks = (
   .filter(isDefined);
 ---
 
-<Layout isHome>
-  <sectino>
+<Layout>
+  <Section isWide>
+    <div
+      class="rounded-xl flex min-md:h-64 mt-20 max-sm:flex-col"
+      style={{
+        background: `linear-gradient(-45deg,transparent, ${lastBook.color}20, ${lastBook.bgColor}50)`,
+      }}
+    >
+      <div class="flex-1">
+        {
+          lastBook.cover && (
+            <a class="block min-md:-mb-32" href={routes.books.detail(lastBook)}>
+              <Image
+                alt={lastBook.title ?? ""}
+                src={lastBook.cover}
+                width={300}
+                height={300}
+                class="shadow-2xl border max-sm:mx-auto border-gray-200 -rotate-12 transition-transform hover:-rotate-8 duration-500"
+              />
+            </a>
+          )
+        }
+      </div>
+      <div class="py-8 px-4 min-sm:px-16 flex-3 flex flex-col justify-between">
+        <div>
+          <h2
+            class="text-[10vw] min-sm:text-6xl font-head mb-4 hover:underline"
+            style={{ color: lastBook.color }}
+          >
+            <a href={routes.books.detail(lastBook)}>{lastBook.title}</a>
+          </h2>
+
+          <div class="line-clamp-3 text-xl">
+            {
+              lastBook.description && (
+                <TinaMarkdown content={lastBook.description} />
+              )
+            }
+          </div>
+          <div class="flex justify-end pt-4 pr-8">
+            <ArrowLink
+              color={lastBook.color ?? undefined}
+              href={routes.books.detail(lastBook)}>více o knize</ArrowLink
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {
+      lastBookAuthors && (
+        <div class="flex gap-2 min-sm:justify-end mb-40 flex-wrap">
+          {lastBookAuthors.map((a) => (
+            <a
+              class="group flex items-center gap-4 hover:bg-white rounded-md py-2 px-4 transition-colors"
+              href={routes.authors.detail({
+                _sys: { filename: a?._sys?.filename ?? "" },
+              })}
+            >
+              {a.image && (
+                <Image
+                  src={a.image}
+                  alt={`${a.firstname} ${a.surname}`}
+                  width={40}
+                  height={40}
+                  class="rounded-full"
+                />
+              )}
+              <div>
+                <div class="group-hover:underline text-gray-800 text-alt font-alt">
+                  {a.firstname} {a.surname}
+                </div>
+                {a.role && (
+                  <div class="text-gray-500 text-sm">{rolesMap[a.role]}</div>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </Section>
+  <Section>
     <p
       class="text-2xl font-alt mt-16 text-center mb-24 italic px-6 text-gray-800"
     >
-      Roddinné knižní nakladatelství, které se ve své ediční činnosti soustředí
-      na kvalitní nekomerční tituly.
+      <strong>Přestupní stanice</strong> je roddinné knižní nakladatelství, které
+      se ve své ediční činnosti soustředí na kvalitní nekomerční tituly.
     </p>
-  </sectino>
+  </Section>
   <Section title="Nejnovější knihy">
     <div class="flex flex-col gap-16">
       {

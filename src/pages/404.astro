@@ -1,6 +1,7 @@
 ---
-import Book from "../components/Book.astro";
+import Section from "../components/Section.astro";
 import BooksGrid from "../components/BooksGrid.astro";
+import Book from "../components/Book.astro";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
 import {
@@ -26,31 +27,33 @@ const recentBooks = (
 ---
 
 <Layout>
-  <h1 class="pt-20 mb-40 font-alt text-4xl text-gray-600">
-    {
-      segments.length === 2 && segments[0] === "knihy" ? (
-        <>
-          Knihu{" "}
-          <span class="block my-4 font-head text-7xl text-orange-900">
-            {uppercaseFirstLetter(segments[1].replace(/-/g, " "))}
-          </span>{" "}
-          jsme zatím nevydali.
-        </>
-      ) : segments.length === 2 && segments[0] === "autori" ? (
-        <>
-          Od autora{" "}
-          <span class="block my-4 font-head text-7xl text-orange-900">
-            {uppercaseEveryFirstLetters(segments[1].replace(/-/g, " "))}
-          </span>{" "}
-          jsme zatím nic nevydali
-        </>
-      ) : (
-        "Tuto knihu jsme ještě nevydali"
-      )
-    }
-  </h1>
-  <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
-  <section>
+  <Section
+    ><h1 class="pt-20 mb-40 font-alt text-4xl text-gray-600">
+      {
+        segments.length === 2 && segments[0] === "knihy" ? (
+          <>
+            Knihu{" "}
+            <span class="block my-4 font-head text-7xl text-orange-900">
+              {uppercaseFirstLetter(segments[1].replace(/-/g, " "))}
+            </span>{" "}
+            jsme zatím nevydali.
+          </>
+        ) : segments.length === 2 && segments[0] === "autori" ? (
+          <>
+            Od autora{" "}
+            <span class="block my-4 font-head text-7xl text-orange-900">
+              {uppercaseEveryFirstLetters(segments[1].replace(/-/g, " "))}
+            </span>{" "}
+            jsme zatím nic nevydali
+          </>
+        ) : (
+          "Tuto knihu jsme ještě nevydali"
+        )
+      }
+    </h1>
+    <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
+  </Section>
+  <Section isWide>
     <BooksGrid>
       {
         recentBooks.map((book) => (
@@ -68,5 +71,5 @@ const recentBooks = (
         ))
       }
     </BooksGrid>
-  </section>
+  </Section>
 </Layout>

@@ -1,4 +1,5 @@
 ---
+import Section from "../../components/Section.astro";
 import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../../tina/__generated__/client.ts";
@@ -19,9 +20,9 @@ const books = (
   .reverse();
 ---
 
-<Layout siteTitle="Naše knihy" isWide>
-  <PageTitle class="max-w-[56rem] mx-auto">Naše knihy</PageTitle>
-  <section>
+<Layout siteTitle="Naše knihy">
+  <PageTitle>Naše knihy</PageTitle>
+  <Section isWide>
     <BooksGrid>
       {
         books.map((book) => (
@@ -39,5 +40,5 @@ const books = (
         ))
       }
     </BooksGrid>
-  </section>
+  </Section>
 </Layout>

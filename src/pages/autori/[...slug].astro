@@ -1,4 +1,5 @@
 ---
+import Section from "../../components/Section.astro";
 import PageTitle from "../../components/PageTitle.astro";
 import { Image } from "astro:assets";
 import { client } from "../../../tina/__generated__/client.ts";
@@ -6,8 +7,8 @@ import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { RichText } from "../../components/RichText";
 import { isDefined } from "../../utils/isDefined";
-import BooksGrid from "../../components/BooksGrid.astro"
-import Book from "../../components/Book.astro"
+import BooksGrid from "../../components/BooksGrid.astro";
+import Book from "../../components/Book.astro";
 import { routes } from "../../routes";
 
 export async function getStaticPaths() {
@@ -49,7 +50,7 @@ const books = (
   <PageTitle>
     {author.firstname}{" "}{author.surname}
   </PageTitle>
-  <section class="mb-8">
+  <Section className="mb-32">
     {
       author.image && (
         <Image
@@ -62,24 +63,25 @@ const books = (
       )
     }
     <RichText content={author.description} />
-  </section>
-  {
-    books.length > 0 && (
-      <BooksGrid>
-        {books.map((book) => (
-          <Book
-            title={book.title}
-            link={routes.books.detail(book)}
-            image={book.cover ?? undefined}
-            color={book.color ?? undefined}
-            authors={(book.authors ?? [])
-              .filter((a) => a?.role === "author")
-              .map((author) => author?.author)
-              .filter(isDefined)
-              .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-          />
-        ))}
-      </BooksGrid>
-    )
-  }
+  </Section>
+  <Section  className="clear-both">{
+      books.length > 0 && (
+        <BooksGrid>
+          {books.map((book) => (
+            <Book
+              title={book.title}
+              link={routes.books.detail(book)}
+              image={book.cover ?? undefined}
+              color={book.color ?? undefined}
+              authors={(book.authors ?? [])
+                .filter((a) => a?.role === "author")
+                .map((author) => author?.author)
+                .filter(isDefined)
+                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
+            />
+          ))}
+        </BooksGrid>
+      )
+    }</Section
+  >
 </Layout>

@@ -1,13 +1,6 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
-import { cn } from "../utils/cn";
 import { routes } from "../routes";
-
-interface Props {
-  isHome?: boolean;
-}
-
-const { isHome } = Astro.props;
 
 const navigations = [
   {
@@ -25,12 +18,7 @@ const navigations = [
   <menu
     class="max-w-[90rem] mx-auto items-center flex justify-between px-6 py-4 transition-colors max-lg:flex-col gap-4"
   >
-    <h2
-      class={cn(
-        "m-0 text-3xl font-head text-gray-600 hover:text-black",
-        isHome && "text-6xl max-sm:text-[10vw]",
-      )}
-    >
+    <h2 class="m-0 text-3xl font-head text-gray-600 hover:text-black">
       <a class="no-underline" href="/">Přestupní stanice</a>
     </h2>
     <div class="internal-links flex gap-4 items-center max-xs:flex-col">

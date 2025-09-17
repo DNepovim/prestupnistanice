@@ -4,6 +4,7 @@ title: Lidská geneze
 date: 2023
 authors:
   - author: src/content/authors/vilem-flusser.md
+    isMain: true
     role: author
 cover: /images/lidska-geneze.png
 category: philosophy

@@ -1,4 +1,5 @@
 ---
+import Section from "../components/Section.astro";
 import { client } from "../../tina/__generated__/client.ts";
 import Layout from "../layouts/Layout.astro";
 import { RichText } from "../components/RichText";
@@ -19,5 +20,5 @@ const page = res.data.pages;
 
 <Layout siteTitle={page.title}>
   <PageTitle>{page.title}</PageTitle>
-  <RichText content={page.content} />
+  <Section><RichText content={page.content} /></Section>
 </Layout>

@@ -7,6 +7,7 @@ pagesCount: 44
 isbn: 978–80–909036–2–3
 authors:
   - author: src/content/authors/wolf-erlbruch.md
+    isMain: true
     role: author
 cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids

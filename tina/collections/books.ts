@@ -57,6 +57,11 @@ export const BooksCollection: Collection = {
           collections: ["authors"],
         },
         {
+          name: "isMain",
+          label: "Hlavní",
+          type: "boolean",
+        },
+        {
           name: "role",
           label: "Role",
           type: "string",
