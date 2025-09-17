@@ -12,10 +12,19 @@ interface Props {
   color?: string;
   description?: TinaMarkdownContent | TinaMarkdownContent[] | string;
   moreLabel?: string;
+  isRounded?: boolean;
 }
 
-const { image, link, title, color, description, moreLabel, className } =
-  Astro.props;
+const {
+  image,
+  link,
+  title,
+  color,
+  description,
+  moreLabel,
+  isRounded,
+  className,
+} = Astro.props;
 ---
 
 <article class={cn("flex gap-8", "max-xs:flex max-xs:flex-col", className)}>
@@ -26,8 +35,11 @@ const { image, link, title, color, description, moreLabel, className } =
           alt={title ?? ""}
           src={image}
           width={157.5}
-          height={225}
-          class="shadow-2xl border border-gray-200"
+          height={157.5}
+          class={cn(
+            "shadow-2xl border border-gray-200",
+            isRounded && "rounded-full",
+          )}
         />
       </a>
     )
