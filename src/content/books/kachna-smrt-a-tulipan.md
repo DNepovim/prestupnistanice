@@ -11,7 +11,7 @@ authors:
     role: author
 cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids
-color: '#c7403c'
+color: '#eaa345'
 bgColor: '#f9cd36'
 ---
 
