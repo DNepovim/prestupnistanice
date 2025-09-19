@@ -80,7 +80,10 @@ const {
     {
       link && (
         <div class="flex justify-end pr-4">
-          <ArrowLink href={link}> {moreLabel ?? "více o knize"} </ArrowLink>
+          <ArrowLink href={link} color={color}>
+            {" "}
+            {moreLabel ?? "více o knize"}{" "}
+          </ArrowLink>
         </div>
       )
     }
