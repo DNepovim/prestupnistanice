@@ -10,7 +10,6 @@ import { isDefined } from "../../utils/isDefined";
 import BooksGrid from "../../components/BooksGrid.astro";
 import Book from "../../components/Book.astro";
 import { routes } from "../../routes";
-import { undefined } from "astro:schema";
 
 export async function getStaticPaths() {
   const posts = await getCollection("author");
@@ -46,7 +45,7 @@ const books = (
 ---
 
 <Layout siteTitle={`${author.firstname} ${author.surname}`}>
-  <PageTitle color={books[0].color ?? "black"}>
+  <PageTitle color={books[0]?.color ?? "black"}>
     {author.firstname}{" "}{author.surname}
   </PageTitle>
 
@@ -68,7 +67,7 @@ const books = (
     >{
       books.length > 0 && (
         <BooksGrid>
-          {books.map((book) => (
+          {books.filter(isDefined).map((book) => (
             <Book
               title={book.title}
               link={routes.books.detail(book)}
