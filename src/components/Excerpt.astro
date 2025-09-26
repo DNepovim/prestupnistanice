@@ -13,6 +13,7 @@ interface Props {
   link?: string;
   title: string;
   color?: string;
+  secondColor?: string;
   description?: TinaMarkdownContent | TinaMarkdownContent[] | string;
   moreLabel?: string;
   isRounded?: boolean;
@@ -23,6 +24,7 @@ const {
   link,
   title,
   color,
+  secondColor,
   description,
   moreLabel,
   isRounded,
@@ -54,10 +56,13 @@ const {
         style={{ color: color ?? "black" }}
       >
         <a href={link}>{tp(title)}</a>
+        <span
+          class="absolute left-0 bottom-0 h-[2px] w-0 group-hover:w-full transition-all duration-500"
+          style={{ backgroundColor: secondColor }}></span>
       </h2>
-      <div class="relative w-8 inline-block mb-2">
+      <div class="relative w-8 inline-block mb-2 mx-2">
         <div
-          class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 transition-all absolute w-8 h-[1px] b-2 bg-gray-400 max-sm:hidden"
+          class="duration-500 peer-has-hover:w-32 peer-has-hover:-left-24 left-0 bottom-0 transition-all absolute w-8 h-[1px] bg-gray-400 max-sm:hidden"
         >
         </div>
       </div>
@@ -95,7 +100,7 @@ const {
     {
       link && (
         <div class="flex justify-end pr-4">
-          <ArrowLink href={link} color={color}>
+          <ArrowLink href={link} color={secondColor}>
             {" "}
             {moreLabel ?? "více o knize"}{" "}
           </ArrowLink>

@@ -157,6 +157,7 @@ const philosophyBooks = (
             description={book.description}
             image={book.cover ?? undefined}
             color={book.color ?? undefined}
+            secondColor={book.bgColor ?? undefined}
             link={routes.books.detail(book)}
           >
             {book.authors

@@ -11,7 +11,7 @@ const isActive = href === `/${pathname}`;
 
 <a
   href={href}
-  style={{color: isActive ? color : "oklch(44.6% 0.03 256.802)"}}
+  style={{ color: isActive ? color : "oklch(44.6% 0.03 256.802)" }}
   class={cn(
     "group hover:text-black no-underline font-head relative",
     isSmall ? "text-xl" : "text-2xl",
@@ -20,6 +20,7 @@ const isActive = href === `/${pathname}`;
 >
   <slot />
   <span
+    style={{ backgroundColor: color }}
     class="absolute left-0 bottom-0 h-[1px] w-0 transition-all group-hover:w-full bg-gray-400 duration-600"
   ></span>
 </a>
