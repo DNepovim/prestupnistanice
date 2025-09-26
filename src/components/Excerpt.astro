@@ -4,12 +4,13 @@ import { cn } from "../utils/cn";
 import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
 import { isString } from "../utils/isString";
 import ArrowLink from "../components/ArrowLink.astro";
+import {tp} from "../utils/tp"
 
 interface Props {
   className?: string;
   image?: string;
   link?: string;
-  title?: string;
+  title: string;
   color?: string;
   description?: TinaMarkdownContent | TinaMarkdownContent[] | string;
   moreLabel?: string;
@@ -51,7 +52,7 @@ const {
         class="peer inline text-4xl font-head relative group"
         style={{ color: color ?? "black" }}
       >
-        <a href={link}>{title}</a>
+        <a href={link}>{tp(title)}</a>
       </h2>
       <div class="relative w-8 inline-block mb-2">
         <div
@@ -67,11 +68,11 @@ const {
         {
           description &&
             (isString(description) ? (
-              description
+              tp(description)
             ) : (
               <TinaMarkdown
                 content={description}
-                components={{ p: (props) => props?.children, i: (props) => props?.children, q: (props) => props.children }}
+                components={{ p: (props) => tp( props?.children ), i: (props) => tp(props?.children), q: (props) => tp(props.children) }}
               />
             ))
         }

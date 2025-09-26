@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import {tp} from "../utils/tp"
 
 interface Props {
   title: string;
@@ -31,7 +32,7 @@ const { title, link, image, color, authors } = Astro.props;
 
   <div class="min-h-30">
     <h2 class="font-head text-2xl" style={{ color: color ?? "black" }}>
-      <a href={link}>{title}</a>
+      <a href={link}>{tp(title)}</a>
     </h2>
     <p>
       {
