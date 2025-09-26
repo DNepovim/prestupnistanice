@@ -1,0 +1,38 @@
+---
+import Section from "../../components/Section.astro";
+import PageTitle from "../../components/PageTitle.astro";
+import Layout from "../../layouts/Layout.astro";
+import { client } from "../../../tina/__generated__/client.ts";
+import Book from "../../components/Book.astro";
+import BooksGrid from "../../components/BooksGrid.astro";
+import { routes } from "../../routes";
+
+function isDefined<T>(value: T | undefined | null): value is T {
+  return value !== undefined && value !== null;
+}
+
+const authors = (
+  (await client.queries.authorsConnection({ sort: "surname" })).data
+    .authorsConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined)
+  .reverse();
+---
+
+<Layout siteTitle="Autoři">
+  <PageTitle>Autoři</PageTitle>
+  <Section isWide>
+    <BooksGrid>
+      {
+        authors.map((author) => (
+          <Book
+            title={`${author.firstname} ${author.surname}`}
+            link={routes.authors.detail(author)}
+            image={author.image ?? undefined}
+          />
+        ))
+      }
+    </BooksGrid>
+  </Section>
+</Layout>
