@@ -1,23 +1,47 @@
 ---
-
+import { Image } from "astro:assets";
+import TrainImage from "../assets/vlak.png";
 ---
 
 <div class="w-full">
-  <footer class="flex justify-between px-4 py-8 min-sm:items-end max-w-[90rem] mx-auto max-sm:flex-col gap-8">
-    <div class="text-xs">
-      <p>
-        E-mail: <a href="mailto:skalak@knihyps.cz" target="_blank"
-          >skalak@knihyps.cz</a
-        >
-      </p><p>
-        FB: <a
-          href="https://www.facebook.com/knihyprestupnistanice"
-          target="_blank">facebook.com/knihyprestupnistanice</a
-        >
-      </p>
+  <footer class="max-w-[56rem] mx-auto px-4">
+    <div
+      class="flex justify-between my-16 min-sm:items-end max-sm:flex-col gap-8"
+    >
+      <div class="flex-1">
+        <h3>Obsah</h3>
+        <menu class="text-xs">
+          <li><a href="/knihy">Naše knihy</a></li>
+          <li><a href="/autori">Autoři</a></li>
+          <li><a href="/o-nakladatelstvi">O nakladatelstvi</a></li>
+        </menu>
+      </div>
+      <div class="flex-1">
+        <Image src={TrainImage} alt="Logo" width={240} height={100} />
+      </div>
+
+      <div class="flex-1 text-right">
+        <h3>Kontakty</h3>
+        <p class="text-xs">
+          E-mail: <a href="mailto:skalak@knihyps.cz" target="_blank"
+            >skalak@knihyps.cz</a
+          >
+        </p><p class="text-xs">
+          FB: <a
+            href="https://www.facebook.com/knihyprestupnistanice"
+            target="_blank">facebook.com/knihyprestupnistanice</a
+          >
+        </p>
+        <p class="text-xs">
+          Naše knihy jsou dostupné v distribuci <a
+            href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
+            >Kosmas</a
+          >.
+        </p>
+      </div>
     </div>
 
-    <p class="text-xs opacity-30">
+    <p class="text-xs opacity-30 text-right my-4">
       Web písmy <a
         class="hover:bg-gray-400 hover:text-white transition-colors"
         href="https://fonts.adobe.com/fonts/quiche-flare"
