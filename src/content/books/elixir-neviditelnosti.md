@@ -1,10 +1,11 @@
 ---
 author: marie-blahova
-slug: elixir-nevidtelnosti
-title: Elixír nevidtelnosti
+slug: elixir-neviditelnosti
+title: Elixír neviditelnosti
 date: 2023
 authors:
   - author: src/content/authors/marie-blahova.md
+    isMain: true
     role: author
 cover: /images/elixir-neviditelnosti.jpg
 category: novel

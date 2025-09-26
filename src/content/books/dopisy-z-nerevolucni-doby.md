@@ -1,8 +1,10 @@
 ---
+slug: dopisy-z-nerevolucni-doby
 title: "Dopisy z\_nerevoluční doby"
 date: 2019
 authors:
   - author: src/content/authors/petr-blaha.md
+    isMain: true
     role: author
 cover: /images/dopisy-z-nerevolucni-doby.jpg
 category: philosophy

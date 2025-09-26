@@ -4,6 +4,7 @@ title: Tati!
 date: 2022
 authors:
   - author: src/content/authors/philippe-corentin.md
+    isMain: true
     role: author
 cover: /images/tati.jpg
 category: forKids

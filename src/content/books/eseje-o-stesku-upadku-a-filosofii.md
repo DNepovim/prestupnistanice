@@ -1,8 +1,10 @@
 ---
+slug: eseje-o-stesku-upadku-a-filosofii
 title: "Eseje o\_stesku, úpadku a\_filosofii"
 date: 2022
 authors:
   - author: src/content/authors/petr-blaha.md
+    isMain: true
     role: author
 cover: /images/eseje-o-stesku-upadku-a-filosofii.jpg
 category: philosophy

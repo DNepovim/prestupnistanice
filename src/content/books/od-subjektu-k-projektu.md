@@ -1,8 +1,10 @@
 ---
+slug: od-subjektu-k-projektu
 title: Od subjektu k projektu
 date: 2020
 authors:
   - author: src/content/authors/vilem-flusser.md
+    isMain: true
     role: author
 cover: /images/od-subjektu-k-projektu.jpg
 category: philosophy

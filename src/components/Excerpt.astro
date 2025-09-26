@@ -4,7 +4,8 @@ import { cn } from "../utils/cn";
 import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
 import { isString } from "../utils/isString";
 import ArrowLink from "../components/ArrowLink.astro";
-import {tp} from "../utils/tp"
+import { tp } from "../utils/tp";
+import type { PropsWithChildren } from "react";
 
 interface Props {
   className?: string;
@@ -72,7 +73,20 @@ const {
             ) : (
               <TinaMarkdown
                 content={description}
-                components={{ p: (props) => tp( props?.children ), i: (props) => tp(props?.children), q: (props) => tp(props.children) }}
+                components={{
+                  p: (props) =>
+                    isString(props?.children)
+                      ? tp(props?.children)
+                      : props?.children,
+                  i: (props) =>
+                    isString(props?.children)
+                      ? tp(props.children)
+                      : props?.children,
+                  q: (props) =>
+                    isString(props?.children)
+                      ? tp(props.children)
+                      : props?.children,
+                }}
               />
             ))
         }

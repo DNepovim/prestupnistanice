@@ -1,8 +1,10 @@
 ---
+slug: postdejiny
 title: Postdějiny
 date: 2018
 authors:
   - author: src/content/authors/vilem-flusser.md
+    isMain: true
     role: author
 cover: /images/postdejiny.jpg
 ---

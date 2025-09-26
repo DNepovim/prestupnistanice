@@ -1,8 +1,10 @@
 ---
+slug: filosoficke-eseje
 title: Filosofické eseje
 date: 2018
 authors:
   - author: src/content/authors/petr-blaha.md
+    isMain: true
     role: author
 cover: /images/filosoficke-eseje.jpg
 category: philosophy

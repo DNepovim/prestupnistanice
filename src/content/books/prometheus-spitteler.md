@@ -4,6 +4,7 @@ title: Prométheus Spitteler
 date: 2022
 authors:
   - author: src/content/authors/karl-spitteler.md
+    isMain: true
     role: author
 cover: /images/prometheus-spitteler.jpg
 category: philosophy

@@ -1,8 +1,10 @@
 ---
+slug: hluk-proti-hlucnosti-naseho-zivota
 title: Hluk - Proti hlučnosti našeho života
 date: 2022
 authors:
   - author: src/content/authors/theodor-lessing.md
+    isMain: true
     role: author
 cover: /images/hluk.jpg
 category: philosophy

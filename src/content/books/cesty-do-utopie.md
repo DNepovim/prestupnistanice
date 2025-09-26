@@ -1,8 +1,10 @@
 ---
+slug: cesty-do-utopie
 title: "Cesty do\_utopie"
 date: 2020
 authors:
   - author: src/content/authors/martin-buber.md
+    isMain: true
     role: author
 cover: /images/cesty-do-utopie.jpg
 category: philosophy

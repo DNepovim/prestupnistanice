@@ -23,4 +23,4 @@ Závažné téma je pro dětského čtenáře působivě podáno jemně a s velk
 
 Smrt tu není vylíčena jako ta, co bere život, ale ta, která čeká. Čeká až přijde nemoc, nehoda nebo liška. Mezitím tu je na blízku. Smrt nezapomíná na nikoho ze svého stáda.
 
-Jako by představená smrt měla v sobě něco z dobrého pastýře.
+Jako by představená smrt měla v sobě něco z dobrého pastýře. 

@@ -1,8 +1,10 @@
 ---
+slug: pesimismus-a-dalsi-uvahy
 title: "Pesimismus?: a\_další úvahy"
 date: 2022
 authors:
   - author: src/content/authors/oswald-spengler.md
+    isMain: true
     role: author
 cover: /images/pesimismus.jpg
 category: philosophy

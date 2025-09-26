@@ -1,8 +1,10 @@
 ---
+slug: ta-moje-realita
 title: Ta moje realita
 date: 2011
 authors:
   - author: src/content/authors/jiri-soucek.md
+    isMain: true
     role: author
 cover: /images/ta-moje-realita.jpg
 category: poetry
