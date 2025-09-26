@@ -67,7 +67,7 @@ const philosophyBooks = (
                 src={lastBook.cover}
                 width={300}
                 height={300}
-                class="shadow-2xl border max-sm:mx-auto border-gray-200 -rotate-12 transition-transform hover:-rotate-8 duration-500"
+                class="shadow-2xl border max-sm:mx-auto border-gray-200 rotate-0 animate-rotate-on-load transition-transform hover:-rotate-8 duration-500"
               />
             </a>
           )
@@ -76,12 +76,14 @@ const philosophyBooks = (
       <div class="py-8 px-4 min-sm:px-16 flex-3 flex flex-col justify-between">
         <div>
           <h2
-            class="group relative text-[10vw] min-sm:text-6xl font-head mb-4 inline-block"
+            class="group relative font-medium text-[10vw] min-sm:text-6xl font-head mb-4 inline-block"
             style={{ color: lastBook.color }}
           >
-            <a class="relative z-10" href={routes.books.detail(lastBook)}>{lastBook.title}</a>
+            <a class="relative z-10" href={routes.books.detail(lastBook)}
+              >{lastBook.title}</a
+            >
             <span
-              class="absolute left-0 bottom-0 h-[4px] w-0 transition-all group-hover:w-full duration-600"
+              class="absolute left-0 bottom-0 h-[4px] w-0 animate-width-expand"
               style={{ backgroundColor: lastBook.bgColor }}></span>
           </h2>
 

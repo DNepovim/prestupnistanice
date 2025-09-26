@@ -7,6 +7,41 @@ body {
   font-size: 18px;
 }
 
+@keyframes width-expand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes rotate-on-load {
+  from {
+    transform: rotate(-20deg);
+  }
+  to {
+    transform: rotate(-12deg);
+  }
+}
+
+@keyframes opacity-on-load {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-width-expand {
+  animation: width-expand 0.6s ease-out forwards;
+}
+
+.animate-rotate-on-load {
+  animation: rotate-on-load 0.8s ease-out forwards;
+}
+
 @theme {
   --font-head: "quiche-flare", sans-serif;
   --font-display: "montserrat", sans-serif;
