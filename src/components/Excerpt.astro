@@ -71,7 +71,7 @@ const {
             ) : (
               <TinaMarkdown
                 content={description}
-                components={{ p: (props) => props?.children }}
+                components={{ p: (props) => props?.children, i: (props) => props?.children, q: (props) => props.children }}
               />
             ))
         }

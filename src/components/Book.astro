@@ -16,19 +16,17 @@ interface Props {
 const { title, link, image, color, authors } = Astro.props;
 ---
 
-<article class="min-md:mb-12 flex flex-col gap-4 justify-end w-64">
+<article class="min-md:mb-12 flex flex-col gap-4 justify-end w-64 jus">
   {
-    image && (
       <a href={link}>
-        <Image
+        { image ? <Image
           alt={title}
           src={image}
           width={157.5}
           height={225}
           class="shadow-2xl border border-gray-200"
-        />
+    /> : <div class="h-40 w-30 bg-gray-300"></div>}
       </a>
-    )
   }
 
   <div class="min-h-30">

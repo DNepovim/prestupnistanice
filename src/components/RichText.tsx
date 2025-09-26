@@ -10,6 +10,7 @@ export const RichText = ({ content }: Props) => {
       content={content}
       components={{
         p: (props) => <p className="mb-4" {...props} />,
+        blockquote: (props) => <blockquote className="mb-4 font-alt text-2xl italic" {...props} />,
         a: (props) => <a href={props.url} className="underline hover:no-underline" {...props} />,
       }}
     />
