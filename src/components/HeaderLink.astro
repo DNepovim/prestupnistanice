@@ -2,18 +2,18 @@
 import type { HTMLAttributes } from "astro/types";
 import { cn } from "../utils/cn";
 
-type Props = HTMLAttributes<"a"> & { isSmall?: boolean };
+type Props = HTMLAttributes<"a"> & { color: string; isSmall?: boolean };
 
-const { href, class: className, isSmall, ...props } = Astro.props;
+const { href, class: className, isSmall, color, ...props } = Astro.props;
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
+const isActive = href === `/${pathname}`;
 ---
 
 <a
   href={href}
+  style={{color: isActive ? color : "oklch(44.6% 0.03 256.802)"}}
   class={cn(
-    "group text-gray-600 hover:text-black no-underline font-head relative",
+    "group hover:text-black no-underline font-head relative",
     isSmall ? "text-xl" : "text-2xl",
   )}
   {...props}

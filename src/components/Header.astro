@@ -2,6 +2,8 @@
 import HeaderLink from "./HeaderLink.astro";
 import { routes } from "../routes";
 
+const { color } = Astro.props;
+
 const navigations = [
   {
     link: routes.books.list(),
@@ -21,14 +23,16 @@ const navigations = [
     <h2 class="m-0 text-3xl font-head text-gray-600 hover:text-black">
       <a class="no-underline" href="/">Přestupní stanice</a>
     </h2>
-    <div class="internal-links flex gap-4 items-center flex-wrap max-xs:justify-center">
+    <div
+      class="internal-links flex gap-4 items-center flex-wrap max-xs:justify-center"
+    >
       {
         navigations.map(({ link, label }, index) => (
           <>
             {index !== 0 && (
               <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200 max-sm:hidden" />
             )}
-            <HeaderLink isSmall href={link}>
+      <HeaderLink isSmall href={link} color={color}>
               {label}
             </HeaderLink>
           </>
