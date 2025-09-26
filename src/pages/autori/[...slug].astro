@@ -47,9 +47,10 @@ const books = (
 ---
 
 <Layout siteTitle={`${author.firstname} ${author.surname}`}>
-  <PageTitle>
+  <PageTitle color={books[0].color}>
     {author.firstname}{" "}{author.surname}
   </PageTitle>
+
   <Section className="mb-32">
     {
       author.image && (
