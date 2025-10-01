@@ -20,6 +20,8 @@ category: forKids
 color: '#775c4b'
 bgColor: '#81937c'
 claim: "Dílo nedávno zesnulého francouzského autora a\_ilustrátora dětských knížek Philippa Corentina je českému čtenáři dosud neznámé."
+color: "#775c4b"
+price: 299
 ---
 
 Půvabná knížka Tati! hodlá tuto mezeru zaplnit a nabídnout nezaměnitelný humor a nadsázku, které jsou Corentinovi vlastní a jejichž podmanivostí získal během svého života řadu ocenění a uznání.

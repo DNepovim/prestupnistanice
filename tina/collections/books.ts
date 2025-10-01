@@ -114,6 +114,14 @@ export const BooksCollection: Collection = {
       type: 'string',
       name: 'description',
       label: 'Popis',
+      type: "number",
+      name: "price",
+      label: "Cena (Kč)",
+    },
+    {
+      type: "rich-text",
+      name: "description",
+      label: "Popis",
       isBody: true,
       ui: {
         component: MarkdownInput,

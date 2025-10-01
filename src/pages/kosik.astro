@@ -1,0 +1,30 @@
+---
+import Section from "../components/Section.astro";
+import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/PageTitle.astro";
+import { OrderFlowWrapper } from "../components/OrderFlowWrapper";
+import { client } from "../../tina/__generated__/client.ts";
+
+// Get all books to match with cart items
+const booksResponse = await client.queries.booksConnection();
+const allBooks = (booksResponse.data.booksConnection.edges ?? [])
+  .map((edge) => edge?.node)
+  .filter((book) => !!book);
+
+// Create a simplified book data structure for the cart
+const booksData = allBooks.map((book) => ({
+  slug: book.slug || book._sys?.filename?.replace(/\.mdx?$/, "") || "",
+  title: book.title || "",
+  cover: book.cover || undefined,
+  authors: book.authors || [],
+  color: book.color || undefined,
+  price: book.price || undefined,
+}));
+---
+
+<Layout siteTitle="Objednávka">
+  <PageTitle>Objednávka</PageTitle>
+  <Section>
+    <OrderFlowWrapper booksData={booksData} client:load />
+  </Section>
+</Layout>

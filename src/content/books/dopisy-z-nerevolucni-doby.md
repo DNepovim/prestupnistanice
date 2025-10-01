@@ -12,6 +12,7 @@ category: philosophy
 color: '#4f0708'
 bgColor: '#bda19c'
 claim: "Kniha je pokusem o\_připomenutí svérázu dopisní formy vyjádření, třebaže se v\_tomto případě jedná o\_soubor fiktivních dopisů. "
+price: 270
 ---
 
 Jejich adresáty jsou však zcela konkrétní teoretici revoluce, a to z různých období dějinného vývoje. Na rozdíl od autora spojuje adresáty jednotlivých dopisů vyzývání k revoluční akci, či naopak varování před nedoceňováním jejích důsledků.

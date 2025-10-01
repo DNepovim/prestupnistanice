@@ -81,5 +81,9 @@ const isDev = import.meta.env.DEV
 
     <Footer />
     <Analytics />
+
+    {Astro.url.pathname !== "/kosik" && <FloatingCartIcon client:load />}
+
+    <script></script>
   </body>
 </html>

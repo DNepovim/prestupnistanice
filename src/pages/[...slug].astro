@@ -4,6 +4,11 @@ import Markdown from '../components/Markdown.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
+import Section from "../components/Section.astro";
+import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/PageTitle.astro";
+import { client } from "../../tina/__generated__/client.ts";
+import { RichText } from "../components/RichText";
 
 export function getStaticPaths() {
   return ['kontakty', 'o-nakladatelstvi'].map((edge) => ({

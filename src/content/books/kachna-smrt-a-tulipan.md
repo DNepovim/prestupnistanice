@@ -1,7 +1,7 @@
 ---
 slug: kachna-smrt-a-tulipan
-title: 'Kachna, smrt a tulipán'
-originlName: 'Ente, Tod und Tulpe'
+title: "Kachna, smrt a tulipán"
+originlName: "Ente, Tod und Tulpe"
 date: 2025
 pagesCount: 44
 isbn: 978–80–909036–2–3
@@ -38,6 +38,9 @@ bgColor: '#efa931'
 claim: >-
   Je to příběh života, umírání a smrti. Pozoruhodná a do řady světových jazyků
   přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí.
+color: "#dd6a55"
+bgColor: "#f9cd36"
+price: 249
 ---
 
 Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.

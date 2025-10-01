@@ -8,6 +8,7 @@ authors:
 cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 slug: nevychovne-eseje-o-vychove
+price: 350
 ---
 
 Kniha nabízí tematicky uspořádané eseje, které se soustřeďují vždy na jeden aspekt výchovného úsilí. Pro vyhodnocování závažnosti těchto aspektů autor vybírá reprezentativní osobnosti, jejichž názory na výchovu vzájemně konfrontuje. Mezi zvolenými tématy se objevuje například otázka, jak souvisí výchova s lidskou přirozeností. Teprve po vyjasňování předpokladů výchovy mohou následovat otázky po úloze učitele či úloze odměn a trestů ve výchově.

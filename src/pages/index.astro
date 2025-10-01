@@ -13,6 +13,19 @@ import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { tp } from '../utils/tp'
+import { routes } from "../routes";
+import { client } from "../../tina/__generated__/client.ts";
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import Section from "../components/Section.astro";
+import Excerpt from "../components/Excerpt.astro";
+import BooksGrid from "../components/BooksGrid.astro";
+import ArrowLink from "../components/ArrowLink.astro";
+import Book from "../components/Book.astro";
+import { isDefined } from "../utils/isDefined";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { rolesMap } from "../utils/rolesMap";
+import { undefined } from "astro:schema";
 
 const [lastBook, ...recentBooks] = (
   (await client.queries.booksConnection({ sort: 'date', last: 4 })).data.booksConnection
@@ -25,7 +38,7 @@ if (!isDefined(lastBook)) {
   return
 }
 
-const lastBookAuthors = lastBook.authors
+const lastBookAuthors = lastBook?.authors
   ?.filter((a) => a?.isMain)
   .filter(isDefined)
   .map((a) => ({ ...a.author, role: a.role }))

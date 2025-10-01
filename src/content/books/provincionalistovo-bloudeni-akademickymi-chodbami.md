@@ -9,6 +9,7 @@ authors:
       - author
 cover: /images/provincionalistovo-bloudeni-akademickymi-chodbami.jpg
 category: philosophy
+price: 340
 ---
 
 Kniha Provincionalistovo bloudění akademickými chodbami žánrově navazuje na východiska dřívější charakteristiky filosofa provincionalismu. Tentokrát se jedná o aplikaci těchto východisek na autorovu dlouhodobou zkušenost s univerzitním prostředím. Své úvahy podrobuje pátrání po dějinných podmíněnostech toho, co bývá nazýváno ideou univerzity, a svá zjištění konfrontuje s tím, jak se mu jeví základní rysy současné situace.

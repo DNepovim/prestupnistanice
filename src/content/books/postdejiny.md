@@ -9,6 +9,7 @@ authors:
       - author
 cover: /images/postdejiny.jpg
 category: philosophy
+price: 290
 ---
 
 

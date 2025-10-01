@@ -9,6 +9,7 @@ authors:
       - author
 cover: /images/eseje-o-stesku-upadku-a-filosofii.jpg
 category: philosophy
+price: 330
 ---
 
 V pořadí již druhý soubor esejů filosofa Petra Bláhy opět představuje pestrou skladbu témat, nad nimiž tento autor dlouhodobě uvažuje. Předmětem jeho výprav do dějin myšlení jsou některé aspekty politické filosofie, mezi nimiž lze objevit například problémy moci, revoluce či utopie. Do některých esejů proniká autorova fundovaná orientace ve filosofii dějin či v otázkách filosofie výchovy. Vedle významných postav evropského myšlenkového dědictví, jakými jsou například Luther, Erasmus, Fichte či Tocqueville, se řada esejů vědomě zaměřuje na tradici českého myšlení.

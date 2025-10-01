@@ -19,6 +19,7 @@ authors:
       - typesetting
 cover: /images/od-subjektu-k-projektu.jpg
 category: philosophy
+price: 360
 ---
 
 

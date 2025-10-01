@@ -91,6 +91,7 @@ const book = defineCollection({
     ),
     category: z.string().nullish(),
     image: z.string().nullish(),
+    price: z.number().nullish(),
     description: z.any(),
   }),
 })
