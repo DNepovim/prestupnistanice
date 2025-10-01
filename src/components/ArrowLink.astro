@@ -1,22 +1,21 @@
 ---
 interface Props {
   href: string;
-  color?: string;
+  className?: string;
 }
 
-const { href, color } = Astro.props;
+const { href, className } = Astro.props;
 ---
 
 <a
-  class="tracking-wider uppercase text-sm font-alt relative group"
+  class={`tracking-wider uppercase text-sm font-alt relative group ${className}`}
   href={href}
-  style={{ color: color ?? "black" }}
 >
   <slot />
   <span
-    class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2"
-    style={{ borderColor: color ?? "black" }}></span>
+    class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2 border-brand-first"
+  ></span>
   <span
-    class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2 bg-black"
-    style={{ backgroundColor: color ?? "black" }}></span>
+    class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2 bg-brand-first"
+  ></span>
 </a>

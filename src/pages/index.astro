@@ -50,12 +50,12 @@ const philosophyBooks = (
   .filter(isDefined);
 ---
 
-<Layout bgColor={lastBook.bgColor ?? undefined}>
+<Layout>
   <Section isWide>
     <div
       class="rounded-xl flex min-md:h-64 mt-8 min-sm:mt-20 max-sm:flex-col"
       style={{
-        background: `linear-gradient(-45deg,transparent, ${lastBook.color}20, ${lastBook.bgColor}50)`,
+        background: `linear-gradient(-45deg, transparent, var(--color-brand-first-100), var(--color-brand-second-300))`,
       }}
     >
       <div class="flex-1">
@@ -76,15 +76,14 @@ const philosophyBooks = (
       <div class="py-8 px-4 min-sm:px-16 flex-3 flex flex-col justify-between">
         <div>
           <h2
-            class="group relative font-medium text-[10vw] min-sm:text-6xl font-head mb-4 inline-block"
-            style={{ color: lastBook.color }}
+            class="group text-brand-first relative font-medium text-[10vw] min-sm:text-6xl font-head mb-4 inline-block"
           >
             <a class="relative z-10" href={routes.books.detail(lastBook)}
               >{lastBook.title}</a
             >
             <span
-              class="absolute left-0 bottom-0 h-[4px] w-0 animate-width-expand"
-              style={{ backgroundColor: lastBook.bgColor }}></span>
+              class="absolute left-0 bottom-0 h-[4px] w-0 animate-width-expand bg-brand-second"
+            ></span>
           </h2>
 
           <div class="line-clamp-3 text-xl">
@@ -99,7 +98,6 @@ const philosophyBooks = (
           </div>
           <div class="flex justify-end pt-4 pr-8">
             <ArrowLink
-              color={lastBook.color ?? undefined}
               href={routes.books.detail(lastBook)}>více o knize</ArrowLink
             >
           </div>

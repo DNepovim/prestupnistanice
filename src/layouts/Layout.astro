@@ -3,15 +3,34 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { cn } from "../utils/cn";
+import { client } from "../../tina/__generated__/client.ts";
 
 interface Props {
   siteTitle?: string;
-  bgColor?: string;
 }
 
-const { siteTitle, bgColor } = Astro.props;
+const lastBook = (
+  await client.queries.booksConnection({ sort: "date", last: 1 })
+).data.booksConnection.edges?.[0]?.node;
 
-const color = bgColor ?? "#fdba74";
+const colorBrandFirst = lastBook?.color;
+const colorBrandFirst1 = `${lastBook?.color}22`;
+const colorBrandFirst2 = `${lastBook?.color}44`;
+const colorBrandFirst3 = `${lastBook?.color}66`;
+const colorBrandFirst4 = `${lastBook?.color}88`;
+const colorBrandFirst5 = `${lastBook?.color}aa`;
+const colorBrandFirst6 = `${lastBook?.color}cc`;
+const colorBrandFirst7 = `${lastBook?.color}ee`;
+const colorBrandSecond = lastBook?.bgColor;
+const colorBrandSecond1 = `${lastBook?.bgColor}22`;
+const colorBrandSecond2 = `${lastBook?.bgColor}44`;
+const colorBrandSecond3 = `${lastBook?.bgColor}66`;
+const colorBrandSecond4 = `${lastBook?.bgColor}88`;
+const colorBrandSecond5 = `${lastBook?.bgColor}aa`;
+const colorBrandSecond6 = `${lastBook?.bgColor}cc`;
+const colorBrandSecond7 = `${lastBook?.bgColor}ee`;
+
+const { siteTitle } = Astro.props;
 
 const isDev = import.meta.env.DEV;
 ---
@@ -23,6 +42,47 @@ const isDev = import.meta.env.DEV;
       title={`${siteTitle ? `${siteTitle} | ` : ""}Přestupní stanice`}
       description="Rodinné knižní nakladatelství"
     />
+    <style
+      define:vars={{
+        colorBrandFirst,
+        colorBrandFirst1,
+        colorBrandFirst2,
+        colorBrandFirst3,
+        colorBrandFirst4,
+        colorBrandFirst5,
+        colorBrandFirst6,
+        colorBrandFirst7,
+        colorBrandSecond,
+        colorBrandSecond1,
+        colorBrandSecond2,
+        colorBrandSecond3,
+        colorBrandSecond4,
+        colorBrandSecond5,
+        colorBrandSecond6,
+        colorBrandSecond7,
+      }}
+    >
+      @import "tailwindcss";
+
+      @theme {
+        --color-brand-first: var(--colorBrandFirst);
+        --color-brand-first-100: var(--colorBrandFirst1);
+        --color-brand-first-200: var(--colorBrandFirst2);
+        --color-brand-first-300: var(--colorBrandFirst3);
+        --color-brand-first-400: var(--colorBrandFirst4);
+        --color-brand-first-500: var(--colorBrandFirst5);
+        --color-brand-first-600: var(--colorBrandFirst6);
+        --color-brand-first-700: var(--colorBrandFirst7);
+        --color-brand-second: var(--colorBrandSecond);
+        --color-brand-second-100: var(--colorBrandSecond1);
+        --color-brand-second-200: var(--colorBrandSecond2);
+        --color-brand-second-300: var(--colorBrandSecond3);
+        --color-brand-second-400: var(--colorBrandSecond4);
+        --color-brand-second-500: var(--colorBrandSecond5);
+        --color-brand-second-600: var(--colorBrandSecond6);
+        --color-brand-second-700: var(--colorBrandSecond7);
+      }
+    </style>
   </head>
   <body
     class={cn(
@@ -30,10 +90,10 @@ const isDev = import.meta.env.DEV;
       isDev && "debug-screens",
     )}
     style={{
-      background: `linear-gradient(180deg, transparent 60%, ${color}44 90%, ${color}99)`,
+      background: `linear-gradient(180deg, transparent 60%, var(--color-brand-second-200) 90%, var(--color-brand-second-600))`,
     }}
   >
-    <Header color={color} />
+    <Header />
 
     <!-- <Trains client:only /> -->
 
