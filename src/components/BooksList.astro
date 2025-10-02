@@ -1,0 +1,55 @@
+---
+import Section from "../components/Section.astro";
+import Excerpt from "../components/Excerpt.astro";
+import { routes } from "../routes";
+import type { Books } from "../../tina/__generated__/types";
+import {isDefined} from "../utils/isDefined"
+
+interface Props {
+  books: Books[];
+}
+
+const { books } = Astro.props;
+
+const CATEGORIES = [
+  { name: "Pro děti", key: "forKids" },
+  { name: "Pro filosofy", key: "philosophy" },
+  { name: "Pro romantiky", kay: "novel" },
+  { name: "Pro poéty", key: "poetry" },
+];
+---
+
+<Section className="flex flex-col gap-20 pt-16">
+  <div class="flex gap-16 justify-center text-brand-second text-xl">
+    {CATEGORIES.map(({ name, key }) => <div>{name}</div>)}
+  </div>
+  {
+    books.map((book, index) => (
+      <Excerpt
+        className={index % 2 === 0 ? "min-sm:pr-8" : "min-sm:pl-8"}
+        title={book.title}
+        description={book.description}
+        image={book.cover ?? undefined}
+        color={book.color ?? undefined}
+        secondColor={book.bgColor ?? undefined}
+        link={routes.books.detail(book)}
+      >
+        {book.authors
+          ?.filter((a) => a?.role === "author")
+          .map((a) => a?.author)
+          .filter(isDefined)
+          .map((a, index) => (
+            <span class="whitespace-nowrap">
+              {index !== 0 ? ", " : ""}
+              <a
+                class="group text-gray-500 hover:text-black transition-colors font-alt"
+                href={routes.authors.detail(a)}
+              >
+                {a.firstname} {a.surname}
+              </a>
+            </span>
+          ))}
+      </Excerpt>
+    ))
+  }
+</Section>

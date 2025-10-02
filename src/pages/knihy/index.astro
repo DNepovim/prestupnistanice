@@ -1,11 +1,8 @@
 ---
-import Section from "../../components/Section.astro";
 import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../../tina/__generated__/client.ts";
-import Book from "../../components/Book.astro";
-import BooksGrid from "../../components/BooksGrid.astro";
-import { routes } from "../../routes";
+import BooksList from "../../components/BooksList.astro"
 
 function isDefined<T>(value: T | undefined | null): value is T {
   return value !== undefined && value !== null;
@@ -18,27 +15,10 @@ const books = (
   .map((item) => item?.node)
   .filter(isDefined)
   .reverse();
+
 ---
 
 <Layout siteTitle="Naše knihy">
   <PageTitle>Naše knihy</PageTitle>
-  <Section isWide>
-    <BooksGrid>
-      {
-        books.map((book) => (
-          <Book
-            title={book.title}
-            link={routes.books.detail(book)}
-            image={book.cover ?? undefined}
-            color={book.color ?? undefined}
-            authors={(book.authors ?? [])
-              .filter((a) => a?.role === "author")
-              .map((author) => author?.author)
-              .filter(isDefined)
-              .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-          />
-        ))
-      }
-    </BooksGrid>
-  </Section>
+  <BooksList books={books} />
 </Layout>
