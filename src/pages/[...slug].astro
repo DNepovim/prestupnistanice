@@ -20,5 +20,5 @@ const page = res.data.pages;
 
 <Layout siteTitle={page.title}>
   <PageTitle>{page.title}</PageTitle>
-  <Section><RichText content={page.content} /></Section>
+  <Section><div class="max-w-2xl mx-auto leading-8"><RichText content={page.content} /></div></Section>
 </Layout>
