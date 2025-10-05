@@ -2,11 +2,8 @@
 import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../../tina/__generated__/client.ts";
-import BooksList from "../../components/BooksList.astro"
-
-function isDefined<T>(value: T | undefined | null): value is T {
-  return value !== undefined && value !== null;
-}
+import BooksList from "../../components/BooksList.astro";
+import { isDefined } from "../../utils/isDefined";
 
 const books = (
   (await client.queries.booksConnection({ sort: "date" })).data.booksConnection
@@ -15,7 +12,6 @@ const books = (
   .map((item) => item?.node)
   .filter(isDefined)
   .reverse();
-
 ---
 
 <Layout siteTitle="Naše knihy">

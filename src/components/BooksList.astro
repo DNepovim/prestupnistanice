@@ -1,27 +1,26 @@
 ---
 import Section from "../components/Section.astro";
 import Excerpt from "../components/Excerpt.astro";
-import { routes } from "../routes";
+import { CATEGORIES, routes } from "../routes";
 import type { Books } from "../../tina/__generated__/types";
-import {isDefined} from "../utils/isDefined"
+import { isDefined } from "../utils/isDefined";
 
 interface Props {
   books: Books[];
 }
 
 const { books } = Astro.props;
-
-const CATEGORIES = [
-  { name: "Pro děti", key: "forKids" },
-  { name: "Pro filosofy", key: "philosophy" },
-  { name: "Pro romantiky", kay: "novel" },
-  { name: "Pro poéty", key: "poetry" },
-];
 ---
 
 <Section className="flex flex-col gap-20 pt-16">
   <div class="flex gap-16 justify-center text-brand-second text-xl">
-    {CATEGORIES.map(({ name, key }) => <div>{name}</div>)}
+    {
+      Object.entries(CATEGORIES).map(([key, values]) => (
+        <a href={routes.books.category(key as keyof typeof CATEGORIES)}>
+          {values.name}
+        </a>
+      ))
+    }
   </div>
   {
     books.map((book, index) => (

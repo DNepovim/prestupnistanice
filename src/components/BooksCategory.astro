@@ -1,0 +1,35 @@
+---
+import PageTitle from "./PageTitle.astro";
+import Layout from "../layouts/Layout.astro";
+import { client } from "../../tina/__generated__/client.ts";
+import BooksList from "./BooksList.astro";
+import { isDefined } from "../utils/isDefined";
+import { CATEGORIES, categoriesSlugToKey, type CategorySlug } from "../routes";
+
+interface Props {
+  slug: CategorySlug;
+}
+
+const { slug } = Astro.props;
+console.log(slug)
+
+const categoryKey = categoriesSlugToKey[slug];
+console.log(categoryKey)
+
+const books = (
+  (
+    await client.queries.booksConnection({
+      sort: "date",
+      filter: { category: { eq: categoryKey } },
+    })
+  ).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(isDefined)
+  .reverse();
+---
+
+<Layout siteTitle={CATEGORIES[categoryKey].name}>
+  <PageTitle>{CATEGORIES[categoryKey].name}</PageTitle>
+  <BooksList books={books} />
+</Layout>

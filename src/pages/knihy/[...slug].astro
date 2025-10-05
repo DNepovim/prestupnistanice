@@ -1,136 +1,27 @@
 ---
-import Excerpt from "../../components/Excerpt.astro";
-import { client } from "../../../tina/__generated__/client.ts";
-import { Image } from "astro:assets";
-import Layout from "../../layouts/Layout.astro";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { getCollection } from "astro:content";
-import PageTitle from "../../components/PageTitle.astro";
-import Section from "../../components/Section.astro";
-import Book from "../../components/Book.astro";
-import BooksGrid from "../../components/BooksGrid.astro";
-import { isDefined } from "../../utils/isDefined";
-import { routes } from "../../routes";
-import {rolesMap} from "../../utils/rolesMap"
-
+import { categoriesSlugToKey } from "../../routes";
+import BookDetail from "../../components/BookDetail.astro";
+import BooksCategory from "../../components/BooksCategory.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("book");
 
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: {
-      post,
-      getTinaProps: async () =>
-        client.queries.books({
-          relativePath: post.data.tinaInfo?.relativePath ?? "",
-        }),
-    },
+  return [
+    ...posts.map(({ id }) => id),
+    ...Object.keys(categoriesSlugToKey),
+  ].map((slug) => ({
+    params: { slug },
   }));
 }
 
 const { slug } = Astro.params;
-
-const relativePath = `${slug}.md`;
-const res = await client.queries.books({ relativePath });
-const book = res.data.books;
-const authors = (book.authors ?? []).filter(isDefined);
-
-const mainAuthor = authors.find((a) => a.role === "author");
-
-const authorsBooks = (
-  (
-    await client.queries.booksConnection({
-      filter: {
-        authors: {
-          author: { authors: { slug: { eq: mainAuthor?.author?.slug } } },
-        },
-      },
-    })
-  ).data.booksConnection.edges ?? []
-)
-  .map((item) => item?.node)
-  .filter((item) => item?.slug !== slug)
-  .filter(isDefined);
 ---
 
-<Layout
-  siteTitle={book.title}
-  bgColor={book.bgColor ?? book.color ?? undefined}
->
-  <PageTitle color={book.color ?? undefined}>{book.title}</PageTitle>
-
-  <Section>
-    {
-      mainAuthor?.author && (
-        <p class="text-2xl mb-8">
-          <span class="whitespace-nowrap">
-            <a
-              class="group text-gray-500 hover:text-black transition-colors font-alt"
-              href={routes.authors.detail(mainAuthor.author)}
-            >
-              {mainAuthor.author.firstname}
-              {mainAuthor.author.surname}
-            </a>
-          </span>
-        </p>
-      )
-    }
-    {
-      book.cover && (
-        <Image
-          alt={book.title}
-          src={book.cover as string}
-          width={420}
-          height={600}
-          class="mb-4 min-sm:float-left max-sm:w-full shadow-2xl border border-gray-200 min-sm:-ml-4 min-sm:mr-8"
-        />
-      )
-    }
-    <TinaMarkdown content={book.description} />
-    <div class="clear-both"></div>
-  </Section>
-  <Section className="clear-both mt-20">
-    {
-      authors
-        .map(({ author, role }) => ({ ...author, role }))
-        .filter(isDefined)
-        .map((a) => (
-          <Excerpt
-            title={`${a.firstname} ${a.surname}`}
-            image={a.image ?? undefined}
-            link={routes.authors.detail({
-              _sys: { filename: a._sys?.filename ?? "" },
-            })}
-            color={book.color ?? undefined}
-            description={a.description}
-            moreLabel="více o autorovi"
-            isRounded
-          >
-            {a.role ? rolesMap[a.role] : undefined}
-          </Excerpt>
-        ))
-    }
-  </Section>
-  {
-    authorsBooks.length > 0 && (
-      <Section title="Další knihy autora">
-        <BooksGrid>
-          {authorsBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.role === "author")
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
-          ))}
-        </BooksGrid>
-      </Section>
-    )
-  }
-</Layout>
+{
+  Object.keys(categoriesSlugToKey).includes(slug) ? (
+    <BooksCategory slug={slug} />
+  ) : (
+    <BookDetail slug={slug} />
+  )
+}
