@@ -1,18 +1,19 @@
 ---
-import Section from "../../components/Section.astro";
-import PageTitle from "../../components/PageTitle.astro";
-import { Image } from "astro:assets";
-import { client } from "../../../tina/__generated__/client.ts";
-import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
-import { RichText } from "../../components/RichText";
-import { isDefined } from "../../utils/isDefined";
-import BooksGrid from "../../components/BooksGrid.astro";
-import Book from "../../components/Book.astro";
-import { routes } from "../../routes";
+import { Image } from 'astro:assets'
+import { getCollection } from 'astro:content'
+
+import { client } from '../../../tina/__generated__/client.ts'
+import Book from '../../components/Book.astro'
+import BooksGrid from '../../components/BooksGrid.astro'
+import PageTitle from '../../components/PageTitle.astro'
+import { RichText } from '../../components/RichText'
+import Section from '../../components/Section.astro'
+import Layout from '../../layouts/Layout.astro'
+import { routes } from '../../routes'
+import { isDefined } from '../../utils/isDefined'
 
 export async function getStaticPaths() {
-  const posts = await getCollection("author");
+  const posts = await getCollection('author')
 
   return posts.map((post) => ({
     params: { slug: post.id },
@@ -20,16 +21,16 @@ export async function getStaticPaths() {
       post,
       getTinaProps: async () =>
         client.queries.authors({
-          relativePath: post.data.tinaInfo?.relativePath ?? "",
+          relativePath: post.data.tinaInfo?.relativePath ?? '',
         }),
     },
-  }));
+  }))
 }
 
-const { slug } = Astro.params;
+const { slug } = Astro.params
 
-const res = await client.queries.authors({ relativePath: `${slug}.md` });
-const author = res.data.authors;
+const res = await client.queries.authors({ relativePath: `${slug}.md` })
+const author = res.data.authors
 
 const books = (
   (
@@ -41,23 +42,22 @@ const books = (
       },
     })
   ).data.booksConnection.edges ?? []
-).map((item) => item?.node);
+).map((item) => item?.node)
 ---
 
 <Layout siteTitle={`${author.firstname} ${author.surname}`}>
-  <PageTitle color={books[0]?.color ?? "black"}>
-    {author.firstname}{" "}{author.surname}
-  </PageTitle>
-
   <Section className="mb-32">
+    <PageTitle>
+      {author.firstname}{' '}{author.surname}
+    </PageTitle>
     {
       author.image && (
         <Image
           alt={`${author.firstname} ${author.surname}`}
-          src={author.image as string}
+          src={author.image}
           width={420}
           height={600}
-          class="mb-4 min-sm:float-left max-sm:w-full shadow-2xl border border-gray-200 min-sm:-ml-4 min-sm:mr-8"
+          class="mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
         />
       )
     }
@@ -74,7 +74,7 @@ const books = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === "author")
+                .filter((a) => a?.role === 'author')
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}

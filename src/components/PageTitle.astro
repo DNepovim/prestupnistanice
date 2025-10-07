@@ -1,19 +1,5 @@
----
-import { cn } from "../utils/cn";
-interface Props {
-  color?: string;
-  class?: string;
-}
-
-const { color, class: className } = Astro.props;
----
-
 <h1
-  class={cn(
-    "mt-6 mb-6 font-head min-md:text-8xl max-md:text-[10vw] max-w-[56rem] mx-auto",
-    className,
-  )}
-  style={{ color: color ?? "black" }}
+  class="font-head text-brand-first-500 relative mx-auto mt-6 inline-block max-w-[56rem] max-md:text-[10vw] min-md:text-8xl"
 >
-  <slot />
+  <span class="relative z-10"><slot /></span>
 </h1>

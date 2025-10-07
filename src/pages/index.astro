@@ -1,88 +1,87 @@
 ---
-import { routes } from "../routes";
-import { client } from "../../tina/__generated__/client.ts";
-import { Image } from "astro:assets";
-import Layout from "../layouts/Layout.astro";
-import Section from "../components/Section.astro";
-import Excerpt from "../components/Excerpt.astro";
-import BooksGrid from "../components/BooksGrid.astro";
-import ArrowLink from "../components/ArrowLink.astro";
-import Book from "../components/Book.astro";
-import { isDefined } from "../utils/isDefined";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { rolesMap } from "../utils/rolesMap";
+import { Image } from 'astro:assets'
+import { TinaMarkdown } from 'tinacms/dist/rich-text'
+
+import { client } from '../../tina/__generated__/client.ts'
+import Theme from '../components/Theme.astro'
+import ArrowLink from '../components/ArrowLink.astro'
+import Book from '../components/Book.astro'
+import BooksGrid from '../components/BooksGrid.astro'
+import Excerpt from '../components/Excerpt.astro'
+import Section from '../components/Section.astro'
+import Layout from '../layouts/Layout.astro'
+import { routes } from '../routes'
+import { isDefined } from '../utils/isDefined'
+import { rolesMap } from '../utils/rolesMap'
 
 const [lastBook, ...recentBooks] = (
-  (await client.queries.booksConnection({ sort: "date", last: 4 })).data
-    .booksConnection.edges ?? []
+  (await client.queries.booksConnection({ sort: 'date', last: 4 })).data.booksConnection
+    .edges ?? []
 )
   .map((item) => item?.node)
-  .filter(isDefined);
+  .filter(isDefined)
 
 const lastBookAuthors = lastBook.authors
   ?.filter((a) => a?.isMain)
   .filter(isDefined)
   .map((a) => ({ ...a.author, role: a.role }))
-  .filter(isDefined);
+  .filter(isDefined)
 
 const forKidsBooks = (
   (
     await client.queries.booksConnection({
-      sort: "date",
+      sort: 'date',
       last: 3,
-      filter: { category: { eq: "forKids" } },
+      filter: { category: { eq: 'forKids' } },
     })
   ).data.booksConnection.edges ?? []
 )
   .map((item) => item?.node)
-  .filter(isDefined);
+  .filter(isDefined)
 
 const philosophyBooks = (
   (
     await client.queries.booksConnection({
-      sort: "date",
+      sort: 'date',
       last: 3,
-      filter: { category: { eq: "philosophy" } },
+      filter: { category: { eq: 'philosophy' } },
     })
   ).data.booksConnection.edges ?? []
 )
   .map((item) => item?.node)
-  .filter(isDefined);
+  .filter(isDefined)
 ---
 
 <Layout>
   <Section isWide>
     <div
-      class="rounded-xl flex min-md:h-64 mt-8 min-sm:mt-20 max-sm:flex-col"
-      style={{
-        background: `linear-gradient(-45deg, transparent, var(--color-brand-first-100), var(--color-brand-second-300))`,
-      }}
+      class="via-brand-first-100/50 to-brand-second-200 mt-8 flex rounded-xl -bg-linear-45 from-transparent max-sm:flex-col min-sm:mt-20 min-md:h-64"
     >
       <div class="flex-1">
         {
           lastBook.cover && (
             <a class="block min-md:-mb-32" href={routes.books.detail(lastBook)}>
               <Image
-                alt={lastBook.title ?? ""}
+                alt={lastBook.title}
                 src={lastBook.cover}
                 width={300}
                 height={300}
-                class="shadow-2xl border max-sm:mx-auto border-gray-200 rotate-0 animate-rotate-on-load transition-transform hover:-rotate-8 duration-500"
+                class="animate-rotate-on-load rotate-0 border border-gray-200 shadow-2xl transition-transform duration-500 hover:-rotate-8 max-sm:mx-auto"
               />
             </a>
           )
         }
       </div>
-      <div class="py-8 px-4 min-sm:px-16 flex-3 flex flex-col justify-between">
+      <div class="flex flex-3 flex-col justify-between px-4 py-8 min-sm:px-16">
         <div>
           <h2
-            class="group text-brand-first relative font-medium text-[10vw] min-sm:text-6xl font-head mb-4 inline-block"
+            class="group text-brand-first-500 font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
           >
             <a class="relative z-10" href={routes.books.detail(lastBook)}
               >{lastBook.title}</a
             >
             <span
-              class="absolute left-0 bottom-0 h-[4px] w-0 animate-width-expand bg-brand-second"
+              class="animate-width-expand bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-0"
             ></span>
           </h2>
 
@@ -97,21 +96,19 @@ const philosophyBooks = (
             }
           </div>
           <div class="flex justify-end pt-4 pr-8">
-            <ArrowLink
-              href={routes.books.detail(lastBook)}>více o knize</ArrowLink
-            >
+            <ArrowLink href={routes.books.detail(lastBook)}>více o knize</ArrowLink>
           </div>
         </div>
       </div>
     </div>
     {
       lastBookAuthors && (
-        <div class="flex gap-2 min-sm:justify-end mb-40 flex-wrap">
+        <div class="mb-40 flex flex-wrap gap-2 min-sm:justify-end">
           {lastBookAuthors.map((a) => (
             <a
-              class="group flex items-center gap-4 hover:bg-white rounded-md py-2 px-4 transition-colors"
+              class="group flex items-center gap-4 rounded-md px-4 py-2 transition-colors hover:bg-white"
               href={routes.authors.detail({
-                _sys: { filename: a?._sys?.filename ?? "" },
+                _sys: { filename: a._sys?.filename ?? '' },
               })}
             >
               {a.image && (
@@ -124,12 +121,10 @@ const philosophyBooks = (
                 />
               )}
               <div>
-                <div class="group-hover:underline text-gray-800 text-alt font-alt">
+                <div class="text-alt font-alt text-gray-800 group-hover:underline">
                   {a.firstname} {a.surname}
                 </div>
-                {a.role && (
-                  <div class="text-gray-500 text-sm">{rolesMap[a.role]}</div>
-                )}
+                {a.role && <div class="text-sm text-gray-500">{rolesMap[a.role]}</div>}
               </div>
             </a>
           ))}
@@ -138,46 +133,44 @@ const philosophyBooks = (
     }
   </Section>
   <Section>
-    <p
-      class="text-2xl font-alt mt-16 text-center mb-24 italic px-6 text-gray-800"
-    >
-      <strong>Přestupní stanice</strong> je roddinné knižní nakladatelství, které
-      se ve své ediční činnosti soustředí na kvalitní nekomerční tituly.
+    <p class="font-alt mt-16 mb-24 px-6 text-center text-2xl text-gray-800 italic">
+      <strong>Přestupní stanice</strong> je roddinné knižní nakladatelství, které se ve své
+      ediční činnosti soustředí na kvalitní nekomerční tituly.
     </p>
   </Section>
   <Section title="Nejnovější knihy">
     <div class="flex flex-col gap-16">
       {
         recentBooks.map((book, index) => (
-          <Excerpt
-            className={index % 2 === 0 ? "min-sm:pr-8" : "min-sm:pl-8"}
-            title={book.title}
-            description={book.description}
-            image={book.cover ?? undefined}
-            color={book.color ?? undefined}
-            secondColor={book.bgColor ?? undefined}
-            link={routes.books.detail(book)}
-          >
-            {book.authors
-              ?.filter((a) => a?.role === "author")
-              .map((a) => a?.author)
-              .filter(isDefined)
-              .map((a, index) => (
-                <span class="whitespace-nowrap">
-                  {index !== 0 ? ", " : ""}
-                  <a
-                    class="group text-gray-500 hover:text-black transition-colors font-alt"
-                    href={routes.authors.detail(a)}
-                  >
-                    {a.firstname} {a.surname}
-                  </a>
-                </span>
-              ))}
-          </Excerpt>
+      <Theme firstColor={book.color ?? undefined} secondColor={book.bgColor ?? undefined}>
+            <Excerpt
+              className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
+              title={book.title}
+              description={book.description}
+              image={book.cover ?? undefined}
+              link={routes.books.detail(book)}
+            >
+              {book.authors
+                ?.filter((a) => a?.role === 'author')
+                .map((a) => a?.author)
+                .filter(isDefined)
+                .map((a, index) => (
+                  <span class="whitespace-nowrap">
+                    {index !== 0 ? ', ' : ''}
+                    <a
+                      class="group font-alt text-gray-500 transition-colors hover:text-black"
+                      href={routes.authors.detail(a)}
+                    >
+                      {a.firstname} {a.surname}
+                    </a>
+                  </span>
+                ))}
+            </Excerpt>
+          </Theme>
         ))
       }
     </div>
-    <div class="flex justify-center my-20">
+    <div class="my-20 flex justify-center">
       <ArrowLink href={routes.books.list()}>všechny knihy</ArrowLink>
     </div>
   </Section>
@@ -192,7 +185,7 @@ const philosophyBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === "author")
+                .filter((a) => a?.role === 'author')
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
@@ -213,7 +206,7 @@ const philosophyBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === "author")
+                .filter((a) => a?.role === 'author')
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}

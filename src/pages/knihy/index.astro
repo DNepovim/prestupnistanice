@@ -1,5 +1,4 @@
 ---
-import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../../tina/__generated__/client.ts";
 import BooksList from "../../components/BooksList.astro";
@@ -15,6 +14,5 @@ const books = (
 ---
 
 <Layout siteTitle="Naše knihy">
-  <PageTitle>Naše knihy</PageTitle>
   <BooksList books={books} />
 </Layout>

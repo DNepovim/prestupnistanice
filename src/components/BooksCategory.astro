@@ -1,35 +1,33 @@
 ---
-import PageTitle from "./PageTitle.astro";
-import Layout from "../layouts/Layout.astro";
-import { client } from "../../tina/__generated__/client.ts";
-import BooksList from "./BooksList.astro";
-import { isDefined } from "../utils/isDefined";
-import { CATEGORIES, categoriesSlugToKey, type CategorySlug } from "../routes";
+import { client } from '../../tina/__generated__/client.ts'
+import Layout from '../layouts/Layout.astro'
+import { CATEGORIES, categoriesSlugToKey, type CategorySlug } from '../routes'
+import { isDefined } from '../utils/isDefined'
+import BooksList from './BooksList.astro'
 
 interface Props {
-  slug: CategorySlug;
+  slug: CategorySlug
 }
 
-const { slug } = Astro.props;
-console.log(slug)
+const { slug } = Astro.props
 
-const categoryKey = categoriesSlugToKey[slug];
-console.log(categoryKey)
+const categoryKey = categoriesSlugToKey[slug]
 
 const books = (
   (
     await client.queries.booksConnection({
-      sort: "date",
+      sort: 'date',
       filter: { category: { eq: categoryKey } },
     })
   ).data.booksConnection.edges ?? []
 )
   .map((item) => item?.node)
   .filter(isDefined)
-  .reverse();
+  .reverse()
+
+const categoryName = CATEGORIES[categoryKey].name
 ---
 
-<Layout siteTitle={CATEGORIES[categoryKey].name}>
-  <PageTitle>{CATEGORIES[categoryKey].name}</PageTitle>
-  <BooksList books={books} />
+<Layout siteTitle={`Naše knihy ${categoryName}`}>
+  <BooksList books={books} slug={slug} />
 </Layout>

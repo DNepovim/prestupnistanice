@@ -9,6 +9,7 @@ authors:
 cover: /images/tati.jpg
 category: forKids
 color: '#775c4b'
+bgColor: '#81937c'
 ---
 
 Dílo nedávno zesnulého francouzského autora a ilustrátora dětských knížek Philippa Corentina je českému čtenáři dosud neznámé. Půvabná knížka Tati! hodlá tuto mezeru zaplnit a nabídnout nezaměnitelný humor a nadsázku, které jsou Corentinovi vlastní a jejichž podmanivostí získal během svého života řadu ocenění a uznání.

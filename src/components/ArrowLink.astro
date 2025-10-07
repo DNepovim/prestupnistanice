@@ -1,21 +1,17 @@
 ---
 interface Props {
-  href: string;
-  className?: string;
+  href: string
 }
 
-const { href, className } = Astro.props;
+const { href } = Astro.props
 ---
 
-<a
-  class={`tracking-wider uppercase text-sm font-alt relative group ${className}`}
-  href={href}
->
+<a class={`tracking-wider uppercase text-sm font-alt relative group text-brand-second-500`} href={href}>
   <slot />
   <span
-    class="block size-2 border-t border-r rotate-45 absolute -right-7 bottom-1/2 translate-y-1/2 border-brand-first"
+    class="border-brand-second-500 absolute -right-7 bottom-1/2 block size-2 translate-y-1/2 rotate-45 border-t border-r"
   ></span>
   <span
-    class="block h-[1px] w-4 transition-all group-hover:w-[calc(100%+2rem)] absolute duration-500 -right-[29px] bottom-1/2 translate-y-1/2 bg-brand-first"
+    class="bg-brand-second-500 absolute -right-[29px] bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]"
   ></span>
 </a>

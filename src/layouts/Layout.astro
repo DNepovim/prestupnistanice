@@ -1,108 +1,81 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { cn } from "../utils/cn";
-import { client } from "../../tina/__generated__/client.ts";
+import { client } from '../../tina/__generated__/client.ts'
+import BaseHead from '../components/BaseHead.astro'
+import Footer from '../components/Footer.astro'
+import Header from '../components/Header.astro'
+import { cn } from '../utils/cn'
+import { getColorScale } from '../utils/geColorScale'
 
 interface Props {
-  siteTitle?: string;
+  siteTitle?: string
+  firstColor?: string
+  secondColor?: string
 }
 
-const lastBook = (
-  await client.queries.booksConnection({ sort: "date", last: 1 })
-).data.booksConnection.edges?.[0]?.node;
+const lastBook = (await client.queries.booksConnection({ sort: 'date', last: 1 })).data
+  .booksConnection.edges?.[0]?.node
 
-const colorBrandFirst = lastBook?.color;
-const colorBrandFirst1 = `${lastBook?.color}22`;
-const colorBrandFirst2 = `${lastBook?.color}44`;
-const colorBrandFirst3 = `${lastBook?.color}66`;
-const colorBrandFirst4 = `${lastBook?.color}88`;
-const colorBrandFirst5 = `${lastBook?.color}aa`;
-const colorBrandFirst6 = `${lastBook?.color}cc`;
-const colorBrandFirst7 = `${lastBook?.color}ee`;
-const colorBrandSecond = lastBook?.bgColor;
-const colorBrandSecond1 = `${lastBook?.bgColor}22`;
-const colorBrandSecond2 = `${lastBook?.bgColor}44`;
-const colorBrandSecond3 = `${lastBook?.bgColor}66`;
-const colorBrandSecond4 = `${lastBook?.bgColor}88`;
-const colorBrandSecond5 = `${lastBook?.bgColor}aa`;
-const colorBrandSecond6 = `${lastBook?.bgColor}cc`;
-const colorBrandSecond7 = `${lastBook?.bgColor}ee`;
+const { siteTitle, firstColor, secondColor } = Astro.props
 
-const { siteTitle } = Astro.props;
+const colorBrandFirst = firstColor ?? lastBook?.color ?? '#434991'
+const colorBrandSecond = secondColor ?? lastBook?.bgColor ?? '#e7d14c'
 
-const isDev = import.meta.env.DEV;
+const colorBrandFirstScale = getColorScale(colorBrandFirst, 'color-first')
+const colorBrandSecondScale = getColorScale(colorBrandSecond, 'color-second')
+
+const isDev = import.meta.env.DEV
 ---
 
-<!doctype html>
 <html lang="en">
   <head>
     <BaseHead
-      title={`${siteTitle ? `${siteTitle} | ` : ""}Přestupní stanice`}
+      title={`${siteTitle ? siteTitle + ' | ' : ''}Přestupní stanice`}
       description="Rodinné knižní nakladatelství"
     />
-    <style
-      define:vars={{
-        colorBrandFirst,
-        colorBrandFirst1,
-        colorBrandFirst2,
-        colorBrandFirst3,
-        colorBrandFirst4,
-        colorBrandFirst5,
-        colorBrandFirst6,
-        colorBrandFirst7,
-        colorBrandSecond,
-        colorBrandSecond1,
-        colorBrandSecond2,
-        colorBrandSecond3,
-        colorBrandSecond4,
-        colorBrandSecond5,
-        colorBrandSecond6,
-        colorBrandSecond7,
-      }}
-    >
-      @import "tailwindcss";
+    <style define:vars={{ ...colorBrandFirstScale, ...colorBrandSecondScale }}>
+      @import 'tailwindcss';
 
       @theme {
-        --color-brand-first: var(--colorBrandFirst);
-        --color-brand-first-100: var(--colorBrandFirst1);
-        --color-brand-first-200: var(--colorBrandFirst2);
-        --color-brand-first-300: var(--colorBrandFirst3);
-        --color-brand-first-400: var(--colorBrandFirst4);
-        --color-brand-first-500: var(--colorBrandFirst5);
-        --color-brand-first-600: var(--colorBrandFirst6);
-        --color-brand-first-700: var(--colorBrandFirst7);
-        --color-brand-second: var(--colorBrandSecond);
-        --color-brand-second-100: var(--colorBrandSecond1);
-        --color-brand-second-200: var(--colorBrandSecond2);
-        --color-brand-second-300: var(--colorBrandSecond3);
-        --color-brand-second-400: var(--colorBrandSecond4);
-        --color-brand-second-500: var(--colorBrandSecond5);
-        --color-brand-second-600: var(--colorBrandSecond6);
-        --color-brand-second-700: var(--colorBrandSecond7);
+        --color-brand-first-50: var(--color-first-50);
+        --color-brand-first-100: var(--color-first-100);
+        --color-brand-first-200: var(--color-first-200);
+        --color-brand-first-300: var(--color-first-300);
+        --color-brand-first-400: var(--color-first-400);
+        --color-brand-first-500: var(--color-first-500);
+        --color-brand-first-600: var(--color-first-600);
+        --color-brand-first-700: var(--color-first-700);
+        --color-brand-first-800: var(--color-first-800);
+        --color-brand-first-900: var(--color-first-900);
+        --color-brand-first-950: var(--color-first-950);
+        --color-brand-second-50: var(--color-second-50);
+        --color-brand-second-100: var(--color-second-100);
+        --color-brand-second-200: var(--color-second-200);
+        --color-brand-second-300: var(--color-second-300);
+        --color-brand-second-400: var(--color-second-400);
+        --color-brand-second-500: var(--color-second-500);
+        --color-brand-second-600: var(--color-second-600);
+        --color-brand-second-700: var(--color-second-700);
+        --color-brand-second-800: var(--color-second-800);
+        --color-brand-second-900: var(--color-second-900);
+        --color-brand-second-950: var(--color-second-950);
       }
     </style>
   </head>
   <body
     class={cn(
-      "flex flex-col min-w-full font-display min-h-screen",
-      isDev && "debug-screens",
+      'font-display flex min-h-screen min-w-full flex-col',
+      'from-brand-second-200 bg-gradient-to-t to-20% to-white',
+      isDev && 'debug-screens',
     )}
-    style={{
-      background: `linear-gradient(180deg, transparent 60%, var(--color-brand-second-200) 90%, var(--color-brand-second-600))`,
-    }}
   >
     <Header />
 
     <!-- <Trains client:idle /> -->
 
-    <main class="pb-16 px-6 flex-1">
+    <main class="flex-1 px-6 pb-16">
       <slot />
     </main>
 
     <Footer />
-
-    <script></script>
   </body>
 </html>

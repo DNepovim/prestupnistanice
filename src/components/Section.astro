@@ -1,25 +1,18 @@
 ---
-import { cn } from "../utils/cn";
+import { cn } from '../utils/cn'
+
 interface Props {
-  title?: string;
-  isWide?: boolean;
-  className?: string;
+  title?: string
+  isWide?: boolean
+  className?: string
 }
 
-const { title, isWide, className } = Astro.props;
+const { title, isWide, className } = Astro.props
 ---
 
 <section
-  class={cn(
-    "mb-12  mx-auto",
-    isWide ? "max-w-[80rem]" : "max-w-[56rem]",
-    className,
-  )}
+  class={cn('mx-auto mb-12', isWide ? 'max-w-[80rem]' : 'max-w-[56rem]', className)}
 >
-  {
-    title && (
-      <h2 class={cn("font-head text-2xl text-gray-600 mb-8")}>{title}</h2>
-    )
-  }
+  {title && <h2 class={cn('font-head mb-8 text-2xl text-gray-600')}>{title}</h2>}
   <slot />
 </section>

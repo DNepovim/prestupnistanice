@@ -12,7 +12,7 @@ authors:
 cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids
 color: '#dd6a55'
-bgColor: '#f9cd36'
+bgColor: '#efa931'
 ---
 
 Je to příběh života, umírání a smrti.
@@ -23,4 +23,4 @@ Závažné téma je pro dětského čtenáře působivě podáno jemně a s velk
 
 Smrt tu není vylíčena jako ta, co bere život, ale ta, která čeká. Čeká až přijde nemoc, nehoda nebo liška. Mezitím tu je na blízku. Smrt nezapomíná na nikoho ze svého stáda.
 
-Jako by představená smrt měla v sobě něco z dobrého pastýře. 
+Jako by představená smrt měla v sobě něco z dobrého pastýře.

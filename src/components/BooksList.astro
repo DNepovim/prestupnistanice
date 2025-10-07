@@ -1,54 +1,96 @@
 ---
-import Section from "../components/Section.astro";
-import Excerpt from "../components/Excerpt.astro";
-import { CATEGORIES, routes } from "../routes";
-import type { Books } from "../../tina/__generated__/types";
-import { isDefined } from "../utils/isDefined";
+import { Icon } from 'astro-icon/components'
+
+import type { Books } from '../../tina/__generated__/types'
+import Excerpt from '../components/Excerpt.astro'
+import PageTitle from '../components/PageTitle.astro'
+import Section from '../components/Section.astro'
+import Theme from '../components/Theme.astro'
+import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '../routes'
+import { cn } from '../utils/cn'
+import { isDefined } from '../utils/isDefined'
+import { uppercaseFirstLetter } from '../utils/uppercaseFirstLetter'
 
 interface Props {
-  books: Books[];
+  books: Books[]
+  slug: CategorySlug
 }
 
-const { books } = Astro.props;
+const { books, slug } = Astro.props
+
+const currentSlug = slug ? slug : ''
+
+const categoryKey = slug ? categoriesSlugToKey[slug] : 'all'
+
+const categoryName = CATEGORIES[categoryKey].name
 ---
 
-<Section className="flex flex-col gap-20 pt-16">
-  <div class="flex gap-16 justify-center text-brand-second text-xl">
+<Section>
+  <PageTitle><a href={routes.books.list()}>Naše knihy</a></PageTitle>
+  <p
+    class="font-alt text-brand-second-500 mb-4 min-md:mb-16 h-[1.2em] text-[5vw] min-md:ml-110 min-md:text-4xl"
+  >
+    {currentSlug.length > 0 && categoryName}
+  </p>
+  <div
+    class="text-brand-second min-md:mb-16 mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col"
+  >
     {
-      Object.entries(CATEGORIES).map(([key, values]) => (
-        <a href={routes.books.category(key as keyof typeof CATEGORIES)}>
-          {values.name}
-        </a>
+      Object.entries(CATEGORIES).map(([key, values], index) => (
+        <>
+          {index !== 0 && <Icon name="ph:tilde-thin" class="text-brand-second-300 max-md:hidden" />}
+          <a
+            class={cn(
+              'font-alt text-brand-first-100 group relative text-xl',
+              currentSlug === values.slug && 'text-brand-first-500 text-2xl',
+            )}
+            href={routes.books.category(key as keyof typeof CATEGORIES)}
+          >
+            <span class="relative z-10">
+              {currentSlug === values.slug
+                ? uppercaseFirstLetter(values.name)
+                : values.name}
+            </span>
+            {currentSlug !== values.slug && (
+              <span class="bg-brand-second-500 absolute bottom-1 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full" />
+            )}
+          </a>
+        </>
       ))
     }
   </div>
-  {
-    books.map((book, index) => (
-      <Excerpt
-        className={index % 2 === 0 ? "min-sm:pr-8" : "min-sm:pl-8"}
-        title={book.title}
-        description={book.description}
-        image={book.cover ?? undefined}
-        color={book.color ?? undefined}
-        secondColor={book.bgColor ?? undefined}
-        link={routes.books.detail(book)}
-      >
-        {book.authors
-          ?.filter((a) => a?.role === "author")
-          .map((a) => a?.author)
-          .filter(isDefined)
-          .map((a, index) => (
-            <span class="whitespace-nowrap">
-              {index !== 0 ? ", " : ""}
-              <a
-                class="group text-gray-500 hover:text-black transition-colors font-alt"
-                href={routes.authors.detail(a)}
-              >
-                {a.firstname} {a.surname}
-              </a>
-            </span>
-          ))}
-      </Excerpt>
-    ))
-  }
+  <div class="flex flex-col gap-20 pt-16">
+    {
+      books.map((book, index) => (
+        <Theme
+          firstColor={book.color ?? undefined}
+          secondColor={book.bgColor ?? undefined}
+        >
+          <Excerpt
+            className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
+            title={book.title}
+            description={book.description}
+            image={book.cover ?? undefined}
+            link={routes.books.detail(book)}
+          >
+            {book.authors
+              ?.filter((a) => a?.role === 'author')
+              .map((a) => a?.author)
+              .filter(isDefined)
+              .map((a, index) => (
+                <span class="whitespace-nowrap">
+                  {index !== 0 ? ', ' : ''}
+                  <a
+                    class="group font-alt text-gray-500 transition-colors hover:text-black"
+                    href={routes.authors.detail(a)}
+                  >
+                    {a.firstname} {a.surname}
+                  </a>
+                </span>
+              ))}
+          </Excerpt>
+        </Theme>
+      ))
+    }
+  </div>
 </Section>

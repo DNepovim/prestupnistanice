@@ -1,0 +1,27 @@
+---
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '../consts'
+import { getColorScale } from '../utils/geColorScale'
+
+interface Props {
+  firstColor?: string
+  secondColor?: string
+}
+
+const { firstColor, secondColor } = Astro.props
+
+const firstColorWithFallback = firstColor ?? FALLBACK_COLOR_FIRST
+const secondColorWithFallback = secondColor ?? FALLBACK_COLOR_SECOND
+
+const colorBrandFirstScale = getColorScale(firstColorWithFallback, 'color-brand-first')
+const colorBrandSecondScale = getColorScale(secondColorWithFallback, 'color-brand-second')
+---
+
+<div
+  style={Object.entries({
+    ...colorBrandFirstScale,
+    ...colorBrandSecondScale,
+  })
+    .map(([key, value]) => `--${key}: ${value}`).join(";") + ";"}
+>
+  <slot />
+</div>
