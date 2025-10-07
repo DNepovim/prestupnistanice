@@ -12,15 +12,18 @@ export const RichText = ({ content }: Props) => {
     <TinaMarkdown
       content={content}
       components={{
+        // @ts-expect-error tina is no well typed
         p: ({ children }) => (
           <p className="mb-4">{isString(children) ? tp(children) : children}</p>
         ),
+        // @ts-expect-error tina is no well typed
         blockquote: ({ children }) => (
           <blockquote className="mb-4 font-alt text-2xl italic">
             {isString(children) ? tp(children) : children}
           </blockquote>
         ),
-        a: (props) =>
+        // tina is not well typed
+        a: (props: { url: string; children?: string } | undefined) =>
           props ? (
             <a href={props.url} className="underline hover:no-underline">
               {isString(props.children) ? tp(props.children) : props.children}

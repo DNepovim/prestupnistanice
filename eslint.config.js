@@ -36,6 +36,7 @@ export default defineConfig(
           argsIgnorePattern: '^_',
         },
       ],
+      'sonarjs/todo-tag': 'off',
     },
   },
   {

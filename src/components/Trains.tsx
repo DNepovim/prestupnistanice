@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/pseudo-random */
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -67,6 +68,8 @@ export default function Trains() {
 
       // Remove train after animation completes (adjust duration based on your train animation)
       setTimeout(() => {
+        // todo refactor
+        // eslint-disable-next-line sonarjs/no-nested-functions
         setTrains((prevTrains) => prevTrains.filter((train) => train.id !== newTrain.id))
       }, 15000) // Remove after 15 seconds (adjust based on your animation duration)
     }

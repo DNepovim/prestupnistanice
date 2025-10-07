@@ -15,7 +15,7 @@ export const getColorScale = (baseColor: string, prefix: string) => {
     ...[50, 100, 200, 300, 400].reduce<Record<number, string>>(
       (acc, step, i) => ({
         ...acc,
-        [`${prefix}-${String(step)}`]: tints[i].toRgbString(),
+        [`${prefix}-${String(step)}`]: tints[i]?.toRgbString(),
       }),
       {},
     ),
@@ -23,7 +23,7 @@ export const getColorScale = (baseColor: string, prefix: string) => {
     ...[600, 700, 800, 900, 950].reduce<Record<number, string>>(
       (acc, step, i) => ({
         ...acc,
-        [`${prefix}-${String(step)}`]: shades[i].toRgbString(),
+        [`${prefix}-${String(step)}`]: shades[i]?.toRgbString(),
       }),
       {},
     ),
