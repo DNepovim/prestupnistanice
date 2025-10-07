@@ -1,4 +1,6 @@
 ---
+import Analytics from '@vercel/analytics/astro'
+
 import { client } from '../../tina/__generated__/client.ts'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
@@ -64,7 +66,7 @@ const isDev = import.meta.env.DEV
   <body
     class={cn(
       'font-display flex min-h-screen min-w-full flex-col',
-      'from-brand-second-200 bg-gradient-to-t to-20% to-white',
+      'from-brand-second-200 bg-gradient-to-t to-white to-20%',
       isDev && 'debug-screens',
     )}
   >
@@ -77,5 +79,6 @@ const isDev = import.meta.env.DEV
     </main>
 
     <Footer />
+    <Analytics />
   </body>
 </html>

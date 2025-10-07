@@ -2,6 +2,7 @@
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
+import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
 import { defineConfig } from 'astro/config'
@@ -18,6 +19,7 @@ const { ENV_NAME } = loadEnv(process.env.ENV_NAME!, process.cwd(), '')
 export default defineConfig({
   env: envConfig,
   site: SITE_URL || `https://${VERCEL_URL}`,
+
   integrations: [
     mdx(),
     sitemap(),
@@ -26,11 +28,20 @@ export default defineConfig({
     ENV_NAME === 'production' && sitemap({ lastmod: new Date() }),
     icon(),
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
+
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
 })
+
