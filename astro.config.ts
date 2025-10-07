@@ -11,14 +11,13 @@ import { loadEnv } from 'vite'
 import tinaDirective from './astro-tina-directive/register'
 import { envConfig } from './env.config.ts'
 
-const { SITE_URL } = loadEnv(process.env.SITE_URL!, process.cwd(), '')
-const { VERCEL_URL } = loadEnv(process.env.VERCEL_URL!, process.cwd(), '')
-const { ENV_NAME } = loadEnv(process.env.ENV_NAME!, process.cwd(), '')
+const { SITE_URL } = loadEnv(process.env.SITE_URL ?? '', process.cwd(), '')
+const { VERCEL_URL } = loadEnv(process.env.VERCEL_URL ?? '', process.cwd(), '')
+const { ENV_NAME } = loadEnv(process.env.ENV_NAME ?? '', process.cwd(), '')
 
-// https://astro.build/config
 export default defineConfig({
   env: envConfig,
-  site: SITE_URL || `https://${VERCEL_URL}`,
+  site: SITE_URL ?? (VERCEL_URL ? `https://${VERCEL_URL}` : 'http://localhost:4321/'),
 
   integrations: [
     mdx(),
@@ -30,7 +29,8 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss()],
+    // @ts-expect-error vite versions incompatibility
+    plugins: [...tailwindcss()],
   },
 
   prefetch: {
@@ -44,4 +44,3 @@ export default defineConfig({
     },
   }),
 })
-
