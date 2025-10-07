@@ -1,97 +1,98 @@
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Train } from "./Train";
+import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+import { Train } from './Train'
 
 interface TrainState {
-  id: number;
-  direction: "rl" | "lr";
-  y: number;
+  id: number
+  direction: 'rl' | 'lr'
+  y: number
 }
 
 export default function Trains() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [trains, setTrains] = useState<TrainState[]>([]);
-  const trainIdCounter = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [trains, setTrains] = useState<TrainState[]>([])
+  const trainIdCounter = useRef(0)
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger)
 
-    const trainContainer = containerRef.current;
+    const trainContainer = containerRef.current
 
-    if (!trainContainer) return;
+    if (!trainContainer) return
 
-    let speedTween: gsap.core.Tween | undefined;
-    let parallaxTween: gsap.core.Tween | undefined;
-    let parallaxTimeout: NodeJS.Timeout;
-    let trainSpawnInterval: NodeJS.Timeout;
+    let speedTween: gsap.core.Tween | undefined
+    let parallaxTween: gsap.core.Tween | undefined
+    let parallaxTimeout: NodeJS.Timeout
+    let trainSpawnInterval: NodeJS.Timeout
 
     const updateParallax = () => {
-      const scrollY = window.scrollY;
-      const targetParallaxOffset = -scrollY * 0.3;
+      const scrollY = window.scrollY
+      const targetParallaxOffset = -scrollY * 0.3
 
       if (parallaxTween) {
-        parallaxTween.kill();
+        parallaxTween.kill()
       }
 
       parallaxTween = gsap.to(trainContainer, {
         y: targetParallaxOffset,
         duration: 0.2,
-        ease: "power2.out",
-      });
+        ease: 'power2.out',
+      })
 
-      clearTimeout(parallaxTimeout);
+      clearTimeout(parallaxTimeout)
 
       parallaxTimeout = setTimeout(() => {
         if (parallaxTween) {
-          parallaxTween.kill();
+          parallaxTween.kill()
         }
         parallaxTween = gsap.to(trainContainer, {
           y: -scrollY * 0.3,
           duration: 0.4,
-          ease: "power2.out",
-        });
-      }, 100);
-    };
+          ease: 'power2.out',
+        })
+      }, 100)
+    }
 
     // Function to spawn new trains
     const spawnTrain = () => {
       const newTrain: TrainState = {
         id: trainIdCounter.current++,
-        direction: Math.random() < 0.5 ? "rl" : "lr",
+        direction: Math.random() < 0.5 ? 'rl' : 'lr',
         y: Math.random() * (window.innerHeight - 100) + 50, // Random between 50 and window height - 50
-      };
+      }
 
-      setTrains(prevTrains => [...prevTrains, newTrain]);
+      setTrains((prevTrains) => [...prevTrains, newTrain])
 
       // Remove train after animation completes (adjust duration based on your train animation)
       setTimeout(() => {
-        setTrains(prevTrains => prevTrains.filter(train => train.id !== newTrain.id));
-      }, 15000); // Remove after 15 seconds (adjust based on your animation duration)
-    };
+        setTrains((prevTrains) => prevTrains.filter((train) => train.id !== newTrain.id))
+      }, 15000) // Remove after 15 seconds (adjust based on your animation duration)
+    }
 
     // Set up train spawning interval
     const scheduleNextSpawn = () => {
-      const delay = Math.random() * 1000 + 2000; // Random delay between 2-3 seconds
+      const delay = Math.random() * 1000 + 2000 // Random delay between 2-3 seconds
       trainSpawnInterval = setTimeout(() => {
-        spawnTrain();
-        scheduleNextSpawn(); // Schedule next spawn
-      }, delay);
-    };
+        spawnTrain()
+        scheduleNextSpawn() // Schedule next spawn
+      }, delay)
+    }
 
     // Start spawning trains
-    scheduleNextSpawn();
+    scheduleNextSpawn()
 
-    window.addEventListener("scroll", updateParallax, { passive: true });
+    window.addEventListener('scroll', updateParallax, { passive: true })
 
     return () => {
-      window.removeEventListener("scroll", updateParallax);
-      clearTimeout(parallaxTimeout);
-      clearTimeout(trainSpawnInterval);
-      if (speedTween) speedTween.kill();
-      if (parallaxTween) parallaxTween.kill();
-    };
-  }, []);
+      window.removeEventListener('scroll', updateParallax)
+      clearTimeout(parallaxTimeout)
+      clearTimeout(trainSpawnInterval)
+      if (speedTween) speedTween.kill()
+      if (parallaxTween) parallaxTween.kill()
+    }
+  }, [])
 
   return (
     <div
@@ -102,5 +103,5 @@ export default function Trains() {
         <Train key={train.id} direction={train.direction} y={train.y} />
       ))}
     </div>
-  );
+  )
 }

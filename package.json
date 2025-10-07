@@ -6,7 +6,11 @@
     "dev": "tinacms dev -c \"astro dev\"",
     "build": "tinacms build && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:check": "eslint './src/**/*.{ts,tsx,js,cjs,mjs}'",
+    "lint:fix": "eslint --fix --cache './src/**/*.{ts,tsx,js,cjs,mjs}'",
+    "format:check": "prettier --check '**/*.{ts,tsx,js,cjs,json,svg}'",
+    "format:write": "prettier --write --cache '**/*.{ts,tsx,js,cjs,json,svg}'"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

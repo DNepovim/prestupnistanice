@@ -4,14 +4,14 @@
  */
 export default async (load, options, el) => {
   try {
-    const isInIframe = window.self !== window.top;
+    const isInIframe = window.self !== window.top
     if (!isInIframe) {
-      return;
+      return
     }
-    
-    const hydrate = await load();
-    await hydrate();
+
+    const hydrate = await load()
+    await hydrate()
   } catch (error) {
-    console.error("An error occurred in the Tina client directive:", error);
+    console.error('An error occurred in the Tina client directive:', error)
   }
-};
+}

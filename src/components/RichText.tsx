@@ -1,9 +1,10 @@
-import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
-import { tp } from "../utils/tp";
-import { isString } from "../utils/isString";
+import { TinaMarkdown, type TinaMarkdownContent } from 'tinacms/dist/rich-text'
+
+import { isString } from '../utils/isString'
+import { tp } from '../utils/tp'
 
 interface Props {
-  content: TinaMarkdownContent | TinaMarkdownContent[];
+  content: TinaMarkdownContent | TinaMarkdownContent[]
 }
 
 export const RichText = ({ content }: Props) => {
@@ -25,9 +26,9 @@ export const RichText = ({ content }: Props) => {
               {isString(props.children) ? tp(props.children) : props.children}
             </a>
           ) : (
-            ""
+            ''
           ),
       }}
     />
-  );
-};
+  )
+}

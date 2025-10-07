@@ -1,3 +1,3 @@
-import { fixTypos } from 'typopo';
+import { fixTypos } from 'typopo'
 
-export const tp = (s: string) => fixTypos(s, "cs")
+export const tp = (s: string) => fixTypos(s, 'cs')
