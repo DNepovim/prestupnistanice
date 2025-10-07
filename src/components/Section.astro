@@ -13,6 +13,6 @@ const { title, isWide, className } = Astro.props
 <section
   class={cn('mx-auto mb-12', isWide ? 'max-w-[80rem]' : 'max-w-[56rem]', className)}
 >
-  {title && <h2 class={cn('font-head mb-8 text-2xl text-gray-600')}>{title}</h2>}
+  {title && <h2 class={cn('font-head mb-8 text-2xl')}>{title}</h2>}
   <slot />
 </section>

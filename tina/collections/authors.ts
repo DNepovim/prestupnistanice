@@ -11,9 +11,11 @@ export const AuthorsCollection: Collection = {
       slugify: ({ firstname, surname }: { firstname?: string; surname?: string }) =>
         firstname && surname ? slugify(`${firstname} ${surname}`) : '',
     },
+    // @ts-expect-error wrongly typed tina cms
     beforeSubmit: ({ values }) => {
       return {
         ...values,
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         slug: slugify(`${values.firstname} ${values.surname}`),
       }
     },
@@ -28,10 +30,20 @@ export const AuthorsCollection: Collection = {
     },
     {
       type: 'string',
+      name: 'firstnameSecond',
+      label: 'Jméno (2. pád)',
+    },
+    {
+      type: 'string',
       name: 'surname',
       label: 'Příjmení',
       required: true,
       isTitle: true,
+    },
+    {
+      type: 'string',
+      name: 'surnameSecond',
+      label: 'Příjmení (2. pád)',
     },
     {
       type: 'datetime',
@@ -61,7 +73,7 @@ export const AuthorsCollection: Collection = {
     { type: 'image', name: 'image', label: 'Fotka' },
 
     {
-      type: 'rich-text',
+      type: 'string',
       name: 'description',
       label: 'Popis',
       isBody: true,

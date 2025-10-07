@@ -10,8 +10,10 @@ export const BooksCollection: Collection = {
       readonly: true,
       slugify: (v?: { title?: string }) => (v?.title ? slugify(v.title) : ''),
     },
+      // @ts-expect-error wrongly typed tina cms
     beforeSubmit: ({ values }) => ({
       ...values,
+      // @ts-expect-error wrongly typed tina cms
       slug: slugify(values.title),
     }),
   },

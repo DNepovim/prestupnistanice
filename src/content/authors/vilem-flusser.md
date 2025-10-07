@@ -1,11 +1,14 @@
 ---
 slug: vilem-flusser
 firstname: Vilém
+firstnameSecond: Viléma
 surname: Flusser
+surnameSecond: Flussera
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
 image: /images/vilem-flusser.jpg
 ---
+
 
 > Myslitel Vilém Flusser se vzdálil české domovině natolik, že se stal známějším ve světě než doma. A tak není divu, že je potřeba jeho dílo překládat do češtiny.
 
