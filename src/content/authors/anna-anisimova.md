@@ -3,9 +3,8 @@ slug: anna-anisimova
 firstname: Anna
 surname: Anisimová
 image: /images/anisimova.webp
+claim: "Ruská novinářka, redaktorka a\_spisovatelka knih pro děti."
 ---
-
-> Ruská novinářka, redaktorka a spisovatelka knih pro děti.
 
 Anisimova se narodila a vyrostla na severu irkutské oblasti ve vesnici Kropotkin na Sibiři. Vystudovala žurnalistiku na Novosibirské státní univerzitě.
 

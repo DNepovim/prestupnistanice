@@ -1,0 +1,36 @@
+---
+import { marked, parseInline } from 'marked'
+
+import { html } from '../utils/html'
+import { isLinkExternal } from '../utils/isLinkExteral'
+import { tp } from '../utils/tp'
+
+interface Props {
+  text: string
+}
+
+const { text } = Astro.props
+
+marked.use({
+  renderer: {
+    heading: ({ text }) =>
+      html`<h3 class="font-head text-brand-first-500 mt-4 text-4xl">${tp(text)}</h3>`,
+    strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
+    em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
+    paragraph: ({ text }) => html`<p class="mb-4">${parseInline(text)}</p>`,
+    link: ({ text, href }) =>
+      html`<a
+        href="${href}"
+        target="${isLinkExternal(href) ? '_blank' : '_self'}"
+        class="font-alt text-brand-first-500 border-b border-transparent hover:border-brand-second-500"
+        >${tp(text)}</a
+      >`,
+    blockquote: ({ text }) =>
+      html`<blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">
+        ${tp(text)}
+      </blockquote>`,
+  },
+})
+---
+
+<div set:html={marked(text)} />

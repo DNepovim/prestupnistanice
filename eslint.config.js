@@ -37,6 +37,7 @@ export default defineConfig(
         },
       ],
       'sonarjs/todo-tag': 'off',
+      'sonarjs/prefer-read-only-props': 'off',
     },
   },
   {

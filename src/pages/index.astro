@@ -1,14 +1,13 @@
 ---
 import { Image } from 'astro:assets'
-import { TinaMarkdown } from 'tinacms/dist/rich-text'
 
 import { client } from '../../tina/__generated__/client.ts'
-import Theme from '../components/Theme.astro'
 import ArrowLink from '../components/ArrowLink.astro'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import Excerpt from '../components/Excerpt.astro'
 import Section from '../components/Section.astro'
+import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
@@ -20,6 +19,10 @@ const [lastBook, ...recentBooks] = (
 )
   .map((item) => item?.node)
   .filter(isDefined)
+
+if (!isDefined(lastBook)) {
+  return
+}
 
 const lastBookAuthors = lastBook.authors
   ?.filter((a) => a?.isMain)
@@ -86,14 +89,7 @@ const philosophyBooks = (
           </h2>
 
           <div class="line-clamp-3 text-xl">
-            {
-              lastBook.description && (
-                <TinaMarkdown
-                  content={lastBook.description}
-                  components={{ p: (props) => props?.children }}
-                />
-              )
-            }
+            {lastBook.description}
           </div>
           <div class="flex justify-end pt-4 pr-8">
             <ArrowLink href={routes.books.detail(lastBook)}>více o knize</ArrowLink>
@@ -142,7 +138,10 @@ const philosophyBooks = (
     <div class="flex flex-col gap-16">
       {
         recentBooks.map((book, index) => (
-      <Theme firstColor={book.color ?? undefined} secondColor={book.bgColor ?? undefined}>
+          <Theme
+            firstColor={book.color ?? undefined}
+            secondColor={book.bgColor ?? undefined}
+          >
             <Excerpt
               className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
               title={book.title}

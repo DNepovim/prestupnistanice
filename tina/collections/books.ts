@@ -1,6 +1,8 @@
 import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
+import { MarkdownInput } from '../components/Markdown'
+
 export const BooksCollection: Collection = {
   name: 'books',
   label: 'Knihy',
@@ -102,10 +104,13 @@ export const BooksCollection: Collection = {
       label: 'Barva pozadí',
     },
     {
-      type: 'rich-text',
+      type: 'string',
       name: 'description',
       label: 'Popis',
       isBody: true,
+      ui: {
+        component: MarkdownInput,
+      },
     },
   ],
 }

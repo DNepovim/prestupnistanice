@@ -6,35 +6,35 @@ import TrainImage from '../assets/vlak.png'
 ---
 
 <div class="w-full">
-  <footer class="mx-auto max-w-[56rem] px-4">
-    <div class="my-16 flex justify-between gap-8 max-sm:flex-col min-sm:items-end">
+  <footer class="mx-auto max-w-[56rem] px-4 font-alt">
+    <div class="my-16 flex items-stretch justify-between gap-8 max-sm:flex-col">
       <div class="flex-1">
-        <h3>Obsah</h3>
-        <menu class="text-xs">
-          <li><a href="/knihy">Naše knihy</a></li>
-          <li><a href="/autori">Autoři</a></li>
-          <li><a href="/o-nakladatelstvi">O nakladatelstvi</a></li>
+        <h3 class="mb-2">Obsah</h3>
+        <menu class="text-sm">
+          <li class="mb-1"><a class="hover:underline" href="/knihy">Naše knihy</a></li>
+          <li class="mb-1"><a class="hover:underline" href="/autori">Autoři</a></li>
+          <li class="mb-1"><a class="hover:underline" href="/o-nakladatelstvi">O nakladatelstvi</a></li>
         </menu>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 max-sm:hidden flex items-center opacity-60">
         <Image src={TrainImage} alt="Logo" width={240} height={100} />
       </div>
 
       <div class="flex-1">
-        <h3>Kontakty</h3>
-        <p class="flex items-center gap-2 text-sm ">
+        <h3 class="mb-2">Kontakty</h3>
+        <p class="flex items-center gap-2 text-sm mb-2">
           <Icon name="ph:envelope-light" class="size-6" />
-          <a href="mailto:skalak@knihyps.cz" target="_blank">skalak@knihyps.cz</a>
+          <a class="hover:underline" href="mailto:skalak@knihyps.cz" target="_blank">skalak@knihyps.cz</a>
         </p>
-        <p class="flex items-center gap-2 text-sm ">
+        <p class="flex items-center gap-2 text-sm mb-2">
           <Icon name="ph:facebook-logo-light" class="size-6" />
 
-          <a href="https://www.facebook.com/knihyprestupnistanice" target="_blank"
+          <a class="hover:underline" href="https://www.facebook.com/knihyprestupnistanice" target="_blank"
             >knihyprestupnistanice</a
           >
         </p>
-        <p class="text-xs">
-          Naše knihy jsou dostupné v distribuci <a
+        <p class="text-xs mt-6">
+          Naše knihy jsou dostupné v distribuci <a class="hover:underline"
             href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
             >Kosmas</a
           >.

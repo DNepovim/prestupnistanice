@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets'
-import { TinaMarkdown } from 'tinacms/dist/rich-text'
 
 import { client } from '../../tina/__generated__/client'
 import Book from '../components/Book.astro'
@@ -12,6 +11,7 @@ import { CATEGORIES, routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { rolesMap } from '../utils/rolesMap'
 import Excerpt from './Excerpt.astro'
+import Markdown from './Markdown.astro'
 
 interface Props {
   slug: string
@@ -25,7 +25,7 @@ const book = res.data.books
 const authors = (book.authors ?? []).filter(isDefined)
 
 const mainAuthor = authors.find((a) => a.role === 'author' && a.isMain)
-const mainAuthorNameSecond = `${mainAuthor?.author?.firstnameSecond ?? mainAuthor?.author?.firstname ?? ""} ${mainAuthor?.author?.surnameSecond ?? mainAuthor?.author?.surname ?? ""}`
+const mainAuthorNameSecond = `${mainAuthor?.author?.firstnameSecond ?? mainAuthor?.author?.firstname ?? ''} ${mainAuthor?.author?.surnameSecond ?? mainAuthor?.author?.surname ?? ''}`
 
 const authorsBooks = (
   (
@@ -94,7 +94,7 @@ const categoryBooks = (
         />
       )
     }
-    <TinaMarkdown content={book.description} />
+    {book.description && <Markdown text={book.description} />}
     <div class="clear-both"></div>
   </Section>
   <Section className="clear-both mt-20">
@@ -102,16 +102,15 @@ const categoryBooks = (
       authors
         .map(({ author, role }) => ({ ...author, role }))
         .filter(isDefined)
-        .filter((a) => a.description?.children?.length)
+        .filter((a) => a.claim?.length)
         .map((a) => (
           <Excerpt
-            title={`${a.firstname} ${a.surname}`}
+            title={`${a.firstname ?? ''} ${a.surname ?? ''}`}
             image={a.image ?? undefined}
             link={routes.authors.detail({
               _sys: { filename: a._sys?.filename ?? '' },
             })}
-            color={book.color ?? undefined}
-            description={a.description}
+            description={a.claim ?? ''}
             moreLabel="více o autorovi"
             isRounded
           >
@@ -122,7 +121,7 @@ const categoryBooks = (
   </Section>
   {
     authorsBooks.length > 0 && (
-    <Section title={`Další knihy od ${mainAuthorNameSecond}`}>
+      <Section title={`Další knihy od ${mainAuthorNameSecond}`}>
         <BooksGrid>
           {authorsBooks.map((book) => (
             <Book
@@ -142,8 +141,8 @@ const categoryBooks = (
     )
   }
   {
-    categoryBooks.length > 0 && (
-      <Section title={`Další knihy ${CATEGORIES[book.category].name}`}>
+    categoryBooks.length > 0 && book.category && (
+      <Section title={`Další knihy ${CATEGORIES[book.category]?.name}`}>
         <BooksGrid>
           {categoryBooks.map((book) => (
             <Book

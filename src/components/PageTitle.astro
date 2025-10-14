@@ -1,5 +1,10 @@
 <h1
-  class="font-head text-brand-first-500 relative mx-auto mt-6 inline-block max-w-[56rem] max-md:text-[10vw] min-md:text-8xl"
+  class="font-head text-brand-first-500 relative mx-auto mt-6 mb-16 inline-block max-w-[56rem] max-md:text-[10vw] min-md:text-8xl"
 >
-  <span class="relative z-10"><slot /></span>
+  <div class="relative z-10">
+    <slot />
+    <span
+      class="from-brand-second-500 absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r to-transparent"
+    ></span>
+  </div>
 </h1>

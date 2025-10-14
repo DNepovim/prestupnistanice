@@ -5,12 +5,13 @@ import { getCollection } from 'astro:content'
 import { client } from '../../../tina/__generated__/client.ts'
 import Book from '../../components/Book.astro'
 import BooksGrid from '../../components/BooksGrid.astro'
+import Markdown from '../../components/Markdown.astro'
 import PageTitle from '../../components/PageTitle.astro'
-import { RichText } from '../../components/RichText'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
 import { routes } from '../../routes'
 import { isDefined } from '../../utils/isDefined'
+import { tp } from '../../utils/tp'
 
 export async function getStaticPaths() {
   const posts = await getCollection('author')
@@ -29,6 +30,10 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params
 
+if (!slug) {
+  return
+}
+
 const res = await client.queries.authors({ relativePath: `${slug}.md` })
 const author = res.data.authors
 
@@ -45,7 +50,11 @@ const books = (
 ).map((item) => item?.node)
 ---
 
-<Layout siteTitle={`${author.firstname} ${author.surname}`}>
+<Layout
+  siteTitle={`${author.firstname} ${author.surname}`}
+  firstColor={books[0]?.color ?? undefined}
+  secondColor={books[0]?.bgColor ?? undefined}
+>
   <Section className="mb-32">
     <PageTitle>
       {author.firstname}{' '}{author.surname}
@@ -57,11 +66,15 @@ const books = (
           src={author.image}
           width={420}
           height={600}
-          class="mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
+          class="border-brand-second-50 mb-4 rounded-xl border-4 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
         />
       )
     }
-    <RichText content={author.description} />
+    <blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">
+      {author.claim && tp(author.claim)}
+    </blockquote>
+
+    {author.description && <Markdown text={author.description} />}
   </Section>
   <Section className="clear-both"
     >{
