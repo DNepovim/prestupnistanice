@@ -76,12 +76,13 @@ const book = defineCollection({
         author: authorSchema,
         role: z.enum([
           'author',
-          'transalte',
+          'translate',
           'editor',
           'illustration',
           'cover',
           'typesetting',
           'reviewer',
+          'corrector'
         ]),
       }),
     ),
