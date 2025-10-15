@@ -5,5 +5,6 @@ export const rolesMap: Record<string, string> = {
   illustration: 'Ilustrace',
   cover: 'Obálka',
   typesetting: 'Sazba',
-  reviewr: 'Recenzent',
+  reviewer: 'Recenzent',
+  corrector: 'Korektor',
 }

@@ -1,14 +1,15 @@
 ---
 slug: wolf-erlbruch
 firstname: Wolf
+firstnameSecond: Wolfa
 surname: Erlbruch
+surnameSecond: Erlbrucha
 birthDate: 1948-06-29T22:00:00.000Z
 deathDate: 2022-01-10T23:00:00.000Z
 gender: male
 image: /images/erlbruch.png
+claim: "Německý autor a\_ilustrátor, který uměl vyprávět o\_životě i\_smrti s\_úsměvem."
 ---
-
-> Německý autor a ilustrátor, který uměl vyprávět o životě i smrti s úsměvem.
 
 Narozený roku 1948 v německém Wuppertalu, patří k nejvýraznějším ilustrátorům moderní doby. Jeho kresby dokázaly mluvit stejně k dětem jako k dospělým – s lehkostí, jemným humorem a s tichou vážností, která se nezalekla ani těch největších témat. Jak sám říkal: „Ilustrace je způsob, jak se ptát na život a na smrt, aniž by se člověk bál odpovědi.“
 

@@ -52,7 +52,9 @@ export const BooksCollection: Collection = {
       name: 'authors',
       label: 'Autoři',
       type: 'object',
-      list: true,
+       ui: {
+        itemProps: (item) => ({ label: `${item.role} - ${item.author}` }),
+      },     list: true,
       fields: [
         {
           name: 'author',
@@ -77,6 +79,7 @@ export const BooksCollection: Collection = {
             { label: 'Obálka', value: 'cover' },
             { label: 'Sazba', value: 'typesetting' },
             { label: 'Recenzent', value: 'reviewer' },
+            { label: 'Korektor', value: 'corrector' },
           ],
         },
       ],

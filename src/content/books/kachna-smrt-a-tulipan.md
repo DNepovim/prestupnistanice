@@ -9,13 +9,28 @@ authors:
   - author: src/content/authors/wolf-erlbruch.md
     isMain: true
     role: author
+  - author: src/content/authors/petr-blaha.md
+    role: translate
+  - author: src/content/authors/jakub-skalak.md
+    role: editor
+  - author: src/content/authors/petra-kulovana.md
+    role: reviewer
+  - author: src/content/authors/filip-komberec.md
+    role: reviewer
+  - author: src/content/authors/marie-blahova.md
+    role: corrector
+  - author: src/content/authors/martina-nejedla.md
+    role: corrector
+  - author: src/content/authors/filip-skalak.md
+    role: typesetting
 cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids
 color: '#dd6a55'
 bgColor: '#efa931'
 ---
 
-Je to příběh života, umírání a smrti.
+> Je to příběh života, umírání a smrti.
+> 
 
 Pozoruhodná a do řady světových jazyků přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí. Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.
 

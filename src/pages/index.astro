@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 
 import { client } from '../../tina/__generated__/client.ts'
 import ArrowLink from '../components/ArrowLink.astro'
+import AuthorSmall from '../components/AuthorSmall.astro'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import Excerpt from '../components/Excerpt.astro'
@@ -11,7 +12,6 @@ import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
-import { rolesMap } from '../utils/rolesMap'
 
 const [lastBook, ...recentBooks] = (
   (await client.queries.booksConnection({ sort: 'date', last: 4 })).data.booksConnection
@@ -84,7 +84,7 @@ const philosophyBooks = (
               >{lastBook.title}</a
             >
             <span
-              class="animate-width-expand bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-0"
+              class="animate-width-expand from-brand-second-500 absolute bottom-0 left-0 h-[4px] w-0 bg-gradient-to-r to-transparent"
             ></span>
           </h2>
 
@@ -101,28 +101,13 @@ const philosophyBooks = (
       lastBookAuthors && (
         <div class="mb-40 flex flex-wrap gap-2 min-sm:justify-end">
           {lastBookAuthors.map((a) => (
-            <a
-              class="group flex items-center gap-4 rounded-md px-4 py-2 transition-colors hover:bg-white"
-              href={routes.authors.detail({
-                _sys: { filename: a._sys?.filename ?? '' },
-              })}
-            >
-              {a.image && (
-                <Image
-                  src={a.image}
-                  alt={`${a.firstname} ${a.surname}`}
-                  width={40}
-                  height={40}
-                  class="rounded-full"
-                />
-              )}
-              <div>
-                <div class="text-alt font-alt text-gray-800 group-hover:underline">
-                  {a.firstname} {a.surname}
-                </div>
-                {a.role && <div class="text-sm text-gray-500">{rolesMap[a.role]}</div>}
-              </div>
-            </a>
+            <AuthorSmall
+              firstname={a.firstname ?? ''}
+              surname={a.surname ?? ''}
+              image={a.image ?? ''}
+              link={routes.authors.detail(a)}
+              role={a.role ?? ''}
+            />
           ))}
         </div>
       )
@@ -145,7 +130,7 @@ const philosophyBooks = (
             <Excerpt
               className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
               title={book.title}
-              description={book.description}
+              description={book.description ?? ""}
               image={book.cover ?? undefined}
               link={routes.books.detail(book)}
             >

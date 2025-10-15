@@ -31,7 +31,7 @@ export const routes = {
     category: (key: keyof typeof CATEGORIES) => `/${SLUGS.books}/${CATEGORIES[key].slug}`,
   },
   authors: {
-    detail: (author: { _sys: { filename: string } }) =>
-      `/${SLUGS.auhtors}/${author._sys.filename}`,
+    detail: (author: { _sys?: { filename: string } }) =>
+      author._sys ? `/${SLUGS.auhtors}/${author._sys.filename}` : '/',
   },
 }
