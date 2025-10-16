@@ -1,7 +1,7 @@
 ---
 import { client } from '../../tina/__generated__/client.ts'
+import Markdown from '../components/Markdown.astro'
 import PageTitle from '../components/PageTitle.astro'
-import { RichText } from '../components/RichText'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
 
@@ -22,7 +22,7 @@ const page = res.data.pages
   <Section>
     <PageTitle>{page.title}</PageTitle>
     <div class="mx-auto max-w-2xl leading-8">
-      <RichText content={page.content} />
+      {page.content && <Markdown text={page.content} />}
     </div>
   </Section>
 </Layout>

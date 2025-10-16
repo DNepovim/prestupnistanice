@@ -1,10 +1,8 @@
 ---
 import { Image } from 'astro:assets'
-import { TinaMarkdown } from 'tinacms/dist/rich-text'
 
 import ArrowLink from '../components/ArrowLink.astro'
 import { cn } from '../utils/cn'
-import { isString } from '../utils/isString'
 import { tp } from '../utils/tp'
 
 interface Props {
@@ -50,24 +48,7 @@ const { image, link, title, description, moreLabel, isRounded, className } = Ast
 
     <div class="min-sm:pl-8">
       <div class="line-clamp-3">
-        {
-          description &&
-            (isString(description) ? (
-              tp(description.replace(/[*>#]/g, ''))
-            ) : (
-              <TinaMarkdown
-                content={description}
-                components={{
-                  p: (props) =>
-                    isString(props?.children) ? tp(props?.children) : props?.children,
-                  i: (props) =>
-                    isString(props?.children) ? tp(props.children) : props?.children,
-                  q: (props) =>
-                    isString(props?.children) ? tp(props.children) : props?.children,
-                }}
-              />
-            ))
-        }
+        {description && tp(description.replace(/[*>#]/g, ''))}
       </div>
     </div>
     {

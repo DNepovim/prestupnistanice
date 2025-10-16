@@ -1,5 +1,7 @@
 import type { Collection } from 'tinacms'
 
+import { MarkdownInput } from '../components/Markdown'
+
 export const PagesCollection: Collection = {
   name: 'pages',
   label: 'Stránky',
@@ -20,10 +22,13 @@ export const PagesCollection: Collection = {
       required: true,
     },
     {
-      type: 'rich-text',
+      type: 'string',
       name: 'content',
       label: 'Obsah',
       isBody: true,
+      ui: {
+        component: MarkdownInput,
+      },
     },
   ],
 }
