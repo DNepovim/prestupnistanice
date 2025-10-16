@@ -17,7 +17,6 @@ interface Props {
   isRounded?: boolean
 }
 
-
 const { image, link, title, description, moreLabel, isRounded, className } = Astro.props
 ---
 
@@ -39,9 +38,6 @@ const { image, link, title, description, moreLabel, isRounded, className } = Ast
     <div class="max-sm:flex max-sm:flex-col">
       <h2 class="peer text-brand-first-500 font-head group relative inline text-4xl">
         <a href={link}>{tp(title)}</a>
-        <span
-          class="bg-brand-second-500 absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-500 group-hover:w-full"
-        ></span>
       </h2>
       <div class="relative mx-2 mb-2 inline-block w-8">
         <div
@@ -57,7 +53,7 @@ const { image, link, title, description, moreLabel, isRounded, className } = Ast
         {
           description &&
             (isString(description) ? (
-              tp(description.replace(/[*>#]/g, ""))
+              tp(description.replace(/[*>#]/g, ''))
             ) : (
               <TinaMarkdown
                 content={description}

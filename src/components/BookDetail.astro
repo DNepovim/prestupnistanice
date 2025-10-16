@@ -10,9 +10,10 @@ import Layout from '../layouts/Layout.astro'
 import { CATEGORIES, routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { rolesMap } from '../utils/rolesMap'
+import { tp } from '../utils/tp'
+import AuthorSmall from './AuthorSmall.astro'
 import Excerpt from './Excerpt.astro'
 import Markdown from './Markdown.astro'
-import AuthorSmall from './AuthorSmall.astro'
 
 interface Props {
   slug: string
@@ -23,7 +24,9 @@ const { slug } = Astro.props
 const relativePath = `${slug}.md`
 const res = await client.queries.books({ relativePath })
 const book = res.data.books
-const authors = (book.authors ?? []).filter(isDefined).map(({ author, role, isMain }) => ({ ...author, role, isMain }))
+const authors = (book.authors ?? [])
+  .filter(isDefined)
+  .map(({ author, role, isMain }) => ({ ...author, role, isMain }))
 
 const mainAuthor = authors.find((a) => a.role === 'author' && a.isMain)
 const mainAuthorNameSecond = `${mainAuthor?.firstnameSecond ?? mainAuthor?.firstname ?? ''} ${mainAuthor?.surnameSecond ?? mainAuthor?.surname ?? ''}`
@@ -68,7 +71,7 @@ const categoryBooks = (
   secondColor={book.bgColor ?? undefined}
 >
   <Section>
-    <PageTitle>{book.title}</PageTitle>
+    <PageTitle>{tp(book.title)}</PageTitle>
     {
       mainAuthor && (
         <p class="mb-8 text-2xl">
@@ -91,7 +94,7 @@ const categoryBooks = (
           src={book.cover}
           width={420}
           height={600}
-          class="mb-4 animate-small-rotate-on-load border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
+          class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
         />
       )
     }
@@ -118,17 +121,20 @@ const categoryBooks = (
         ))
     }
   </Section>
-  <Section className="grid grid-cols-3 max-w-3xl" >
+  <Section className="grid max-w-3xl grid-cols-3">
     {
-    authors.filter(isDefined).filter(({isMain}) => !isMain).map(a => 
-        <AuthorSmall
-          firstname={a.firstname ?? ''}
-          surname={a.surname ?? ''}
-          image={a.image ?? ''}
-          link={routes.authors.detail(a)}
-          role={a.role ?? ''}
-        />
-      )
+      authors
+        .filter(isDefined)
+        .filter(({ isMain }) => !isMain)
+        .map((a) => (
+          <AuthorSmall
+            firstname={a.firstname ?? ''}
+            surname={a.surname ?? ''}
+            image={a.image ?? ''}
+            link={routes.authors.detail(a)}
+            role={a.role ?? ''}
+          />
+        ))
     }
   </Section>
   {

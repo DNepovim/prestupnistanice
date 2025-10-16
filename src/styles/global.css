@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "tailwindcss-debug-screens";
 
 @custom-variant dark (&:is(.dark *));
@@ -12,7 +12,7 @@ body {
     width: 0;
   }
   to {
-    width: 100%;
+    width: 60%;
   }
 }
 
@@ -68,11 +68,19 @@ body {
   animation: slide-on-load 0.8s ease-out forwards;
 }
 
-@theme {
-  --font-head: "quiche-flare", sans-serif;
-  --font-display: "montserrat", sans-serif;
-  --font-alt: "montserrat-alternates", sans-serif;
+@utility text-outline-* {
+  text-shadow:
+    -2px -2px 0 --value(--color-*),
+    2px -2px 0 --value(--color-*),
+    -2px 2px 0 --value(--color-*),
+    2px 2px 0 --value(--color-*);
+}
 
-  --color-brand: "#fdba74";
+@theme {
+  --font-head: 'quiche-flare', sans-serif;
+  --font-display: 'montserrat', sans-serif;
+  --font-alt: 'montserrat-alternates', sans-serif;
+
+  --color-brand: '#fdba74';
   --breakpoint-xs: 30rem;
 }
