@@ -84,7 +84,7 @@ const philosophyBooks = (
               >{lastBook.title}</a
             >
             <span
-              class="animate-width-expand from-brand-second-500 absolute bottom-0 left-0 h-[4px] w-0 bg-gradient-to-r to-transparent"
+              class="animate-width-expand from-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] duration-600 bg-gradient-to-r to-transparent transition-all group-hover:w-full group-hover:bg-brand-second-500"
             ></span>
           </h2>
 
@@ -97,7 +97,7 @@ const philosophyBooks = (
         </div>
       </div>
     </div>
-    {
+    <div class="animate-opacity-on-load">{
       lastBookAuthors && (
         <div class="mb-40 flex flex-wrap gap-2 min-sm:justify-end">
           {lastBookAuthors.map((a) => (
@@ -111,7 +111,7 @@ const philosophyBooks = (
           ))}
         </div>
       )
-    }
+    }</div>
   </Section>
   <Section>
     <p class="font-alt mt-16 mb-24 px-6 text-center text-2xl text-gray-800 italic">
@@ -130,7 +130,7 @@ const philosophyBooks = (
             <Excerpt
               className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
               title={book.title}
-              description={book.description ?? ""}
+              description={book.description ?? ''}
               image={book.cover ?? undefined}
               link={routes.books.detail(book)}
             >
