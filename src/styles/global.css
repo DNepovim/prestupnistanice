@@ -25,6 +25,15 @@ body {
   }
 }
 
+@keyframes small-rotate-on-load {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(-2deg);
+  }
+}
+
 @keyframes opacity-on-load {
   from {
     opacity: 0;
@@ -34,12 +43,29 @@ body {
   }
 }
 
+@keyframes slide-on-load {
+  from {
+    transform: translateY(2rem);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .animate-width-expand {
   animation: width-expand 0.6s ease-out forwards;
 }
 
 .animate-rotate-on-load {
   animation: rotate-on-load 0.8s ease-out forwards;
+}
+
+.animate-small-rotate-on-load {
+  animation: small-rotate-on-load 0.8s ease-out forwards;
+}
+
+.animate-slide-on-load {
+  animation: slide-on-load 0.8s ease-out forwards;
 }
 
 @theme {
