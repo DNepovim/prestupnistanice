@@ -35,10 +35,12 @@ cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids
 color: '#dd6a55'
 bgColor: '#efa931'
-claim: 'Je to příběh života, umírání a smrti.'
+claim: >-
+  Je to příběh života, umírání a smrti. Pozoruhodná a do řady světových jazyků
+  přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí.
 ---
 
-Pozoruhodná a do řady světových jazyků přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí. Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.
+Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.
 
 Závažné téma je pro dětského čtenáře působivě podáno jemně a s velkou mírou laskavosti a soucitu. Smrt není děsivá, ani dotěrná, její zobrazení balancuje na tenké hranici vytříbeného smutku.
 

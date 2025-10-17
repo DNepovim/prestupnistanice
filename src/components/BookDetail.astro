@@ -90,7 +90,7 @@ const anotherBooks = (
         <p class="mb-8 text-2xl">
           <span class="whitespace-nowrap">
             <a
-              class="group font-alt text-gray-500 transition-colors hover:text-black"
+              class="group font-alt relative text-gray-600 transition-colors hover:text-black"
               href={routes.authors.detail(mainAuthor)}
             >
               {mainAuthor.firstname}
@@ -105,8 +105,8 @@ const anotherBooks = (
         <Image
           alt={book.title}
           src={book.cover}
-          width={420}
-          height={600}
+          width={336}
+          height={480}
           class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
         />
       )
