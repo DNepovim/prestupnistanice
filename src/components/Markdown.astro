@@ -17,7 +17,7 @@ marked.use({
       html`<h3 class="font-head text-brand-first-500 mt-4 text-4xl">${tp(text)}</h3>`,
     strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
-    paragraph: ({ text }) => html`<p class="mb-4">${parseInline(text)}</p>`,
+    paragraph: ({ text }) => html`<p class="mb-4">${parseInline(tp(text))}</p>`,
     link: ({ text, href }) =>
       html`<a
         href="${href}"
