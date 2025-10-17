@@ -9,9 +9,11 @@ import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
 import { CATEGORIES, routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
+import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
 import { tp } from '../utils/tp'
 import AuthorSmall from './AuthorSmall.astro'
+import Blockquote from './Blockquote.astro'
 import Excerpt from './Excerpt.astro'
 import Markdown from './Markdown.astro'
 
@@ -28,22 +30,19 @@ const authors = (book.authors ?? [])
   .filter(isDefined)
   .map(({ author, role, isMain }) => ({ ...author, role, isMain }))
 
-const mainAuthor = authors.find((a) => a.role === 'author' && a.isMain)
+const mainAuthor = authors.find((a) => a.isMain)
 const mainAuthorNameSecond = `${mainAuthor?.firstnameSecond ?? mainAuthor?.firstname ?? ''} ${mainAuthor?.surnameSecond ?? mainAuthor?.surname ?? ''}`
 
 const authorsBooks = (
-  (
-    await client.queries.booksConnection({
-      filter: {
-        authors: {
-          author: { authors: { slug: { eq: mainAuthor?.slug } } },
-        },
-      },
-    })
-  ).data.booksConnection.edges ?? []
+  (await client.queries.booksConnection()).data.booksConnection.edges ?? []
 )
   .map((item) => item?.node)
   .filter((item) => item?.slug !== slug)
+  .filter((item) =>
+    (item?.authors ?? []).find(
+      (a) => a && a.isMain && a.author && a.author.slug === mainAuthor?.slug,
+    ),
+  )
   .filter(isDefined)
 
 const categoryBooks = (
@@ -61,6 +60,20 @@ const categoryBooks = (
   .map((item) => item?.node)
   .filter(
     (item) => ![slug, ...authorsBooks.map(({ slug }) => slug)].includes(item?.slug ?? ''),
+  )
+  .filter(isDefined)
+
+const anotherBooks = (
+  (await client.queries.booksConnection({ first: 3 })).data.booksConnection.edges ?? []
+)
+  .map((item) => item?.node)
+  .filter(
+    (item) =>
+      ![
+        slug,
+        ...authorsBooks.map(({ slug }) => slug),
+        ...categoryBooks.map(({ slug }) => slug),
+      ].includes(item?.slug ?? ''),
   )
   .filter(isDefined)
 ---
@@ -98,10 +111,11 @@ const categoryBooks = (
         />
       )
     }
+    {book.claim && <Blockquote text={book.claim} />}
     {book.description && <Markdown text={book.description} />}
     <div class="clear-both"></div>
   </Section>
-  <Section className="clear-both mt-20">
+  <Section className="clear-both my-24 mb-16 flex flex-col gap-12">
     {
       authors
         .filter(({ isMain }) => isMain)
@@ -116,7 +130,14 @@ const categoryBooks = (
             moreLabel="více o autorovi"
             isRounded
           >
-            {a.role ? rolesMap[a.role] : undefined}
+            {joinWords(
+              a.role
+                .map(
+                  (r) =>
+                    rolesMap[r]?.[(a.gender as 'male' | 'female' | undefined) ?? 'male'],
+                )
+                .filter(isDefined),
+            )}
           </Excerpt>
         ))
     }
@@ -132,7 +153,8 @@ const categoryBooks = (
             surname={a.surname ?? ''}
             image={a.image ?? ''}
             link={routes.authors.detail(a)}
-            role={a.role ?? ''}
+            roles={a.role}
+            gender={(a.gender as 'male' | 'female' | undefined) ?? 'male'}
           />
         ))
     }
@@ -148,7 +170,7 @@ const categoryBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === 'author')
+                .filter((a) => a?.role.includes('author'))
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
@@ -169,7 +191,28 @@ const categoryBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === 'author')
+                .filter((a) => a?.role.includes('author'))
+                .map((author) => author?.author)
+                .filter(isDefined)
+                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
+            />
+          ))}
+        </BooksGrid>
+      </Section>
+    )
+  }
+  {
+    anotherBooks.length > 0 && (
+      <Section title="Naše další knihy">
+        <BooksGrid>
+          {anotherBooks.map((book) => (
+            <Book
+              title={book.title}
+              link={routes.books.detail(book)}
+              image={book.cover ?? undefined}
+              color={book.color ?? undefined}
+              authors={(book.authors ?? [])
+                .filter((a) => a?.role.includes('author'))
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}

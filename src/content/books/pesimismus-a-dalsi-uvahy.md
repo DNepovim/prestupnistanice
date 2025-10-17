@@ -5,7 +5,8 @@ date: 2022
 authors:
   - author: src/content/authors/oswald-spengler.md
     isMain: true
-    role: author
+    role:
+      - author
 cover: /images/pesimismus.jpg
 category: philosophy
 ---

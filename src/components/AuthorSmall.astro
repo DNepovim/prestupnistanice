@@ -1,17 +1,20 @@
 ---
 import { Image } from 'astro:assets'
 
+import { isDefined } from '../utils/isDefined'
+import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
 
 interface Props {
   firstname: string
   surname: string
   image: string
-  role: string
+  roles: string[]
+  gender: 'male' | 'female'
   link: string
 }
 
-const { firstname, surname, image, role, link } = Astro.props
+const { firstname, surname, image, roles, gender, link } = Astro.props
 ---
 
 <a
@@ -25,15 +28,23 @@ const { firstname, surname, image, role, link } = Astro.props
         alt={`${firstname} ${surname}`}
         width={40}
         height={40}
-        class="rounded-full"
+        class="size-10 rounded-full"
       />
-  ) : <div class="size-8 rounded-full bg-gradient-to-tr from-brand-first-200 to-brand-second-200"></div>
+    ) : (
+      <div class="from-brand-first-200 to-brand-second-200 size-8 rounded-full bg-gradient-to-tr" />
+    )
   }
   <div>
-    <div class="text-alt font-alt text-gray-800 group-hover:underline">
+    {
+      (
+        <div class="text-sm text-gray-500">
+          {joinWords(roles.map((r) => rolesMap[r]?.[gender]).filter(isDefined))}
+        </div>
+      )
+    }
+    <p class="text-alt font-alt text-brand-first-700 group-hover:underline">
       {firstname}
       {surname}
-    </div>
-    {role && <div class="text-sm text-gray-500">{rolesMap[role]}</div>}
+    </p>
   </div>
 </a>

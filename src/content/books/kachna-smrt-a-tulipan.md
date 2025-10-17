@@ -8,21 +8,29 @@ isbn: 978–80–909036–2–3
 authors:
   - author: src/content/authors/wolf-erlbruch.md
     isMain: true
-    role: author
+    role:
+      - author
   - author: src/content/authors/petr-blaha.md
-    role: translate
+    role:
+      - translate
   - author: src/content/authors/jakub-skalak.md
-    role: editor
+    role:
+      - editor
   - author: src/content/authors/petra-kulovana.md
-    role: reviewer
+    role:
+      - reviewer
   - author: src/content/authors/filip-komberec.md
-    role: reviewer
+    role:
+      - reviewer
   - author: src/content/authors/marie-blahova.md
-    role: corrector
+    role:
+      - corrector
   - author: src/content/authors/martina-nejedla.md
-    role: corrector
+    role:
+      - corrector
   - author: src/content/authors/filip-skalak.md
-    role: typesetting
+    role:
+      - typesetting
 cover: /images/kachna-smrt-a-tulipan.jpg
 category: forKids
 color: '#dd6a55'

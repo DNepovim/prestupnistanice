@@ -1,13 +1,17 @@
 ---
 slug: theodor-lessing
 firstname: Theodor
+firstnameSecond: Theodora
 surname: Lessing
+surnameSecond: Lessinga
 birthDate: 1872-02-08T00:00:00.000Z
 deathDate: 1933-08-31T00:00:00.000Z
+gender: male
 image: /images/lessing.png
+claim: >-
+  Německý filosof a novinář, první oběť fašismu v ČSR. V knize o hluku odhaluje
+  hlučnost jako zrcadlo chaosu moderní doby.
 ---
-
-> Německý filosof a novinář, první oběť fašismu v ČSR. V knize o hluku odhaluje hlučnost jako zrcadlo chaosu moderní doby.
 
 Myslitel Theodor Lessing patří k těm postavám, jejichž životní osud je pevně svázán s dramaty 20. století. Narodil se roku 1872 v Hannoveru v židovské rodině a své příjmení Lewy změnil na Lessing na počest osvícenského spisovatele Gottholda Efraima Lessinga. Vyrůstal v německo-židovském prostředí, studoval medicínu, filosofii a psychologii a brzy se stal kritickým hlasem své doby.
 

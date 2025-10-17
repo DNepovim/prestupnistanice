@@ -1,13 +1,18 @@
 ---
 slug: karl-spitteler
 firstname: Karl
+firstnameSecond: Karla
 surname: Spitteler
+surnameSecond: Spittelera
 birthDate: 1845-04-24T00:00:00.000Z
 deathDate: 1924-12-29T00:00:00.000Z
+gender: male
 image: /images/spitteler.png
+claim: >-
+  Švýcarský básník a prozaik, Nobelova cena za literaturu 1919. Autor Prométhea,
+  jenž několikrát stál na prahu Nobelovy ceny, mistr mýtické a vizionářské
+  poezie.
 ---
-
-> Švýcarský básník a prozaik, Nobelova cena za literaturu 1919. Autor Prométhea, jenž několikrát stál na prahu Nobelovy ceny, mistr mýtické a vizionářské poezie.
 
 Carl Spitteler se narodil roku 1845 v Liestalu. Už od mládí cítil, že jeho cesta povede jinam než přál otec – ne k právu či teologii, ale k literatuře a poezii. V básních i próze hledal jazyk, který by spojil mytický patos s moderním světem. Jeho život byl nenápadný, o to silnější je jeho dílo.
 

@@ -5,7 +5,8 @@ date: 2011
 authors:
   - author: src/content/authors/jiri-soucek.md
     isMain: true
-    role: author
+    role:
+      - author
 cover: /images/ta-moje-realita.jpg
 category: poetry
 color: '#535b59'

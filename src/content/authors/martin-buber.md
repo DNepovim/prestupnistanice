@@ -1,13 +1,17 @@
 ---
 slug: martin-buber
 firstname: Martin
+firstnameSecond: Martina
 surname: Buber
+surnameSecond: Bubera
 birthDate: 1878-02-08T00:00:00.000Z
 deathDate: 1965-06-13T00:00:00.000Z
+gender: male
 image: /images/buber.jpg
+claim: >-
+  Židovský filosof dialogu, vypravěč židovských legend a překladatel Bible.
+  Myslitel, který ukázal, že „celý skutečný život je setkání“.
 ---
-
-> Židovský filosof dialogu, vypravěč židovských legend a překladatel Bible. Myslitel, který ukázal, že „celý skutečný život je setkání“.
 
 Martin Buber se narodil roku 1878 ve Vídni, ale dětství prožil u prarodičů v Haliči, kde ho obklopovala živá židovská tradice. Už tehdy si osvojil lásku k jazykům a příběhům, která později formovala jeho dílo. Studoval filosofii, literaturu i psychologii a v mládí se zapojil do sionistického hnutí. Brzy však našel vlastní cestu: hledání dialogu mezi lidmi, kulturami a vírami.
 

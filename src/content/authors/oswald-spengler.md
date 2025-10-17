@@ -1,13 +1,17 @@
 ---
 slug: oswald-spengler
 firstname: Oswald
+firstnameSecond: Oswalda
 surname: Spengler
+surnameSecond: Spenglera
 birthDate: 1880-05-29T00:00:00.000Z
 deathDate: 1936-05-08T00:00:00.000Z
+gender: male
 image: /images/spengler.png
+claim: >-
+  Německý filosof a historik, autor slavného Zániku Západu. Tvůrce „morfologie
+  dějin“, provokativní kritik modernity a prorok kulturního pesimismu.
 ---
-
-> Německý filosof a historik, autor slavného Zániku Západu. Tvůrce „morfologie dějin“, provokativní kritik modernity a prorok kulturního pesimismu.
 
 Oswald Spengler byl německý filosof, historik kultury a spisovatel, který se stal jednou z nejdiskutovanějších postav intelektuálního života první poloviny 20. století. Narodil se roku 1880 v Blankenburgu, studoval matematiku, přírodní vědy a filozofii v Halle, Mnichově a Berlíně. Už během studií jej fascinovala otázka zákonitostí dějin – a právě z tohoto zaujetí se později zrodilo jeho nejvlivnější dílo.
 

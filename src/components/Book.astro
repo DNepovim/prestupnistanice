@@ -1,51 +1,58 @@
 ---
-import { Image } from "astro:assets";
-import {tp} from "../utils/tp"
+import { Image } from 'astro:assets'
+
+import { tp } from '../utils/tp'
 
 interface Props {
-  title: string;
-  link: string;
-  image?: string;
-  color?: string;
+  title: string
+  link: string
+  image?: string
+  color?: string
   authors?: {
-    firstname: string;
-    surname: string;
-    link: string;
-  }[];
+    firstname: string
+    surname: string
+    link: string
+  }[]
 }
 
-const { title, link, image, color, authors } = Astro.props;
+const { title, link, image, color, authors } = Astro.props
 ---
 
-<article class="min-md:mb-12 flex flex-col gap-4 justify-end w-64 jus">
+<article class="jus flex w-64 flex-col justify-end gap-4 min-md:mb-12">
   {
+    (
       <a href={link}>
-        { image ? <Image
-          alt={title}
-          src={image}
-          width={157.5}
-          height={225}
-          class="shadow-2xl border border-gray-200 -rotate-2"
-    /> : <div class="h-40 w-30 bg-gray-300"></div>}
+        {image ? (
+          <Image
+            alt={title}
+            src={image}
+            width={157.5}
+            height={225}
+            class="-rotate-2 border border-gray-200 shadow-2xl"
+          />
+        ) : (
+          <div class="h-40 w-30 bg-gray-300" />
+        )}
       </a>
+    )
   }
 
   <div class="min-h-30">
-    <h2 class="font-head text-2xl" style={{ color: color ?? "black" }}>
+    <h2 class="font-head text-2xl" style={{ color: color ?? 'black' }}>
       <a href={link}>{tp(title)}</a>
     </h2>
     <p>
       {
         authors?.map((a, index) => (
-          <span class="whitespace-nowrap">
-            {index !== 0 ? ", " : ""}
+          <>
+            {index !== 0 ? ', ' : ''}
             <a
-              class="group text-gray-500 hover:text-black transition-colors font-alt"
+              class="group font-alt text-gray-500 transition-colors hover:text-black"
               href={a.link}
             >
               {a.firstname} {a.surname}
             </a>
-          </span>
+          </>
         ))
       }
     </p>

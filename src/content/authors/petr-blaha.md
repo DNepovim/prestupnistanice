@@ -1,9 +1,13 @@
 ---
 slug: petr-blaha
 firstname: Petr
+firstnameSecond: Petra
 surname: Bláha
+surnameSecond: Bláhy
 birthDate: 1965-05-17T00:00:00.000Z
+gender: male
 ---
+
 
 Vystudoval filosofii a historii na Filosofické fakultě Univerzity Karlovy v Praze. V současnosti působí na Filosofické fakultě Univerzity J. E. Purkyně v Ústí nad Labem. Publikoval řadu článků z oblasti filosofie dějin, politické filosofie a etiky.
 

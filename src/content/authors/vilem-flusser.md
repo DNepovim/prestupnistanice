@@ -6,12 +6,14 @@ surname: Flusser
 surnameSecond: Flussera
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
+gender: male
 image: /images/vilem-flusser.jpg
 claim: >-
   Osobitý filosof na pomezí české, německé a židovské kultury, český myslitel,
   který našel domov ve světě. Filosof komunikace a technických obrazů, jehož
   dílo se k nám vrací v překladech po desetiletích.
 ---
+
 
 Myslitel, který se svému rodnému Česku vzdálil natolik, že se stal slavnějším v zahraničí než doma. Možná i proto dnes stojí za to jeho dílo znovu objevovat v češtině.
 

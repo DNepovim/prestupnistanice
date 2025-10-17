@@ -71,6 +71,8 @@ export const BooksCollection: Collection = {
           name: 'role',
           label: 'Role',
           type: 'string',
+          list: true,
+          required: true,
           options: [
             { label: 'Autor', value: 'author' },
             { label: 'Překladatel', value: 'translate' },
@@ -80,6 +82,7 @@ export const BooksCollection: Collection = {
             { label: 'Sazba', value: 'typesetting' },
             { label: 'Recenzent', value: 'reviewer' },
             { label: 'Korektor', value: 'corrector' },
+            { label: 'Konzultant', value: 'consultation' },
           ],
         },
       ],
@@ -106,6 +109,7 @@ export const BooksCollection: Collection = {
       name: 'bgColor',
       label: 'Barva pozadí',
     },
+    { type: 'string', name: 'claim', label: 'Úvod' },
     {
       type: 'string',
       name: 'description',

@@ -5,14 +5,44 @@ date: 2023
 authors:
   - author: src/content/authors/vilem-flusser.md
     isMain: true
-    role: author
+    role:
+      - author
   - author: src/content/authors/petr-babka.md
-    role: translate
+    role:
+      - translate
+  - author: src/content/authors/petr-blaha.md
+    role:
+      - editor
+  - author: src/content/authors/jakub-skalak.md
+    role:
+      - editor
+  - author: src/content/authors/hynek-tippelt.md
+    role:
+      - reviewer
+  - author: src/content/authors/jiri-floriancic.md
+    role:
+      - reviewer
+  - author: src/content/authors/radek-slangal.md
+    role:
+      - consultation
+  - author: src/content/authors/petr-blaha.md
+    role:
+      - corrector
+  - author: src/content/authors/marie-blahova.md
+    role:
+      - corrector
+  - author: src/content/authors/dominik-blaha.md
+    role:
+      - cover
+      - typesetting
 cover: /images/lidska-geneze.png
 category: philosophy
 color: '#564019'
 bgColor: '#b87600'
 ---
+
+
+
 
 
 Po dovršení sedmdesátého roku svého života nabyl Vilém Flusser dojmu, že dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou. Tehdy ještě netušil, že tato suma se podivnou souhrou okolností stane i jeho nedokončenou filosofickou závětí.

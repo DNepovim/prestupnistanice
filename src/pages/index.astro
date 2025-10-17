@@ -12,6 +12,7 @@ import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
+import { tp } from '../utils/tp'
 
 const [lastBook, ...recentBooks] = (
   (await client.queries.booksConnection({ sort: 'date', last: 4 })).data.booksConnection
@@ -84,12 +85,12 @@ const philosophyBooks = (
               >{lastBook.title}</a
             >
             <span
-              class="animate-width-expand from-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] duration-600 bg-gradient-to-r to-transparent transition-all group-hover:w-full group-hover:bg-brand-second-500"
+              class="animate-width-expand from-brand-second-500 group-hover:bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] bg-gradient-to-r to-transparent transition-all duration-600 group-hover:w-full"
             ></span>
           </h2>
 
           <div class="line-clamp-3 text-xl">
-            {lastBook.description}
+            {lastBook.description && tp(lastBook.description.replace(/[*>#]/g, ''))}
           </div>
           <div class="flex justify-end pt-4 pr-8">
             <ArrowLink href={routes.books.detail(lastBook)}>více o knize</ArrowLink>
@@ -97,26 +98,33 @@ const philosophyBooks = (
         </div>
       </div>
     </div>
-    <div class="animate-opacity-on-load">{
+    {
       lastBookAuthors && (
-        <div class="mb-40 flex flex-wrap gap-2 min-sm:justify-end">
+        <div class="animate-opacity-on-load mt-4 mb-40 flex flex-wrap gap-4 min-sm:justify-end">
           {lastBookAuthors.map((a) => (
             <AuthorSmall
               firstname={a.firstname ?? ''}
               surname={a.surname ?? ''}
               image={a.image ?? ''}
               link={routes.authors.detail(a)}
-              role={a.role ?? ''}
+              roles={a.role}
+              gender={(a.gender as 'male' | 'female' | undefined) ?? 'male'}
             />
           ))}
         </div>
       )
-    }</div>
+    }
   </Section>
-  <Section>
-    <p class="font-alt mt-16 mb-24 px-6 text-center text-2xl text-gray-800 italic">
-      <strong>Přestupní stanice</strong> je roddinné knižní nakladatelství, které se ve své
-      ediční činnosti soustředí na kvalitní nekomerční tituly.
+  <Section
+    isFull
+    className="via-brand-second-50/70 bg-gradient-to-r from-transparent to-transparent"
+  >
+    <p
+      class="mx-auto mt-16 mb-24 max-w-[56rem] py-8 text-center text-2xl text-gray-800 italic"
+    >
+      <strong class="text-brand-first-500 font-alt">Přestupní stanice</strong> je roddinné
+      knižní nakladatelství, které se ve své ediční činnosti soustředí na kvalitní nekomerční
+      tituly.
     </p>
   </Section>
   <Section title="Nejnovější knihy">
@@ -135,7 +143,7 @@ const philosophyBooks = (
               link={routes.books.detail(book)}
             >
               {book.authors
-                ?.filter((a) => a?.role === 'author')
+                ?.filter((a) => a?.isMain)
                 .map((a) => a?.author)
                 .filter(isDefined)
                 .map((a, index) => (
@@ -169,7 +177,7 @@ const philosophyBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === 'author')
+                .filter((a) => a?.isMain)
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
@@ -190,7 +198,7 @@ const philosophyBooks = (
               image={book.cover ?? undefined}
               color={book.color ?? undefined}
               authors={(book.authors ?? [])
-                .filter((a) => a?.role === 'author')
+                .filter((a) => a?.isMain)
                 .map((author) => author?.author)
                 .filter(isDefined)
                 .map((a) => ({ ...a, link: routes.authors.detail(a) }))}

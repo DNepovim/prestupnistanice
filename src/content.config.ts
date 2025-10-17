@@ -74,16 +74,19 @@ const book = defineCollection({
     authors: z.array(
       z.object({
         author: authorSchema,
-        role: z.enum([
-          'author',
-          'translate',
-          'editor',
-          'illustration',
-          'cover',
-          'typesetting',
-          'reviewer',
-          'corrector'
-        ]),
+        role: z.array(
+          z.enum([
+            'author',
+            'translate',
+            'editor',
+            'illustration',
+            'cover',
+            'typesetting',
+            'reviewer',
+            'corrector',
+            'consultation',
+          ]),
+        ),
       }),
     ),
     category: z.string().nullish(),

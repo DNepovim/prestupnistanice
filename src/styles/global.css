@@ -73,6 +73,11 @@ body {
   animation: slide-on-load 0.8s ease-out forwards;
 }
 
+@utility text-stroke-* {
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: --value(--color-*);
+}
+
 @utility text-outline-* {
   text-shadow:
     -2px -2px 0 --value(--color-*),

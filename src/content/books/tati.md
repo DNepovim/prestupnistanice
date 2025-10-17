@@ -2,10 +2,19 @@
 slug: tati
 title: Tati!
 date: 2022
+pagesCount: 29
+isbn: ''
 authors:
   - author: src/content/authors/philippe-corentin.md
     isMain: true
-    role: author
+    role:
+      - author
+  - author: src/content/authors/jakub-skalak.md
+    role:
+      - editor
+  - author: src/content/authors/filip-skalak.md
+    role:
+      - typesetting
 cover: /images/tati.jpg
 category: forKids
 color: '#775c4b'
