@@ -9,6 +9,8 @@ authors:
       - author
 cover: /images/pesimismus.jpg
 category: philosophy
+color: '#373737'
+bgColor: '#e3e1d6'
 claim: "Soubor pěti kratších úvah představuje německého filosofa Oswalda Spenglera, známého svou objemnou a\_provokativní koncepcí dějin, nejen jako polemika, ale také jako osobnost s\_širokým rejstříkem znalostí a\_zájmů."
 ---
 
