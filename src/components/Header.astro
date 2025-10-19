@@ -1,40 +1,34 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import { routes } from "../routes";
-
-const { color } = Astro.props;
+import { routes } from '../routes'
+import HeaderLink from './HeaderLink.astro'
 
 const navigations = [
   {
     link: routes.books.list(),
-    label: "Naše knihy",
+    label: 'Naše knihy',
   },
   {
-    link: "/o-nakladatelstvi",
-    label: "O nakladatelství",
+    link: '/o-nakladatelstvi',
+    label: 'O nakladatelství',
   },
-];
+]
 ---
 
 <div class="min-w-full">
   <menu
-    class="max-w-[90rem] mx-auto items-center flex justify-between px-6 py-4 transition-colors max-lg:flex-col gap-4"
+    class="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-6 py-4 transition-colors max-lg:flex-col"
   >
-    <h2 class="m-0 text-3xl font-head text-gray-600 hover:text-black">
+    <h2 class="font-head m-0 text-3xl text-gray-600 hover:text-black">
       <a class="no-underline" href="/">Přestupní stanice</a>
     </h2>
-    <div
-      class="internal-links flex gap-4 items-center flex-wrap max-xs:justify-center"
-    >
+    <div class="internal-links max-xs:justify-center flex flex-wrap items-center gap-4">
       {
         navigations.map(({ link, label }, index) => (
           <>
             {index !== 0 && (
-              <div class="inline-block w-8 h-[1px] mr-2 bg-gray-200 max-sm:hidden" />
+              <div class="mr-2 inline-block h-[1px] w-8 bg-gray-300 max-sm:hidden" />
             )}
-            <HeaderLink isSmall href={link} color={color}>
-              {label}
-            </HeaderLink>
+            <HeaderLink href={link}>{label}</HeaderLink>
           </>
         ))
       }

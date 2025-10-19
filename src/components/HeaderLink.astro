@@ -1,26 +1,25 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import { cn } from "../utils/cn";
+import type { HTMLAttributes } from 'astro/types'
 
-type Props = HTMLAttributes<"a"> & { color: string; isSmall?: boolean };
+import { cn } from '../utils/cn'
 
-const { href, class: className, isSmall, color, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
-const isActive = href === `/${pathname}`;
+type Props = HTMLAttributes<'a'>
+
+const { href, ...props } = Astro.props
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '')
+const isActive = href === `/${pathname}`
 ---
 
 <a
   href={href}
-  style={{ color: isActive ? color : "oklch(44.6% 0.03 256.802)" }}
   class={cn(
-    "group hover:text-black no-underline font-head relative",
-    isSmall ? "text-xl" : "text-2xl",
+    'group font-head hover:text-brand-first-500 relative text-2xl text-gray-600 no-underline',
+    isActive && 'text-brand-first-500',
   )}
   {...props}
 >
   <slot />
   <span
-    style={{ backgroundColor: color }}
-    class="absolute left-0 bottom-0 h-[1px] w-0 transition-all group-hover:w-full bg-gray-400 duration-600"
+    class="bg-brand-first-500 absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
   ></span>
 </a>
