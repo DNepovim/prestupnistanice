@@ -1,6 +1,5 @@
 // @ts-check
 import mdx from '@astrojs/mdx'
-import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
@@ -22,7 +21,6 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap(),
-    react(),
     tinaDirective(),
     ENV_NAME === 'production' && sitemap({ lastmod: new Date() }),
     icon(),

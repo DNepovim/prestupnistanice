@@ -1,7 +1,5 @@
 import type { Collection } from 'tinacms'
 
-import IconComponent from '../components/IconComponent'
-
 export const GlobalConfigCollection: Collection = {
   name: 'config',
   label: 'Global Config',
@@ -37,7 +35,6 @@ export const GlobalConfigCollection: Collection = {
             defaultValue: 'Your name here',
           },
         },
-        // Add more settings here...
       ],
     },
     {
@@ -90,18 +87,7 @@ export const GlobalConfigCollection: Collection = {
           label: 'Link',
           type: 'string',
         },
-        {
-          name: 'icon',
-          label: 'Icon',
-          type: 'string',
-          ui: {
-            //@ts-ignore
-            component: IconComponent,
-          },
-        },
       ],
     },
-
-    // Add other config fields here...
   ],
 }
