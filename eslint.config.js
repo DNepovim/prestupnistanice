@@ -39,6 +39,7 @@ export default defineConfig(
       'sonarjs/todo-tag': 'off',
       'sonarjs/prefer-read-only-props': 'off',
       'sonarjs/no-nested-conditional': 'off',
+      'sonarjs/pseudo-random': 'off',
     },
   },
   {

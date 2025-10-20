@@ -79,11 +79,7 @@ body {
 }
 
 @utility text-outline-* {
-  text-shadow:
-    -2px -2px 0 --value(--color-*),
-    2px -2px 0 --value(--color-*),
-    -2px 2px 0 --value(--color-*),
-    2px 2px 0 --value(--color-*);
+  filter: drop-shadow(2px 0 0 --value(--color-*)) drop-shadow(-2px 0 0 --value(--color-*));
 }
 
 @theme {

@@ -1,6 +1,7 @@
 // @ts-check
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
+import svelte from '@astrojs/svelte'
 import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
@@ -24,6 +25,7 @@ export default defineConfig({
     tinaDirective(),
     ENV_NAME === 'production' && sitemap({ lastmod: new Date() }),
     icon(),
+    svelte(),
   ],
 
   vite: {
@@ -42,3 +44,4 @@ export default defineConfig({
     },
   }),
 })
+
