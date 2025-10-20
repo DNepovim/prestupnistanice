@@ -11,8 +11,7 @@ const authorSchema = z.object({
       relativePath: z.string(),
     })
     .nullish(),
-  // TODO doplnit slugy vsude
-  slug: z.string().nullish(),
+  slug: z.string(),
   firstname: z.string(),
   surname: z.string(),
   birthdate: z.string().nullish(),
@@ -65,15 +64,16 @@ const book = defineCollection({
       path: z.string(),
       relativePath: z.string(),
     }),
-    // TODO doplnit slugy vsude
-    slug: z.string().nullish(),
+    slug: z.string(),
     title: z.string(),
     date: z.number().nullish(),
     pagesCount: z.number().nullish(),
     isbn: z.string().nullish(),
+    cover: z.string().nullish(),
     authors: z.array(
       z.object({
         author: authorSchema,
+        isMain: z.boolean().nullish(),
         role: z.array(
           z.enum([
             'author',

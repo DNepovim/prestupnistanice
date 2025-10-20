@@ -1,7 +1,13 @@
 ---
-import Search from "../components/Search.svelte";
+import { getCollection } from 'astro:content'
+
+import SearchButton from '../components/SearchButton.svelte'
 import { routes } from '../routes'
+import { joinWords } from '../utils/joinWords'
 import HeaderLink from './HeaderLink.astro'
+
+const books = await getCollection('book')
+const authors = await getCollection('author')
 
 const navigations = [
   {
@@ -34,7 +40,28 @@ const navigations = [
         ))
       }
       <div class="mr-2 inline-block h-[1px] w-8 bg-gray-300 max-sm:hidden"></div>
-      <Search client:idle />
+      <SearchButton
+        client:idle
+        data={[
+          ...books.map(({ data: { title, cover, slug, authors } }) => ({
+            title,
+            subtitle: joinWords(
+              authors
+                .filter((a) => a.isMain)
+                .map(({ author: { firstname, surname } }) => `${firstname} ${surname}`),
+            ),
+            image: cover,
+            link: `/knihy/${slug}`,
+            type: 'book',
+          })),
+          ...authors.map(({ data: { firstname, surname, image, slug } }) => ({
+            title: `${firstname} ${surname}`,
+            image,
+            link: `/autori/${slug}`,
+            type: 'author',
+          })),
+        ]}
+      />
     </div>
   </menu>
 </div>
