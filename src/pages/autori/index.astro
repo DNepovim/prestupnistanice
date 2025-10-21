@@ -1,22 +1,24 @@
 ---
-import { client } from '../../../tina/__generated__/client.ts'
+import { getCollection } from 'astro:content'
+
 import Book from '../../components/Book.astro'
 import BooksGrid from '../../components/BooksGrid.astro'
 import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
-import { routes } from '../../routes'
 
-function isDefined<T>(value: T | undefined | null): value is T {
-  return value !== undefined && value !== null
-}
+const books = await getCollection('book')
+const authors = await getCollection('author')
 
-const authors = (
-  (await client.queries.authorsConnection({ sort: 'surname' })).data.authorsConnection
-    .edges ?? []
+const mainAuthorIds = new Set(
+  books
+    .flatMap((book) =>
+      book.data.authors.filter((a) => a.isMain).map((a) => a.author.slug),
+    )
+    .filter(Boolean),
 )
-  .map((item) => item?.node)
-  .filter(isDefined)
+
+const mainAuthors = authors.filter((author) => mainAuthorIds.has(author.id))
 ---
 
 <Layout siteTitle="Autoři">
@@ -24,11 +26,11 @@ const authors = (
     <PageTitle>Autoři</PageTitle>
     <BooksGrid>
       {
-        authors.map((author) => (
+        mainAuthors.map(({ data }) => (
           <Book
-            title={`${author.firstname} ${author.surname}`}
-            link={routes.authors.detail(author)}
-            image={author.image ?? undefined}
+            title={`${data.firstname} ${data.surname}`}
+            link={`/autori/${data.slug}`}
+            image={data.image ?? undefined}
           />
         ))
       }
