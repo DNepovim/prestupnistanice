@@ -9,7 +9,6 @@ import Markdown from '../../components/Markdown.astro'
 import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
-import { routes } from '../../routes'
 import { isDefined } from '../../utils/isDefined'
 import { tp } from '../../utils/tp'
 
@@ -37,23 +36,15 @@ if (!slug) {
 const res = await client.queries.authors({ relativePath: `${slug}.md` })
 const author = res.data.authors
 
-const books = (
-  (
-    await client.queries.booksConnection({
-      filter: {
-        authors: {
-          author: { authors: { slug: { eq: slug } } },
-        },
-      },
-    })
-  ).data.booksConnection.edges ?? []
-).map((item) => item?.node)
+const books = await getCollection('book', ({ data }) =>
+  data.authors.some((a) => a.isMain && a.author.slug === slug),
+)
 ---
 
 <Layout
   siteTitle={`${author.firstname} ${author.surname}`}
-  firstColor={books[0]?.color ?? undefined}
-  secondColor={books[0]?.bgColor ?? undefined}
+  firstColor={books[0]?.data.color ?? undefined}
+  secondColor={books[0]?.data.bgColor ?? undefined}
 >
   <Section className="mb-32">
     <PageTitle>
@@ -82,15 +73,15 @@ const books = (
         <BooksGrid>
           {books.filter(isDefined).map((book) => (
             <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.role === 'author')
-                .map((author) => author?.author)
+              title={book.data.title}
+              link={`/knihy/${book.data.slug}`}
+              image={book.data.cover ?? undefined}
+              color={book.data.color ?? undefined}
+              authors={book.data.authors
+                .filter((a) => a.isMain)
+                .map((author) => author.author)
                 .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
+                .map((a) => ({ ...a, link: `/autori/${a.slug}` }))}
             />
           ))}
         </BooksGrid>

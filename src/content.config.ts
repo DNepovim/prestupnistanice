@@ -93,6 +93,8 @@ const book = defineCollection({
     category: z.string().nullish(),
     image: z.string().nullish(),
     description: z.any(),
+    color: z.string().nullish(),
+    bgColor: z.string().nullish(),
   }),
 })
 
