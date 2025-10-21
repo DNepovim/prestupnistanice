@@ -1,11 +1,48 @@
-export const rolesMap: Record<string, { male: string; female: string }> = {
-  author: {male: "napsal", female: "napsala"},
-  translate: {male: "přeložil", female: "přeložila"},
-  editor: {male: "redigoval", female: "redigovala"},
-  illustration: {male: "ilustroval", female: "ilustrovala"},
-  cover: {male: "obálku navrhl", female: "obálku navrhla"},
-  typesetting: {male: "vysázel", female: "vysázel"},
-  reviewer: {male: "recenzi napsal", female: "recenzi napsala"},
-  corrector: {male: "korekturu udělal", female: "korekturu udělala"},
-  consultation: {male: "konzultoval", female: "konzultovala"},
+export const rolesMap: Record<
+  string,
+  {
+    perfect: { male: string; female: string }
+    imperfect: { male: string; female: string }
+  }
+> = {
+  author: {
+    perfect: { male: 'napsal', female: 'napsala' },
+    imperfect: { male: 'píše', female: 'píše' },
+  },
+  translate: {
+    perfect: { male: 'přeložil', female: 'přeložila' },
+    imperfect: { male: 'překládá', female: 'překládá' },
+  },
+  editor: {
+    perfect: { male: 'redigoval', female: 'redigovala' },
+    imperfect: { male: 'rediguje', female: 'rediguje' },
+  },
+  supereditor: {
+    perfect: { male: 'odpovědně redigoval', female: 'odpovědně redigovala' },
+    imperfect: { male: 'odpovědně rediguje', female: 'odpovědně rediguje' },
+  },
+  illustration: {
+    perfect: { male: 'ilustroval', female: 'ilustrovala' },
+    imperfect: { male: 'ilustruje', female: 'ilustruje' },
+  },
+  cover: {
+    perfect: { male: 'obálku navrhl', female: 'obálku navrhla' },
+    imperfect: { male: 'navrhuje obálky', female: 'navrhuje obálky' },
+  },
+  typesetting: {
+    perfect: { male: 'vysázel', female: 'vysázel' },
+    imperfect: { male: 'sází', female: 'sází' },
+  },
+  reviewer: {
+    perfect: { male: 'recenzi napsal', female: 'recenzi napsala' },
+    imperfect: { male: 'píše recenze', female: 'píše recenze' },
+  },
+  corrector: {
+    perfect: { male: 'korekturu udělal', female: 'korekturu udělala' },
+    imperfect: { male: 'dělá korektury', female: 'dělá korektury' },
+  },
+  consultation: {
+    perfect: { male: 'konzultoval', female: 'konzultovala' },
+    imperfect: { male: 'konzultuje', female: 'konzultuje' },
+  },
 }

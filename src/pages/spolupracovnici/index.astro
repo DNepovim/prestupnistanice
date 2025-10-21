@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content'
+
+import AuthorSmall from '../../components/AuthorSmall.astro'
+import BooksGrid from '../../components/BooksGrid.astro'
+import PageTitle from '../../components/PageTitle.astro'
+import Section from '../../components/Section.astro'
+import Layout from '../../layouts/Layout.astro'
+
+const books = await getCollection('book')
+const authors = await getCollection('author')
+
+const authorRolesMap = books
+  .flatMap((book) => book.data.authors)
+  .filter((entry) => !entry.isMain)
+  .reduce<Record<string, string[]>>((acc, entry) => {
+    const slug = entry.author.slug
+    const newRoles = entry.role
+    const existing = acc[slug] ?? []
+
+    const mergedRoles = Array.from(new Set([...existing, ...newRoles]))
+
+    return { ...acc, [slug]: mergedRoles }
+  }, {})
+console.log(authorRolesMap)
+
+const collaborators = authors
+  .filter((a) => authorRolesMap[a.data.slug])
+  .map((a) => ({
+    ...a,
+    roles: authorRolesMap[a.data.slug],
+  }))
+console.log(collaborators)
+---
+
+<Layout siteTitle="Autoři">
+  <Section isWide>
+    <PageTitle>Spolupracovníci</PageTitle>
+    <BooksGrid>
+      {
+        collaborators.map(({ data, roles }) => (
+          <AuthorSmall
+            firstname={data.firstname}
+            surname={data.surname}
+            image={data.image ?? undefined}
+            gender={data.gender}
+            roles={roles ?? []}
+            link={`/autor/${data.slug}`}
+            imperfect
+          />
+        ))
+      }
+    </BooksGrid>
+  </Section>
+</Layout>

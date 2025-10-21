@@ -77,6 +77,7 @@ export const BooksCollection: Collection = {
             { label: 'Autor', value: 'author' },
             { label: 'Překladatel', value: 'translate' },
             { label: 'Redaktor', value: 'editor' },
+            { label: 'Odpovědný redaktor', value: 'supereditor' },
             { label: 'Ilustrace', value: 'illustration' },
             { label: 'Obálka', value: 'cover' },
             { label: 'Sazba', value: 'typesetting' },

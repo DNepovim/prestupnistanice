@@ -7,7 +7,7 @@ import BooksGrid from '../components/BooksGrid.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
-import { CATEGORIES, routes } from '../routes'
+import { CATEGORIES, CategoryKey, routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
@@ -134,7 +134,9 @@ const anotherBooks = (
               a.role
                 .map(
                   (r) =>
-                    rolesMap[r]?.[(a.gender as 'male' | 'female' | undefined) ?? 'male'],
+                    rolesMap[r]?.perfect[
+                      (a.gender as 'male' | 'female' | undefined) ?? 'male'
+                    ],
                 )
                 .filter(isDefined),
             )}
@@ -182,7 +184,7 @@ const anotherBooks = (
   }
   {
     categoryBooks.length > 0 && book.category && (
-      <Section title={`Další knihy ${CATEGORIES[book.category]?.name}`}>
+      <Section title={`Další knihy ${CATEGORIES[book.category as CategoryKey].name}`}>
         <BooksGrid>
           {categoryBooks.map((book) => (
             <Book

@@ -74,7 +74,7 @@ const categoryName = CATEGORIES[categoryKey].name
             link={routes.books.detail(book)}
           >
             {book.authors
-              ?.filter((a) => a?.role === 'author')
+              ?.filter((a) => a?.isMain)
               .map((a) => a?.author)
               .filter(isDefined)
               .map((a, index) => (

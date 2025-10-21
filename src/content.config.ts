@@ -18,6 +18,7 @@ const authorSchema = z.object({
   deathdate: z.string().nullish(),
   description: z.any(),
   image: z.string().nullish(),
+  gender: z.enum(['male', 'female']),
 })
 
 const author = defineCollection({

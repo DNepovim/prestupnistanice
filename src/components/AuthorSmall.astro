@@ -8,13 +8,14 @@ import { rolesMap } from '../utils/rolesMap'
 interface Props {
   firstname: string
   surname: string
-  image: string
+  image?: string
   roles: string[]
   gender: 'male' | 'female'
   link: string
+  imperfect?: boolean
 }
 
-const { firstname, surname, image, roles, gender, link } = Astro.props
+const { firstname, surname, image, roles, gender, link, imperfect } = Astro.props
 ---
 
 <a
@@ -36,9 +37,9 @@ const { firstname, surname, image, roles, gender, link } = Astro.props
   }
   <div>
     {
-      (
+      !imperfect && (
         <div class="text-sm text-gray-500">
-          {joinWords(roles.map((r) => rolesMap[r]?.[gender]).filter(isDefined))}
+          {joinWords(roles.map((r) => rolesMap[r]?.perfect[gender]).filter(isDefined))}
         </div>
       )
     }
@@ -46,5 +47,12 @@ const { firstname, surname, image, roles, gender, link } = Astro.props
       {firstname}
       {surname}
     </p>
+    {
+      imperfect && (
+        <div class="text-sm text-gray-500">
+          {joinWords(roles.map((r) => rolesMap[r]?.imperfect[gender]).filter(isDefined))}
+        </div>
+      )
+    }
   </div>
 </a>

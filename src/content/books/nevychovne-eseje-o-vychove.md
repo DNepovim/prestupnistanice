@@ -3,6 +3,7 @@ title: "Nevýchovné eseje o\_výchově"
 date: 2019
 authors:
   - author: src/content/authors/petr-blaha.md
+    isMain: true
     role:
       - author
 cover: /images/nevychovne-eseje-o-vychove.jpg
