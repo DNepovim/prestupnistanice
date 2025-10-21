@@ -52,9 +52,10 @@ export const BooksCollection: Collection = {
       name: 'authors',
       label: 'Autoři',
       type: 'object',
-       ui: {
+      ui: {
         itemProps: (item) => ({ label: `${item.role} - ${item.author}` }),
-      },     list: true,
+      },
+      list: true,
       fields: [
         {
           name: 'author',
@@ -111,17 +112,14 @@ export const BooksCollection: Collection = {
     },
     { type: 'string', name: 'claim', label: 'Úvod' },
     {
+      type: 'number',
+      name: 'price',
+      label: 'Cena (Kč)',
+    },
+    {
       type: 'string',
       name: 'description',
       label: 'Popis',
-      type: "number",
-      name: "price",
-      label: "Cena (Kč)",
-    },
-    {
-      type: "rich-text",
-      name: "description",
-      label: "Popis",
       isBody: true,
       ui: {
         component: MarkdownInput,
