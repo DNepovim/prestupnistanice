@@ -10,19 +10,19 @@ authors:
       - author
   - author: src/content/authors/jakub-skalak.md
     role:
-      - editor
+      - supereditor
   - author: src/content/authors/petr-blaha.md
     role:
       - editor
+  - author: src/content/authors/tereza-diepoltova.md
+    role:
+      - illustration
   - author: src/content/authors/michaela-brabnikova.md
     role:
       - cover
   - author: src/content/authors/dominik-blaha.md
     role:
       - typesetting
-  - author: src/content/authors/tereza-diepoltova.md
-    role:
-      - illustration
 cover: /images/elixir-neviditelnosti.jpg
 category: novel
 color: '#3d6431'
