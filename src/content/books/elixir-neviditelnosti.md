@@ -20,12 +20,16 @@ authors:
   - author: src/content/authors/dominik-blaha.md
     role:
       - typesetting
+  - author: src/content/authors/tereza-diepoltova.md
+    role:
+      - illustration
 cover: /images/elixir-neviditelnosti.jpg
 category: novel
 color: '#3d6431'
 bgColor: '#bdd743'
 claim: "Během prázdnin, které tráví dospívající Klára se svými rodiči, dojde k\_jejímu seznámení s\_mužem, který se k\_jejímu velkému překvapení objeví na začátku nového školního roku za katedrou, a\_to dokonce v\_roli třídního učitele. "
 ---
+
 
 Klára nastupuje do maturitního ročníku na technicky orientované střední škole, přestože disponuje spíše uměleckými sklony.
 
