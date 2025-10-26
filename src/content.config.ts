@@ -80,6 +80,7 @@ const book = defineCollection({
             'author',
             'translate',
             'editor',
+            'supereditor',
             'illustration',
             'cover',
             'typesetting',
