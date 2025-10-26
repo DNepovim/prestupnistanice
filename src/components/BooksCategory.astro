@@ -28,6 +28,6 @@ const books = (
 const categoryName = CATEGORIES[categoryKey].name
 ---
 
-<Layout siteTitle={`Naše knihy ${categoryName}`}>
+<Layout siteTitle={`Naše knihy ${categoryName}`} siteDescription={`Naše knihy ${categoryName}`}>
   <BooksList books={books} slug={slug} />
 </Layout>

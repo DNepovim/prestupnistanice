@@ -1,53 +1,56 @@
 ---
-import Section from "../components/Section.astro";
-import BooksGrid from "../components/BooksGrid.astro";
-import Book from "../components/Book.astro";
-import { client } from "../../tina/__generated__/client.ts";
-import Layout from "../layouts/Layout.astro";
+import { client } from '../../tina/__generated__/client.ts'
+import Book from '../components/Book.astro'
+import BooksGrid from '../components/BooksGrid.astro'
+import Section from '../components/Section.astro'
+import Layout from '../layouts/Layout.astro'
+import { routes } from '../routes'
 import {
-  uppercaseFirstLetter,
   uppercaseEveryFirstLetters,
-} from "../utils/uppercaseFirstLetter";
-import { routes } from "../routes";
+  uppercaseFirstLetter,
+} from '../utils/uppercaseFirstLetter'
 
-const req = Astro.request;
-const url = new URL(req.url);
-const segments = url.pathname.split("/").filter(Boolean);
+const req = Astro.request
+const url = new URL(req.url)
+const segments = url.pathname.split('/').filter(Boolean)
 
 function isDefined<T>(value: T | undefined | null): value is T {
-  return value !== undefined && value !== null;
+  return value !== undefined && value !== null
 }
 
 const recentBooks = (
-  (await client.queries.booksConnection({ sort: "date", last: 9 })).data
-    .booksConnection.edges ?? []
+  (await client.queries.booksConnection({ sort: 'date', last: 9 })).data.booksConnection
+    .edges ?? []
 )
   .map((item) => item?.node)
-  .filter(isDefined);
+  .filter(isDefined)
+
+const category = segments[0]
+const slug = segments[1]
 ---
 
-<Layout>
+<Layout siteDescription="Zde nic není...">
   <Section
-    ><h1 class="pt-20 mb-40 font-alt text-4xl text-gray-600">
+    ><h1 class="font-alt mb-40 pt-20 text-4xl text-gray-600">
       {
-        segments.length === 2 && segments[0] === "knihy" ? (
+        slug && category === 'knihy' ? (
           <>
-            Knihu{" "}
-            <span class="block my-4 font-head text-7xl text-orange-900">
-              {uppercaseFirstLetter(segments[1].replace(/-/g, " "))}
-            </span>{" "}
+            Knihu{' '}
+            <span class="font-head my-4 block text-7xl text-orange-900">
+              {uppercaseFirstLetter(slug.replace(/-/g, ' '))}
+            </span>{' '}
             jsme zatím nevydali.
           </>
-        ) : segments.length === 2 && segments[0] === "autori" ? (
+        ) : slug && category === 'autori' ? (
           <>
-            Od autora{" "}
-            <span class="block my-4 font-head text-7xl text-orange-900">
-              {uppercaseEveryFirstLetters(segments[1].replace(/-/g, " "))}
-            </span>{" "}
+            Od autora{' '}
+            <span class="font-head my-4 block text-7xl text-orange-900">
+              {uppercaseEveryFirstLetters(slug.replace(/-/g, ' '))}
+            </span>{' '}
             jsme zatím nic nevydali
           </>
         ) : (
-          "Tuto knihu jsme ještě nevydali"
+          'Tuto knihu jsme ještě nevydali'
         )
       }
     </h1>
@@ -63,7 +66,7 @@ const recentBooks = (
             image={book.cover ?? undefined}
             color={book.color ?? undefined}
             authors={(book.authors ?? [])
-              .filter((a) => a?.role === "author")
+              .filter((a) => a?.role === 'author')
               .map((author) => author?.author)
               .filter(isDefined)
               .map((a) => ({ ...a, link: routes.authors.detail(a) }))}

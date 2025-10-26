@@ -24,29 +24,7 @@ const { title, description } = Astro.props;
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 <link rel="manifest" href="/site.webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link
-  rel="alternate"
-  type="application/rss+xml"
-  title={title}
-  href={new URL("rss.xml", Astro.site)}
-/>
 <meta name="generator" content={Astro.generator} />
-
-<!-- Font preloads -->
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -70,6 +48,8 @@ const { title, description } = Astro.props;
 <meta property="twitter:description" content={description} />
 <!-- <meta property="twitter:image" content={new URL(image.src, Astro.url)} /> -->
 
+
+<!-- Adobe fonts -->
 <link rel="stylesheet" href="https://use.typekit.net/fck4lqn.css" />
 
 <ClientRouter />

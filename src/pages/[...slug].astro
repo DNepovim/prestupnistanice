@@ -13,12 +13,12 @@ export function getStaticPaths() {
 
 const { slug } = Astro.params
 
-const relativePath = `${slug}.md`
+const relativePath = `${slug ?? ''}.md`
 const res = await client.queries.pages({ relativePath })
 const page = res.data.pages
 ---
 
-<Layout siteTitle={page.title}>
+<Layout siteTitle={page.title} siteDescription={page.content?.substring(0, 900) ?? ''}>
   <Section>
     <PageTitle>{page.title}</PageTitle>
     <div class="mx-auto max-w-2xl leading-8">

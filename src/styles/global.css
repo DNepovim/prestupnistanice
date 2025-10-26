@@ -42,7 +42,6 @@
   --font-display: 'montserrat', sans-serif;
   --font-alt: 'montserrat-alternates', sans-serif;
 
-  --color-brand: '#fdba74';
   --breakpoint-xs: 30rem;
 
   @keyframes width-expand {

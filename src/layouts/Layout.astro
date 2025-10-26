@@ -10,6 +10,7 @@ import { getColorScale } from '../utils/geColorScale'
 
 interface Props {
   siteTitle?: string
+  siteDescription: string
   firstColor?: string
   secondColor?: string
 }
@@ -17,7 +18,7 @@ interface Props {
 const lastBook = (await client.queries.booksConnection({ sort: 'date', last: 1 })).data
   .booksConnection.edges?.[0]?.node
 
-const { siteTitle, firstColor, secondColor } = Astro.props
+const { siteTitle, siteDescription, firstColor, secondColor } = Astro.props
 
 const colorBrandFirst = firstColor ?? lastBook?.color ?? '#434991'
 const colorBrandSecond = secondColor ?? lastBook?.bgColor ?? '#e7d14c'
@@ -28,13 +29,13 @@ const colorBrandSecondScale = getColorScale(colorBrandSecond, 'color-second')
 const isDev = import.meta.env.DEV
 ---
 
-<html lang="en">
+<html lang="cs">
   <head>
     <BaseHead
       title={`${siteTitle ? siteTitle + ' | ' : ''}Přestupní stanice`}
-      description="Rodinné knižní nakladatelství"
+      description={siteDescription}
     />
-    <style define:vars={{ ...colorBrandFirstScale, ...colorBrandSecondScale }}>
+    <style is:global define:vars={{ ...colorBrandFirstScale, ...colorBrandSecondScale }}>
       @import 'tailwindcss';
 
       @theme {

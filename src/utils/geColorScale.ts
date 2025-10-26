@@ -5,7 +5,10 @@ extend([mixPlugin])
 
 export const COLORS_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 
-export const getColorScale = (baseColor: string, prefix: string) => {
+export const getColorScale = (
+  baseColor: string,
+  prefix: string,
+): Record<`${string}${(typeof COLORS_STEPS)[number]}`, string> => {
   const base = colord(baseColor)
 
   const tints = base.tints(6).reverse().slice(1)

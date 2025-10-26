@@ -1,11 +1,23 @@
 ---
 import { getCollection } from 'astro:content'
 
-import AuthorSmall from '../../components/AuthorSmall.astro'
-import BooksGrid from '../../components/BooksGrid.astro'
-import PageTitle from '../../components/PageTitle.astro'
-import Section from '../../components/Section.astro'
-import Layout from '../../layouts/Layout.astro'
+import { client } from '../../tina/__generated__/client.ts'
+import AuthorSmall from '../components/AuthorSmall.astro'
+import BooksGrid from '../components/BooksGrid.astro'
+import Markdown from '../components/Markdown.astro'
+import PageTitle from '../components/PageTitle.astro'
+import Section from '../components/Section.astro'
+import Layout from '../layouts/Layout.astro'
+
+export function getStaticPaths() {
+  return ['kontakty', 'o-nakladatelstvi'].map((edge) => ({
+    params: { slug: edge },
+  }))
+}
+
+const relativePath = `o-nakladatelstvi.md`
+const res = await client.queries.pages({ relativePath })
+const page = res.data.pages
 
 const books = await getCollection('book')
 const authors = await getCollection('author')
@@ -22,7 +34,6 @@ const authorRolesMap = books
 
     return { ...acc, [slug]: mergedRoles }
   }, {})
-console.log(authorRolesMap)
 
 const collaborators = authors
   .filter((a) => authorRolesMap[a.data.slug])
@@ -30,12 +41,16 @@ const collaborators = authors
     ...a,
     roles: authorRolesMap[a.data.slug],
   }))
-console.log(collaborators)
 ---
 
-<Layout siteTitle="Autoři">
-  <Section isWide>
-    <PageTitle>Spolupracovníci</PageTitle>
+<Layout siteTitle={page.title} siteDescription={page.content?.substring(0, 900) ?? ''}>
+  <Section>
+    <PageTitle>{page.title}</PageTitle>
+    <div class="mx-auto max-w-2xl leading-8">
+      {page.content && <Markdown text={page.content} />}
+    </div>
+  </Section>
+  <Section title="Spolupracují s námi" >
     <BooksGrid>
       {
         collaborators.map(({ data, roles }) => (

@@ -16,12 +16,21 @@ const colorBrandFirstScale = getColorScale(firstColorWithFallback, 'color-brand-
 const colorBrandSecondScale = getColorScale(secondColorWithFallback, 'color-brand-second')
 ---
 
-<div
-  style={Object.entries({
-    ...colorBrandFirstScale,
-    ...colorBrandSecondScale,
-  })
-    .map(([key, value]) => `--${key}: ${value}`).join(";") + ";"}
->
-  <slot />
-</div>
+{
+  firstColor || secondColor ? (
+    <div
+      style={
+        Object.entries({
+          ...colorBrandFirstScale,
+          ...colorBrandSecondScale,
+        })
+          .map(([key, value]) => `--${key}: ${value}`)
+          .join(';') + ';'
+      }
+    >
+      <slot />
+    </div>
+  ) : (
+    <slot />
+  )
+}

@@ -43,6 +43,7 @@ const books = await getCollection('book', ({ data }) =>
 
 <Layout
   siteTitle={`${author.firstname} ${author.surname}`}
+  siteDescription={author.claim ?? ''}
   firstColor={books[0]?.data.color ?? undefined}
   secondColor={books[0]?.data.bgColor ?? undefined}
 >
