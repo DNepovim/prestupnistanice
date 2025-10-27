@@ -26,12 +26,10 @@ export const routes = {
   homepage: () => '/',
   books: {
     list: () => `/${SLUGS.books}`,
-    detail: (book: { _sys: { filename: string } }) =>
-      `/${SLUGS.books}/${book._sys.filename}`,
+    detail: (slug: string) => `/${SLUGS.books}/${slug}`,
     category: (key: keyof typeof CATEGORIES) => `/${SLUGS.books}/${CATEGORIES[key].slug}`,
   },
   authors: {
-    detail: (author: { _sys?: { filename: string } }) =>
-      author._sys ? `/${SLUGS.auhtors}/${author._sys.filename}` : '/',
+    detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
 }

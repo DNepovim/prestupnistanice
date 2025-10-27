@@ -1,6 +1,8 @@
 import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
+import type { Books } from '../__generated__/types'
+import { getSlugFromPath } from '../../src/utils/getSlugFromPath'
 import { MarkdownInput } from '../components/Markdown'
 
 export const BooksCollection: Collection = {
@@ -13,10 +15,13 @@ export const BooksCollection: Collection = {
       slugify: (v?: { title?: string }) => (v?.title ? slugify(v.title) : ''),
     },
     // @ts-expect-error wrongly typed tina cms
-    beforeSubmit: ({ values }) => ({
+    beforeSubmit: ({ values }: { values: Books }) => ({
       ...values,
-      // @ts-expect-error wrongly typed tina cms
       slug: slugify(values.title),
+      authors: values.authors?.map((a) => ({
+        ...a,
+        slug: getSlugFromPath(a.author),
+      })),
     }),
   },
   fields: [
@@ -37,6 +42,7 @@ export const BooksCollection: Collection = {
       type: 'number',
       name: 'date',
       label: 'Rok vydání',
+      required: true,
     },
     {
       type: 'number',
@@ -52,16 +58,20 @@ export const BooksCollection: Collection = {
       name: 'authors',
       label: 'Autoři',
       type: 'object',
-       ui: {
+      ui: {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         itemProps: (item) => ({ label: `${item.role} - ${item.author}` }),
-      },     list: true,
+      },
+      list: true,
       fields: [
         {
           name: 'author',
           label: 'Autor',
           type: 'reference',
           collections: ['authors'],
+          required: true,
         },
+        { type: 'string', name: 'slug', ui: { component: 'hidden' }, required: true },
         {
           name: 'isMain',
           label: 'Hlavní',
@@ -99,6 +109,7 @@ export const BooksCollection: Collection = {
         { label: 'Román', value: 'novel' },
         { label: 'Poesie', value: 'poetry' },
       ],
+      required: true,
     },
     {
       type: 'string',

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { getCollection } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 
 import { client } from '../../../tina/__generated__/client.ts'
 import Book from '../../components/Book.astro'
@@ -9,19 +9,20 @@ import Markdown from '../../components/Markdown.astro'
 import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
+import { getSlugFromPath } from '../../utils/getSlugFromPath'
 import { isDefined } from '../../utils/isDefined'
 import { tp } from '../../utils/tp'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('author')
+  const authors = await getCollection('author')
 
-  return posts.map((post) => ({
-    params: { slug: post.id },
+  return authors.map((a) => ({
+    params: { slug: a.id },
     props: {
-      post,
+      post: a,
       getTinaProps: async () =>
         client.queries.authors({
-          relativePath: post.data.slug,
+          relativePath: a.data.slug,
         }),
     },
   }))
@@ -33,11 +34,16 @@ if (!slug) {
   return
 }
 
-const res = await client.queries.authors({ relativePath: `${slug}.md` })
-const author = res.data.authors
+const entry = await getEntry('author', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: author } = entry
 
 const books = await getCollection('book', ({ data }) =>
-  data.authors.some((a) => a.isMain && a.author.slug === slug),
+  data.authors.some(({ isMain, author }) => isMain && getSlugFromPath(author) === slug),
 )
 ---
 
@@ -66,24 +72,14 @@ const books = await getCollection('book', ({ data }) =>
       {author.claim && tp(author.claim)}
     </blockquote>
 
-    {author.description && <Markdown text={author.description} />}
+    {entry.body && <Markdown text={entry.body} />}
   </Section>
   <Section className="clear-both"
     >{
       books.length > 0 && (
         <BooksGrid>
           {books.filter(isDefined).map((book) => (
-            <Book
-              title={book.data.title}
-              link={`/knihy/${book.data.slug}`}
-              image={book.data.cover ?? undefined}
-              color={book.data.color ?? undefined}
-              authors={book.data.authors
-                .filter((a) => a.isMain)
-                .map((author) => author.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: `/autori/${a.slug}` }))}
-            />
+            <Book slug={book.data.slug} />
           ))}
         </BooksGrid>
       )

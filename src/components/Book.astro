@@ -1,31 +1,38 @@
 ---
 import { Image } from 'astro:assets'
+import { getEntries, getEntry } from 'astro:content'
 
+import { routes } from '../routes'
+import { getSlugFromPath } from '../utils/getSlugFromPath'
 import { tp } from '../utils/tp'
 
 interface Props {
-  title: string
-  link: string
-  image?: string
-  color?: string
-  authors?: {
-    firstname: string
-    surname: string
-    link: string
-  }[]
+  slug: string
 }
 
-const { title, link, image, color, authors } = Astro.props
+const { slug } = Astro.props
+
+const entry = await getEntry('book', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: b } = entry
+
+const link = routes.books.detail(slug)
+
+const authors = await getEntries(b.authors.filter(a => a.isMain).map(({ slug }) => slug))
 ---
 
 <article class="jus flex w-64 flex-col justify-end gap-4 min-md:mb-12">
   {
     (
       <a href={link}>
-        {image ? (
+        {b.cover ? (
           <Image
-            alt={title}
-            src={image}
+            alt={b.title}
+            src={b.cover}
             width={157.5}
             height={225}
             class="-rotate-2 border border-gray-200 shadow-2xl"
@@ -38,19 +45,19 @@ const { title, link, image, color, authors } = Astro.props
   }
 
   <div class="min-h-30">
-    <h2 class="font-head text-2xl" style={{ color: color ?? 'black' }}>
-      <a href={link}>{tp(title)}</a>
+    <h2 class="font-alt text-2xl" style={{ color: b.color ?? 'black' }}>
+      <a href={link}>{tp(b.title)}</a>
     </h2>
     <p>
       {
-        authors?.map((a, index) => (
+        authors.map((a, index) => (
           <>
             {index !== 0 ? ', ' : ''}
             <a
               class="group font-alt text-gray-500 transition-colors hover:text-black"
-              href={a.link}
+              href={routes.authors.detail(getSlugFromPath(a.data.slug))}
             >
-              {a.firstname} {a.surname}
+              {a.data.firstname} {a.data.surname}
             </a>
           </>
         ))

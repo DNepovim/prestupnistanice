@@ -1,24 +1,23 @@
 ---
+import type { CollectionEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 
-import type { Books } from '../../tina/__generated__/types'
-import Excerpt from '../components/Excerpt.astro'
+import BookExcerpt from '../components/BookExcerpt.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Theme from '../components/Theme.astro'
 import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '../routes'
 import { cn } from '../utils/cn'
-import { isDefined } from '../utils/isDefined'
 import { uppercaseFirstLetter } from '../utils/uppercaseFirstLetter'
 
 interface Props {
-  books: Books[]
-  slug: CategorySlug
+  books: CollectionEntry<'book'>[]
+  slug?: CategorySlug
 }
 
 const { books, slug } = Astro.props
 
-const currentSlug = slug ? slug : ''
+const currentSlug = slug ?? ''
 
 const categoryKey = slug ? categoriesSlugToKey[slug] : 'all'
 
@@ -28,17 +27,19 @@ const categoryName = CATEGORIES[categoryKey].name
 <Section>
   <PageTitle><a href={routes.books.list()}>Naše knihy</a></PageTitle>
   <p
-    class="font-alt text-brand-second-500 mb-4 min-md:mb-16 h-[1.2em] text-[5vw] min-md:ml-110 min-md:text-4xl"
+    class="font-alt text-brand-second-500 mb-4 h-[1.2em] text-[5vw] min-md:mb-16 min-md:ml-110 min-md:text-4xl"
   >
     {currentSlug.length > 0 && categoryName}
   </p>
   <div
-    class="text-brand-second min-md:mb-16 mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col"
+    class="text-brand-second mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col min-md:mb-16"
   >
     {
       Object.entries(CATEGORIES).map(([key, values], index) => (
         <>
-          {index !== 0 && <Icon name="ph:tilde-thin" class="text-brand-second-300 max-md:hidden" />}
+          {index !== 0 && (
+            <Icon name="ph:tilde-thin" class="text-brand-second-300 max-md:hidden" />
+          )}
           <a
             class={cn(
               'font-alt text-brand-first-100 group relative text-xl',
@@ -63,32 +64,13 @@ const categoryName = CATEGORIES[categoryKey].name
     {
       books.map((book, index) => (
         <Theme
-          firstColor={book.color ?? undefined}
-          secondColor={book.bgColor ?? undefined}
+          firstColor={book.data.color ?? undefined}
+          secondColor={book.data.bgColor ?? undefined}
         >
-          <Excerpt
-            className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
-            title={book.title}
-            description={book.description}
-            image={book.cover ?? undefined}
-            link={routes.books.detail(book)}
-          >
-            {book.authors
-              ?.filter((a) => a?.isMain)
-              .map((a) => a?.author)
-              .filter(isDefined)
-              .map((a, index) => (
-                <span class="whitespace-nowrap">
-                  {index !== 0 ? ', ' : ''}
-                  <a
-                    class="group font-alt text-gray-500 transition-colors hover:text-black"
-                    href={routes.authors.detail(a)}
-                  >
-                    {a.firstname} {a.surname}
-                  </a>
-                </span>
-              ))}
-          </Excerpt>
+          <BookExcerpt
+            class={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
+            slug={book.data.slug}
+          />
         </Theme>
       ))
     }

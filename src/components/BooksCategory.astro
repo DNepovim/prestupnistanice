@@ -1,8 +1,8 @@
 ---
-import { client } from '../../tina/__generated__/client.ts'
+import { getCollection } from 'astro:content'
+
 import Layout from '../layouts/Layout.astro'
 import { CATEGORIES, categoriesSlugToKey, type CategorySlug } from '../routes'
-import { isDefined } from '../utils/isDefined'
 import BooksList from './BooksList.astro'
 
 interface Props {
@@ -13,21 +13,14 @@ const { slug } = Astro.props
 
 const categoryKey = categoriesSlugToKey[slug]
 
-const books = (
-  (
-    await client.queries.booksConnection({
-      sort: 'date',
-      filter: { category: { eq: categoryKey } },
-    })
-  ).data.booksConnection.edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
-  .reverse()
+const books = await getCollection('book', (b) => b.data.category === categoryKey)
 
 const categoryName = CATEGORIES[categoryKey].name
 ---
 
-<Layout siteTitle={`Naše knihy ${categoryName}`} siteDescription={`Naše knihy ${categoryName}`}>
+<Layout
+  siteTitle={`Naše knihy ${categoryName}`}
+  siteDescription={`Naše knihy ${categoryName}`}
+>
   <BooksList books={books} slug={slug} />
 </Layout>

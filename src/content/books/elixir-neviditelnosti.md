@@ -5,22 +5,28 @@ title: Elixír neviditelnosti
 date: 2023
 authors:
   - author: src/content/authors/marie-blahova.md
+    slug: marie-blahova
     isMain: true
     role:
       - author
   - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
     role:
       - supereditor
   - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
     role:
       - editor
   - author: src/content/authors/tereza-diepoltova.md
+    slug: tereza-diepoltova
     role:
       - illustration
   - author: src/content/authors/michaela-brabnikova.md
+    slug: michaela-brabnikova
     role:
       - cover
   - author: src/content/authors/dominik-blaha.md
+    slug: dominik-blaha
     role:
       - typesetting
 cover: /images/elixir-neviditelnosti.jpg
@@ -29,7 +35,6 @@ color: '#3d6431'
 bgColor: '#bdd743'
 claim: "Během prázdnin, které tráví dospívající Klára se svými rodiči, dojde k\_jejímu seznámení s\_mužem, který se k\_jejímu velkému překvapení objeví na začátku nového školního roku za katedrou, a\_to dokonce v\_roli třídního učitele. "
 ---
-
 
 Klára nastupuje do maturitního ročníku na technicky orientované střední škole, přestože disponuje spíše uměleckými sklony.
 

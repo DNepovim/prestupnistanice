@@ -1,56 +1,66 @@
 ---
 import { Image } from 'astro:assets'
+import { getEntry } from 'astro:content'
 
+import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
 
 interface Props {
-  firstname: string
-  surname: string
-  image?: string
-  roles: string[]
-  gender: 'male' | 'female'
-  link: string
+  slug: string
   imperfect?: boolean
+  roles: string[]
 }
 
-const { firstname, surname, image, roles, gender, link, imperfect } = Astro.props
+const { slug, imperfect, roles } = Astro.props
+
+const entry = await getEntry('author', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: author } = entry
 ---
 
 <a
   class="group flex items-center gap-4 rounded-md px-4 py-2 transition-colors"
-  href={link}
+  href={routes.authors.detail(slug)}
 >
   {
-    image ? (
+    author.image ? (
       <Image
-        src={image}
-        alt={`${firstname} ${surname}`}
+        src={author.image}
+        alt={`${author.firstname} ${author.surname}`}
         width={40}
         height={40}
         class="size-10 rounded-full"
       />
     ) : (
-      <div class="from-brand-first-200 to-brand-second-200 size-8 rounded-full bg-gradient-to-tr" />
+      <div class="from-brand-first-200 to-brand-second-200 size-10 rounded-full bg-gradient-to-tr" />
     )
   }
   <div>
     {
       !imperfect && (
         <div class="text-sm text-gray-500">
-          {joinWords(roles.map((r) => rolesMap[r]?.perfect[gender]).filter(isDefined))}
+          {joinWords(
+            roles.map((r) => rolesMap[r]?.perfect[author.gender]).filter(isDefined),
+          )}
         </div>
       )
     }
     <p class="text-alt font-alt text-brand-first-700 group-hover:underline">
-      {firstname}
-      {surname}
+      {author.firstname}
+      {author.surname}
     </p>
     {
       imperfect && (
         <div class="text-sm text-gray-500">
-          {joinWords(roles.map((r) => rolesMap[r]?.imperfect[gender]).filter(isDefined))}
+          {joinWords(
+            roles.map((r) => rolesMap[r]?.imperfect[author.gender]).filter(isDefined),
+          )}
         </div>
       )
     }

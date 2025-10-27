@@ -1,65 +1,38 @@
-import { defineCollection, z } from 'astro:content'
-import { isDefined } from 'narrowland'
-
-import client from '../tina/__generated__/client'
+import { defineCollection, reference, z } from 'astro:content'
+import { glob } from 'astro/loaders'
 
 const authorSchema = z.object({
   slug: z.string(),
   firstname: z.string(),
-  firstnameSecond: z.string().nullable(),
+  firstnameSecond: z.string().optional(),
   surname: z.string(),
-  surnameSecond: z.string().nullable(),
-  birthDate: z.coerce.date().nullable(),
-  deathDate: z.coerce.date().nullable(),
+  surnameSecond: z.string().optional(),
+  birthDate: z.date().optional(),
+  deathDate: z.date().optional(),
   gender: z.enum(['male', 'female']),
-  image: z.string().nullable(),
-  claim: z.string().nullable(),
-  description: z.string().nullable(),
+  image: z.string().optional(),
+  claim: z.string().optional(),
 })
 
 const author = defineCollection({
-  loader: async () => {
-    const authorsResponse = await client.queries.authorsConnection()
-
-    return (authorsResponse.data.authorsConnection.edges ?? [])
-      .filter(isDefined)
-      .map(({ node }) => ({
-        ...node,
-        id: node?.slug ?? '',
-        tinaInfo: node?._sys,
-      }))
-  },
+  loader: glob({ pattern: '**/*.md', base: './src/content/authors' }),
   schema: authorSchema,
 })
 
 const book = defineCollection({
-  loader: async () => {
-    const booksResponse = await client.queries.booksConnection()
-
-    // Map Tina posts to the correct format for Astro
-    return (booksResponse.data.booksConnection.edges ?? [])
-      .filter((book) => !!book)
-      .map((book) => {
-        const node = book.node
-
-        return {
-          ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, '') ?? '', // Generate clean URLs
-          tinaInfo: node?._sys, // Include Tina system info if needed
-        }
-      })
-  },
+  loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     slug: z.string(),
     title: z.string(),
-    date: z.number().nullish(),
-    pagesCount: z.number().nullish(),
-    isbn: z.string().nullish(),
-    cover: z.string().nullish(),
+    date: z.number(),
+    pagesCount: z.number().optional(),
+    isbn: z.string().optional(),
+    cover: z.string().optional(),
     authors: z.array(
       z.object({
-        author: authorSchema,
-        isMain: z.boolean().nullish(),
+        author: z.string(),
+        slug: reference('author'),
+        isMain: z.boolean().optional(),
         role: z.array(
           z.enum([
             'author',
@@ -76,34 +49,18 @@ const book = defineCollection({
         ),
       }),
     ),
-    category: z.string().nullish(),
-    image: z.string().nullish(),
-    description: z.any(),
-    color: z.string().nullish(),
-    bgColor: z.string().nullish(),
+    category: z.enum(['forKids', 'philosophy', 'novel', 'poetry']),
+    claim: z.string().optional(),
+    color: z.string().optional(),
+    bgColor: z.string().optional(),
   }),
 })
 
 const page = defineCollection({
-  loader: async () => {
-    const postsResponse = await client.queries.pagesConnection()
-
-    // Map Tina posts to the correct format for Astro
-    return (postsResponse.data.pagesConnection.edges ?? [])
-      .filter((p) => !!p)
-      .map((p) => {
-        const node = p.node
-
-        return {
-          ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, '') ?? '', // Generate clean URLs
-          tinaInfo: node?._sys, // Include Tina system info if needed
-        }
-      })
-  },
+  loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     title: z.string(),
-    content: z.any().nullish(),
+    content: z.string().optional(),
   }),
 })
 export const collections = { book, author, page }

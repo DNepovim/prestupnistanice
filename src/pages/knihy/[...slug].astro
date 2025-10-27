@@ -1,21 +1,21 @@
 ---
-import { getCollection } from "astro:content";
-import { categoriesSlugToKey } from "../../routes";
-import BookDetail from "../../components/BookDetail.astro";
-import BooksCategory from "../../components/BooksCategory.astro";
+import { getCollection } from 'astro:content'
+
+import BookDetail from '../../components/BookDetail.astro'
+import BooksCategory from '../../components/BooksCategory.astro'
+import { categoriesSlugToKey } from '../../routes'
 
 export async function getStaticPaths() {
-  const posts = await getCollection("book");
+  const posts = await getCollection('book')
 
-  return [
-    ...posts.map(({ id }) => id),
-    ...Object.keys(categoriesSlugToKey),
-  ].map((slug) => ({
-    params: { slug },
-  }));
+  return [...posts.map(({ data }) => data.slug), ...Object.keys(categoriesSlugToKey)].map(
+    (slug) => ({
+      params: { slug },
+    }),
+  )
 }
 
-const { slug } = Astro.params;
+const { slug } = Astro.params
 ---
 
 {

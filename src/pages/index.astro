@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets'
+import { getCollection } from 'astro:content'
 
-import { client } from '../../tina/__generated__/client.ts'
 import ArrowLink from '../components/ArrowLink.astro'
 import AuthorSmall from '../components/AuthorSmall.astro'
 import Book from '../components/Book.astro'
+import BookExcerpt from '../components/BookExcerpt.astro'
 import BooksGrid from '../components/BooksGrid.astro'
-import Excerpt from '../components/Excerpt.astro'
 import Section from '../components/Section.astro'
 import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
@@ -14,46 +14,17 @@ import { routes } from '../routes'
 import { isDefined } from '../utils/isDefined'
 import { tp } from '../utils/tp'
 
-const [lastBook, ...recentBooks] = (
-  (await client.queries.booksConnection({ sort: 'date', last: 4 })).data.booksConnection
-    .edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
+const books = (await getCollection('book')).reverse().toSorted((a, b) => b.data.date - a.data.date)
+
+const lastBook = books[0]
 
 if (!isDefined(lastBook)) {
   return
 }
 
-const lastBookAuthors = lastBook.authors
-  ?.filter((a) => a?.isMain)
-  .filter(isDefined)
-  .map((a) => ({ ...a.author, role: a.role }))
-  .filter(isDefined)
-
-const forKidsBooks = (
-  (
-    await client.queries.booksConnection({
-      sort: 'date',
-      last: 3,
-      filter: { category: { eq: 'forKids' } },
-    })
-  ).data.booksConnection.edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
-
-const philosophyBooks = (
-  (
-    await client.queries.booksConnection({
-      sort: 'date',
-      last: 3,
-      filter: { category: { eq: 'philosophy' } },
-    })
-  ).data.booksConnection.edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
+const recentBooks = books.slice(1, 4)
+const forKidsBooks = books.filter((b) => b.data.category === 'forKids').slice(0, 3)
+const philosophyBooks = books.filter((b) => b.data.category === 'philosophy' && !recentBooks.map(b => b.data.slug).includes(b.data.slug)).slice(0, 3)
 ---
 
 <Layout
@@ -65,11 +36,11 @@ const philosophyBooks = (
     >
       <div class="flex-1">
         {
-          lastBook.cover && (
-            <a class="block min-md:-mb-32" href={routes.books.detail(lastBook)}>
+          lastBook.data.cover && (
+            <a class="block min-md:-mb-32" href={routes.books.detail(lastBook.data.slug)}>
               <Image
-                alt={lastBook.title}
-                src={lastBook.cover}
+                alt={lastBook.data.title}
+                src={lastBook.data.cover}
                 width={300}
                 height={300}
                 class="animate-rotate-on-load rotate-0 border border-gray-200 shadow-2xl transition-transform duration-500 hover:-rotate-8 max-sm:mx-auto"
@@ -81,10 +52,11 @@ const philosophyBooks = (
       <div class="flex flex-3 flex-col justify-between px-4 py-8 min-sm:px-16">
         <div>
           <h2
-            class="group text-brand-first-500 font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
+            style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
+            class="group text-brand-second-200 font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
           >
-            <a class="relative z-10" href={routes.books.detail(lastBook)}
-              >{lastBook.title}</a
+            <a class="relative z-10" href={routes.books.detail(lastBook.data.slug)}
+              >{lastBook.data.title}</a
             >
             <span
               class="animate-width-expand from-brand-second-500 group-hover:bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] bg-gradient-to-r to-transparent transition-all duration-600 group-hover:w-full"
@@ -92,30 +64,28 @@ const philosophyBooks = (
           </h2>
 
           <div class="line-clamp-3 text-xl">
-            {lastBook.description && tp(lastBook.description.replace(/[*>#]/g, ''))}
+            {
+              isDefined(lastBook.data.claim) &&
+                tp(lastBook.data.claim.replace(/[*>#]/g, ''))
+            }
           </div>
           <div class="flex justify-end pt-4 pr-8">
-            <ArrowLink href={routes.books.detail(lastBook)}>více o knize</ArrowLink>
+            <ArrowLink href={routes.books.detail(lastBook.data.slug)}
+              >více o knize</ArrowLink
+            >
           </div>
         </div>
       </div>
     </div>
-    {
-      lastBookAuthors && (
-        <div class="animate-opacity-on-load mt-4 mb-40 flex flex-wrap gap-4 min-sm:justify-end">
-          {lastBookAuthors.map((a) => (
-            <AuthorSmall
-              firstname={a.firstname ?? ''}
-              surname={a.surname ?? ''}
-              image={a.image ?? ''}
-              link={routes.authors.detail(a)}
-              roles={a.role}
-              gender={(a.gender as 'male' | 'female' | undefined) ?? 'male'}
-            />
-          ))}
-        </div>
-      )
-    }
+    <div
+      class="animate-opacity-on-load mt-4 mb-40 flex flex-wrap gap-4 min-sm:justify-end"
+    >
+      {
+        lastBook.data.authors
+          .filter((a) => a.isMain)
+          .map((a) => <AuthorSmall slug={a.slug.id} roles={a.role} />)
+      }
+    </div>
   </Section>
   <Section
     isFull
@@ -132,34 +102,15 @@ const philosophyBooks = (
   <Section title="Nejnovější knihy">
     <div class="flex flex-col gap-16">
       {
-        recentBooks.map((book, index) => (
+        recentBooks.map(({ data: book }, index) => (
           <Theme
             firstColor={book.color ?? undefined}
             secondColor={book.bgColor ?? undefined}
           >
-            <Excerpt
-              className={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
-              title={book.title}
-              description={book.description ?? ''}
-              image={book.cover ?? undefined}
-              link={routes.books.detail(book)}
-            >
-              {book.authors
-                ?.filter((a) => a?.isMain)
-                .map((a) => a?.author)
-                .filter(isDefined)
-                .map((a, index) => (
-                  <span class="whitespace-nowrap">
-                    {index !== 0 ? ', ' : ''}
-                    <a
-                      class="group font-alt text-gray-500 transition-colors hover:text-black"
-                      href={routes.authors.detail(a)}
-                    >
-                      {a.firstname} {a.surname}
-                    </a>
-                  </span>
-                ))}
-            </Excerpt>
+            <BookExcerpt
+              class={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
+              slug={book.slug}
+            />
           </Theme>
         ))
       }
@@ -173,17 +124,7 @@ const philosophyBooks = (
       <Section title="Knihy pro děti">
         <BooksGrid>
           {forKidsBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.isMain)
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
+            <Book slug={book.data.slug} />
           ))}
         </BooksGrid>
       </Section>
@@ -194,17 +135,7 @@ const philosophyBooks = (
       <Section title="Knihy pro filosofy">
         <BooksGrid>
           {philosophyBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={`/knihy/${book._sys.filename}`}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.isMain)
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
+            <Book slug={book.data.slug} />
           ))}
         </BooksGrid>
       </Section>

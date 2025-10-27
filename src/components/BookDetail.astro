@@ -1,20 +1,18 @@
 ---
 import { Image } from 'astro:assets'
+import { getCollection, getEntries, getEntry } from 'astro:content'
 
-import { client } from '../../tina/__generated__/client'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
-import { CATEGORIES, routes, type CategoryKey } from '../routes'
-import { isDefined } from '../utils/isDefined'
-import { joinWords } from '../utils/joinWords'
-import { rolesMap } from '../utils/rolesMap'
+import { CATEGORIES, routes } from '../routes'
+import { getAuthorsSecondName } from '../utils/getAuthorSecondName'
 import { tp } from '../utils/tp'
+import AuthorExcerpt from './AuthorExcerpt.astro'
 import AuthorSmall from './AuthorSmall.astro'
 import Blockquote from './Blockquote.astro'
-import Excerpt from './Excerpt.astro'
 import Markdown from './Markdown.astro'
 
 interface Props {
@@ -23,81 +21,65 @@ interface Props {
 
 const { slug } = Astro.props
 
-const relativePath = `${slug}.md`
-const res = await client.queries.books({ relativePath })
-const book = res.data.books
-const authors = (book.authors ?? [])
-  .filter(isDefined)
-  .map(({ author, role, isMain }) => ({ ...author, role, isMain }))
+const entry = await getEntry('book', slug)
 
-const mainAuthor = authors.find((a) => a.isMain)
-const mainAuthorNameSecond = `${mainAuthor?.firstnameSecond ?? mainAuthor?.firstname ?? ''} ${mainAuthor?.surnameSecond ?? mainAuthor?.surname ?? ''}`
+if (!entry) {
+  return
+}
 
-const authorsBooks = (
-  (await client.queries.booksConnection()).data.booksConnection.edges ?? []
+const { data: book } = entry
+
+const mainAuthors = await getEntries(
+  book.authors.filter((b) => b.isMain).map((b) => b.slug),
 )
-  .map((item) => item?.node)
-  .filter((item) => item?.slug !== slug)
-  .filter((item) =>
-    (item?.authors ?? []).find(
-      (a) => a && a.isMain && a.author && a.author.slug === mainAuthor?.slug,
-    ),
-  )
-  .filter(isDefined)
 
-const categoryBooks = (
-  (
-    await client.queries.booksConnection({
-      first: 3,
-      filter: {
-        category: {
-          eq: book.category,
-        },
-      },
-    })
-  ).data.booksConnection.edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(
-    (item) => ![slug, ...authorsBooks.map(({ slug }) => slug)].includes(item?.slug ?? ''),
-  )
-  .filter(isDefined)
+const mainAuthorsWithRoles = mainAuthors.map((a) => ({
+  author: a,
+  roles: book.authors.find((ba) => ba.slug.id === a.data.slug)?.role ?? [],
+}))
 
-const anotherBooks = (
-  (await client.queries.booksConnection({ first: 3 })).data.booksConnection.edges ?? []
+const mainAuthorSlug =
+  book.authors.find((a) => a.isMain && a.role.includes('author'))?.slug.id ?? ''
+
+const mainAuthor = await getEntry('author', mainAuthorSlug)
+
+const authorsBooks = await getCollection('book', (b) =>
+  b.data.authors.filter((b) => b.isMain).some((b) => b.slug.id === mainAuthorSlug),
 )
-  .map((item) => item?.node)
-  .filter(
-    (item) =>
-      ![
-        slug,
-        ...authorsBooks.map(({ slug }) => slug),
-        ...categoryBooks.map(({ slug }) => slug),
-      ].includes(item?.slug ?? ''),
-  )
-  .filter(isDefined)
+
+const categoryBooks = await getCollection(
+  'book',
+  (b) => b.data.slug !== slug && b.data.category === book.category,
+)
 ---
 
 <Layout
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
-  firstColor={book.color ?? undefined}
-  secondColor={book.bgColor ?? undefined}
+  firstColor={book.color}
+  secondColor={book.bgColor}
 >
   <Section>
     <PageTitle>{tp(book.title)}</PageTitle>
     {
-      mainAuthor && (
+      mainAuthors.length > 0 && (
         <p class="mb-8 text-2xl">
-          <span class="whitespace-nowrap">
-            <a
-              class="group font-alt relative text-gray-600 transition-colors hover:text-black"
-              href={routes.authors.detail(mainAuthor)}
-            >
-              {mainAuthor.firstname}
-              {mainAuthor.surname}
-            </a>
-          </span>
+          {mainAuthors.map(({ data: a }, index) => (
+            <>
+              <a
+                class="group font-alt relative text-gray-600 transition-colors hover:text-black"
+                href={routes.authors.detail(a.slug)}
+              >
+                {a.firstname}
+                {a.surname}
+              </a>
+              {index === mainAuthors.length - 2
+                ? ' & '
+                : index === mainAuthors.length - 1
+                  ? ''
+                  : ', '}
+            </>
+          ))}
         </p>
       )
     }
@@ -113,113 +95,40 @@ const anotherBooks = (
       )
     }
     {book.claim && <Blockquote text={book.claim} />}
-    {book.description && <Markdown text={book.description} />}
+    {entry.body && <Markdown text={entry.body} />}
     <div class="clear-both"></div>
   </Section>
   <Section className="clear-both my-24 mb-16 flex flex-col gap-12">
     {
-      authors
-        .filter(({ isMain }) => isMain)
-        .map((a) => (
-          <Excerpt
-            title={`${a.firstname ?? ''} ${a.surname ?? ''}`}
-            image={a.image ?? undefined}
-            link={routes.authors.detail({
-              _sys: { filename: a._sys?.filename ?? '' },
-            })}
-            description={a.claim ?? ''}
-            moreLabel="více o autorovi"
-            isRounded
-          >
-            {joinWords(
-              a.role
-                .map(
-                  (r) =>
-                    rolesMap[r]?.perfect[
-                      (a.gender as 'male' | 'female' | undefined) ?? 'male'
-                    ],
-                )
-                .filter(isDefined),
-            )}
-          </Excerpt>
-        ))
+      mainAuthorsWithRoles.map(({ author, roles }) => (
+        <AuthorExcerpt slug={author.data.slug} roles={roles} />
+      ))
     }
   </Section>
   <Section className="grid max-w-3xl grid-cols-3">
     {
-      authors
-        .filter(isDefined)
-        .filter(({ isMain }) => !isMain)
-        .map((a) => (
-          <AuthorSmall
-            firstname={a.firstname ?? ''}
-            surname={a.surname ?? ''}
-            image={a.image ?? ''}
-            link={routes.authors.detail(a)}
-            roles={a.role}
-            gender={(a.gender as 'male' | 'female' | undefined) ?? 'male'}
-          />
-        ))
+      book.authors
+        .filter((a) => !a.isMain)
+        .map((a) => <AuthorSmall slug={a.slug.id} roles={a.role} />)
     }
   </Section>
   {
-    authorsBooks.length > 0 && (
-      <Section title={`Další knihy od ${mainAuthorNameSecond}`}>
+    mainAuthor && authorsBooks.length > 0 && (
+      <Section title={`Další knihy od ${getAuthorsSecondName(mainAuthor.data)}`}>
         <BooksGrid>
-          {authorsBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.role.includes('author'))
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
+          {authorsBooks.map((b) => (
+            <Book slug={b.data.slug} />
           ))}
         </BooksGrid>
       </Section>
     )
   }
   {
-    categoryBooks.length > 0 && book.category && (
-      <Section title={`Další knihy ${CATEGORIES[book.category as CategoryKey].name}`}>
+    categoryBooks.length > 0 && (
+      <Section title={`Další knihy ${CATEGORIES[book.category].name}`}>
         <BooksGrid>
-          {categoryBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.role.includes('author'))
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
-          ))}
-        </BooksGrid>
-      </Section>
-    )
-  }
-  {
-    anotherBooks.length > 0 && (
-      <Section title="Naše další knihy">
-        <BooksGrid>
-          {anotherBooks.map((book) => (
-            <Book
-              title={book.title}
-              link={routes.books.detail(book)}
-              image={book.cover ?? undefined}
-              color={book.color ?? undefined}
-              authors={(book.authors ?? [])
-                .filter((a) => a?.role.includes('author'))
-                .map((author) => author?.author)
-                .filter(isDefined)
-                .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-            />
+          {categoryBooks.map((b) => (
+            <Book slug={b.data.slug} />
           ))}
         </BooksGrid>
       </Section>

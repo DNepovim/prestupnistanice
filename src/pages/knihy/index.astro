@@ -1,16 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { client } from "../../../tina/__generated__/client.ts";
-import BooksList from "../../components/BooksList.astro";
-import { isDefined } from "../../utils/isDefined";
+import { getCollection } from 'astro:content'
 
-const books = (
-  (await client.queries.booksConnection({ sort: "date" })).data.booksConnection
-    .edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
-  .reverse();
+import BooksList from '../../components/BooksList.astro'
+import Layout from '../../layouts/Layout.astro'
+
+const books = (await getCollection('book')).reverse().toSorted((a, b) => b.data.date - a.data.date)
 ---
 
 <Layout siteTitle="Naše knihy" siteDescription="Naše knihy">

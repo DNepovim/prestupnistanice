@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets'
+import { getEntry } from 'astro:content'
+import { isDefined } from 'narrowland'
+
+import ArrowLink from '../components/ArrowLink.astro'
+import { routes } from '../routes'
+import { joinWords } from '../utils/joinWords'
+import { rolesMap } from '../utils/rolesMap'
+import { tp } from '../utils/tp'
+
+interface Props {
+  slug: string
+  roles?: string[]
+}
+
+const { slug, roles } = Astro.props
+
+const entry = await getEntry('author', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: a } = entry
+
+const name = `${a.firstname} ${a.surname}`
+---
+
+<article class="max-xs:flex max-xs:flex-col flex gap-8">
+  {
+    a.image && (
+      <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
+        <Image
+          alt={name}
+          src={a.image}
+          width={157.5}
+          height={157.5}
+          class="border border-gray-200 shadow-2xl"
+        />
+      </a>
+    )
+  }
+  <div class="flex flex-3 flex-col gap-4">
+    <div class="max-sm:flex max-sm:flex-col">
+      {
+        roles && roles.length > 0 && (
+          <p class="text-xl text-gray-500">
+            {joinWords(
+              roles.map((r) => rolesMap[r]?.perfect[a.gender]).filter(isDefined),
+            )}
+          </p>
+        )
+      }
+      <h2 class="peer text-brand-first-500 font-alt group relative inline text-4xl">
+        <a href={routes.books.detail(slug)}>{name}</a>
+      </h2>
+    </div>
+
+    <div class="min-sm:pl-8">
+      <div class="line-clamp-3">
+        {entry.body && tp(entry.body.replace(/[*>#]/g, ''))}
+      </div>
+    </div>
+    {
+      (
+        <div class="flex justify-end pr-4">
+          <ArrowLink href={routes.books.detail(slug)}>
+            více o {a.gender === 'male' ? 'autorovy' : 'autorce'}
+          </ArrowLink>
+        </div>
+      )
+    }
+  </div>
+</article>

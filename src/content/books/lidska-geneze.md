@@ -4,34 +4,44 @@ title: Lidská geneze
 date: 2023
 authors:
   - author: src/content/authors/vilem-flusser.md
+    slug: vilem-flusser
     isMain: true
     role:
       - author
   - author: src/content/authors/petr-babka.md
+    slug: petr-babka
     role:
       - translate
   - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
     role:
       - editor
   - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
     role:
       - editor
   - author: src/content/authors/hynek-tippelt.md
+    slug: hynek-tippelt
     role:
       - reviewer
   - author: src/content/authors/jiri-floriancic.md
+    slug: jiri-floriancic
     role:
       - reviewer
   - author: src/content/authors/radek-slangal.md
+    slug: radek-slangal
     role:
       - consultation
   - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
     role:
       - corrector
   - author: src/content/authors/marie-blahova.md
+    slug: marie-blahova
     role:
       - corrector
   - author: src/content/authors/dominik-blaha.md
+    slug: dominik-blaha
     role:
       - cover
       - typesetting
@@ -43,6 +53,7 @@ claim: >-
   Po dovršení sedmdesátého roku svého života nabyl Vilém Flusser dojmu, že
   dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou.
 ---
+
 
 Tehdy ještě netušil, že tato suma se podivnou souhrou okolností stane i jeho nedokončenou filosofickou závětí.
 

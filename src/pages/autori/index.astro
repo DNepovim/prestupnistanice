@@ -1,11 +1,13 @@
 ---
 import { getCollection } from 'astro:content'
+import { isTruthy } from 'narrowland'
 
 import Book from '../../components/Book.astro'
 import BooksGrid from '../../components/BooksGrid.astro'
 import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
+import { getSlugFromPath } from '../../utils/getSlugFromPath'
 
 const books = await getCollection('book')
 const authors = await getCollection('author')
@@ -13,15 +15,15 @@ const authors = await getCollection('author')
 const mainAuthorIds = new Set(
   books
     .flatMap((book) =>
-      book.data.authors.filter((a) => a.isMain).map((a) => a.author.slug),
+      book.data.authors.filter((a) => a.isMain).map((a) => getSlugFromPath(a.author)),
     )
-    .filter(Boolean),
+    .filter(isTruthy),
 )
 
 const mainAuthors = authors.filter((author) => mainAuthorIds.has(author.id))
 ---
 
-<Layout siteTitle="Autoři" siteDescription='Naši autoři'>
+<Layout siteTitle="Autoři" siteDescription="Naši autoři">
   <Section isWide>
     <PageTitle>Autoři</PageTitle>
     <BooksGrid>

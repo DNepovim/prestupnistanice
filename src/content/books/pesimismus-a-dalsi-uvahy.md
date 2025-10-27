@@ -4,6 +4,7 @@ title: "Pesimismus?: a\_další úvahy"
 date: 2022
 authors:
   - author: src/content/authors/oswald-spengler.md
+    slug: oswald-spengler
     isMain: true
     role:
       - author

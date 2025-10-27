@@ -3,32 +3,40 @@ slug: kachna-smrt-a-tulipan
 title: 'Kachna, smrt a tulipán'
 originlName: 'Ente, Tod und Tulpe'
 date: 2025
-pagesCount: 44
+pagesCount: 38
 isbn: 978–80–909036–2–3
 authors:
   - author: src/content/authors/wolf-erlbruch.md
+    slug: wolf-erlbruch
     isMain: true
     role:
       - author
   - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
     role:
       - translate
   - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
     role:
       - editor
   - author: src/content/authors/petra-kulovana.md
+    slug: petra-kulovana
     role:
       - reviewer
   - author: src/content/authors/filip-komberec.md
+    slug: filip-komberec
     role:
       - reviewer
   - author: src/content/authors/marie-blahova.md
+    slug: marie-blahova
     role:
       - corrector
   - author: src/content/authors/martina-nejedla.md
+    slug: martina-nejedla
     role:
       - corrector
   - author: src/content/authors/filip-skalak.md
+    slug: filip-skalak
     role:
       - typesetting
 cover: /images/kachna-smrt-a-tulipan.jpg

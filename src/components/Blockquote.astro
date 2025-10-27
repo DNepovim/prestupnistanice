@@ -1,4 +1,5 @@
 ---
+import { getFirstLetterIndex } from '../utils/getFirstLetterIndex'
 import { tp } from '../utils/tp'
 
 interface Props {
@@ -12,6 +13,6 @@ const { text } = Astro.props
   <span
     style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
     class="text-stroke-brand-first-500 text-brand-second-100 float-left mr-4 text-[2.6em] leading-[1em] font-bold"
-    >{text.slice(0, 1)}</span
-  >{tp(text.slice(1))}
+    >{text.slice(0, getFirstLetterIndex(text) + 1)}</span
+  >{tp(text.slice(getFirstLetterIndex(text) + 1))}
 </blockquote>
