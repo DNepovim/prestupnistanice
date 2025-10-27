@@ -1,42 +1,33 @@
 import { defineCollection, z } from 'astro:content'
+import { isDefined } from 'narrowland'
 
 import client from '../tina/__generated__/client'
 
 const authorSchema = z.object({
-  tinaInfo: z
-    .object({
-      filename: z.string(),
-      basename: z.string(),
-      path: z.string(),
-      relativePath: z.string(),
-    })
-    .nullish(),
   slug: z.string(),
   firstname: z.string(),
+  firstnameSecond: z.string().nullable(),
   surname: z.string(),
-  birthdate: z.string().nullish(),
-  deathdate: z.string().nullish(),
-  description: z.any(),
-  image: z.string().nullish(),
+  surnameSecond: z.string().nullable(),
+  birthDate: z.coerce.date().nullable(),
+  deathDate: z.coerce.date().nullable(),
   gender: z.enum(['male', 'female']),
+  image: z.string().nullable(),
+  claim: z.string().nullable(),
+  description: z.string().nullable(),
 })
 
 const author = defineCollection({
   loader: async () => {
     const authorsResponse = await client.queries.authorsConnection()
 
-    // Map Tina posts to the correct format for Astro
     return (authorsResponse.data.authorsConnection.edges ?? [])
-      .filter((author) => !!author)
-      .map((author) => {
-        const node = author.node
-
-        return {
-          ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, '') ?? '', // Generate clean URLs
-          tinaInfo: node?._sys, // Include Tina system info if needed
-        }
-      })
+      .filter(isDefined)
+      .map(({ node }) => ({
+        ...node,
+        id: node?.slug ?? '',
+        tinaInfo: node?._sys,
+      }))
   },
   schema: authorSchema,
 })
@@ -59,12 +50,6 @@ const book = defineCollection({
       })
   },
   schema: z.object({
-    tinaInfo: z.object({
-      filename: z.string(),
-      basename: z.string(),
-      path: z.string(),
-      relativePath: z.string(),
-    }),
     slug: z.string(),
     title: z.string(),
     date: z.number().nullish(),
@@ -117,12 +102,6 @@ const page = defineCollection({
       })
   },
   schema: z.object({
-    tinaInfo: z.object({
-      filename: z.string(),
-      basename: z.string(),
-      path: z.string(),
-      relativePath: z.string(),
-    }),
     title: z.string(),
     content: z.any().nullish(),
   }),

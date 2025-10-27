@@ -21,7 +21,7 @@ export async function getStaticPaths() {
       post,
       getTinaProps: async () =>
         client.queries.authors({
-          relativePath: post.data.tinaInfo?.relativePath ?? '',
+          relativePath: post.data.slug,
         }),
     },
   }))
