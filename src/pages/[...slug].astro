@@ -1,21 +1,32 @@
 ---
-import { client } from '../../tina/__generated__/client.ts'
+import { getCollection, getEntry } from 'astro:content'
+
 import Markdown from '../components/Markdown.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
 
-export function getStaticPaths() {
-  return ['kontakty', 'o-nakladatelstvi'].map((edge) => ({
-    params: { slug: edge },
+export async function getStaticPaths() {
+  const posts = await getCollection('page')
+
+  return posts.map((p) => ({
+    params: { slug: p.id },
   }))
 }
 
 const { slug } = Astro.params
 
-const relativePath = `${slug ?? ''}.md`
-const res = await client.queries.pages({ relativePath })
-const page = res.data.pages
+if (!slug) {
+  return
+}
+
+const entry = await getEntry('page', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: page } = entry
 ---
 
 <Layout siteTitle={page.title} siteDescription={page.content?.substring(0, 900) ?? ''}>

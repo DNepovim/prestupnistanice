@@ -4,6 +4,7 @@
   import SearchModal from './SearchModal.svelte'
 
   export let data: {
+    slug: string
     title: string
     subtitle: string
     image: string
@@ -19,6 +20,7 @@
 <button
   onclick={() => toggle(true)}
   class="font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-gray-600 no-underline"
+  title="Vyhledávání"
 >
   <iconify-icon class="-mb-1" icon="ph:magnifying-glass" noobserver></iconify-icon>
   <span
@@ -27,12 +29,16 @@
 </button>
 
 {#if isOpen}
-  <SearchModal {data} {isOpen} {toggle} />
+  <SearchModal {data} {toggle} />
 {/if}
 
 <svelte:window
-  onkeydown={(e) => {
-    e.key === 'k' && (e.ctrlKey || e.metaKey) && toggle()
-    e.key === 'Escape' && toggle(false)
+  onkeydown={(e: KeyboardEvent) => {
+    if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      toggle()
+    }
+    if (e.key === 'Escape') {
+      toggle(false)
+    }
   }}
 />

@@ -5,6 +5,7 @@
   import { cn } from '../utils/cn'
 
   export let data: {
+    slug: string
     title: string
     subtitle: string
     image: string
@@ -19,6 +20,7 @@
   let items: HTMLAnchorElement[] = []
   let indicator: HTMLDivElement
   let selectedIndex = 0
+  // eslint-disable-next-line unused-imports/no-unused-vars
   let hoveredIndex: number | null = null
 
   const fuseOptions = {
@@ -33,25 +35,25 @@
 
   const fuse = new Fuse(data, fuseOptions)
 
-  function updateIndicator(index: number) {
+  const updateIndicator = (index: number) => {
     const el = items[index]
-    if (!el || !indicator) return
+    if (!el) return
     const { offsetTop, offsetHeight } = el
-    indicator.style.transform = `translateY(${offsetTop}px)`
-    indicator.style.height = `${offsetHeight}px`
+    indicator.style.transform = `translateY(${String(offsetTop)}px)`
+    indicator.style.height = `${String(offsetHeight)}px`
   }
 
   $: filteredBooks =
-    (searchValue ?? '').trim() === ''
-      ? data.map((item) => ({ item }))
-      : fuse.search(searchValue)
+    searchValue.trim() === '' ? data.map((item) => ({ item })) : fuse.search(searchValue)
 
   $: if (searchValue) {
     selectedIndex = 0
   }
 
-  $: if (container && items[selectedIndex]) {
-    items[selectedIndex]!.scrollIntoView({
+  const selectedItem = items[selectedIndex]
+
+  $: if (selectedItem) {
+    selectedItem.scrollIntoView({
       block: 'nearest',
       behavior: 'smooth',
     })
@@ -68,7 +70,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="fixed inset-0 bg-gradient-to-t from-brand-second-50/90 to-white/90 size-full"
-    onclick={() => toggle(false)}
+    onclick={() => { toggle(false); }}
   ></div>
   <div class="block mx-auto max-w-160 mt-20">
     <label class="relative text-5xl">
@@ -101,7 +103,7 @@
       {/if}
 
       <ul class="px-4">
-        {#each filteredBooks as book, index}
+        {#each filteredBooks as book, index (book.item.slug)}
           <li
             class="py-4"
             onmouseenter={() => {
@@ -149,18 +151,20 @@
 </div>
 
 <svelte:window
-  onkeydown={(e) => {
-    e.key === 'Escape' && close()
+  onkeydown={(e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp' && selectedIndex > 0) {
+      selectedIndex -= 1
+    }
 
-    e.key === 'ArrowUp' && selectedIndex > 0 && (selectedIndex -= 1)
+    if (e.key === 'ArrowDown' && selectedIndex < filteredBooks.length - 1) {
+      selectedIndex += 1
+    }
 
-    e.key === 'ArrowDown' &&
-      selectedIndex < filteredBooks.length - 1 &&
-      (selectedIndex += 1)
+    const selectedBook = filteredBooks[selectedIndex]
 
-    e.key === 'Enter' &&
-      filteredBooks[selectedIndex] &&
-      navigate(filteredBooks[selectedIndex]!.item.link)
+    if (e.key === 'Enter' && filteredBooks[selectedIndex] && selectedBook) {
+      void navigate(selectedBook.item.link)
+    }
   }}
 />
 

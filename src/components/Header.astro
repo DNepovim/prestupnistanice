@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
+import { isDefined } from 'narrowland'
 
 import SearchButton from '../components/SearchButton.svelte'
 import { routes } from '../routes'
@@ -43,18 +44,26 @@ const navigations = [
       <SearchButton
         client:idle
         data={[
-          ...books.map(({ data: { title, cover, slug, authors } }) => ({
+          ...books.map(({ data: { title, cover, slug, authors: as } }) => ({
             title,
             subtitle: joinWords(
-              authors
+              as
                 .filter((a) => a.isMain)
-                .map(({ author: { firstname, surname } }) => `${firstname} ${surname}`),
+                .map(({ author }) => {
+                  const au = authors.find((a) => a.data.slug === author)
+                  if (!au) {
+                    return
+                  }
+                  return `${au.data.firstname} ${au.data.surname}`
+                })
+                .filter(isDefined),
             ),
             image: cover,
             link: `/knihy/${slug}`,
             type: 'book',
           })),
           ...authors.map(({ data: { firstname, surname, image, slug } }) => ({
+            slug,
             title: `${firstname} ${surname}`,
             image,
             link: `/autori/${slug}`,

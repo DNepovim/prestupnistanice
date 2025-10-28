@@ -1,5 +1,7 @@
+import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
+import type { Pages } from '../__generated__/types'
 import { MarkdownInput } from '../components/Markdown'
 
 export const PagesCollection: Collection = {
@@ -12,6 +14,11 @@ export const PagesCollection: Collection = {
       slugify: (v?: { title?: string }) =>
         (v?.title ?? '').toLowerCase().replace(/ /g, '-'),
     },
+    // @ts-expect-error wrongly typed tina cms
+    beforeSubmit: ({ values }: { values: Pages }) => ({
+      ...values,
+      slug: slugify(values.title),
+    }),
   },
   fields: [
     {

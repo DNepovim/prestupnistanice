@@ -1,7 +1,6 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 
-import { client } from '../../tina/__generated__/client.ts'
 import AuthorSmall from '../components/AuthorSmall.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import Markdown from '../components/Markdown.astro'
@@ -9,15 +8,13 @@ import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
 
-export function getStaticPaths() {
-  return ['kontakty', 'o-nakladatelstvi'].map((edge) => ({
-    params: { slug: edge },
-  }))
+const entry = await getEntry('page', 'o-nakladatelstvi')
+
+if (!entry) {
+  return
 }
 
-const relativePath = `o-nakladatelstvi.md`
-const res = await client.queries.pages({ relativePath })
-const page = res.data.pages
+const { data: page } = entry
 
 const books = await getCollection('book')
 const authors = await getCollection('author')
@@ -26,7 +23,7 @@ const authorRolesMap = books
   .flatMap((book) => book.data.authors)
   .filter((entry) => !entry.isMain)
   .reduce<Record<string, string[]>>((acc, entry) => {
-    const slug = entry.author.slug
+    const slug = entry.author
     const newRoles = entry.role
     const existing = acc[slug] ?? []
 
@@ -47,22 +44,14 @@ const collaborators = authors
   <Section>
     <PageTitle>{page.title}</PageTitle>
     <div class="mx-auto max-w-2xl leading-8">
-      {page.content && <Markdown text={page.content} />}
+      {entry.body && <Markdown text={entry.body} />}
     </div>
   </Section>
-  <Section title="Spolupracují s námi" >
+  <Section title="Spolupracují s námi">
     <BooksGrid>
       {
         collaborators.map(({ data, roles }) => (
-          <AuthorSmall
-            firstname={data.firstname}
-            surname={data.surname}
-            image={data.image ?? undefined}
-            gender={data.gender}
-            roles={roles ?? []}
-            link={`/autori/${data.slug}`}
-            imperfect
-          />
+          <AuthorSmall slug={data.slug} roles={roles ?? []} imperfect />
         ))
       }
     </BooksGrid>

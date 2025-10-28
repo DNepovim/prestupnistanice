@@ -2,9 +2,12 @@
 import eslint from '@eslint/js'
 import eslintPluginAstro from 'eslint-plugin-astro'
 import sonarjs from 'eslint-plugin-sonarjs'
+import eslintSveltePlugin from 'eslint-plugin-svelte'
 import unusedImports from 'eslint-plugin-unused-imports'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import svelteParser from 'svelte-eslint-parser'
 import tseslint from 'typescript-eslint'
+
 
 export default defineConfig(
   globalIgnores(['.astro/*']),
@@ -12,8 +15,6 @@ export default defineConfig(
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   sonarjs.configs.recommended,
-  eslintPluginAstro.configs.recommended,
-  eslintPluginAstro.configs['jsx-a11y-strict'],
   {
     languageOptions: {
       parserOptions: {
@@ -42,12 +43,33 @@ export default defineConfig(
       'sonarjs/pseudo-random': 'off',
     },
   },
+  eslintPluginAstro.configs.recommended,
+  eslintPluginAstro.configs['jsx-a11y-strict'],
   {
     files: ['**/*.astro'],
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
       },
+    },
+  },
+  ...eslintSveltePlugin.configs.recommended,
+  {
+    files: ['**/*.svelte'],
+    languageOptions: {
+      parser: svelteParser,
+      parserOptions: {
+        parser: tseslint.parser,
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+        extraFileExtensions: ['.svelte'],
+      },
+    },
+    rules: {
+      'sonarjs/no-empty-collection': 'off',
+      'sonarjs/no-duplicate-string': 'off',
+      'sonarjs/no-small-switch': 'off',
+      'sonarjs/no-identical-functions': 'off',
     },
   },
 )

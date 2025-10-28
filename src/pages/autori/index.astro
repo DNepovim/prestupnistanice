@@ -27,15 +27,7 @@ const mainAuthors = authors.filter((author) => mainAuthorIds.has(author.id))
   <Section isWide>
     <PageTitle>Autoři</PageTitle>
     <BooksGrid>
-      {
-        mainAuthors.map(({ data }) => (
-          <Book
-            title={`${data.firstname} ${data.surname}`}
-            link={`/autori/${data.slug}`}
-            image={data.image ?? undefined}
-          />
-        ))
-      }
+      {mainAuthors.map(({ data }) => <Book slug={data.slug} />)}
     </BooksGrid>
   </Section>
 </Layout>

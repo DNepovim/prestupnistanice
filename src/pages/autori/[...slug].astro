@@ -10,8 +10,8 @@ import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
 import Layout from '../../layouts/Layout.astro'
 import { getSlugFromPath } from '../../utils/getSlugFromPath'
-import { isDefined } from '../../utils/isDefined'
 import { tp } from '../../utils/tp'
+import { isDefined } from 'narrowland'
 
 export async function getStaticPaths() {
   const authors = await getCollection('author')

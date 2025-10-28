@@ -1,10 +1,9 @@
 ---
-import { client } from '../../tina/__generated__/client.ts'
+import { getCollection } from 'astro:content'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
-import { routes } from '../routes'
 import {
   uppercaseEveryFirstLetters,
   uppercaseFirstLetter,
@@ -14,16 +13,8 @@ const req = Astro.request
 const url = new URL(req.url)
 const segments = url.pathname.split('/').filter(Boolean)
 
-function isDefined<T>(value: T | undefined | null): value is T {
-  return value !== undefined && value !== null
-}
-
-const recentBooks = (
-  (await client.queries.booksConnection({ sort: 'date', last: 9 })).data.booksConnection
-    .edges ?? []
-)
-  .map((item) => item?.node)
-  .filter(isDefined)
+const books = await getCollection("book")
+const recentBooks = books.toReversed().slice(0, 9)
 
 const category = segments[0]
 const slug = segments[1]
@@ -58,21 +49,7 @@ const slug = segments[1]
   </Section>
   <Section isWide>
     <BooksGrid>
-      {
-        recentBooks.map((book) => (
-          <Book
-            title={book.title}
-            link={routes.books.detail(book)}
-            image={book.cover ?? undefined}
-            color={book.color ?? undefined}
-            authors={(book.authors ?? [])
-              .filter((a) => a?.role === 'author')
-              .map((author) => author?.author)
-              .filter(isDefined)
-              .map((a) => ({ ...a, link: routes.authors.detail(a) }))}
-          />
-        ))
-      }
+      {recentBooks.map((book) => <Book slug={book.data.slug} />)}
     </BooksGrid>
   </Section>
 </Layout>
