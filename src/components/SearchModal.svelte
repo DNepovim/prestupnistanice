@@ -68,7 +68,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="fixed inset-0 bg-gradient-to-t from-brand-second-50/90 to-white/90 size-full"
-    onclick={() => toggle(false)}
+    onclick={() => { toggle(false); }}
   ></div>
   <div class="block mx-auto max-w-160 mt-20">
     <label class="relative text-5xl">

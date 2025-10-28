@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TrainImage from '../assets/vlak.png'
 import { cn } from '../utils/cn'
 
-interface Props {
+type Props = {
   direction: 'lr' | 'rl'
   y: number
 }

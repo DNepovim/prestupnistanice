@@ -1,11 +1,11 @@
-/* eslint-disable sonarjs/pseudo-random */
+ 
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { Train } from './Train'
 
-interface TrainState {
+type TrainState = {
   id: number
   direction: 'rl' | 'lr'
   y: number

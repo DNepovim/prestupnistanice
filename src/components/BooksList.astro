@@ -10,7 +10,7 @@ import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '../r
 import { cn } from '../utils/cn'
 import { uppercaseFirstLetter } from '../utils/uppercaseFirstLetter'
 
-interface Props {
+type Props = {
   books: CollectionEntry<'book'>[]
   slug?: CategorySlug
 }
