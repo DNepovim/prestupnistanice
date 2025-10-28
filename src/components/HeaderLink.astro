@@ -13,7 +13,7 @@ const isActive = href === `/${pathname}`
 <a
   href={href}
   class={cn(
-    'group font-head hover:text-brand-first-500 relative text-2xl text-gray-600 no-underline',
+    'group transition-colors font-alt hover:text-brand-first-500 relative text-md text-brand-first-500 no-underline',
     isActive && 'text-brand-first-500',
   )}
   {...props}

@@ -1,16 +1,13 @@
 ---
-import { Image } from 'astro:assets'
 import { Icon } from 'astro-icon/components'
-
-import TrainImage from '../assets/vlak.png'
 ---
 
 <div class="w-full">
   <footer class="font-alt mx-auto max-w-[56rem]">
     <div
-      class="border-brand-first-500 bg-brand-second-50/30 flex items-stretch justify-between gap-8 rounded-sm border p-4 max-sm:flex-col"
+      class="border-brand-first-100 text-brand-first-500 bg-brand-second-50/30 flex items-stretch justify-between gap-8 rounded-sm border p-4 max-sm:flex-col"
     >
-      <div class="flex-1">
+      <div class="flex-2">
         <h3 class="mb-2">Obsah</h3>
         <menu class="text-sm">
           <li class="mb-1"><a class="hover:underline" href="/knihy">Naše knihy</a></li>
@@ -19,9 +16,6 @@ import TrainImage from '../assets/vlak.png'
             <a class="hover:underline" href="/o-nakladatelstvi">O nakladatelstvi</a>
           </li>
         </menu>
-      </div>
-      <div class="flex flex-1 items-center opacity-60 max-sm:hidden">
-        <Image src={TrainImage} alt="Logo" width={240} height={100} />
       </div>
 
       <div class="flex-1">
@@ -53,17 +47,17 @@ import TrainImage from '../assets/vlak.png'
 
     <p class="text-brand-first-500 my-2 text-right text-xs">
       Web písmy <a
-        class="underline transition-colors hover:bg-brand-second-200 hover:text-white"
+        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://fonts.adobe.com/fonts/quiche-flare"
         target="_blank"
         rel="noopener noreferer">Quiche Flare</a
       > a <a
-        class="underline transition-colors hover:bg-brand-second-200 hover:text-white"
+        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://fonts.adobe.com/fonts/montserrat"
         target="_blank"
         rel="noopener noreferer">Montserrat</a
       > vysázel <a
-        class="underline transition-colors hover:bg-brand-second-200 hover:text-white"
+        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://www.dominikblaha.cz"
         target="_blank"
         rel="noopener noreferer">Dominik Bláha</a

@@ -7,6 +7,7 @@ import Markdown from '../components/Markdown.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
+import { getSlugFromPath } from '../utils/getSlugFromPath'
 
 const entry = await getEntry('page', 'o-nakladatelstvi')
 
@@ -23,7 +24,7 @@ const authorRolesMap = books
   .flatMap((book) => book.data.authors)
   .filter((entry) => !entry.isMain)
   .reduce<Record<string, string[]>>((acc, entry) => {
-    const slug = entry.author
+    const slug = getSlugFromPath(entry.author)
     const newRoles = entry.role
     const existing = acc[slug] ?? []
 

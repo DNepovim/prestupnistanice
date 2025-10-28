@@ -66,8 +66,9 @@ const isDev = import.meta.env.DEV
   </head>
   <body
     class={cn(
-      'font-display flex min-h-screen min-w-full flex-col',
+      'font-display flex min-h-screen min-w-full flex-col bg-brand-second-50/40',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
+      'bg-gradient-to-t from-brand-first-50/50 to-white',
       isDev && 'debug-screens',
     )}
   >

@@ -40,11 +40,11 @@ const authors = await getEntries(
       </a>
     )
   }
-  <div class="flex flex-3 flex-col gap-4">
+  <div class="flex flex-4 flex-col gap-4">
     <div class="max-sm:flex max-sm:flex-col">
       <h2
         style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
-        class="peer text-brand-second-100 font-head font-bold tracking-wide group relative inline text-5xl"
+        class="peer text-brand-second-100 font-head group text-shadow-lg relative inline text-5xl font-bold tracking-wide"
       >
         <a href={routes.books.detail(slug)}>{tp(b.title)}</a>
       </h2>

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
+import { isDefined } from 'narrowland'
 
 import ArrowLink from '../components/ArrowLink.astro'
 import AuthorSmall from '../components/AuthorSmall.astro'
@@ -12,9 +13,10 @@ import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
 import { tp } from '../utils/tp'
-import { isDefined } from 'narrowland'
 
-const books = (await getCollection('book')).toReversed().toSorted((a, b) => b.data.date - a.data.date)
+const books = (await getCollection('book'))
+  .toReversed()
+  .toSorted((a, b) => b.data.date - a.data.date)
 
 const lastBook = books[0]
 
@@ -24,7 +26,13 @@ if (!isDefined(lastBook)) {
 
 const recentBooks = books.slice(1, 4)
 const forKidsBooks = books.filter((b) => b.data.category === 'forKids').slice(0, 3)
-const philosophyBooks = books.filter((b) => b.data.category === 'philosophy' && !recentBooks.map(b => b.data.slug).includes(b.data.slug)).slice(0, 3)
+const philosophyBooks = books
+  .filter(
+    (b) =>
+      b.data.category === 'philosophy' &&
+      !recentBooks.map((b) => b.data.slug).includes(b.data.slug),
+  )
+  .slice(0, 3)
 ---
 
 <Layout
@@ -32,7 +40,7 @@ const philosophyBooks = books.filter((b) => b.data.category === 'philosophy' && 
 >
   <Section isWide>
     <div
-      class="via-brand-first-50/50 to-brand-second-100 mt-8 flex rounded-xl -bg-linear-45 from-transparent shadow-2xl max-sm:flex-col min-sm:mt-20 min-md:h-64"
+      class="via-brand-first-50/50 to-brand-second-100 mt-8 flex rounded-xl -bg-linear-45 from-transparent shadow-2xl max-sm:flex-col min-sm:mt-20"
     >
       <div class="flex-1">
         {
@@ -56,14 +64,14 @@ const philosophyBooks = books.filter((b) => b.data.category === 'philosophy' && 
             class="group text-brand-second-200 font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
           >
             <a class="relative z-10" href={routes.books.detail(lastBook.data.slug)}
-              >{lastBook.data.title}</a
+              >{tp(lastBook.data.title)}</a
             >
             <span
               class="animate-width-expand from-brand-second-500 group-hover:bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] bg-gradient-to-r to-transparent transition-all duration-600 group-hover:w-full"
             ></span>
           </h2>
 
-          <div class="line-clamp-3 text-xl">
+          <div class="text-gray-800 line-clamp-3 text-xl">
             {
               isDefined(lastBook.data.claim) &&
                 tp(lastBook.data.claim.replace(/[*>#]/g, ''))

@@ -18,8 +18,11 @@
 </script>
 
 <button
-  onclick={() => toggle(true)}
-  class="font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-gray-600 no-underline"
+  onclick={() => {
+    
+    toggle(true)
+  }}
+  class="font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-brand-first-500 no-underline"
   title="Vyhledávání"
 >
   <iconify-icon class="-mb-1" icon="ph:magnifying-glass" noobserver></iconify-icon>
