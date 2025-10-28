@@ -11,10 +11,10 @@ import Section from '../components/Section.astro'
 import Theme from '../components/Theme.astro'
 import Layout from '../layouts/Layout.astro'
 import { routes } from '../routes'
-import { isDefined } from '../utils/isDefined'
 import { tp } from '../utils/tp'
+import { isDefined } from 'narrowland'
 
-const books = (await getCollection('book')).reverse().toSorted((a, b) => b.data.date - a.data.date)
+const books = (await getCollection('book')).toReversed().toSorted((a, b) => b.data.date - a.data.date)
 
 const lastBook = books[0]
 

@@ -45,6 +45,7 @@ const navigations = [
         client:idle
         data={[
           ...books.map(({ data: { title, cover, slug, authors: as } }) => ({
+            d:slug,
             title,
             subtitle: joinWords(
               as
@@ -63,6 +64,7 @@ const navigations = [
             type: 'book',
           })),
           ...authors.map(({ data: { firstname, surname, image, slug } }) => ({
+            slug,
             title: `${firstname} ${surname}`,
             image,
             link: `/autori/${slug}`,

@@ -60,6 +60,7 @@ const page = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     title: z.string(),
+    slug: z.string(),
     content: z.string().optional(),
   }),
 })

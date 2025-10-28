@@ -11,7 +11,7 @@ export const getColorScale = (
 ): Record<`${string}${(typeof COLORS_STEPS)[number]}`, string> => {
   const base = colord(baseColor)
 
-  const tints = base.tints(6).reverse().slice(1)
+  const tints = base.tints(6).toReversed().slice(1)
   const shades = base.shades(6)
 
   return {

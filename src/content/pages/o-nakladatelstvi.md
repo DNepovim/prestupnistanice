@@ -1,5 +1,6 @@
 ---
 title: O nakladatelství
+slug: o-nakladatelstvi
 ---
 
 Vznik nakladatelství **Přestupní stanice** se úzce pojí s autorskou tvorbou a divadelním souborem, který po dobu deseti let připravoval a provozoval improvizovaná představení či komponovaná autorská pásma. Tento divadelní soubor se nejprve jmenoval **DS Naslouchání a v roce 2005 se přejmenoval na Přestupní stanici**, aby svým názvem zřetelněji naznačoval to, o co usiloval. Od svých počátků totiž nabízel prostor pro mladé a inspirativní autory a zajímavé texty. Již tato tendence v sobě skrývala potřebu uchovat některé texty v knižní podobě. Rozhodujícím podnětem ovšem bylo až předčasné úmrtí jednoho ze zakladatelů souboru [Jiřího Součka](/autori/jiri-soucek), na jehož počest vznikla [sbírka jeho básní](/knihy/ta-moje-realita).

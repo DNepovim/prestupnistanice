@@ -9,6 +9,7 @@ const config = {
   plugins: [
     'prettier-plugin-astro',
     'prettier-plugin-tailwindcss',
+    'prettier-plugin-svelte',
     '@ianvs/prettier-plugin-sort-imports',
   ],
   tailwindFunctions: ['cva', 'cn'],
