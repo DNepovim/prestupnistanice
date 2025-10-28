@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { Train } from './Train'
 
-interface TrainState {
+type TrainState = {
   id: number
   direction: 'rl' | 'lr'
   y: number

@@ -49,12 +49,12 @@ const navigations = [
             subtitle: joinWords(
               as
                 .filter((a) => a.isMain)
-                .map(({ author }) => {
-                  const au = authors.find((a) => a.data.slug === author)
-                  if (!au) {
-                    return
+                .map((a) => {
+                  const author = authors.find((as) => as.data.slug === a.slug.id)
+                  if (!author) {
+                    return null
                   }
-                  return `${au.data.firstname} ${au.data.surname}`
+                  return `${author.data.firstname} ${author.data.surname}`
                 })
                 .filter(isDefined),
             ),

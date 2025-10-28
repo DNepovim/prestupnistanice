@@ -6,8 +6,9 @@ import { isDefined } from 'narrowland'
 import { routes } from '../routes'
 import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
+import { isDefined } from 'narrowland'
 
-interface Props {
+type Props = {
   slug: string
   imperfect?: boolean
   roles: string[]
