@@ -53,7 +53,7 @@ const name = `${a.firstname} ${a.surname}`
         )
       }
       <h2 class="peer text-brand-first-500 font-alt group relative inline text-4xl">
-        <a href={routes.books.detail(slug)}>{name}</a>
+        <a href={routes.authors.detail(slug)}>{name}</a>
       </h2>
     </div>
 
@@ -65,7 +65,7 @@ const name = `${a.firstname} ${a.surname}`
     {
       (
         <div class="flex justify-end pr-4">
-          <ArrowLink href={routes.books.detail(slug)}>
+          <ArrowLink href={routes.authors.detail(slug)}>
             více o {a.gender === 'male' ? 'autorovy' : 'autorce'}
           </ArrowLink>
         </div>
