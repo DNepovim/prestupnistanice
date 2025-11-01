@@ -18,7 +18,7 @@
   let searchValue = ''
   let container: HTMLDivElement
   let items: HTMLAnchorElement[] = []
-  let indicator: HTMLDivElement
+  let indicator: HTMLDivElement | undefined
   let selectedIndex = 0
   // eslint-disable-next-line unused-imports/no-unused-vars
   let hoveredIndex: number | null = null
@@ -37,7 +37,7 @@
 
   const updateIndicator = (index: number) => {
     const el = items[index]
-    if (!el) return
+    if (!el || !indicator) return
     const { offsetTop, offsetHeight } = el
     indicator.style.transform = `translateY(${String(offsetTop)}px)`
     indicator.style.height = `${String(offsetHeight)}px`
@@ -50,7 +50,8 @@
     selectedIndex = 0
   }
 
-  const selectedItem = items[selectedIndex]
+  let selectedItem: HTMLAnchorElement | undefined
+  $: selectedItem = items[selectedIndex]
 
   $: if (selectedItem) {
     selectedItem.scrollIntoView({
@@ -103,7 +104,7 @@
       {/if}
 
       <ul class="px-4">
-        {#each filteredBooks as book, index (book.item.slug)}
+        {#each filteredBooks as book, index (book.item.link)}
           <li
             class="py-4"
             onmouseenter={() => {
@@ -126,7 +127,7 @@
                   alt={book.item.title}
                   class={cn(
                     'w-20 rounded shadow-2xl',
-                    book.item.type === 'author' && 'rounde-full',
+                    book.item.type === 'author' && 'rounded-full',
                   )}
                 />
               {:else}
