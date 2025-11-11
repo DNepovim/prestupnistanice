@@ -7,9 +7,10 @@ import { tp } from '../utils/tp'
 
 type Props = {
   text: string
+  class?: string
 }
 
-const { text } = Astro.props
+const { text, class: className } = Astro.props
 
 marked.use({
   renderer: {
@@ -33,4 +34,4 @@ marked.use({
 })
 ---
 
-<div set:html={marked(text)} />
+<div set:html={marked(text)} class={className}/>
