@@ -71,7 +71,7 @@ const philosophyBooks = books
             ></span>
           </h2>
 
-          <div class="text-gray-800 line-clamp-3 text-xl">
+          <div class="line-clamp-3 text-xl text-gray-800">
             {
               isDefined(lastBook.data.claim) &&
                 tp(lastBook.data.claim.replace(/[*>#]/g, ''))
@@ -107,7 +107,7 @@ const philosophyBooks = books
       tituly.
     </p>
   </Section>
-  <Section title="Nejnovější knihy">
+  <Section>
     <div class="flex flex-col gap-16">
       {
         recentBooks.map(({ data: book }, index) => (
@@ -129,7 +129,7 @@ const philosophyBooks = books
   </Section>
   {
     forKidsBooks.length > 0 && (
-      <Section title="Knihy pro děti">
+      <Section title="Knihy pro děti" link={routes.books.category('forKids')}>
         <BooksGrid>
           {forKidsBooks.map((book) => (
             <Book slug={book.data.slug} />
@@ -140,7 +140,7 @@ const philosophyBooks = books
   }
   {
     philosophyBooks.length > 0 && (
-      <Section title="Knihy pro filosofy">
+      <Section title="Knihy pro filosofy" link={routes.books.category('philosophy')}>
         <BooksGrid>
           {philosophyBooks.map((book) => (
             <Book slug={book.data.slug} />
