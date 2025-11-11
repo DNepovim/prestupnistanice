@@ -15,6 +15,10 @@ authors:
     isMain: true
     role:
       - illustration
+  - author: src/content/authors/anna-rosova.md
+    slug: anna-rosova
+    role:
+      - translate
   - author: src/content/authors/filip-komberec.md
     slug: filip-komberec
     role:
@@ -39,10 +43,6 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-  - author: src/content/authors/anna-rosova.md
-    slug: anna-rosova
-    role:
-      - translate
 cover: /images/neviditelny-slon.GIF
 category: forKids
 color: '#434991'
