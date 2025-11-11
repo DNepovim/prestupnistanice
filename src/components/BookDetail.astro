@@ -43,8 +43,11 @@ const mainAuthorSlug =
 
 const mainAuthor = await getEntry('author', mainAuthorSlug)
 
-const authorsBooks = await getCollection('book', (b) =>
-  b.data.authors.filter((b) => b.isMain).some((b) => b.slug.id === mainAuthorSlug),
+const authorsBooks = await getCollection(
+  'book',
+  (b) =>
+    b.data.slug !== slug &&
+    b.data.authors.filter((a) => a.isMain).some((a) => a.slug.id === mainAuthorSlug),
 )
 
 const categoryBooks = await getCollection(
