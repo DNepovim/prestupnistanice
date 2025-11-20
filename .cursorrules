@@ -1,0 +1,81 @@
+Comments policy
+
+- Absolutely do not write comments in code, in any language.
+- No line comments (//, #), no block comments (/* ... */), no docstrings/JSDoc, no TODO/FIXME.
+- Prefer clear, self-documenting names and structure instead of comments.
+- If a tool or template generates comments, remove them before saving.
+- Only exception: legally required license headers that already exist; do not add new ones.
+
+Functional style and immutability
+
+- Write clear, functional, immutable code.
+- Default to pure functions and expressions.
+- Prefer `const` over `let`; avoid mutation.
+- Avoid `for`/`for...of`/`for...in` when possible; use `.map`, `.reduce`, `.filter`, etc.
+- Avoid side effects; isolate effects at boundaries.
+
+Post-task checks
+
+- After every task, run lint, prettier, and typecheck, and fix all errors.
+- Use these project scripts:
+  - Lint (fix): `pnpm run lint:fix`
+  - Format (write): `pnpm run format:write`
+  - Typecheck: `pnpm run typecheck`
+
+TypeScript style and exports
+
+- Avoid `any`/`unknown` without narrowing; make types explicit.
+- Avoid non-null assertions (`!`); narrow values instead.
+- Prefer named exports; avoid default exports.
+
+Imports and paths
+
+- Until an `@/` alias is configured in `tsconfig.json`, use relative imports.
+- Keep import paths reasonable; prefer refactors over deep `../../..` chains.
+
+Astro components
+
+- Define `type Props` and destructure from `Astro.props`.
+- Accept `class?: string` and apply via `class:list={[className, '...']}`.
+- Prefer semantic HTML; avoid inline `style` attributes.
+
+React islands
+
+- Define `type Props` and export named components.
+- Use `className={cn(...)};` use the `cn` helper for conditional classes.
+- Mount with `client:idle`/`client:visible` unless `client:load` is necessary.
+
+Svelte components
+
+- Always use `<script lang="ts">`.
+- Use reactive statements (`$:`) instead of manual re-renders where possible.
+- Use `class={cn(...)};` prefer the `cn` helper for classes.
+
+Tailwind usage
+
+- Use Tailwind utilities for styling; avoid ad-hoc CSS files.
+- Use the `cn` helper (twMerge + clsx) to compose classes.
+- Prefer project brand tokens; avoid raw hex colors inline.
+
+Data, routing, and utilities
+
+- Use `astro:content` APIs (`getCollection`) for content access.
+- Use `routes` helpers for URLs; do not hardcode route segments.
+- Prefer existing utilities in `src/utils` (e.g., `cn`, `tp`, `html`, `joinWords`).
+
+Accessibility
+
+- Use appropriate `aria-*` attributes for interactive UI (e.g., tooltips, modals).
+- Ensure keyboard interaction for dialogs/menus; manage focus appropriately.
+
+Client directives
+
+- Prefer `client:idle` or `client:visible` for islands; avoid `client:load` by default.
+
+Environment
+
+- Access environment via `Astro.env` as defined in `env.config.ts`; avoid `process.env` in app code.
+
+No inline rule suppressions
+
+- Do not add `eslint-disable` comments; fix the code or prefix names with `_`.
