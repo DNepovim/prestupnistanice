@@ -1,20 +1,22 @@
 ---
 import { Image } from 'astro:assets'
 import { getEntry } from 'astro:content'
-import { isDefined } from 'narrowland'
+import { Icon } from 'astro-icon/components'
+import { isDefined, isNonEmptyString } from 'narrowland'
 
+import Tooltip from '../components/Tooltip.astro'
 import { routes } from '../routes'
 import { joinWords } from '../utils/joinWords'
 import { rolesMap } from '../utils/rolesMap'
-import { isDefined } from 'narrowland'
 
 type Props = {
   slug: string
   imperfect?: boolean
   roles: string[]
+  col?: string
 }
 
-const { slug, imperfect, roles } = Astro.props
+const { slug, imperfect, roles, col } = Astro.props
 
 const entry = await getEntry('author', slug)
 
@@ -52,9 +54,18 @@ const { data: author } = entry
         </div>
       )
     }
-    <p class="text-alt font-alt text-brand-first-700 group-hover:underline">
+    <p
+      class="text-alt font-alt text-brand-first-700 flex items-center gap-2 group-hover:underline"
+    >
       {author.firstname}
       {author.surname}
+      {
+        isNonEmptyString(col) && (
+          <Tooltip label={col}>
+            <Icon name="ph:info" class="size-4" />
+          </Tooltip>
+        )
+      }
     </p>
     {
       imperfect && (

@@ -33,6 +33,7 @@ const book = defineCollection({
         author: z.string(),
         slug: reference('author'),
         isMain: z.boolean().optional(),
+        col: z.string().optional(),
         role: z.array(
           z.enum([
             'author',

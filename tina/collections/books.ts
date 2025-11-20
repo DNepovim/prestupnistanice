@@ -96,6 +96,7 @@ export const BooksCollection: Collection = {
             { label: 'Konzultant', value: 'consultation' },
           ],
         },
+        { name: 'col', label: 'Kolektiv', type: 'string' },
       ],
     },
     { type: 'image', name: 'cover', label: 'Obálka' },

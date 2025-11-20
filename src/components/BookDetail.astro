@@ -112,7 +112,7 @@ const categoryBooks = await getCollection(
     {
       book.authors
         .filter((a) => !a.isMain)
-        .map((a) => <AuthorSmall slug={a.slug.id} roles={a.role} />)
+        .map((a) => <AuthorSmall col={a.col} slug={a.slug.id} roles={a.role} />)
     }
   </Section>
   {

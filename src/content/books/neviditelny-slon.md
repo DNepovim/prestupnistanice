@@ -19,6 +19,11 @@ authors:
     slug: anna-rosova
     role:
       - translate
+    col: >-
+      Studenti Ústavu translatologie FF UK pod vedení Mgr. Anny Rosové: Antonie
+      Alexejeva, Maria Golubtsova, Jana Jiříková, Kristýna Kostková, Eliška
+      Králová, Diana Matviyuková, Anna Santrosyan, Timur Šajachmetov, Naděžda
+      Trunečková a Barbora Vybíralová
   - author: src/content/authors/filip-komberec.md
     slug: filip-komberec
     role:
@@ -49,6 +54,7 @@ color: '#434991'
 bgColor: '#e7d14c'
 claim: "Kniha vypráví o\_velmi vážných tématech tak, jak to umí jen Anna Anisimova: s\_neuvěřitelnou lehkostí a\_optimismem."
 ---
+
 
 
 

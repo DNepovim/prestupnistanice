@@ -1,0 +1,29 @@
+---
+type Props = {
+  label: string
+  isDisabled?: boolean
+  id?: string // Optional custom id for aria-describedby
+}
+
+const { label, id, isDisabled } = Astro.props
+
+const tooltipId = id ?? `tooltip-${Math.random().toString(36).slice(2, 10)}`
+---
+
+{
+  isDisabled ? (
+    <slot />
+  ) : (
+    <span class="group/tooltip relative inline-flex" aria-describedby={tooltipId}>
+      <slot />
+      <span
+        id={tooltipId}
+        role="tooltip"
+        class="bg-brand-first-500 invisible absolute bottom-full left-1/2 z-50 mb-4 w-[20rem] -translate-x-1/2 rounded px-4 py-2 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:visible group-hover/tooltip:opacity-100"
+      >
+        {label}
+        <span class="bg-brand-first-500 absolute right-1/2 bottom-0 -z-1 size-4 translate-1/2 rotate-45 rounded-br-sm" />
+      </span>
+    </span>
+  )
+}
