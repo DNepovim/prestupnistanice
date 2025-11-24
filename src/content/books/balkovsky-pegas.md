@@ -54,12 +54,13 @@ authors:
 cover: /images/pegas_cover.png
 category: novel
 color: '#51609b'
-bgColor: '#EC008C'
+bgColor: '#ec008c'
 claim: >-
   „A přece v dávných dobách, jež se dnes již propadly v bezhlesé zapomenutí,
   byla tato ves čímsi neobyčejná. Místním venkovanům byl udělen dar – či snad
   prokletí? – nahlížet v hlubiny a brodit se temnotami země.
 ---
+
 
 
 A právě tady se kdysi udál zázrak, jenž propojil nebe a zemi. O těchto bělostných křídlech, o smrti i pokušení, o daru i zatracení vypráví náš příběh…“
