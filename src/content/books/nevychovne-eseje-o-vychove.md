@@ -12,6 +12,11 @@ authors:
     slug: krystof-skalak
     role:
       - illustration
+  - author: src/content/authors/dominik-blaha.md
+    slug: dominik-blaha
+    role:
+      - cover
+      - typesetting
 cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 color: '#318ccb'
