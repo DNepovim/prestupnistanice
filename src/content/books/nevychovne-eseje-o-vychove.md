@@ -23,6 +23,10 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/petr-babka.md
+    slug: petr-babka
+    role:
+      - editor
 cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 color: '#318ccb'
