@@ -8,6 +8,10 @@ authors:
     isMain: true
     role:
       - author
+  - author: src/content/authors/krystof-skalak.md
+    slug: krystof-skalak
+    role:
+      - illustration
 cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 color: '#318ccb'
@@ -16,6 +20,7 @@ claim: >-
   Kniha nabízí tematicky uspořádané eseje, které se soustřeďují vždy na jeden
   aspekt výchovného úsilí.
 ---
+
 
 
 
