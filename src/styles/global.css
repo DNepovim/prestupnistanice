@@ -37,6 +37,10 @@
   filter: drop-shadow(2px 0 0 --value(--color-*)) drop-shadow(-2px 0 0 --value(--color-*));
 }
 
+@utility font-liga {
+  font-feature-settings: 'liga', 'onum';
+}
+
 @theme {
   --font-head: 'quiche-flare', sans-serif;
   --font-display: 'montserrat', sans-serif;

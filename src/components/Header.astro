@@ -26,7 +26,7 @@ const navigations = [
   <menu
     class="mx-auto mt-2 flex max-w-[56rem] items-center justify-between gap-4 py-1 transition-colors max-lg:flex-col"
   >
-    <h2 class="font-head text-brand-first-500 m-0 text-3xl hover:text-black">
+    <h2 class="font-liga font-head text-brand-first-500 m-0 text-3xl hover:text-black">
       <a class="no-underline" href="/">Přestupní stanice</a>
     </h2>
     <div class="internal-links max-xs:justify-center flex flex-wrap items-center gap-4">
@@ -74,8 +74,10 @@ const navigations = [
               image,
               link: `/autori/${slug}`,
               type: 'author',
-          }))
-        ].filter((item, index, arr) => index === arr.findIndex((el) => el.slug === item.slug))}
+            })),
+        ].filter(
+          (item, index, arr) => index === arr.findIndex((el) => el.slug === item.slug),
+        )}
       />
     </div>
   </menu>

@@ -27,7 +27,7 @@ const slug = segments[1]
         slug && category === 'knihy' ? (
           <>
             Knihu{' '}
-            <span class="font-head my-4 block text-7xl text-orange-900">
+            <span class="font-liga font-head my-4 block text-7xl text-orange-900">
               {uppercaseFirstLetter(slug.replace(/-/g, ' '))}
             </span>{' '}
             jsme zatím nevydali.
@@ -35,7 +35,7 @@ const slug = segments[1]
         ) : slug && category === 'autori' ? (
           <>
             Od autora{' '}
-            <span class="font-head my-4 block text-7xl text-orange-900">
+            <span class="font-liga font-head my-4 block text-7xl text-orange-900">
               {uppercaseEveryFirstLetters(slug.replace(/-/g, ' '))}
             </span>{' '}
             jsme zatím nic nevydali
