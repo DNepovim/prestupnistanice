@@ -18,6 +18,10 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/radek-slangal.md
+    slug: radek-slangal
+    role:
+      - reviewer
 cover: /images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
