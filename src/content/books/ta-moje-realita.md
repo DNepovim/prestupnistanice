@@ -18,6 +18,10 @@ authors:
     slug: petr-blaha
     role:
       - supereditor
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - supereditor
 cover: /images/ta-moje-realita.jpg
 category: poetry
 color: '#535b59'
