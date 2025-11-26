@@ -26,6 +26,10 @@ authors:
     slug: jakub-skalak
     role:
       - reviewer
+  - author: src/content/authors/kristyna-vesnenkova.md
+    slug: kristyna-vesnenkova
+    role:
+      - cover
 cover: /images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
