@@ -2,6 +2,8 @@
 slug: cesty-do-utopie
 title: "Cesty do\_utopie"
 date: 2020
+pagesCount: 178
+isbn: 978-80-907627-3-2
 authors:
   - author: src/content/authors/martin-buber.md
     slug: martin-buber
@@ -31,6 +33,7 @@ color: '#153341'
 bgColor: '#b8b9a7'
 claim: "Méně známá a\_do češtiny dosud nepřeložená kniha Martina Bubera vznikala v\_době druhé světové války. "
 ---
+
 
 
 Autor v ní vychází z předpokladu hluboké společenské krize, které lze čelit pouze důsledným promýšlením kořenů naší civilizace. Vlastním námětem jsou rozličné reformní pokusy 19. století, jež reagovaly na dějinném důsledky Francouzské revoluce. Buber zasvěceně podává charakteristiky Saint-Simona, Owena a Fouriera, tedy těch, pro které Marx z pozice centralizovaného socialismu razil pojem „utopičtí socialisté“. Autor přesvědčivě odhaluje zdroje utopického přesahu nejen u jednotlivých osobností, ale také u Marxe samotného. Poměrně detailně si přitom všímá konkurence mezi různými ideovými východisky. Oproti zpozorovaným mezím Marxova přístupu zkoumá a problematizuje myšlenky Proudhona, Kropotkina či Landauera.
