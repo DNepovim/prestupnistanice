@@ -14,6 +14,14 @@ authors:
     slug: petr-blaha
     role:
       - translate
+  - author: src/content/authors/jiri-hoblik.md
+    slug: jiri-hoblik
+    role:
+      - editor
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - supereditor
 cover: /images/pesimismus.jpg
 category: philosophy
 color: '#373737'
