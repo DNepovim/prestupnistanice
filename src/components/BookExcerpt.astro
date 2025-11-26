@@ -31,18 +31,16 @@ const authors = await getEntries(
     >{b.order}</span
   >
   {
-    b.cover && (
-      <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
-        <Image
-          alt={b.title}
-          src={b.cover}
-          width={158}
-          widths={[316, 158]}
-          height={200}
-          class="border border-gray-200 shadow-2xl"
-        />
-      </a>
-    )
+    <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
+      <Image
+        alt={b.title}
+        src={b.cover}
+        width={158}
+        widths={[316, 158]}
+        height={200}
+        class="border border-gray-200 shadow-2xl"
+      />
+    </a>
   }
   <div class="flex flex-4 flex-col gap-4">
     <div class="max-sm:flex max-sm:flex-col">

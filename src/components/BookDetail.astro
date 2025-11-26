@@ -115,15 +115,13 @@ const categoryBooks = await getCollection(
       )
     }
     {
-      book.cover && (
-        <Image
-          alt={book.title}
-          src={book.cover}
-          width={336}
-          height={480}
-          class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
-        />
-      )
+      <Image
+        alt={book.title}
+        src={book.cover}
+        width={336}
+        height={480}
+        class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
+      />
     }
     {book.claim && <Blockquote text={book.claim} />}
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}

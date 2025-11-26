@@ -7,13 +7,18 @@
   let y = 0
   let left = '0px'
   let top = '0px'
-  const onEnter = () => { visible = true }
+  let hasMouseMoved = false
+  const onEnter = () => {
+    if (hasMouseMoved) visible = true
+  }
   const onLeave = () => { visible = false }
   const onMove = (e: MouseEvent) => {
+    hasMouseMoved = true
     x = e.clientX + offsetX
     y = e.clientY + offsetY
     left = String(x) + 'px'
     top = String(y) + 'px'
+    visible = true
   }
 </script>
 
