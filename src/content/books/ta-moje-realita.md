@@ -22,6 +22,10 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/julie-machacova.md
+    slug: julie-machacova
+    role:
+      - typesetting
 cover: /images/ta-moje-realita.jpg
 category: poetry
 color: '#535b59'
