@@ -31,6 +31,10 @@ authors:
     slug: jiri-hoblik
     role:
       - reviewer
+  - author: src/content/authors/jakub-chavalka.md
+    slug: jakub-chavalka
+    role:
+      - reviewer
 cover: /images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 color: '#318ccb'
