@@ -23,6 +23,11 @@ authors:
     slug: petr-blaha
     role:
       - editor
+  - author: src/content/authors/tomas-zach.md
+    slug: tomas-zach
+    role:
+      - cover
+      - illustration
 cover: /images/prometheus-spitteler.jpg
 category: philosophy
 color: '#461200'
