@@ -3,6 +3,7 @@ slug: kachna-smrt-a-tulipan
 title: 'Kachna, smrt a tulipán'
 originlName: 'Ente, Tod und Tulpe'
 date: 2025
+order: 13
 pagesCount: 38
 isbn: 978–80–909036–2–3
 authors:

@@ -2,6 +2,7 @@
 slug: pesimismus-a-dalsi-uvahy
 title: "Pesimismus?: a\_další úvahy"
 date: 2022
+order: 11
 pagesCount: 88
 isbn: 978-80-907627-6-3
 authors:

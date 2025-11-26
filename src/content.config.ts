@@ -25,7 +25,13 @@ const book = defineCollection({
       slug: z.string(),
       title: z.string(),
       date: z.number(),
+      order: z.number(),
       pagesCount: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional(),
+      paper: z.string().optional(),
+      font: z.string().optional(),
+      vazba: z.string().optional(),
       isbn: z.string().optional(),
       cover: image(),
       authors: z.array(

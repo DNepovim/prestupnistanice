@@ -2,6 +2,7 @@
 slug: ta-moje-realita
 title: Ta moje realita
 date: 2011
+order: 1
 pagesCount: 146
 isbn: 978-80-254-7924-7
 authors:

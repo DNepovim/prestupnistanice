@@ -2,6 +2,7 @@
 slug: eseje-o-stesku-upadku-a-filosofii
 title: "Eseje o\_stesku, úpadku a\_filosofii"
 date: 2022
+order: 8
 pagesCount: 219
 isbn: 978-80-907627-8-7
 authors:

@@ -22,9 +22,9 @@ type Props = {
 
 const { slug } = Astro.props
 
-const books = (await getCollection('book'))
-  .toReversed()
-  .toSorted((a, b) => b.data.date - a.data.date)
+const books = (await getCollection('book')).toSorted(
+  (a, b) => b.data.order - a.data.order,
+)
 
 const entry = await getEntry('book', slug)
 
@@ -73,10 +73,12 @@ const categoryBooks = await getCollection(
 >
   <Section>
     <BookPagination
+      order={book.order}
       prev={prevBook
         ? {
             slug: prevBook.data.slug,
             title: prevBook.data.title,
+            order: prevBook.data.order,
             cover: prevBook.data.cover,
           }
         : undefined}
@@ -84,6 +86,7 @@ const categoryBooks = await getCollection(
         ? {
             slug: nextBook.data.slug,
             title: nextBook.data.title,
+            order: nextBook.data.order,
             cover: nextBook.data.cover,
           }
         : undefined}

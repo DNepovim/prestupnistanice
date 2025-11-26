@@ -4,7 +4,9 @@ import { getCollection } from 'astro:content'
 import BooksList from '../../components/BooksList.astro'
 import Layout from '../../layouts/Layout.astro'
 
-const books = (await getCollection('book')).toReversed().toSorted((a, b) => b.data.date - a.data.date)
+const books = (await getCollection('book')).toSorted(
+  (a, b) => b.data.order - a.data.order,
+)
 ---
 
 <Layout siteTitle="Naše knihy" siteDescription="Naše knihy">

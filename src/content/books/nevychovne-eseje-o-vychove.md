@@ -2,6 +2,7 @@
 slug: nevychovne-eseje-o-vychove
 title: "Nevýchovné eseje o\_výchově"
 date: 2019
+order: 5
 pagesCount: 305
 isbn: 978-80-270-5563-0
 authors:

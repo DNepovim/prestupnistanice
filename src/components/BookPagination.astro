@@ -8,6 +8,7 @@ import FloatingPopup from './FloatingPopup.svelte'
 type NavItem = {
   slug: string
   title: string
+  order?: number
   cover?: {
     src: string
     width: number
@@ -19,22 +20,19 @@ type NavItem = {
 type Props = {
   prev?: NavItem
   next?: NavItem
-  class?: string
+  order?: number
 }
 
-const { prev, next, class: className } = Astro.props
+const { prev, next, order } = Astro.props
 ---
 
-<div
-  class="text-brand-first-500 mt-6 flex items-center justify-between px-8"
-  class:list={[className]}
->
-  <div>
+<div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
+  <div class="flex-1 text-left">
     {
       prev && (
         <FloatingPopup client:visible>
           <ArrowLink hasArrowLeft href={routes.books.detail(prev.slug)} class="text-xs">
-            {prev.title}
+            {prev.order}. {prev.title}
           </ArrowLink>
           {prev.cover && (
             <div slot="popup" class="w-[168px]">
@@ -55,12 +53,13 @@ const { prev, next, class: className } = Astro.props
       )
     }
   </div>
-  <div>
+  {order && <div class="text-brand-second-100 flex-1 text-center font-head font-bold">{order}.</div>}
+  <div class="flex-1 text-right">
     {
       next && (
         <FloatingPopup client:visible>
           <ArrowLink href={routes.books.detail(next.slug)} class="text-xs">
-            {next.title}
+            {next.order}. {next.title}
           </ArrowLink>
           {next.cover && (
             <div slot="popup" class="w-[168px]">

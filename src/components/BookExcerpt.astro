@@ -26,7 +26,10 @@ const authors = await getEntries(
 )
 ---
 
-<article class:list={['max-xs:flex max-xs:flex-col flex gap-8', className]}>
+<article class:list={['relative max-xs:flex max-xs:flex-col flex gap-8', className]}>
+  <span class="-z-1 text-brand-second-100/20 font-head bold absolute -top-10 -left-6 text-6xl"
+    >{b.order}</span
+  >
   {
     b.cover && (
       <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>

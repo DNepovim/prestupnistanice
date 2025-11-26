@@ -13,7 +13,9 @@ const { slug } = Astro.props
 
 const categoryKey = categoriesSlugToKey[slug]
 
-const books = await getCollection('book', (b) => b.data.category === categoryKey)
+const books = (
+  await getCollection('book', (b) => b.data.category === categoryKey)
+).toSorted((a, b) => b.data.order - a.data.order)
 
 const categoryName = CATEGORIES[categoryKey].name
 ---

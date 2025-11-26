@@ -2,6 +2,7 @@
 slug: lidska-geneze
 title: Lidská geneze
 date: 2023
+order: 12
 pagesCount: 120
 isbn: 978-80-909036-1-6
 authors:

@@ -2,6 +2,7 @@
 slug: balkovsky-pegas
 title: Balkovský Pegas
 date: 2026
+order: 15
 pagesCount: 216
 isbn: 978-80-909036-4-7
 authors:

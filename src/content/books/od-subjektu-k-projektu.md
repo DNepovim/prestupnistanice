@@ -2,6 +2,7 @@
 slug: od-subjektu-k-projektu
 title: Od subjektu k projektu
 date: 2020
+order: 7
 pagesCount: 176
 isbn: 978-80-907627-1-8
 authors:

@@ -2,6 +2,7 @@
 slug: hluk-proti-hlucnosti-naseho-zivota
 title: Hluk - Proti hlučnosti našeho života
 date: 2022
+order: 9
 pagesCount: 128
 isbn: 978-80-907627-2-5
 authors:

@@ -2,6 +2,7 @@
 slug: prometheus-spitteler
 title: Prométheus Spitteler
 date: 2022
+order: 10
 pagesCount: 576
 isbn: 978–80–907627–4–9
 authors:

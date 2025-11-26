@@ -46,8 +46,38 @@ export const BooksCollection: Collection = {
     },
     {
       type: 'number',
+      name: 'order',
+      label: 'Pořadí publikace',
+    },
+    {
+      type: 'number',
       name: 'pagesCount',
       label: 'Počet stran',
+    },
+    {
+      type: 'number',
+      name: 'width',
+      label: 'Šířka',
+    },
+    {
+      type: 'number',
+      name: 'height',
+      label: 'Výška',
+    },
+    {
+      type: 'string',
+      name: 'paper',
+      label: 'Papír',
+    },
+    {
+      type: 'string',
+      name: 'font',
+      label: 'Písmo',
+    },
+    {
+      type: 'string',
+      name: 'binding',
+      label: 'Vazba',
     },
     {
       type: 'string',

@@ -2,6 +2,7 @@
 slug: postdejiny
 title: Postdějiny
 date: 2018
+order: 3
 pagesCount: 121
 isbn: 978-80-270-4476-4
 authors:

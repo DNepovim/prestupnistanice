@@ -2,6 +2,7 @@
 slug: dopisy-z-nerevolucni-doby
 title: "Dopisy z\_nerevoluční doby"
 date: 2019
+order: 4
 pagesCount: 271
 isbn: 978-80-907627-0-1
 authors:
