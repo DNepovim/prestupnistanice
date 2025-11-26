@@ -3,10 +3,9 @@ import { Image } from 'astro:assets'
 import { getCollection, getEntries, getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 
-import ArrowLink from '../components/ArrowLink.astro'
 import Book from '../components/Book.astro'
+import BookPagination from '../components/BookPagination.astro'
 import BooksGrid from '../components/BooksGrid.astro'
-import FloatingPopup from '../components/FloatingPopup.svelte'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
@@ -74,60 +73,22 @@ const categoryBooks = await getCollection(
   secondColor={book.bgColor}
 >
   <Section>
-    <div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
-      {
-        prevBook && (
-          <FloatingPopup client:visible>
-            <ArrowLink
-              hasArrowLeft
-              href={routes.books.detail(prevBook.data.slug)}
-              class="text-xs"
-            >
-              {prevBook.data.title}
-            </ArrowLink>
-            {prevBook.data.cover && (
-              <div slot="popup" class="w-20">
-                <Image
-                  alt={prevBook.data.title}
-                  src={prevBook.data.cover}
-                  width={160}
-                  height={228}
-                  widths={[120, 160, 200]}
-                  sizes="160px"
-                  loading="eager"
-                  decoding="async"
-                  class="h-auto w-full border border-gray-200 shadow-xl"
-                />
-              </div>
-            )}
-          </FloatingPopup>
-        )
-      }
-      {
-        nextBook && (
-          <FloatingPopup client:visible>
-            <ArrowLink href={routes.books.detail(nextBook.data.slug)} class="text-xs">
-              {nextBook.data.title}
-            </ArrowLink>
-            {nextBook.data.cover && (
-              <div slot="popup" class="w-20">
-                <Image
-                  alt={nextBook.data.title}
-                  src={nextBook.data.cover}
-                  width={160}
-                  height={228}
-                  widths={[120, 160, 200]}
-                  sizes="160px"
-                  loading="eager"
-                  decoding="async"
-                  class="h-auto w-full border border-gray-200 shadow-xl"
-                />
-              </div>
-            )}
-          </FloatingPopup>
-        )
-      }
-    </div>
+    <BookPagination
+      prev={prevBook
+        ? {
+            slug: prevBook.data.slug,
+            title: prevBook.data.title,
+            cover: prevBook.data.cover,
+          }
+        : undefined}
+      next={nextBook
+        ? {
+            slug: nextBook.data.slug,
+            title: nextBook.data.title,
+            cover: nextBook.data.cover,
+          }
+        : undefined}
+    />
     <PageTitle>{tp(book.title)}</PageTitle>
     {
       mainAuthors.length > 0 && (
@@ -163,16 +124,6 @@ const categoryBooks = await getCollection(
       )
     }
     {book.claim && <Blockquote text={book.claim} />}
-    <div class="my-16 grid grid-cols-2 gap-2 px-16 text-sm text-gray-600">
-      <div class="flex items-center gap-2">
-        <Icon name="ph:barcode-light" class="text-brand-first-500 size-6 font-thin" />
-        {book.isbn}
-      </div>
-      <div class="flex items-center gap-2">
-        <Icon name="ph:file-light" class="text-brand-first-500 size-6 font-thin" />
-        {book.pagesCount}
-      </div>
-    </div>
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
     <div class="clear-both"></div>
   </Section>
@@ -182,6 +133,24 @@ const categoryBooks = await getCollection(
         <AuthorExcerpt slug={author.data.slug} roles={roles} />
       ))
     }
+  </Section>
+  <Section>
+    <BookPagination
+      prev={prevBook
+        ? {
+            slug: prevBook.data.slug,
+            title: prevBook.data.title,
+            cover: prevBook.data.cover,
+          }
+        : undefined}
+      next={nextBook
+        ? {
+            slug: nextBook.data.slug,
+            title: nextBook.data.title,
+            cover: nextBook.data.cover,
+          }
+        : undefined}
+    />
   </Section>
   <Section className="grid max-w-3xl grid-cols-3">
     {
