@@ -31,7 +31,6 @@ const book = defineCollection({
       height: z.number().optional(),
       paper: z.string().optional(),
       font: z.string().optional(),
-      vazba: z.string().optional(),
       isbn: z.string().optional(),
       cover: image(),
       authors: z.array(

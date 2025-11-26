@@ -76,11 +76,6 @@ export const BooksCollection: Collection = {
     },
     {
       type: 'string',
-      name: 'binding',
-      label: 'Vazba',
-    },
-    {
-      type: 'string',
       name: 'isbn',
       label: 'ISBN',
     },

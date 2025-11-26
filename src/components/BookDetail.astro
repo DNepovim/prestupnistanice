@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { getCollection, getEntries, getEntry } from 'astro:content'
+import { Icon } from 'astro-icon/components'
 
 import Book from '../components/Book.astro'
 import BookPagination from '../components/BookPagination.astro'
@@ -37,6 +38,54 @@ const prevBook = books[currentBookIndex - 1]
 const nextBook = books[currentBookIndex + 1]
 
 const { data: book } = entry
+
+const data = [
+  ...(book.pagesCount
+    ? [
+        {
+          icon: 'ph:book-open-text-thin',
+          label: 'Počet stran',
+          text: book.pagesCount,
+        },
+      ]
+    : []),
+  ...(book.width && book.height
+    ? [
+        {
+          icon: 'ph:arrows-out-simple-thin',
+          label: 'Rozměry',
+          text: `${String(book.width)} × ${String(book.height)} mm`,
+        },
+      ]
+    : []),
+  ...(book.paper
+    ? [
+        {
+          icon: 'ph:file-thin',
+          label: 'Papír',
+          text: book.paper,
+        },
+      ]
+    : []),
+  ...(book.font
+    ? [
+        {
+          icon: 'ph:text-aa-thin',
+          label: 'Písmo',
+          text: book.font,
+        },
+      ]
+    : []),
+  ...(book.isbn
+    ? [
+        {
+          icon: 'ph:barcode-thin',
+          label: 'ISBN',
+          text: book.isbn,
+        },
+      ]
+    : []),
+]
 
 const mainAuthors = await getEntries(
   book.authors.filter((b) => b.isMain).map((b) => b.slug),
@@ -115,15 +164,29 @@ const categoryBooks = await getCollection(
       )
     }
     {
-      <Image
-        alt={book.title}
-        src={book.cover}
-        width={336}
-        height={480}
-        class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
-      />
+      (
+        <Image
+          alt={book.title}
+          src={book.cover}
+          width={336}
+          height={480}
+          class="animate-small-rotate-on-load mb-4 border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
+        />
+      )
     }
     {book.claim && <Blockquote text={book.claim} />}
+    {
+      data.length > 0 && (
+        <div class="flex flex-col font-alt gap-1 mb-8 text-brand-first-500 items-end">
+          {data.map((d) => (
+            <div title={d.label} class="flex gap-4 items-center">
+              <Icon class="size-6" name={d.icon} />
+              {d.text}
+            </div>
+          ))}
+        </div>
+      )
+    }
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
     <div class="clear-both"></div>
   </Section>
