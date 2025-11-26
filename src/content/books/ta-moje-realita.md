@@ -26,6 +26,10 @@ authors:
     slug: julie-machacova
     role:
       - typesetting
+  - author: src/content/authors/filip-komberec.md
+    slug: filip-komberec
+    role:
+      - corrector
 cover: /images/ta-moje-realita.jpg
 category: poetry
 color: '#535b59'
