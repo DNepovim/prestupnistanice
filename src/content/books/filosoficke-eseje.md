@@ -18,6 +18,10 @@ authors:
     slug: tlama-design
     role:
       - typesetting
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - reviewer
 cover: /images/filosoficke-eseje.jpg
 category: philosophy
 color: '#b26436'
