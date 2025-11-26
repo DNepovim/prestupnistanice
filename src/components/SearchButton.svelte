@@ -3,14 +3,16 @@
 
   import SearchModal from './SearchModal.svelte'
 
-  export let data: {
+  type SearchItem = {
     slug: string
     title: string
-    subtitle: string
-    image: string
+    subtitle?: string
+    image?: { src: string }
     link: string
     type: 'book' | 'author'
-  }[]
+  }
+
+  export let data: SearchItem[]
 
   let isOpen = false
 

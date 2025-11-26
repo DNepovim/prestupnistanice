@@ -4,14 +4,16 @@
 
   import { cn } from '../utils/cn'
 
-  export let data: {
+  type SearchItem = {
     slug: string
     title: string
-    subtitle: string
-    image: string
+    subtitle?: string
+    image?: { src: string }
     link: string
     type: 'book' | 'author'
-  }[]
+  }
+
+  export let data: SearchItem[]
 
   export let toggle: (is?: boolean) => void
 
@@ -123,7 +125,7 @@
             >
               {#if book.item.image}
                 <img
-                  src={book.item.image}
+                  src={book.item.image.src}
                   alt={book.item.title}
                   class={cn(
                     'w-20 rounded shadow-2xl',
