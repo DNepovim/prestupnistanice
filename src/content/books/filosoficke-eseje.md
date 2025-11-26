@@ -14,6 +14,10 @@ authors:
     slug: anezka-skalakova
     role:
       - cover
+  - author: src/content/authors/tlama-design.md
+    slug: tlama-design
+    role:
+      - typesetting
 cover: /images/filosoficke-eseje.jpg
 category: philosophy
 color: '#b26436'
