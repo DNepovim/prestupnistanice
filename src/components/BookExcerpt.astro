@@ -33,8 +33,9 @@ const authors = await getEntries(
         <Image
           alt={b.title}
           src={b.cover}
-          width={157.5}
-          height={157.5}
+          width={158}
+          widths={[316, 158]}
+          height={200}
           class="border border-gray-200 shadow-2xl"
         />
       </a>
@@ -44,7 +45,7 @@ const authors = await getEntries(
     <div class="max-sm:flex max-sm:flex-col">
       <h2
         style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
-        class="peer text-brand-second-100 font-head font-liga group text-shadow-lg relative inline text-5xl font-bold tracking-wide leading-[1.2em]"
+        class="peer text-brand-second-100 font-head font-liga group relative inline text-5xl leading-[1.2em] font-bold tracking-wide text-shadow-lg"
       >
         <a href={routes.books.detail(slug)}>{tp(b.title)}</a>
       </h2>

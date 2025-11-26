@@ -29,52 +29,56 @@ const { prev, next, class: className } = Astro.props
   class="text-brand-first-500 mt-6 flex items-center justify-between px-8"
   class:list={[className]}
 >
-  {
-    prev && (
-      <FloatingPopup client:visible>
-        <ArrowLink hasArrowLeft href={routes.books.detail(prev.slug)} class="text-xs">
-          {prev.title}
-        </ArrowLink>
-        {prev.cover && (
-          <div slot="popup" class="w-[168px]">
-            <Image
-              alt={prev.title}
-              src={prev.cover}
-              width={160}
-              height={228}
-              widths={[120, 160, 200]}
-              sizes="160px"
-              loading="eager"
-              decoding="async"
-              class="h-auto w-full border border-gray-200 shadow-xl"
-            />
-          </div>
-        )}
-      </FloatingPopup>
-    )
-  }
-  {
-    next && (
-      <FloatingPopup client:visible>
-        <ArrowLink href={routes.books.detail(next.slug)} class="text-xs">
-          {next.title}
-        </ArrowLink>
-        {next.cover && (
-          <div slot="popup" class="w-[168px]">
-            <Image
-              alt={next.title}
-              src={next.cover}
-              width={160}
-              height={228}
-              widths={[120, 160, 200]}
-              sizes="160px"
-              loading="eager"
-              decoding="async"
-              class="h-auto w-full border border-gray-200 shadow-xl"
-            />
-          </div>
-        )}
-      </FloatingPopup>
-    )
-  }
+  <div>
+    {
+      prev && (
+        <FloatingPopup client:visible>
+          <ArrowLink hasArrowLeft href={routes.books.detail(prev.slug)} class="text-xs">
+            {prev.title}
+          </ArrowLink>
+          {prev.cover && (
+            <div slot="popup" class="w-[168px]">
+              <Image
+                alt={prev.title}
+                src={prev.cover}
+                width={160}
+                height={228}
+                widths={[120, 160, 200]}
+                sizes="160px"
+                loading="eager"
+                decoding="async"
+                class="h-auto w-full border border-gray-200 shadow-xl"
+              />
+            </div>
+          )}
+        </FloatingPopup>
+      )
+    }
+  </div>
+  <div>
+    {
+      next && (
+        <FloatingPopup client:visible>
+          <ArrowLink href={routes.books.detail(next.slug)} class="text-xs">
+            {next.title}
+          </ArrowLink>
+          {next.cover && (
+            <div slot="popup" class="w-[168px]">
+              <Image
+                alt={next.title}
+                src={next.cover}
+                width={160}
+                height={228}
+                widths={[120, 160, 200]}
+                sizes="160px"
+                loading="eager"
+                decoding="async"
+                class="h-auto w-full border border-gray-200 shadow-xl"
+              />
+            </div>
+          )}
+        </FloatingPopup>
+      )
+    }
+  </div>
 </div>
