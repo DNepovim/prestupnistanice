@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content'
+import { isOneOf } from 'narrowland'
 
 import AuthorSmall from '../components/AuthorSmall.astro'
 import BooksGrid from '../components/BooksGrid.astro'
@@ -33,8 +34,22 @@ const authorRolesMap = books
     return { ...acc, [slug]: mergedRoles }
   }, {})
 
+const boardRolesMap = {
+  'jakub-skalak': 'ředitel nakladatelství',
+  'petr-blaha': 'člen redakční rady',
+  'dominik-blaha': 'člen redakční rady',
+}
+
+const boardMembers = Object.entries(boardRolesMap).map(([slug, role]) => ({
+  ...authors.find((a) => a.data.slug === slug),
+  role,
+}))
+
+console.log(boardMembers)
+
 const collaborators = authors
   .filter((a) => authorRolesMap[a.data.slug])
+  .filter((a) => !isOneOf(a.data.slug, Object.keys(boardRolesMap)))
   .map((a) => ({
     ...a,
     roles: authorRolesMap[a.data.slug],
@@ -44,9 +59,18 @@ const collaborators = authors
 <Layout siteTitle={page.title} siteDescription={page.content?.substring(0, 900) ?? ''}>
   <Section>
     <PageTitle>{page.title}</PageTitle>
-    <div class="mx-auto max-w-2xl leading-8">
+    <div class="mx-auto mt-16 max-w-2xl leading-8">
       {entry.body && <Markdown text={entry.body} />}
     </div>
+  </Section>
+  <Section title="Redakční rada">
+    <BooksGrid>
+      {
+        boardMembers.map(({ data, role }) => (
+          <AuthorSmall slug={data?.slug ?? ''} role={role} imperfect />
+        ))
+      }
+    </BooksGrid>
   </Section>
   <Section title="Spolupracují s námi">
     <BooksGrid>

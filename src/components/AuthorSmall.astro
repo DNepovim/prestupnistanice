@@ -12,11 +12,12 @@ import { rolesMap } from '../utils/rolesMap'
 type Props = {
   slug: string
   imperfect?: boolean
-  roles: string[]
+  roles?: string[]
+  role?: string
   col?: string
 }
 
-const { slug, imperfect, roles, col } = Astro.props
+const { slug, imperfect, roles, role, col } = Astro.props
 
 const entry = await getEntry('author', slug)
 
@@ -48,9 +49,12 @@ const { data: author } = entry
     {
       !imperfect && (
         <div class="text-sm text-gray-500">
-          {joinWords(
-            roles.map((r) => rolesMap[r]?.perfect[author.gender]).filter(isDefined),
-          )}
+          {joinWords([
+            ...(roles ?? [])
+              .map((r) => rolesMap[r]?.perfect[author.gender])
+              .filter(isDefined),
+            ...(role ? [role] : []),
+          ])}
         </div>
       )
     }
@@ -70,9 +74,12 @@ const { data: author } = entry
     {
       imperfect && (
         <div class="text-sm text-gray-500">
-          {joinWords(
-            roles.map((r) => rolesMap[r]?.imperfect[author.gender]).filter(isDefined),
-          )}
+          {joinWords([
+            ...(roles ?? [])
+              .map((r) => rolesMap[r]?.imperfect[author.gender])
+              .filter(isDefined),
+            ...(role ? [role] : []),
+          ])}
         </div>
       )
     }
