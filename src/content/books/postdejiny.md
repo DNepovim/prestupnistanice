@@ -14,6 +14,10 @@ authors:
     slug: petr-blaha
     role:
       - translate
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - supereditor
 cover: /images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
