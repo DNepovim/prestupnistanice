@@ -1,7 +1,9 @@
 ---
 import { Image } from 'astro:assets'
 import { getCollection, getEntries, getEntry } from 'astro:content'
+import { Icon } from 'astro-icon/components'
 
+import ArrowLink from '../components/ArrowLink.astro'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
 import PageTitle from '../components/PageTitle.astro'
@@ -21,11 +23,19 @@ type Props = {
 
 const { slug } = Astro.props
 
+const books = (await getCollection('book'))
+  .toReversed()
+  .toSorted((a, b) => b.data.date - a.data.date)
+
 const entry = await getEntry('book', slug)
 
 if (!entry) {
   return
 }
+
+const currentBookIndex = books.findIndex((b) => b.data.slug === slug)
+const prevBook = books[currentBookIndex - 1]
+const nextBook = books[currentBookIndex + 1]
 
 const { data: book } = entry
 
@@ -63,6 +73,22 @@ const categoryBooks = await getCollection(
   secondColor={book.bgColor}
 >
   <Section>
+    <div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
+      {
+        prevBook && (
+          <ArrowLink hasArrowLeft href={routes.books.detail(prevBook.data.slug)} class="text-xs">
+            {prevBook.data.title}
+          </ArrowLink>
+        )
+      }
+      {
+        nextBook && (
+          <ArrowLink href={routes.books.detail(nextBook.data.slug)} class="text-xs">
+            {nextBook.data.title}
+          </ArrowLink>
+        )
+      }
+    </div>
     <PageTitle>{tp(book.title)}</PageTitle>
     {
       mainAuthors.length > 0 && (
@@ -98,6 +124,16 @@ const categoryBooks = await getCollection(
       )
     }
     {book.claim && <Blockquote text={book.claim} />}
+    <div class="my-16 grid grid-cols-2 gap-2 px-16 text-sm text-gray-600">
+      <div class="flex items-center gap-2">
+        <Icon name="ph:barcode-light" class="text-brand-first-500 size-6 font-thin" />
+        {book.isbn}
+      </div>
+      <div class="flex items-center gap-2">
+        <Icon name="ph:file-light" class="text-brand-first-500 size-6 font-thin" />
+        {book.pagesCount}
+      </div>
+    </div>
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
     <div class="clear-both"></div>
   </Section>
