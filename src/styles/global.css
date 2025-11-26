@@ -92,4 +92,17 @@
       transform: translateY(0);
     }
   }
+  @keyframes cartFall {
+    0% {
+      transform: translate(-50%, -24px) scale(0.95);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, 72px) scale(0.95);
+      opacity: 0;
+    }
+  }
 }

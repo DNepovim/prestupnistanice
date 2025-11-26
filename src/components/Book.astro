@@ -7,6 +7,7 @@ import { routes } from '@/routes'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
 import { tp } from '@/utils/tp'
 
+import AddToCart from './AddToCart.svelte'
 import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
@@ -76,6 +77,9 @@ const authors = await getEntries(
           ))
         }
       </div>
+      <div class="mt-3">
+        <AddToCart client:load slug={slug} />
+      </div>
     </div>
-  </article></Theme
->
+  </article>
+</Theme>

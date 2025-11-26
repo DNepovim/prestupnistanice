@@ -6,6 +6,7 @@ import ArrowLink from '@/components/ArrowLink.astro'
 import { routes } from '@/routes'
 import { tp } from '@/utils/tp'
 
+import AddToCart from './AddToCart.svelte'
 import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
@@ -96,7 +97,8 @@ const authors = await getEntries(
     </div>
     {
       (
-        <div class="flex justify-end pr-4">
+        <div class="flex items-end flex-col pr-4">
+          <AddToCart client:load slug={slug} />
           <ArrowLink href={routes.books.detail(slug)}>více o knize</ArrowLink>
         </div>
       )
