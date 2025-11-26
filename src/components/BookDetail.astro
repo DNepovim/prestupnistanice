@@ -40,6 +40,15 @@ const nextBook = books[currentBookIndex + 1]
 const { data: book } = entry
 
 const data = [
+  ...(book.date
+    ? [
+        {
+          icon: 'ph:calendar-thin',
+          label: 'Rok uvedení',
+          text: book.date,
+        },
+      ]
+    : []),
   ...(book.pagesCount
     ? [
         {
