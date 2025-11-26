@@ -14,6 +14,10 @@ authors:
     slug: aida-lihova-legnerova
     role:
       - illustration
+  - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
+    role:
+      - supereditor
 cover: /images/ta-moje-realita.jpg
 category: poetry
 color: '#535b59'
