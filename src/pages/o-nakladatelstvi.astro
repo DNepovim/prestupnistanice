@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
 import { isOneOf } from 'narrowland'
 
@@ -7,8 +8,37 @@ import BooksGrid from '../components/BooksGrid.astro'
 import Markdown from '../components/Markdown.astro'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
+import LogoFondBudoucnosti from '../content/images/fondBudoucnosti.png'
+import LogoFondKultury from '../content/images/fondKultury.png'
+import LogoGi from '../content/images/gi.png'
+import LogoKima from '../content/images/kima.png'
+import LogoMk from '../content/images/mk.png'
 import Layout from '../layouts/Layout.astro'
 import { getSlugFromPath } from '../utils/getSlugFromPath'
+
+const sponsors = [
+  { title: 'Ministerstov kultury ČR', link: 'https://www.mk.gov.cz/', logo: LogoMk },
+  {
+    title: 'Goethe institut',
+    link: 'https://www.goethe.de/ins/cz/cs/index.html',
+    logo: LogoGi,
+  },
+  {
+    title: 'Česko-německý fond budoucnosti',
+    link: 'https://www.fondbudoucnosti.cz/',
+    logo: LogoFondBudoucnosti,
+  },
+  {
+    title: 'Státní fond kultury ČR',
+    link: 'https://www.mk.gov.cz/statni-fond-kultury-cr-cs-42',
+    logo: LogoFondKultury,
+  },
+  {
+    title: 'Jiří Málek – KIMA Transport s. r. o.',
+    link: 'https://www.kimatransport.cz/',
+    logo: LogoKima,
+  },
+]
 
 const entry = await getEntry('page', 'o-nakladatelstvi')
 
@@ -80,5 +110,22 @@ const collaborators = authors
         ))
       }
     </BooksGrid>
+  </Section>
+  <Section title="Podporují nás">
+    <div class="flex items-center justify-center gap-8 flex-wrap">
+      {
+        sponsors.map((s) => (
+          <a href={s.link} target="_blank">
+            <Image
+              alt={s.title}
+              src={s.logo}
+              width={150}
+              height={100}
+              widths={[300, 150]}
+            />
+          </a>
+        ))
+      }
+    </div>
   </Section>
 </Layout>
