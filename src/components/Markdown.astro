@@ -21,7 +21,7 @@ marked.use({
     strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
     paragraph: ({ text }) =>
-      html`<p class="text-justify hypens-auto mb-6 indent-12 break-words">
+      html`<p class="text-justify hyphens-auto hyphenate mb-6 indent-12 break-words">
         ${parseInline(tp(text))}
       </p>`,
     link: ({ text, href }) =>
