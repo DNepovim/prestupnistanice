@@ -12,6 +12,11 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/dominik-blaha.md
+    slug: dominik-blaha
+    role:
+      - cover
+      - typesetting
 cover: /images/provincionalistovo-bloudeni-akademickymi-chodbami.jpg
 category: philosophy
 color: '#562e2e'
