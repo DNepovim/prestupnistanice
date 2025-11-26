@@ -22,6 +22,11 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/filip-skalak.md
+    slug: filip-skalak
+    role:
+      - cover
+      - typesetting
 cover: /images/pesimismus.jpg
 category: philosophy
 color: '#373737'
