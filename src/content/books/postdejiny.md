@@ -2,12 +2,18 @@
 slug: postdejiny
 title: Postdějiny
 date: 2018
+pagesCount: 121
+isbn: 978-80-270-4476-4
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser
     isMain: true
     role:
       - author
+  - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
+    role:
+      - translate
 cover: /images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
@@ -17,5 +23,6 @@ claim: >-
   vyjadřují současný dějinný přelom, který se vyznačuje přechodem z tradiční
   textové kultury do prostředí, v němž získávají převahu technické obrazy.
 ---
+
 
 Člověk se ocitá v zajetí aparátů a jejich programů, nad kterými stále zřetelněji ztrácí kontrolu. Původní lidské očekávání se proměňuje v absurdní hru, při níž se rozplývá půda pod nohama. Dřívější snaha udílet dějinám nějaké smysluplné zacílení viditelně troskotá. Nástup postdějinného období zasahuje veškerou strukturu společenského života. Flusser si vybírá některé jevy, na nichž se sobě vlastní přesvědčivostí ukazuje hloubku proměny. Takto se zastavuje nejen u posunů významu práce či vědění, ale nabízí vhled i do postdějinného přizpůsobování bydlení či odívání.
