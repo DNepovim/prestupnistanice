@@ -30,6 +30,10 @@ authors:
     slug: kristyna-vesnenkova
     role:
       - cover
+  - author: src/content/authors/tlama-design.md
+    slug: tlama-design
+    role:
+      - typesetting
 cover: /images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
