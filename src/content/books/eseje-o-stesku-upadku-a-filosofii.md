@@ -19,7 +19,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: /images/eseje-o-stesku-upadku-a-filosofii.jpg
+cover: ../images/eseje-o-stesku-upadku-a-filosofii.jpg
 category: philosophy
 color: '#2a5365'
 bgColor: '#417a97'

@@ -28,7 +28,7 @@ authors:
     role:
       - cover
       - illustration
-cover: /images/prometheus-spitteler.jpg
+cover: ../images/prometheus-spitteler.jpg
 category: philosophy
 color: '#461200'
 bgColor: '#872f01'

@@ -18,7 +18,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: /images/tati.jpg
+cover: ../images/tati.jpg
 category: forKids
 color: '#775c4b'
 bgColor: '#81937c'

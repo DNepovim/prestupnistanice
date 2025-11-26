@@ -7,7 +7,7 @@ surnameSecond: Lessinga
 birthDate: 1872-02-08T00:00:00.000Z
 deathDate: 1933-08-31T00:00:00.000Z
 gender: male
-image: /images/lessing.png
+image: ../images/lessing.png
 claim: >-
   Německý filosof a novinář, první oběť fašismu v ČSR. V knize o hluku odhaluje
   hlučnost jako zrcadlo chaosu moderní doby.

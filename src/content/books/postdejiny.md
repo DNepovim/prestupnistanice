@@ -34,7 +34,7 @@ authors:
     slug: tlama-design
     role:
       - typesetting
-cover: /images/postdejiny.jpg
+cover: ../images/postdejiny.jpg
 category: philosophy
 color: '#b85c63'
 bgColor: '#e7e4dd'

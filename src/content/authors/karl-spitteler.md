@@ -7,7 +7,7 @@ surnameSecond: Spittelera
 birthDate: 1845-04-24T00:00:00.000Z
 deathDate: 1924-12-29T00:00:00.000Z
 gender: male
-image: /images/spitteler.png
+image: ../images/spitteler.png
 claim: >-
   Švýcarský básník a prozaik, Nobelova cena za literaturu 1919. Autor Prométhea,
   jenž několikrát stál na prahu Nobelovy ceny, mistr mýtické a vizionářské

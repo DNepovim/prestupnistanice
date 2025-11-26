@@ -7,7 +7,7 @@ surnameSecond: Corentina
 birthDate: 1936-02-16T00:00:00.000Z
 deathDate: 2022-11-07T00:00:00.000Z
 gender: male
-image: /images/corentin.png
+image: ../images/corentin.png
 claim: >-
   Francouzský kreslíř a vypravěč, který proměnil dětské strachy ve zdroj smíchu.
   Autor kultovních knih, kde se fantazie a humor originálně potkávají.

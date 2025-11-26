@@ -39,7 +39,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: /images/kachna-smrt-a-tulipan.jpg
+cover: ../images/kachna-smrt-a-tulipan.jpg
 category: forKids
 color: '#dd6a55'
 bgColor: '#efa931'

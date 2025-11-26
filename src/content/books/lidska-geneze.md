@@ -47,7 +47,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: /images/lidska-geneze.png
+cover: ../images/lidska-geneze.png
 category: philosophy
 color: '#564019'
 bgColor: '#b87600'

@@ -7,7 +7,7 @@ surnameSecond: Spenglera
 birthDate: 1880-05-29T00:00:00.000Z
 deathDate: 1936-05-08T00:00:00.000Z
 gender: male
-image: /images/spengler.png
+image: ../images/spengler.png
 claim: >-
   Německý filosof a historik, autor slavného Zániku Západu. Tvůrce „morfologie
   dějin“, provokativní kritik modernity a prorok kulturního pesimismu.

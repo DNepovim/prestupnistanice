@@ -27,7 +27,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: /images/pesimismus.jpg
+cover: ../images/pesimismus.jpg
 category: philosophy
 color: '#373737'
 bgColor: '#e3e1d6'

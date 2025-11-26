@@ -7,7 +7,7 @@ surnameSecond: Flussera
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
 gender: male
-image: /images/vilem-flusser.jpg
+image: ../images/vilem-flusser.jpg
 claim: >-
   Osobitý filosof na pomezí české, německé a židovské kultury, český myslitel,
   který našel domov ve světě. Filosof komunikace a technických obrazů, jehož

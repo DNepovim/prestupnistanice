@@ -5,7 +5,7 @@ firstnameSecond: Anny
 surname: Anisimová
 surnameSecond: Anisimové
 gender: female
-image: /images/anisimova.webp
+image: ../images/anisimova.webp
 claim: "Ruská novinářka, redaktorka a\_spisovatelka knih pro děti."
 ---
 

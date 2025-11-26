@@ -27,7 +27,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: /images/cesty-do-utopie.jpg
+cover: ../images/cesty-do-utopie.jpg
 category: philosophy
 color: '#153341'
 bgColor: '#b8b9a7'

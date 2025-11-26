@@ -51,7 +51,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: /images/pegas_cover.png
+cover: ../images/pegas_cover.png
 category: novel
 color: '#51609b'
 bgColor: '#ec008c'

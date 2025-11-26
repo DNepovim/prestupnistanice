@@ -7,7 +7,7 @@ surnameSecond: Erlbrucha
 birthDate: 1948-06-29T22:00:00.000Z
 deathDate: 2022-01-10T23:00:00.000Z
 gender: male
-image: /images/erlbruch.png
+image: ../images/erlbruch.png
 claim: "Německý autor a\_ilustrátor, který uměl vyprávět o\_životě i\_smrti s\_úsměvem."
 ---
 

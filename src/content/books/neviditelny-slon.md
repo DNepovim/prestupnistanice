@@ -48,7 +48,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: /images/neviditelny-slon.GIF
+cover: ../images/neviditelny-slon.GIF
 category: forKids
 color: '#434991'
 bgColor: '#e7d14c'

@@ -35,7 +35,7 @@ authors:
     slug: jakub-chavalka
     role:
       - reviewer
-cover: /images/nevychovne-eseje-o-vychove.jpg
+cover: ../images/nevychovne-eseje-o-vychove.jpg
 category: philosophy
 color: '#318ccb'
 bgColor: '#f3dbe0'

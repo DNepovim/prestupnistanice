@@ -19,7 +19,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: /images/dopisy-z-nerevolucni-doby.jpg
+cover: ../images/dopisy-z-nerevolucni-doby.jpg
 category: philosophy
 color: '#4f0708'
 bgColor: '#bda19c'

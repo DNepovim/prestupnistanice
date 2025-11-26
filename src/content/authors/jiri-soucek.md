@@ -7,7 +7,7 @@ surnameSecond: Součka
 birthDate: 1980-07-10T00:00:00.000Z
 deathDate: 2009-11-28T00:00:00.000Z
 gender: male
-image: /images/soucek.jpg
+image: ../images/soucek.jpg
 claim: >-
   Básník, filosof, divadelník, člověk s hlavou v oblacích a nohama pevně v
   máchovském kraji.

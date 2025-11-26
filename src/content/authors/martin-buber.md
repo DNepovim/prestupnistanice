@@ -7,7 +7,7 @@ surnameSecond: Bubera
 birthDate: 1878-02-08T00:00:00.000Z
 deathDate: 1965-06-13T00:00:00.000Z
 gender: male
-image: /images/buber.jpg
+image: ../images/buber.jpg
 claim: >-
   Židovský filosof dialogu, vypravěč židovských legend a překladatel Bible.
   Myslitel, který ukázal, že „celý skutečný život je setkání“.
