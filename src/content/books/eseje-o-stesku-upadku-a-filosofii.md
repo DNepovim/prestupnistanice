@@ -14,6 +14,11 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/dominik-blaha.md
+    slug: dominik-blaha
+    role:
+      - cover
+      - typesetting
 cover: /images/eseje-o-stesku-upadku-a-filosofii.jpg
 category: philosophy
 color: '#2a5365'
