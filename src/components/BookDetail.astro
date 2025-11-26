@@ -6,6 +6,7 @@ import { Icon } from 'astro-icon/components'
 import ArrowLink from '../components/ArrowLink.astro'
 import Book from '../components/Book.astro'
 import BooksGrid from '../components/BooksGrid.astro'
+import FloatingPopup from '../components/FloatingPopup.svelte'
 import PageTitle from '../components/PageTitle.astro'
 import Section from '../components/Section.astro'
 import Layout from '../layouts/Layout.astro'
@@ -76,16 +77,54 @@ const categoryBooks = await getCollection(
     <div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
       {
         prevBook && (
-          <ArrowLink hasArrowLeft href={routes.books.detail(prevBook.data.slug)} class="text-xs">
-            {prevBook.data.title}
-          </ArrowLink>
+          <FloatingPopup client:visible>
+            <ArrowLink
+              hasArrowLeft
+              href={routes.books.detail(prevBook.data.slug)}
+              class="text-xs"
+            >
+              {prevBook.data.title}
+            </ArrowLink>
+            {prevBook.data.cover && (
+              <div slot="popup" class="w-20">
+                <Image
+                  alt={prevBook.data.title}
+                  src={prevBook.data.cover}
+                  width={160}
+                  height={228}
+                  widths={[120, 160, 200]}
+                  sizes="160px"
+                  loading="eager"
+                  decoding="async"
+                  class="h-auto w-full border border-gray-200 shadow-xl"
+                />
+              </div>
+            )}
+          </FloatingPopup>
         )
       }
       {
         nextBook && (
-          <ArrowLink href={routes.books.detail(nextBook.data.slug)} class="text-xs">
-            {nextBook.data.title}
-          </ArrowLink>
+          <FloatingPopup client:visible>
+            <ArrowLink href={routes.books.detail(nextBook.data.slug)} class="text-xs">
+              {nextBook.data.title}
+            </ArrowLink>
+            {nextBook.data.cover && (
+              <div slot="popup" class="w-20">
+                <Image
+                  alt={nextBook.data.title}
+                  src={nextBook.data.cover}
+                  width={160}
+                  height={228}
+                  widths={[120, 160, 200]}
+                  sizes="160px"
+                  loading="eager"
+                  decoding="async"
+                  class="h-auto w-full border border-gray-200 shadow-xl"
+                />
+              </div>
+            )}
+          </FloatingPopup>
         )
       }
     </div>
