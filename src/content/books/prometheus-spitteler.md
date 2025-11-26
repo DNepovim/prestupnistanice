@@ -15,6 +15,10 @@ authors:
     isMain: true
     role:
       - translate
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - supereditor
 cover: /images/prometheus-spitteler.jpg
 category: philosophy
 color: '#461200'
