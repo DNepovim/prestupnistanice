@@ -19,6 +19,10 @@ authors:
     slug: jakub-skalak
     role:
       - supereditor
+  - author: src/content/authors/petr-blaha.md
+    slug: petr-blaha
+    role:
+      - editor
 cover: /images/prometheus-spitteler.jpg
 category: philosophy
 color: '#461200'
