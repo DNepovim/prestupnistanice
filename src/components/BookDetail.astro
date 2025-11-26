@@ -140,6 +140,7 @@ const categoryBooks = await getCollection(
         ? {
             slug: prevBook.data.slug,
             title: prevBook.data.title,
+            order: prevBook.data.order,
             cover: prevBook.data.cover,
           }
         : undefined}
@@ -147,6 +148,7 @@ const categoryBooks = await getCollection(
         ? {
             slug: nextBook.data.slug,
             title: nextBook.data.title,
+            order: nextBook.data.order,
             cover: nextBook.data.cover,
           }
         : undefined}
