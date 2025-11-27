@@ -5,6 +5,7 @@ import { getEntries, getEntry } from 'astro:content'
 import ArrowLink from '../components/ArrowLink.astro'
 import { routes } from '../routes'
 import { tp } from '../utils/tp'
+import FloatingPopup from './FloatingPopup.svelte'
 
 type Props = {
   class?: string
@@ -26,21 +27,24 @@ const authors = await getEntries(
 )
 ---
 
-<article class:list={['relative max-xs:flex max-xs:flex-col flex gap-8', className]}>
-  <span class="-z-1 text-brand-second-100/20 font-head bold absolute -top-10 -left-6 text-6xl"
+<article class:list={['max-xs:flex max-xs:flex-col relative flex gap-8', className]}>
+  <span
+    class="text-brand-second-100/20 font-head bold absolute -top-10 -left-6 -z-1 text-6xl"
     >{b.order}</span
   >
   {
-    <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
-      <Image
-        alt={b.title}
-        src={b.cover}
-        width={158}
-        widths={[316, 158]}
-        height={200}
-        class="border border-gray-200 shadow-2xl"
-      />
-    </a>
+    (
+      <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
+        <Image
+          alt={b.title}
+          src={b.cover}
+          width={158}
+          widths={[316, 158]}
+          height={200}
+          class="border border-gray-200 shadow-2xl"
+        />
+      </a>
+    )
   }
   <div class="flex flex-4 flex-col gap-4">
     <div class="max-sm:flex max-sm:flex-col">
@@ -56,21 +60,38 @@ const authors = await getEntries(
         >
         </div>
       </div>
-      <p class="inline text-xl text-gray-500">
+      <div class="text-xl inline text-gray-500">
         {
           authors.map(({ data: a }, index) => (
-            <span class="whitespace-nowrap">
+            <>
               {index !== 0 ? ', ' : ''}
-              <a
-                class="group font-alt text-gray-500 transition-colors hover:text-black"
-                href={routes.authors.detail(a.slug)}
-              >
-                {a.firstname} {a.surname}
-              </a>
-            </span>
+              <FloatingPopup client:visible>
+                <a
+                  class="group font-alt text-gray-500 transition-colors hover:text-black"
+                  href={routes.authors.detail(a.slug)}
+                >
+                  {a.firstname} {a.surname}
+                </a>
+                {a.image && (
+                  <div slot="popup" class="w-[168px]">
+                    <Image
+                      alt={`${a.firstname} ${a.surname}`}
+                      src={a.image}
+                      width={160}
+                      height={228}
+                      widths={[120, 160, 200]}
+                      sizes="160px"
+                      loading="eager"
+                      decoding="async"
+                      class="h-auto w-full border border-gray-200 shadow-xl"
+                    />
+                  </div>
+                )}
+              </FloatingPopup>
+            </>
           ))
         }
-      </p>
+      </div>
     </div>
 
     <div class="min-sm:pl-8">

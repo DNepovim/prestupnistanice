@@ -2,9 +2,11 @@
 import { Image } from 'astro:assets'
 import { getEntries, getEntry } from 'astro:content'
 
+import Theme from '../components/Theme.astro'
 import { routes } from '../routes'
 import { getSlugFromPath } from '../utils/getSlugFromPath'
 import { tp } from '../utils/tp'
+import FloatingPopup from './FloatingPopup.svelte'
 
 type Props = {
   slug: string
@@ -22,46 +24,68 @@ const { data: b } = entry
 
 const link = routes.books.detail(slug)
 
-const authors = await getEntries(b.authors.filter(a => a.isMain).map(({ slug }) => slug))
+const authors = await getEntries(
+  b.authors.filter((a) => a.isMain).map(({ slug }) => slug),
+)
 ---
 
-<article class="jus flex w-64 flex-col justify-end gap-4 min-md:mb-12">
-  {
-    (
-      <a href={link}>
-        {b.cover ? (
+<Theme firstColor={b.color} secondColor={b.bgColor}>
+  <article class="jus flex w-64 justify-end gap-4 min-md:mb-12">
+    {
+      (
+        <a href={link} class="block width-8 shrink-0" >
           <Image
             alt={b.title}
             src={b.cover}
             width={157.5}
             height={225}
-            class="-rotate-2 border border-gray-200 shadow-2xl"
+            class="w-24 -rotate-2 border border-gray-200 shadow-2xl"
           />
-        ) : (
-          <div class="h-40 w-30 bg-gray-300" />
-        )}
-      </a>
-    )
-  }
+        </a>
+      )
+    }
 
-  <div class="min-h-30">
-    <h2 class="font-alt text-2xl" style={{ color: b.color ?? 'black' }}>
-      <a href={link}>{tp(b.title)}</a>
-    </h2>
-    <p>
-      {
-        authors.map((a, index) => (
-          <>
-            {index !== 0 ? ', ' : ''}
-            <a
-              class="group font-alt text-gray-500 transition-colors hover:text-black"
-              href={routes.authors.detail(getSlugFromPath(a.data.slug))}
-            >
-              {a.data.firstname} {a.data.surname}
-            </a>
-          </>
-        ))
-      }
-    </p>
-  </div>
-</article>
+    <div class="flex-1">
+      <h2 class="group font-alt text-brand-first-500 text-xl">
+        <a class="relative" href={link}
+          >{tp(b.title)}
+          <span
+            class="bg-brand-first-500 absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
+          ></span>
+        </a>
+      </h2>
+      <div class="text-gray-500">
+        {
+          authors.map((a, index) => (
+            <>
+              {index !== 0 ? ', ' : ''}
+              <FloatingPopup client:visible>
+                <a
+                  class="group font-alt whitespace-nowrap transition-colors hover:text-black"
+                  href={routes.authors.detail(getSlugFromPath(a.data.slug))}
+                >
+                  {a.data.firstname} {a.data.surname}
+                </a>
+                {a.data.image && (
+                  <div slot="popup" class="w-[168px]">
+                    <Image
+                      alt={`${a.data.firstname} ${a.data.surname}`}
+                      src={a.data.image}
+                      width={160}
+                      height={228}
+                      widths={[120, 160, 200]}
+                      sizes="160px"
+                      loading="eager"
+                      decoding="async"
+                      class="h-auto w-full border border-gray-200 shadow-xl"
+                    />
+                  </div>
+                )}
+              </FloatingPopup>
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </article></Theme
+>

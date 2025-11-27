@@ -9,6 +9,7 @@
   let top = '0px'
   let hasMouseMoved = false
   const onEnter = () => {
+    console.log("enter")
     if (hasMouseMoved) visible = true
   }
   const onLeave = () => { visible = false }
