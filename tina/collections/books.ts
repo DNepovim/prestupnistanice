@@ -18,7 +18,7 @@ export const BooksCollection: Collection = {
     beforeSubmit: ({ values }: { values: Books }) => ({
       ...values,
       slug: slugify(values.title),
-      authors: values.authors?.map((a) => ({
+      authors: ( values.authors ?? [] ).map((a) => ({
         ...a,
         slug: getSlugFromPath(a.author),
       })),

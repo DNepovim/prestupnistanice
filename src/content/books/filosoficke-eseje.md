@@ -2,7 +2,7 @@
 slug: filosoficke-eseje
 title: Filosofické eseje
 date: 2018
-order: 2
+order: 3
 pagesCount: 206
 isbn: 978-80-270-2504-6
 authors:
@@ -28,6 +28,7 @@ category: philosophy
 color: '#b26436'
 bgColor: '#c59e61'
 ---
+
 
 
 

@@ -2,7 +2,7 @@
 slug: lidska-geneze
 title: Lidská geneze
 date: 2023
-order: 12
+order: 16
 pagesCount: 120
 isbn: 978-80-909036-1-6
 authors:
@@ -56,6 +56,7 @@ claim: >-
   Po dovršení sedmdesátého roku svého života nabyl Vilém Flusser dojmu, že
   dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou.
 ---
+
 
 
 

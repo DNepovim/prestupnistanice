@@ -2,7 +2,7 @@
 slug: cesty-do-utopie
 title: "Cesty do\_utopie"
 date: 2020
-order: 6
+order: 8
 pagesCount: 178
 isbn: 978-80-907627-3-2
 authors:
@@ -34,6 +34,7 @@ color: '#153341'
 bgColor: '#b8b9a7'
 claim: "Méně známá a\_do češtiny dosud nepřeložená kniha Martina Bubera vznikala v\_době druhé světové války. "
 ---
+
 
 
 

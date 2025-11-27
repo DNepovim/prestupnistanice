@@ -2,7 +2,7 @@
 slug: od-subjektu-k-projektu
 title: Od subjektu k projektu
 date: 2020
-order: 7
+order: 6
 pagesCount: 176
 isbn: 978-80-907627-1-8
 authors:
@@ -33,6 +33,7 @@ claim: >-
   jeho tvorby. Také z tohoto důvodu se jedná o vrcholné formulování jeho
   celoživotního tématu, kterým je hledání východiska z civilizační krize.
 ---
+
 
 
 Autor z rozličných hledisek sleduje jednotlivé kroky novověkého rozpouštění subjektu i objektu. Moderní člověk ztrácí jakoukoliv oporu v něčem uchopitelném, což dle Flussera může ospravedlňovat pocit dějinné katastrofy. Proti tomuto pochopitelnému stanovisku však vykřesává jiskru naděje, kterou spojuje s projektováním. Tato naděje však nemůže zapřít svou křehkost, kterou doprovází nejednoznačnost Flusserova smyslu pro ironii.

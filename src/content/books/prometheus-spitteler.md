@@ -2,7 +2,7 @@
 slug: prometheus-spitteler
 title: Prométheus Spitteler
 date: 2022
-order: 10
+order: 11
 pagesCount: 576
 isbn: 978–80–907627–4–9
 authors:
@@ -35,6 +35,7 @@ color: '#461200'
 bgColor: '#872f01'
 claim: "„Extramundánní“ básník, tvůrce eposů, básní a\_povídek, esejista a\_znalec hudby Karl Spitteler (1845 až 1924), dodnes jediný švýcarský nositel Nobelovy ceny za literaturu, je v\_Čechách zcela neznámou postavou. Petr Babka jej v\_objemném svazku obsáhle představuje takřka ve všech žánrech."
 ---
+
 
 
 Na prvním místě je zde mohutná epická skladba Prométheus a Epimétheus. Tento epos stál u kolébky Nietzscheho Zarathustry. Proto kniha obsahuje i překlad všech zmínek o Spittelerovi v Nietzscheho dopisech, což spolu se Spittelerovým letákem Mé styky s Nietzschem a jeho „posudky“, tj. recenzemi Nietzscheho díla nastiňuje pozoruhodný příběh vztahu dvou spřízněných myslitelů a spisovatelů. Následuje kniha Pravda se směje, soubor vtipných a mnohdy břitkých esejů, studií, poznámek a satirických hříček na literární, hudební i obecně lidská témata. S dalšími eseji z dobových časopisů je jich celkem 99. Na ukázku dalších žánrů jsou zde tři povídky a řada básní.

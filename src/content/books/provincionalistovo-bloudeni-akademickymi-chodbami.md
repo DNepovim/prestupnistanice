@@ -2,7 +2,7 @@
 slug: provincionalistovo-bloudeni-akademickymi-chodbami
 title: Provincionalistovo bloudění akademickými chodbami
 date: 2021
-order: 8
+order: 9
 pagesCount: 122
 isbn: 978-80-907627-5-6
 authors:
@@ -28,6 +28,7 @@ claim: >-
   Kniha Provincionalistovo bloudění akademickými chodbami žánrově navazuje na
   východiska dřívější charakteristiky filosofa provincionalismu.
 ---
+
 
 
 

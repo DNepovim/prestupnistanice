@@ -2,9 +2,9 @@
 slug: hluk-proti-hlucnosti-naseho-zivota
 title: Hluk - Proti hlučnosti našeho života
 date: 2022
-order: 9
+order: 10
 pagesCount: 128
-isbn: 978-80-907627-2-5
+isbn: 978-80-907627-9-4
 authors:
   - author: src/content/authors/theodor-lessing.md
     slug: theodor-lessing
@@ -36,6 +36,8 @@ category: philosophy
 color: '#24211b'
 bgColor: '#e0dcd0'
 ---
+
+
 
 
 

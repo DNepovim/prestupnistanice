@@ -2,7 +2,7 @@
 slug: nevychovne-eseje-o-vychove
 title: "Nevýchovné eseje o\_výchově"
 date: 2019
-order: 5
+order: 4
 pagesCount: 305
 isbn: 978-80-270-5563-0
 authors:
@@ -44,6 +44,7 @@ claim: >-
   Kniha nabízí tematicky uspořádané eseje, které se soustřeďují vždy na jeden
   aspekt výchovného úsilí.
 ---
+
 
 
 

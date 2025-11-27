@@ -2,7 +2,7 @@
 slug: dopisy-z-nerevolucni-doby
 title: "Dopisy z\_nerevoluční doby"
 date: 2019
-order: 4
+order: 5
 pagesCount: 271
 isbn: 978-80-907627-0-1
 authors:
@@ -26,6 +26,7 @@ color: '#4f0708'
 bgColor: '#bda19c'
 claim: "Kniha je pokusem o\_připomenutí svérázu dopisní formy vyjádření, třebaže se v\_tomto případě jedná o\_soubor fiktivních dopisů."
 ---
+
 
 
 

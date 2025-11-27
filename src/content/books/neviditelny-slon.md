@@ -2,7 +2,7 @@
 slug: neviditelny-slon
 title: Neviditelný slon
 date: 2025
-order: 14
+order: 18
 pagesCount: 108
 isbn: 978-80-909036-3-0
 authors:
@@ -55,6 +55,7 @@ color: '#434991'
 bgColor: '#e7d14c'
 claim: "Kniha vypráví o\_velmi vážných tématech tak, jak to umí jen Anna Anisimova: s\_neuvěřitelnou lehkostí a\_optimismem."
 ---
+
 
 
 

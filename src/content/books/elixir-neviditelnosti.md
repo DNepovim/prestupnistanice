@@ -3,7 +3,7 @@ author: marie-blahova
 slug: elixir-neviditelnosti
 title: Elixír neviditelnosti
 date: 2023
-order: 12
+order: 15
 pagesCount: 276
 width: 130
 height: 200
@@ -42,6 +42,7 @@ color: '#3d6431'
 bgColor: '#bdd743'
 claim: "Během prázdnin, které tráví dospívající Klára se svými rodiči, dojde k\_jejímu seznámení s\_mužem, který se k\_jejímu velkému překvapení objeví na začátku nového školního roku za katedrou, a\_to dokonce v\_roli třídního učitele. "
 ---
+
 
 
 
