@@ -43,7 +43,7 @@ const data = [
   ...(book.date
     ? [
         {
-          icon: 'ph:calendar-thin',
+          icon: 'ph:calendar',
           label: 'Rok uvedení',
           text: book.date,
         },
@@ -52,7 +52,7 @@ const data = [
   ...(book.pagesCount
     ? [
         {
-          icon: 'ph:book-open-text-thin',
+          icon: 'ph:book-open-text',
           label: 'Počet stran',
           text: book.pagesCount,
         },
@@ -61,7 +61,7 @@ const data = [
   ...(book.width && book.height
     ? [
         {
-          icon: 'ph:arrows-out-simple-thin',
+          icon: 'ph:arrows-out-simple',
           label: 'Rozměry',
           text: `${String(book.width)} × ${String(book.height)} mm`,
         },
@@ -70,7 +70,7 @@ const data = [
   ...(book.paper
     ? [
         {
-          icon: 'ph:file-thin',
+          icon: 'ph:file',
           label: 'Papír',
           text: book.paper,
         },
@@ -79,7 +79,7 @@ const data = [
   ...(book.font
     ? [
         {
-          icon: 'ph:text-aa-thin',
+          icon: 'ph:text-aa',
           label: 'Písmo',
           text: book.font,
         },
@@ -88,7 +88,7 @@ const data = [
   ...(book.isbn
     ? [
         {
-          icon: 'ph:barcode-thin',
+          icon: 'ph:barcode',
           label: 'ISBN',
           text: book.isbn,
         },
@@ -186,13 +186,19 @@ const categoryBooks = await getCollection(
     {book.claim && <Blockquote text={book.claim} />}
     {
       data.length > 0 && (
-        <div class="flex flex-col font-alt gap-1 mb-8 text-brand-first-500 items-end">
-          {data.map((d) => (
-            <div title={d.label} class="flex gap-4 items-center">
-              <Icon class="size-6" name={d.icon} />
-              {d.text}
+        <div class="from-brand-second-50/30 relative -right-4 mb-8 flex flex-col items-end gap-2 bg-gradient-to-l to-transparent px-4 pb-3 pt-2">
+          {data.map((d) => 
+            <div>
+              <p class="text-right text-[0.6rem] text-gray-400 lowercase">{d.label}</p>
+              <div
+                title={d.label}
+                class="text-brand-first-500 flex items-center justify-end gap-2 leading-1 oldstyle-nums"
+              >
+                <Icon class="size-4" name={`${d.icon}-light`} />
+                {d.text}
+              </div>
             </div>
-          ))}
+          )}
         </div>
       )
     }
