@@ -13,6 +13,7 @@ authors:
       - author
   - author: src/content/authors/anna-ticha.md
     slug: anna-ticha
+    isMain: true
     role:
       - cover
       - illustration
@@ -52,7 +53,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/pegas_cover.png
+cover: /src../images/pegas_cover.png
 category: novel
 color: '#51609b'
 bgColor: '#ec008c'
@@ -61,6 +62,7 @@ claim: >-
   byla tato ves čímsi neobyčejná. Místním venkovanům byl udělen dar – či snad
   prokletí? – nahlížet v hlubiny a brodit se temnotami země.
 ---
+
 
 
 
