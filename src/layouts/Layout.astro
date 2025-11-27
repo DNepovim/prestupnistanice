@@ -15,7 +15,7 @@ type Props = {
   secondColor?: string
 }
 
-const lastBook = (await client.queries.booksConnection({ sort: 'date', last: 1 })).data
+const lastBook = (await client.queries.booksConnection({ sort: 'order', last: 1 })).data
   .booksConnection.edges?.[0]?.node
 
 const { siteTitle, siteDescription, firstColor, secondColor } = Astro.props

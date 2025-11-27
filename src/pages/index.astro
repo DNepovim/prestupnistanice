@@ -15,8 +15,7 @@ import { routes } from '../routes'
 import { tp } from '../utils/tp'
 
 const books = (await getCollection('book'))
-  .toReversed()
-  .toSorted((a, b) => b.data.date - a.data.date)
+  .toSorted((a, b) => b.data.order - a.data.order)
 
 const lastBook = books[0]
 
