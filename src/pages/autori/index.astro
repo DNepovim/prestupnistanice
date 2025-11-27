@@ -1,8 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
-import { isTruthy } from 'narrowland'
 
-import Book from '../../components/Book.astro'
+import AuthorSmall from '../../components/AuthorSmall.astro'
 import BooksGrid from '../../components/BooksGrid.astro'
 import PageTitle from '../../components/PageTitle.astro'
 import Section from '../../components/Section.astro'
@@ -13,21 +12,19 @@ const books = await getCollection('book')
 const authors = await getCollection('author')
 
 const mainAuthorIds = new Set(
-  books
-    .flatMap((book) =>
-      book.data.authors.filter((a) => a.isMain).map((a) => getSlugFromPath(a.author)),
-    )
-    .filter(isTruthy),
+  books.flatMap((book) =>
+    book.data.authors.filter((a) => a.isMain).map((a) => getSlugFromPath(a.author)),
+  ),
 )
 
-const mainAuthors = authors.filter((author) => mainAuthorIds.has(author.id))
+const mainAuthors = authors.filter((a) => mainAuthorIds.has(a.data.slug))
 ---
 
 <Layout siteTitle="Autoři" siteDescription="Naši autoři">
   <Section isWide>
     <PageTitle>Autoři</PageTitle>
     <BooksGrid>
-      {mainAuthors.map(({ data }) => <Book slug={data.slug} />)}
+      {mainAuthors.map(({ data }) => <AuthorSmall slug={data.slug} />)}
     </BooksGrid>
   </Section>
 </Layout>
