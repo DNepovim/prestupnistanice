@@ -5,5 +5,6 @@ firstnameSecond: Jakuba
 surname: Skalák
 surnameSecond: Skaláka
 gender: male
+image: ../images/jakubSkalak.jpg
 ---
 
