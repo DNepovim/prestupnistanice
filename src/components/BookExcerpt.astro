@@ -5,7 +5,7 @@ import { getEntries, getEntry } from 'astro:content'
 import ArrowLink from '../components/ArrowLink.astro'
 import { routes } from '../routes'
 import { tp } from '../utils/tp'
-import FloatingPopup from './FloatingPopup.svelte'
+import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
   class?: string
@@ -65,29 +65,14 @@ const authors = await getEntries(
           authors.map(({ data: a }, index) => (
             <>
               {index !== 0 ? ', ' : ''}
-              <FloatingPopup client:visible>
+              <FloatingImage client:visible src={a.image?.src} alt={`${a.firstname} ${a.surname}`}>
                 <a
                   class="group font-alt text-gray-500 transition-colors hover:text-black"
                   href={routes.authors.detail(a.slug)}
                 >
                   {a.firstname} {a.surname}
                 </a>
-                {a.image && (
-                  <div slot="popup" class="w-[168px]">
-                    <Image
-                      alt={`${a.firstname} ${a.surname}`}
-                      src={a.image}
-                      width={160}
-                      height={228}
-                      widths={[120, 160, 200]}
-                      sizes="160px"
-                      loading="eager"
-                      decoding="async"
-                      class="h-auto w-full border border-gray-200 shadow-xl"
-                    />
-                  </div>
-                )}
-              </FloatingPopup>
+              </FloatingImage>
             </>
           ))
         }

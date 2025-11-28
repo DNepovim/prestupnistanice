@@ -1,9 +1,8 @@
 ---
-import { Image } from 'astro:assets'
 
 import { routes } from '../routes'
 import ArrowLink from './ArrowLink.astro'
-import FloatingPopup from './FloatingPopup.svelte'
+import FloatingImage from './FloatingImage.svelte'
 
 type NavItem = {
   slug: string
@@ -30,26 +29,11 @@ const { prev, next, order } = Astro.props
   <div class="flex-1 text-left">
     {
       prev && (
-        <FloatingPopup client:visible>
+        <FloatingImage client:visible src={prev.cover?.src} alt={prev.title}>
           <ArrowLink hasArrowLeft href={routes.books.detail(prev.slug)} class="text-xs">
             {prev.order}. {prev.title}
           </ArrowLink>
-          {prev.cover && (
-            <div slot="popup" class="w-[168px]">
-              <Image
-                alt={prev.title}
-                src={prev.cover}
-                width={160}
-                height={228}
-                widths={[120, 160, 200]}
-                sizes="160px"
-                loading="eager"
-                decoding="async"
-                class="h-auto w-full border border-gray-200 shadow-xl"
-              />
-            </div>
-          )}
-        </FloatingPopup>
+        </FloatingImage>
       )
     }
   </div>
@@ -57,26 +41,11 @@ const { prev, next, order } = Astro.props
   <div class="flex-1 text-right">
     {
       next && (
-        <FloatingPopup client:visible>
+        <FloatingImage client:visible src={next.cover?.src} alt={next.title}>
           <ArrowLink href={routes.books.detail(next.slug)} class="text-xs">
             {next.order}. {next.title}
           </ArrowLink>
-          {next.cover && (
-            <div slot="popup" class="w-[168px]">
-              <Image
-                alt={next.title}
-                src={next.cover}
-                width={160}
-                height={228}
-                widths={[120, 160, 200]}
-                sizes="160px"
-                loading="eager"
-                decoding="async"
-                class="h-auto w-full border border-gray-200 shadow-xl"
-              />
-            </div>
-          )}
-        </FloatingPopup>
+        </FloatingImage>
       )
     }
   </div>

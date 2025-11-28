@@ -6,7 +6,7 @@ import Theme from '../components/Theme.astro'
 import { routes } from '../routes'
 import { getSlugFromPath } from '../utils/getSlugFromPath'
 import { tp } from '../utils/tp'
-import FloatingPopup from './FloatingPopup.svelte'
+import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
   slug: string
@@ -59,29 +59,14 @@ const authors = await getEntries(
           authors.map((a, index) => (
             <>
               {index !== 0 ? ', ' : ''}
-              <FloatingPopup client:visible>
+              <FloatingImage client:visible src={a.data.image?.src} alt={`${a.data.firstname} ${a.data.surname}`}>
                 <a
                   class="group font-alt whitespace-nowrap transition-colors hover:text-black"
                   href={routes.authors.detail(getSlugFromPath(a.data.slug))}
                 >
                   {a.data.firstname} {a.data.surname}
                 </a>
-                {a.data.image && (
-                  <div slot="popup" class="w-[168px]">
-                    <Image
-                      alt={`${a.data.firstname} ${a.data.surname}`}
-                      src={a.data.image}
-                      width={160}
-                      height={228}
-                      widths={[120, 160, 200]}
-                      sizes="160px"
-                      loading="eager"
-                      decoding="async"
-                      class="h-auto w-full border border-gray-200 shadow-xl"
-                    />
-                  </div>
-                )}
-              </FloatingPopup>
+              </FloatingImage>
             </>
           ))
         }
