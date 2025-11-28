@@ -1,5 +1,6 @@
 <script lang="ts">
   import { cn } from '../utils/cn'
+
   export let offsetX = 16
   export let offsetY = 16
   let visible = false
@@ -11,7 +12,9 @@
   const onEnter = () => {
     if (hasMouseMoved) visible = true
   }
-  const onLeave = () => { visible = false }
+  const onLeave = () => {
+    visible = false
+  }
   const onMove = (e: MouseEvent) => {
     hasMouseMoved = true
     x = e.clientX + offsetX
@@ -22,7 +25,13 @@
   }
 </script>
 
-<div on:mouseenter={onEnter} on:mouseleave={onLeave} on:mousemove={onMove} class="relative inline-block">
+<div
+  role="group"
+  on:mouseenter={onEnter}
+  on:mouseleave={onLeave}
+  on:mousemove={onMove}
+  class="relative inline-block"
+>
   <slot />
   {#if visible}
     <div
@@ -36,4 +45,3 @@
     </div>
   {/if}
 </div>
-
