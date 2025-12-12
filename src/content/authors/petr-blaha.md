@@ -9,7 +9,8 @@ gender: male
 ---
 
 
-Vystudoval filosofii a historii na Filosofické fakultě Univerzity Karlovy v Praze. V současnosti působí na Filosofické fakultě Univerzity J. E. Purkyně v Ústí nad Labem. Publikoval řadu článků z oblasti filosofie dějin, politické filosofie a etiky.
+
+Vystudoval filosofii a historii na Filosofické fakultě Univerzity Karlovy v Praze. Po dlouholetém působení na akademické půdě ústecké univerzity a po okolnostmi vynuceném odchodu se identifikuje s novodobou formou disentu. Pohybuje se mezi podporou v nezaměstnanosti a příležitostnými nekvalifikovanými zaměstnáními a doufá, že se v těchto neradostných časech dožije důchodu.
 
 Knižně u jiných nakladatelství:
 
