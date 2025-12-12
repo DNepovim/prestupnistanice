@@ -5,12 +5,13 @@ firstnameSecond: Jakuba
 surname: Skalák
 surnameSecond: Skaláka
 gender: male
-image: ../images/jakubSkalak.jpg
+image: /src../images/jakubSkalak.jpg
 claim: >-
   Jakub Skalák patří k lidem, kteří se v českém školství pohybují s lehkostí
   těch, kdo učí rádi a zároveň vědí i proč. Dějepis, společenské vědy a
-  dramatická výchova vnímá jako části jednoho živého organismu.
+  dramatickou výchovu vnímá jako části jednoho živého organismu.
 ---
+
 
 Od studií na pedagogické fakultě UJEP prošel řadou škol i projektů — od základní školy přes filmovou a fotografickou střední školu ve Skalsku až po gymnázium. Zkušenosti si rozšířil také v zahraničí, například během stáže na University College Lillebaelt v Dánsku.
 
