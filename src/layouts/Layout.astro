@@ -7,6 +7,7 @@ import Footer from '../components/Footer.astro'
 import Header from '../components/Header.astro'
 import { cn } from '../utils/cn'
 import { getColorScale } from '../utils/geColorScale'
+import { UMAMI_SITE_ID } from "astro:env/client";
 
 type Props = {
   siteTitle?: string
@@ -27,6 +28,12 @@ const colorBrandFirstScale = getColorScale(colorBrandFirst, 'color-first')
 const colorBrandSecondScale = getColorScale(colorBrandSecond, 'color-second')
 
 const isDev = import.meta.env.DEV
+
+
+const config = {
+  url: 'https://cloud.umami.is/script.js',
+  websiteId: UMAMI_SITE_ID,
+} as const
 ---
 
 <html lang="cs">
@@ -63,6 +70,7 @@ const isDev = import.meta.env.DEV
         --color-brand-second-950: var(--color-second-950);
       }
     </style>
+    <script is:inline defer src={config.url} data-website-id={config.websiteId}></script>
   </head>
   <body
     class={cn(
