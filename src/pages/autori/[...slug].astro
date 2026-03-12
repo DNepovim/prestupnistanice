@@ -3,15 +3,17 @@ import { Image } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
 import { isDefined } from 'narrowland'
 
+import Book from '@/components/Book.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import Markdown from '@/components/Markdown.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getSlugFromPath } from '@/utils/getSlugFromPath'
+import { tp } from '@/utils/tp'
+
+// eslint-disable-next-line no-restricted-imports
 import { client } from '../../../tina/__generated__/client.ts'
-import Book from '../../components/Book.astro'
-import BooksGrid from '../../components/BooksGrid.astro'
-import Markdown from '../../components/Markdown.astro'
-import PageTitle from '../../components/PageTitle.astro'
-import Section from '../../components/Section.astro'
-import Layout from '../../layouts/Layout.astro'
-import { getSlugFromPath } from '../../utils/getSlugFromPath'
-import { tp } from '../../utils/tp'
 
 export async function getStaticPaths() {
   const authors = await getCollection('author')

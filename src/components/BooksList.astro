@@ -2,13 +2,12 @@
 import type { CollectionEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 
-import BookExcerpt from '../components/BookExcerpt.astro'
-import PageTitle from '../components/PageTitle.astro'
-import Section from '../components/Section.astro'
-import Theme from '../components/Theme.astro'
-import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '../routes'
-import { cn } from '../utils/cn'
-import { uppercaseFirstLetter } from '../utils/uppercaseFirstLetter'
+import BookExcerpt from '@/components/BookExcerpt.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import Theme from '@/components/Theme.astro'
+import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '@/routes'
+import { uppercaseFirstLetter } from '@/utils/uppercaseFirstLetter'
 
 type Props = {
   books: CollectionEntry<'book'>[]
@@ -16,8 +15,6 @@ type Props = {
 }
 
 const { books, slug } = Astro.props
-
-const currentSlug = slug ?? ''
 
 const categoryKey = slug ? categoriesSlugToKey[slug] : 'all'
 
@@ -29,7 +26,7 @@ const categoryName = CATEGORIES[categoryKey].name
   <p
     class="font-alt text-brand-second-500 mb-4 h-[1.2em] text-[5vw] min-md:mb-16 min-md:ml-110 min-md:text-4xl"
   >
-    {currentSlug.length > 0 && categoryName}
+    {slug && categoryName}
   </p>
   <div
     class="text-brand-second mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col min-md:mb-16"
@@ -41,18 +38,16 @@ const categoryName = CATEGORIES[categoryKey].name
             <Icon name="ph:tilde-thin" class="text-brand-second-300 max-md:hidden" />
           )}
           <a
-            class={cn(
+            class:list={[
               'font-alt text-brand-first-100 group relative text-xl',
-              currentSlug === values.slug && 'text-brand-first-500 text-2xl',
-            )}
+              slug === values.slug && 'text-brand-first-500 text-2xl',
+            ]}
             href={routes.books.category(key as keyof typeof CATEGORIES)}
           >
             <span class="relative z-10">
-              {currentSlug === values.slug
-                ? uppercaseFirstLetter(values.name)
-                : values.name}
+              {slug === values.slug ? uppercaseFirstLetter(values.name) : values.name}
             </span>
-            {currentSlug !== values.slug && (
+            {slug !== values.slug && (
               <span class="bg-brand-second-500 absolute bottom-1 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full" />
             )}
           </a>

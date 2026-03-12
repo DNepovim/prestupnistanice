@@ -4,10 +4,10 @@ import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import { isDefined, isNonEmptyString } from 'narrowland'
 
-import Tooltip from '../components/Tooltip.astro'
-import { routes } from '../routes'
-import { joinWords } from '../utils/joinWords'
-import { rolesMap } from '../utils/rolesMap'
+import Tooltip from '@/components/Tooltip.astro'
+import { routes } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
+import { rolesMap } from '@/utils/rolesMap'
 
 type Props = {
   slug: string
@@ -59,7 +59,7 @@ const { data: author } = entry
       )
     }
     <p
-      class="group  relative text-alt font-alt text-brand-first-700 inline-flex items-center gap-2"
+      class="group text-alt font-alt text-brand-first-700 relative inline-flex items-center gap-2"
     >
       {author.firstname}
       {author.surname}

@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content'
 
-import AuthorSmall from '../../components/AuthorSmall.astro'
-import BooksGrid from '../../components/BooksGrid.astro'
-import PageTitle from '../../components/PageTitle.astro'
-import Section from '../../components/Section.astro'
-import Layout from '../../layouts/Layout.astro'
-import { getSlugFromPath } from '../../utils/getSlugFromPath'
+import AuthorSmall from '@/components/AuthorSmall.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getSlugFromPath } from '@/utils/getSlugFromPath'
 
 const books = await getCollection('book')
 const authors = await getCollection('author')

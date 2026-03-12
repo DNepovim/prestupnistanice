@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import TrainImage from '../assets/vlak.png'
-import { cn } from '../utils/cn'
+import TrainImage from '@/assets/vlak.png'
 
 type Props = {
   direction: 'lr' | 'rl'
@@ -108,10 +107,7 @@ export const Train = ({ direction, y }: Props) => {
       ref={trainRef}
       src={TrainImage.src}
       alt="Vlak"
-      className={cn(
-        'absolute top-1/2 transform -translate-y-1/2 w-80 h-auto',
-        direction === 'rl' && '-scale-x-100',
-      )}
+      className={`absolute top-1/2 transform -translate-y-1/2 w-80 h-auto ${direction === 'rl' ? '-scale-x-100' : ''}`}
     />
   )
 }

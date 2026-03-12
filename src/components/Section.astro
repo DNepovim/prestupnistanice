@@ -1,6 +1,4 @@
 ---
-import { cn } from '../utils/cn'
-
 type Props = {
   title?: string
   link?: string
@@ -13,20 +11,20 @@ const { title, link, isWide, isFull, className } = Astro.props
 ---
 
 <section
-  class={cn(
+  class:list={[
     'mx-auto mb-12',
     isWide ? 'max-w-[70rem]' : isFull ? 'max-w-full' : 'max-w-[56rem]',
     className,
-  )}
+  ]}
 >
   {
     title && (
-      <h2 class={cn('mb-8 text-xl text-gray-500')}>
+      <h2 class:list="mb-8 text-xl text-gray-500">
         {link ? (
           <a
             class:list={[
               className,
-              'font-alt group text-brand-first-500 relative text-md tracking-wider',
+              'font-alt group text-brand-first-500 text-md relative tracking-wider',
             ]}
             href={link}
           >

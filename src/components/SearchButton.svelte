@@ -21,7 +21,6 @@
 
 <button
   onclick={() => {
-    
     toggle(true)
   }}
   class="font-liga font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-brand-first-500 no-underline"

@@ -1,11 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
 import { getImage } from 'astro:assets'
+import { getCollection } from 'astro:content'
 import { isDefined } from 'narrowland'
 
-import SearchButton from '../components/SearchButton.svelte'
-import { routes } from '../routes'
-import { joinWords } from '../utils/joinWords'
+import SearchButton from '@/components/SearchButton.svelte'
+import { routes } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
+
 import HeaderLink from './HeaderLink.astro'
 
 const books = await getCollection('book')
@@ -44,7 +45,9 @@ const authorMainEntries = books
 
 const authorItems = await Promise.all(
   authorMainEntries.map(async ({ data: { firstname, surname, image, slug } }) => {
-    const optimized = image ? await getImage({ src: image, width: 160, format: 'webp' }) : undefined
+    const optimized = image
+      ? await getImage({ src: image, width: 160, format: 'webp' })
+      : undefined
     return {
       slug,
       title: `${firstname} ${surname}`,
@@ -71,7 +74,7 @@ const navigations = [
 ]
 ---
 
-<div class="hover:opacity-100 min-w-full px-6 opacity-30 transition-opacity">
+<div class="min-w-full px-6 opacity-30 transition-opacity hover:opacity-100">
   <menu
     class="mx-auto mt-2 flex max-w-[56rem] items-center justify-between gap-4 py-1 transition-colors max-lg:flex-col"
   >
@@ -90,10 +93,7 @@ const navigations = [
         ))
       }
       <div class="mr-2 inline-block h-[1px] w-8 bg-gray-300 max-sm:hidden"></div>
-      <SearchButton
-        client:idle
-        data={searchData}
-      />
+      <SearchButton client:idle data={searchData} />
     </div>
   </menu>
 </div>

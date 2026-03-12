@@ -1,6 +1,4 @@
 ---
-import { cn } from '../utils/cn'
-
 type Props = {
   href: string
   class?: string
@@ -19,13 +17,13 @@ const { href, class: className, hasArrowLeft } = Astro.props
 >
   <slot />
   <span
-    class={cn(
+    class:list={[
       'border-brand-second-500 absolute bottom-1/2 block size-2 translate-y-1/2 rotate-45',
       hasArrowLeft ? '-left-7 border-b border-l' : '-right-7 border-t border-r',
-    )}></span>
+    ]}></span>
   <span
-    class={cn(
+    class:list={[
       'bg-brand-second-500 absolute bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]',
       hasArrowLeft ? '-left-[29px]' : '-right-[29px]',
-    )}></span>
+    ]}></span>
 </a>

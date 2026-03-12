@@ -2,10 +2,11 @@
 import { Image } from 'astro:assets'
 import { getEntries, getEntry } from 'astro:content'
 
-import Theme from '../components/Theme.astro'
-import { routes } from '../routes'
-import { getSlugFromPath } from '../utils/getSlugFromPath'
-import { tp } from '../utils/tp'
+import Theme from '@/components/Theme.astro'
+import { routes } from '@/routes'
+import { getSlugFromPath } from '@/utils/getSlugFromPath'
+import { tp } from '@/utils/tp'
+
 import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
@@ -33,7 +34,7 @@ const authors = await getEntries(
   <article class="jus flex w-64 justify-end gap-4 min-md:mb-12">
     {
       (
-        <a href={link} class="block width-8 shrink-0" >
+        <a href={link} class="width-8 block shrink-0">
           <Image
             alt={b.title}
             src={b.cover}
@@ -59,7 +60,11 @@ const authors = await getEntries(
           authors.map((a, index) => (
             <>
               {index !== 0 ? ', ' : ''}
-              <FloatingImage client:visible src={a.data.image?.src} alt={`${a.data.firstname} ${a.data.surname}`}>
+              <FloatingImage
+                client:visible
+                src={a.data.image?.src}
+                alt={`${a.data.firstname} ${a.data.surname}`}
+              >
                 <a
                   class="group font-alt whitespace-nowrap transition-colors hover:text-black"
                   href={routes.authors.detail(getSlugFromPath(a.data.slug))}

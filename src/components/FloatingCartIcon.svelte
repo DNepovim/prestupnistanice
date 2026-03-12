@@ -60,7 +60,7 @@
             <p class="text-gray-500 text-sm text-center py-4">Košík je prázdný</p>
           {:else}
             <div class="grid grid-cols-2 gap-2">
-              {#each items as { slug, count }}
+              {#each items as { slug, count } (slug)}
                 {#key slug}
                   <div
                     class="flex flex-col items-center p-2 hover:bg-gray-50 rounded border border-gray-100"
@@ -94,7 +94,9 @@
 
                     <div class="flex items-center space-x-1 mb-1">
                       <button
-                        on:click={() => { updateQuantity(slug, count - 1); }}
+                        on:click={() => {
+                          updateQuantity(slug, count - 1)
+                        }}
                         class="w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
                         disabled={count <= 1}
                         aria-label="Snížit počet"
@@ -103,7 +105,9 @@
                       </button>
                       <span class="text-xs font-medium w-4 text-center">{count}</span>
                       <button
-                        on:click={() => { updateQuantity(slug, count + 1); }}
+                        on:click={() => {
+                          updateQuantity(slug, count + 1)
+                        }}
                         class="w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
                         aria-label="Zvýšit počet"
                       >
@@ -112,7 +116,9 @@
                     </div>
 
                     <button
-                      on:click={() => { removeFromCart(slug); }}
+                      on:click={() => {
+                        removeFromCart(slug)
+                      }}
                       class="text-red-500 hover:text-red-700 p-1"
                       aria-label="Odebrat z košíku"
                     >

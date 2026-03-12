@@ -1,13 +1,12 @@
 ---
+import { getCollection } from 'astro:content'
+import { UMAMI_SITE_ID } from 'astro:env/client'
 import Analytics from '@vercel/analytics/astro'
 
-import { client } from '../../tina/__generated__/client.ts'
-import BaseHead from '../components/BaseHead.astro'
-import Footer from '../components/Footer.astro'
-import Header from '../components/Header.astro'
-import { cn } from '../utils/cn'
-import { getColorScale } from '../utils/geColorScale'
-import { UMAMI_SITE_ID } from "astro:env/client";
+import BaseHead from '@/components/BaseHead.astro'
+import Footer from '@/components/Footer.astro'
+import Header from '@/components/Header.astro'
+import { getColorScale } from '@/utils/geColorScale'
 
 type Props = {
   siteTitle?: string
@@ -16,19 +15,19 @@ type Props = {
   secondColor?: string
 }
 
-const lastBook = (await client.queries.booksConnection({ sort: 'order', last: 1 })).data
-  .booksConnection.edges?.[0]?.node
+const lastBook = (await getCollection('book')).toSorted(
+  (a, b) => b.data.order - a.data.order,
+)[0]
 
 const { siteTitle, siteDescription, firstColor, secondColor } = Astro.props
 
-const colorBrandFirst = firstColor ?? lastBook?.color ?? '#434991'
-const colorBrandSecond = secondColor ?? lastBook?.bgColor ?? '#e7d14c'
+const colorBrandFirst = firstColor ?? lastBook?.data.color ?? '#434991'
+const colorBrandSecond = secondColor ?? lastBook?.data.bgColor ?? '#e7d14c'
 
 const colorBrandFirstScale = getColorScale(colorBrandFirst, 'color-first')
 const colorBrandSecondScale = getColorScale(colorBrandSecond, 'color-second')
 
 const isDev = import.meta.env.DEV
-
 
 const config = {
   url: 'https://cloud.umami.is/script.js',
@@ -73,12 +72,12 @@ const config = {
     <script is:inline defer src={config.url} data-website-id={config.websiteId}></script>
   </head>
   <body
-    class={cn(
-      'font-display flex min-h-screen min-w-full flex-col bg-brand-second-50/40',
+    class:list={[
+      'font-display bg-brand-second-50/40 flex min-h-screen min-w-full flex-col',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
-      'bg-gradient-to-t from-brand-first-50/50 to-white',
+      'from-brand-first-50/50 bg-gradient-to-t to-white',
       isDev && 'debug-screens',
-    )}
+    ]}
   >
     <Header />
 
@@ -90,6 +89,6 @@ const config = {
 
     <Footer />
     <Analytics />
-    <script type="module" src="/scripts/hyphenopoly-init.js"></script>
+    <script is:inline type="module" src="/scripts/hyphenopoly-init.js"></script>
   </body>
 </html>

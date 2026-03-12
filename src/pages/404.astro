@@ -1,19 +1,20 @@
 ---
 import { getCollection } from 'astro:content'
-import Book from '../components/Book.astro'
-import BooksGrid from '../components/BooksGrid.astro'
-import Section from '../components/Section.astro'
-import Layout from '../layouts/Layout.astro'
+
+import Book from '@/components/Book.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import Section from '@/components/Section.astro'
+import Layout from '@/layouts/Layout.astro'
 import {
   uppercaseEveryFirstLetters,
   uppercaseFirstLetter,
-} from '../utils/uppercaseFirstLetter'
+} from '@/utils/uppercaseFirstLetter'
 
 const req = Astro.request
 const url = new URL(req.url)
 const segments = url.pathname.split('/').filter(Boolean)
 
-const books = await getCollection("book")
+const books = await getCollection('book')
 const recentBooks = books.toReversed().slice(0, 9)
 
 const category = segments[0]

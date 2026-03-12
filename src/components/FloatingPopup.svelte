@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { cn } from '../utils/cn'
-
   export let offsetX = 16
   export let offsetY = 16
   let visible = false
@@ -35,9 +33,7 @@
   <slot />
   {#if visible}
     <div
-      class={cn(
-        'pointer-events-none fixed z-50 shadow-2xl transition-opacity opacity-100',
-      )}
+      class="pointer-events-none fixed z-50 shadow-2xl transition-opacity opacity-100"
       style={`left:${left};top:${top}`}
       aria-hidden={!visible}
     >

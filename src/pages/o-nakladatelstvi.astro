@@ -3,18 +3,18 @@ import { Image } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
 import { isOneOf } from 'narrowland'
 
-import AuthorSmall from '../components/AuthorSmall.astro'
-import BooksGrid from '../components/BooksGrid.astro'
-import Markdown from '../components/Markdown.astro'
-import PageTitle from '../components/PageTitle.astro'
-import Section from '../components/Section.astro'
-import LogoFondBudoucnosti from '../content/images/fondBudoucnosti.png'
-import LogoFondKultury from '../content/images/fondKultury.png'
-import LogoGi from '../content/images/gi.png'
-import LogoKima from '../content/images/kima.png'
-import LogoMk from '../content/images/mk.png'
-import Layout from '../layouts/Layout.astro'
-import { getSlugFromPath } from '../utils/getSlugFromPath'
+import AuthorSmall from '@/components/AuthorSmall.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import Markdown from '@/components/Markdown.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import LogoFondBudoucnosti from '@/content/images/fondBudoucnosti.png'
+import LogoFondKultury from '@/content/images/fondKultury.png'
+import LogoGi from '@/content/images/gi.png'
+import LogoKima from '@/content/images/kima.png'
+import LogoMk from '@/content/images/mk.png'
+import Layout from '@/layouts/Layout.astro'
+import { getSlugFromPath } from '@/utils/getSlugFromPath'
 
 const sponsors = [
   { title: 'Ministerstov kultury ČR', link: 'https://www.mk.gov.cz/', logo: LogoMk },
@@ -112,7 +112,7 @@ const collaborators = authors
     </BooksGrid>
   </Section>
   <Section title="Podporují nás">
-    <div class="flex items-center justify-center gap-8 flex-wrap">
+    <div class="flex flex-wrap items-center justify-center gap-8">
       {
         sponsors.map((s) => (
           <a href={s.link} target="_blank">

@@ -3,15 +3,16 @@ import { Image } from 'astro:assets'
 import { getCollection, getEntries, getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 
-import Book from '../components/Book.astro'
-import BookPagination from '../components/BookPagination.astro'
-import BooksGrid from '../components/BooksGrid.astro'
-import PageTitle from '../components/PageTitle.astro'
-import Section from '../components/Section.astro'
-import Layout from '../layouts/Layout.astro'
-import { CATEGORIES, routes } from '../routes'
-import { getAuthorsSecondName } from '../utils/getAuthorSecondName'
-import { tp } from '../utils/tp'
+import Book from '@/components/Book.astro'
+import BookPagination from '@/components/BookPagination.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import Layout from '@/layouts/Layout.astro'
+import { CATEGORIES, routes } from '@/routes'
+import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
+import { tp } from '@/utils/tp'
+
 import AuthorExcerpt from './AuthorExcerpt.astro'
 import AuthorSmall from './AuthorSmall.astro'
 import Blockquote from './Blockquote.astro'
@@ -186,8 +187,8 @@ const categoryBooks = await getCollection(
     {book.claim && <Blockquote text={book.claim} />}
     {
       data.length > 0 && (
-        <div class="from-brand-second-50/30 relative -right-4 mb-8 flex flex-col items-end gap-2 bg-gradient-to-l to-transparent px-4 pb-3 pt-2">
-          {data.map((d) => 
+        <div class="from-brand-second-50/30 relative -right-4 mb-8 flex flex-col items-end gap-2 bg-gradient-to-l to-transparent px-4 pt-2 pb-3">
+          {data.map((d) => (
             <div>
               <p class="text-right text-[0.6rem] text-gray-400 lowercase">{d.label}</p>
               <div
@@ -198,7 +199,7 @@ const categoryBooks = await getCollection(
                 {d.text}
               </div>
             </div>
-          )}
+          ))}
         </div>
       )
     }

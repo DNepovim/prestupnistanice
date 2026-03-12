@@ -2,8 +2,6 @@
   import { navigate } from 'astro:transitions/client'
   import Fuse from 'fuse.js'
 
-  import { cn } from '../utils/cn'
-
   type SearchItem = {
     slug: string
     title: string
@@ -73,7 +71,9 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="fixed inset-0 bg-gradient-to-t from-brand-second-50/90 to-white/90 size-full"
-    onclick={() => { toggle(false); }}
+    onclick={() => {
+      toggle(false)
+    }}
   ></div>
   <div class="block mx-auto max-w-160 mt-20">
     <label class="relative text-5xl">
@@ -127,10 +127,10 @@
                 <img
                   src={book.item.image.src}
                   alt={book.item.title}
-                  class={cn(
+                  class={[
                     'w-20 rounded shadow-2xl',
                     book.item.type === 'author' && 'rounded-full',
-                  )}
+                  ]}
                 />
               {:else}
                 <div

@@ -1,8 +1,6 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import { cn } from '../utils/cn'
-
 type Props = HTMLAttributes<'a'>
 
 const { href, ...props } = Astro.props
@@ -12,10 +10,10 @@ const isActive = href === `/${pathname}`
 
 <a
   href={href}
-  class={cn(
-    'group transition-colors font-alt hover:text-brand-first-500 relative text-md text-brand-first-500 no-underline',
+  class:list={[
+    'group font-alt hover:text-brand-first-500 text-md text-brand-first-500 relative no-underline transition-colors',
     isActive && 'text-brand-first-500',
-  )}
+  ]}
   {...props}
 >
   <slot />

@@ -22,6 +22,14 @@ export const categoriesSlugToKey = {
   'pro-poety': 'poetry',
 } as const
 
+export const categoryKeys = [
+  '',
+  'pro-deti',
+  'pro-filosofy',
+  'pro-romantiky',
+  'pro-poety',
+] as const
+
 export const routes = {
   homepage: () => '/',
   books: {

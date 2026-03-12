@@ -3,19 +3,20 @@ import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import { isDefined } from 'narrowland'
 
-import ArrowLink from '../components/ArrowLink.astro'
-import AuthorSmall from '../components/AuthorSmall.astro'
-import Book from '../components/Book.astro'
-import BookExcerpt from '../components/BookExcerpt.astro'
-import BooksGrid from '../components/BooksGrid.astro'
-import Section from '../components/Section.astro'
-import Theme from '../components/Theme.astro'
-import Layout from '../layouts/Layout.astro'
-import { routes } from '../routes'
-import { tp } from '../utils/tp'
+import ArrowLink from '@/components/ArrowLink.astro'
+import AuthorSmall from '@/components/AuthorSmall.astro'
+import Book from '@/components/Book.astro'
+import BookExcerpt from '@/components/BookExcerpt.astro'
+import BooksGrid from '@/components/BooksGrid.astro'
+import Section from '@/components/Section.astro'
+import Theme from '@/components/Theme.astro'
+import Layout from '@/layouts/Layout.astro'
+import { routes } from '@/routes'
+import { tp } from '@/utils/tp'
 
-const books = (await getCollection('book'))
-  .toSorted((a, b) => b.data.order - a.data.order)
+const books = (await getCollection('book')).toSorted(
+  (a, b) => b.data.order - a.data.order,
+)
 
 const lastBook = books[0]
 
@@ -43,16 +44,18 @@ const philosophyBooks = books
     >
       <div class="flex-1">
         {
-          <a class="block min-md:-mb-32" href={routes.books.detail(lastBook.data.slug)}>
-            <Image
-              alt={lastBook.data.title}
-              src={lastBook.data.cover}
-              widths={[675, 337.5]}
-              width={337.5}
-              height={420}
-              class="animate-rotate-on-load rotate-0 border border-gray-200 shadow-2xl transition-transform duration-500 hover:-rotate-8 max-sm:mx-auto"
-            />
-          </a>
+          (
+            <a class="block min-md:-mb-32" href={routes.books.detail(lastBook.data.slug)}>
+              <Image
+                alt={lastBook.data.title}
+                src={lastBook.data.cover}
+                widths={[675, 337.5]}
+                width={337.5}
+                height={420}
+                class="animate-rotate-on-load rotate-0 border border-gray-200 shadow-2xl transition-transform duration-500 hover:-rotate-8 max-sm:mx-auto"
+              />
+            </a>
+          )
         }
       </div>
       <div class="flex flex-3 flex-col justify-between px-4 py-8 min-sm:px-16">

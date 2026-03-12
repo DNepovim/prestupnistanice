@@ -1,9 +1,9 @@
 ---
 import { marked, parseInline } from 'marked'
 
-import { html } from '../utils/html'
-import { isLinkExternal } from '../utils/isLinkExteral'
-import { tp } from '../utils/tp'
+import { html } from '@/utils/html'
+import { isLinkExternal } from '@/utils/isLinkExteral'
+import { tp } from '@/utils/tp'
 
 type Props = {
   text: string
@@ -21,7 +21,7 @@ marked.use({
     strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
     paragraph: ({ text }) =>
-      html`<p class="text-justify hyphens-auto hyphenate mb-6 indent-12 break-words">
+      html`<p class="hyphenate mb-6 text-justify indent-12 break-words hyphens-auto">
         ${parseInline(tp(text))}
       </p>`,
     link: ({ text, href }) =>

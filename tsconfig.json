@@ -3,9 +3,11 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "jsx": "preserve",
     "strictNullChecks": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
     "noUncheckedIndexedAccess": true,
     "plugins": [
       {

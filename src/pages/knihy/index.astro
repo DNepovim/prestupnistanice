@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content'
 
-import BooksList from '../../components/BooksList.astro'
-import Layout from '../../layouts/Layout.astro'
+import BooksList from '@/components/BooksList.astro'
+import Layout from '@/layouts/Layout.astro'
 
 const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,

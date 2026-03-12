@@ -2,9 +2,10 @@
 import { Image } from 'astro:assets'
 import { getEntries, getEntry } from 'astro:content'
 
-import ArrowLink from '../components/ArrowLink.astro'
-import { routes } from '../routes'
-import { tp } from '../utils/tp'
+import ArrowLink from '@/components/ArrowLink.astro'
+import { routes } from '@/routes'
+import { tp } from '@/utils/tp'
+
 import FloatingImage from './FloatingImage.svelte'
 
 type Props = {
@@ -60,12 +61,16 @@ const authors = await getEntries(
         >
         </div>
       </div>
-      <div class="text-xl inline text-gray-500">
+      <div class="inline text-xl text-gray-500">
         {
           authors.map(({ data: a }, index) => (
             <>
               {index !== 0 ? ', ' : ''}
-              <FloatingImage client:visible src={a.image?.src} alt={`${a.firstname} ${a.surname}`}>
+              <FloatingImage
+                client:visible
+                src={a.image?.src}
+                alt={`${a.firstname} ${a.surname}`}
+              >
                 <a
                   class="group font-alt text-gray-500 transition-colors hover:text-black"
                   href={routes.authors.detail(a.slug)}

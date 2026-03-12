@@ -3,11 +3,11 @@ import { Image } from 'astro:assets'
 import { getEntry } from 'astro:content'
 import { isDefined } from 'narrowland'
 
-import ArrowLink from '../components/ArrowLink.astro'
-import { routes } from '../routes'
-import { joinWords } from '../utils/joinWords'
-import { rolesMap } from '../utils/rolesMap'
-import { tp } from '../utils/tp'
+import ArrowLink from '@/components/ArrowLink.astro'
+import { routes } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
+import { rolesMap } from '@/utils/rolesMap'
+import { tp } from '@/utils/tp'
 
 type Props = {
   slug: string
@@ -36,7 +36,7 @@ const name = `${a.firstname} ${a.surname}`
           src={a.image}
           width={157.5}
           height={157.5}
-          class="border border-gray-200 shadow-2xl rounded-full"
+          class="rounded-full border border-gray-200 shadow-2xl"
         />
       </a>
     )

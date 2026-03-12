@@ -1,5 +1,6 @@
 <script lang="ts">
   import FloatingPopup from './FloatingPopup.svelte'
+
   export let src: string | undefined
   export let alt = ''
   export let offsetX = 16
@@ -12,8 +13,8 @@
   <div slot="popup" class={popupClass}>
     {#if src}
       <img
-        src={src}
-        alt={alt}
+        {src}
+        {alt}
         loading="eager"
         decoding="async"
         class="h-auto w-full border border-gray-200 shadow-xl"
@@ -21,4 +22,3 @@
     {/if}
   </div>
 </FloatingPopup>
-
