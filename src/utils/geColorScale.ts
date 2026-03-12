@@ -3,12 +3,12 @@ import mixPlugin from 'colord/plugins/mix'
 
 extend([mixPlugin])
 
-export const COLORS_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+type colorsSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 
 export const getColorScale = (
   baseColor: string,
   prefix: string,
-): Record<`${string}${(typeof COLORS_STEPS)[number]}`, string> => {
+): Record<`${string}${colorsSteps[number]}`, string> => {
   const base = colord(baseColor)
 
   const tints = base.tints(6).toReversed().slice(1)
