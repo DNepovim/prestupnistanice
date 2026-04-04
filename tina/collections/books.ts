@@ -126,6 +126,11 @@ export const BooksCollection: Collection = {
     },
     { type: 'image', name: 'cover', label: 'Obálka' },
     {
+      type: 'boolean',
+      name: 'isPromoted',
+      label: 'Propagovaná kniha',
+    },
+    {
       type: 'string',
       name: 'category',
       label: 'Kategorie',

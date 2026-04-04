@@ -56,6 +56,7 @@ const book = defineCollection({
         }),
       ),
       category: z.enum(['forKids', 'philosophy', 'novel', 'poetry']),
+      isPromoted: z.boolean().optional(),
       claim: z.string().optional(),
       color: z.string().optional(),
       bgColor: z.string().optional(),

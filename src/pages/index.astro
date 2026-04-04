@@ -18,15 +18,18 @@ const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
 )
 
-const lastBook = books[0]
+const promotedBook = books.find((b) => b.data.isPromoted) ?? books[0]
 
-if (!isDefined(lastBook)) {
+if (!isDefined(promotedBook)) {
   return
 }
 
-const recentBooks = books.slice(1, 4)
-const forKidsBooks = books.filter((b) => b.data.category === 'forKids').slice(0, 3)
-const philosophyBooks = books
+const lastBook = promotedBook
+const remainingBooks = books.filter((b) => b.data.slug !== promotedBook.data.slug)
+
+const recentBooks = remainingBooks.slice(0, 3)
+const forKidsBooks = remainingBooks.filter((b) => b.data.category === 'forKids').slice(0, 3)
+const philosophyBooks = remainingBooks
   .filter(
     (b) =>
       b.data.category === 'philosophy' &&
