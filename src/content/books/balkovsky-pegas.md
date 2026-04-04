@@ -54,6 +54,7 @@ authors:
     role:
       - typesetting
 cover: ../images/pegas_cover.png
+isPromoted: true
 category: novel
 color: '#51609b'
 bgColor: '#ec008c'
@@ -62,6 +63,7 @@ claim: >-
   byla tato ves čímsi neobyčejná. Místním venkovanům byl udělen dar – či snad
   prokletí? – nahlížet v hlubiny a brodit se temnotami země.
 ---
+
 
 
 

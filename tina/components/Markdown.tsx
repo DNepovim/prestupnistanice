@@ -1,3 +1,4 @@
+import React from 'react'
 import MarkdownEditor, { commands } from '@uiw/react-md-editor'
 import { isString } from 'narrowland'
 import { wrapFieldsWithMeta } from 'tinacms'
