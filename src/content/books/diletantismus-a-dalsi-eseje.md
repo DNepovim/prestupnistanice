@@ -2,7 +2,7 @@
 slug: diletantismus-a-dalsi-eseje
 title: Diletantismus a další eseje
 date: 2026
-order: 20
+order: 21
 pagesCount: 104
 width: 130
 height: 200
@@ -17,6 +17,27 @@ authors:
     slug: petr-blaha
     role:
       - translate
+  - author: src/content/authors/jakub-skalak.md
+    slug: jakub-skalak
+    role:
+      - supereditor
+  - author: src/content/authors/petra-kulovana.md
+    slug: petra-kulovana
+    role:
+      - reviewer
+  - author: src/content/authors/jiri-hoblik.md
+    slug: jiri-hoblik
+    role:
+      - reviewer
+  - author: src/content/authors/hynek-tippelt.md
+    slug: hynek-tippelt
+    role:
+      - corrector
+  - author: src/content/authors/filip-skalak.md
+    slug: filip-skalak
+    role:
+      - typesetting
+      - cover
 cover: ../images/diletantisumsadalsieseje.jpg
 category: philosophy
 color: '#b39e73'
@@ -25,6 +46,8 @@ claim: >-
   Ústřední esej Diletantismus je ostrou, místy provokativní diagnózou moderního
   člověka.
 ---
+
+
 
 
 

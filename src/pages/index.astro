@@ -24,7 +24,6 @@ if (!isDefined(promotedBook)) {
   return
 }
 
-const lastBook = promotedBook
 const remainingBooks = books.filter((b) => b.data.slug !== promotedBook.data.slug)
 
 const recentBooks = remainingBooks.slice(0, 3)
@@ -48,10 +47,10 @@ const philosophyBooks = remainingBooks
       <div class="flex-1">
         {
           (
-            <a class="block min-md:-mb-32" href={routes.books.detail(lastBook.data.slug)}>
+            <a class="block min-md:-mb-32" href={routes.books.detail(promotedBook.data.slug)}>
               <Image
-                alt={lastBook.data.title}
-                src={lastBook.data.cover}
+                alt={promotedBook.data.title}
+                src={promotedBook.data.cover}
                 widths={[675, 337.5]}
                 width={337.5}
                 height={420}
@@ -67,8 +66,8 @@ const philosophyBooks = remainingBooks
             style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
             class="group text-brand-second-200 font-liga font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
           >
-            <a class="relative z-10" href={routes.books.detail(lastBook.data.slug)}
-              >{tp(lastBook.data.title)}</a
+            <a class="relative z-10" href={routes.books.detail(promotedBook.data.slug)}
+              >{tp(promotedBook.data.title)}</a
             >
             <span
               class="animate-width-expand from-brand-second-500 group-hover:bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] bg-gradient-to-r to-transparent transition-all duration-600 group-hover:w-full"
@@ -77,12 +76,12 @@ const philosophyBooks = remainingBooks
 
           <div class="line-clamp-3 text-xl text-gray-800">
             {
-              isDefined(lastBook.data.claim) &&
-                tp(lastBook.data.claim.replace(/[*>#]/g, ''))
+              isDefined(promotedBook.data.claim) &&
+                tp(promotedBook.data.claim.replace(/[*>#]/g, ''))
             }
           </div>
           <div class="flex justify-end pt-4 pr-8">
-            <ArrowLink href={routes.books.detail(lastBook.data.slug)}
+            <ArrowLink href={routes.books.detail(promotedBook.data.slug)}
               >více o knize</ArrowLink
             >
           </div>
@@ -93,7 +92,7 @@ const philosophyBooks = remainingBooks
       class="animate-opacity-on-load mt-4 mb-40 flex flex-wrap gap-4 min-sm:justify-end"
     >
       {
-        lastBook.data.authors
+        promotedBook.data.authors
           .filter((a) => a.isMain)
           .map((a) => <AuthorSmall slug={a.slug.id} roles={a.role} />)
       }

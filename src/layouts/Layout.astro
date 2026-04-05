@@ -15,14 +15,16 @@ type Props = {
   secondColor?: string
 }
 
-const lastBook = (await getCollection('book')).toSorted(
+const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
-)[0]
+)
+
+const promotedBook = books.find((b) => b.data.isPromoted) ?? books[0]
 
 const { siteTitle, siteDescription, firstColor, secondColor } = Astro.props
 
-const colorBrandFirst = firstColor ?? lastBook?.data.color ?? '#434991'
-const colorBrandSecond = secondColor ?? lastBook?.data.bgColor ?? '#e7d14c'
+const colorBrandFirst = firstColor ?? promotedBook?.data.color ?? '#434991'
+const colorBrandSecond = secondColor ?? promotedBook?.data.bgColor ?? '#e7d14c'
 
 const colorBrandFirstScale = getColorScale(colorBrandFirst, 'color-first')
 const colorBrandSecondScale = getColorScale(colorBrandSecond, 'color-second')
