@@ -116,9 +116,26 @@ const bookColorScales = books.map((book) => ({
 <script>
   import EmblaCarousel from 'embla-carousel'
 
+  const emblaByViewport = new WeakMap<HTMLElement, ReturnType<typeof EmblaCarousel>>()
+
+  const isIosSafari = () => {
+    const { userAgent, vendor } = window.navigator
+    const isIOS = /iP(ad|hone|od)/.test(userAgent) || (userAgent.includes('Mac') && 'ontouchend' in document)
+    const isWebKit = /AppleWebKit/.test(userAgent)
+    const isOtherBrowser = /CriOS|FxiOS|EdgiOS/.test(userAgent) || !vendor.includes('Apple')
+    return isIOS && isWebKit && !isOtherBrowser
+  }
+
+  const destroyCarousel = (viewport: HTMLElement | null) => {
+    if (!viewport) return
+    emblaByViewport.get(viewport)?.destroy()
+    emblaByViewport.delete(viewport)
+  }
+
   function setup() {
     const viewport = document.getElementById('carousel-viewport') as HTMLElement
     if (!viewport) return
+    destroyCarousel(viewport)
 
     const outer = viewport.closest<HTMLElement>('[data-color-scales]')
     const colorScales: Record<string, string>[] = outer
@@ -129,9 +146,10 @@ const bookColorScales = books.map((book) => ({
     const stepButtons = [...document.querySelectorAll<HTMLElement>('.carousel-step')]
 
     const embla = EmblaCarousel(viewport, {
-      loop: true,
+      loop: !isIosSafari(),
       align: 'center',
     })
+    emblaByViewport.set(viewport, embla)
 
     const slides = embla.slideNodes()
 
@@ -173,4 +191,8 @@ const bookColorScales = books.map((book) => ({
   }
 
   document.addEventListener('astro:page-load', setup)
+  document.addEventListener('astro:before-swap', () => {
+    const viewport = document.getElementById('carousel-viewport') as HTMLElement | null
+    destroyCarousel(viewport)
+  })
 </script>
