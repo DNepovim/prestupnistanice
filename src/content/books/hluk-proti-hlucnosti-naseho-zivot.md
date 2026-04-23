@@ -31,7 +31,9 @@ authors:
     slug: dominik-blaha
     role:
       - typesetting
-cover: ../images/hluk.jpg
+cover: ../images/hlukThumb.jpg
+coverImage: ../images/hlukCover.jpg
+coverTop: ../images/hlukTop.jpg
 category: philosophy
 color: '#24211b'
 bgColor: '#e0dcd0'

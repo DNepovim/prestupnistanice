@@ -38,7 +38,10 @@ authors:
     role:
       - typesetting
       - cover
-cover: ../images/diletantisumsadalsieseje.jpg
+cover: ../images/diletantismusThumb.jpg
+coverImage: ../images/diletantisumsCover.jpg
+coverTop: ../images/diletantismusTop.jpg
+isPromoted: true
 category: philosophy
 color: '#b39e73'
 bgColor: '#c9bda4'

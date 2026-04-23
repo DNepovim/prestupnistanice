@@ -1,33 +1,35 @@
 ---
-import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
-import { isDefined } from 'narrowland'
-
 import ArrowLink from '@/components/ArrowLink.astro'
-import AuthorSmall from '@/components/AuthorSmall.astro'
 import Book from '@/components/Book.astro'
 import BookExcerpt from '@/components/BookExcerpt.astro'
 import BooksGrid from '@/components/BooksGrid.astro'
+import PromotedCarousel from '@/components/PromotedCarousel.astro'
 import Section from '@/components/Section.astro'
 import Theme from '@/components/Theme.astro'
 import Layout from '@/layouts/Layout.astro'
 import { routes } from '@/routes'
-import { tp } from '@/utils/tp'
-
 const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
 )
 
-const promotedBook = books.find((b) => b.data.isPromoted) ?? books[0]
+const promotedBooks = books.filter((b) => b.data.isPromoted)
+if (promotedBooks.length === 0 && books[0]) {
+  promotedBooks.push(books[0])
+}
 
-if (!isDefined(promotedBook)) {
+if (promotedBooks.length === 0) {
   return
 }
 
-const remainingBooks = books.filter((b) => b.data.slug !== promotedBook.data.slug)
+const remainingBooks = books.filter(
+  (b) => !promotedBooks.some((p) => p.data.slug === b.data.slug),
+)
 
 const recentBooks = remainingBooks.slice(0, 3)
-const forKidsBooks = remainingBooks.filter((b) => b.data.category === 'forKids').slice(0, 3)
+const forKidsBooks = remainingBooks
+  .filter((b) => b.data.category === 'forKids')
+  .slice(0, 3)
 const philosophyBooks = remainingBooks
   .filter(
     (b) =>
@@ -40,76 +42,10 @@ const philosophyBooks = remainingBooks
 <Layout
   siteDescription="Přestupní stanice je roddinné knižní nakladatelství, které se ve své ediční činnosti soustředí na kvalitní nekomerční tituly."
 >
-  <Section isWide>
-    <div
-      class="via-brand-first-50/50 to-brand-second-100 mt-8 flex rounded-xl -bg-linear-45 from-transparent shadow-2xl max-sm:flex-col min-sm:mt-20"
-    >
-      <div class="flex-1">
-        {
-          (
-            <a class="block min-md:-mb-32" href={routes.books.detail(promotedBook.data.slug)}>
-              <Image
-                alt={promotedBook.data.title}
-                src={promotedBook.data.cover}
-                widths={[675, 337.5]}
-                width={337.5}
-                height={420}
-                class="animate-rotate-on-load rotate-0 border border-gray-200 shadow-2xl transition-transform duration-500 hover:-rotate-8 max-sm:mx-auto"
-              />
-            </a>
-          )
-        }
-      </div>
-      <div class="flex flex-3 flex-col justify-between px-4 py-8 min-sm:px-16">
-        <div>
-          <h2
-            style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
-            class="group text-brand-second-200 font-liga font-head relative mb-4 inline-block text-[10vw] font-medium min-sm:text-6xl"
-          >
-            <a class="relative z-10" href={routes.books.detail(promotedBook.data.slug)}
-              >{tp(promotedBook.data.title)}</a
-            >
-            <span
-              class="animate-width-expand from-brand-second-500 group-hover:bg-brand-second-500 absolute bottom-0 left-0 h-[4px] w-[60%] bg-gradient-to-r to-transparent transition-all duration-600 group-hover:w-full"
-            ></span>
-          </h2>
-
-          <div class="line-clamp-3 text-xl text-gray-800">
-            {
-              isDefined(promotedBook.data.claim) &&
-                tp(promotedBook.data.claim.replace(/[*>#]/g, ''))
-            }
-          </div>
-          <div class="flex justify-end pt-4 pr-8">
-            <ArrowLink href={routes.books.detail(promotedBook.data.slug)}
-              >více o knize</ArrowLink
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="animate-opacity-on-load mt-4 mb-40 flex flex-wrap gap-4 min-sm:justify-end"
-    >
-      {
-        promotedBook.data.authors
-          .filter((a) => a.isMain)
-          .map((a) => <AuthorSmall slug={a.slug.id} roles={a.role} />)
-      }
-    </div>
+  <Section isFull>
+    <PromotedCarousel books={promotedBooks} />
   </Section>
-  <Section
-    isFull
-    className="via-brand-second-50/70 bg-gradient-to-r from-transparent to-transparent"
-  >
-    <p
-      class="mx-auto mt-16 mb-24 max-w-[56rem] py-8 text-center text-2xl text-gray-800 italic"
-    >
-      <strong class="text-brand-first-500 font-alt">Přestupní stanice</strong> je roddinné
-      knižní nakladatelství, které se ve své ediční činnosti soustředí na kvalitní nekomerční
-      tituly.
-    </p>
-  </Section>
+  
   <Section>
     <div class="flex flex-col gap-16">
       {

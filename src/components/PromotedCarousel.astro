@@ -1,0 +1,176 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import { isDefined } from 'narrowland'
+
+import { routes } from '@/routes'
+import { getColorScale } from '@/utils/geColorScale'
+import { tp } from '@/utils/tp'
+
+import AuthorSmall from './AuthorSmall.astro'
+
+type Props = {
+  books: CollectionEntry<'book'>[]
+}
+
+const { books } = Astro.props
+
+const bookColorScales = books.map((book) => ({
+  ...getColorScale(book.data.color ?? '#434991', 'color-first'),
+  ...getColorScale(book.data.bgColor ?? '#e7d14c', 'color-second'),
+}))
+---
+
+<div
+  class="[--slide-w:min(calc(100%-96px),70rem)]"
+  data-color-scales={JSON.stringify(bookColorScales)}
+>
+  <div class="relative mt-8">
+    <div id="carousel-viewport" class="overflow-hidden">
+      <div id="carousel-track" class="flex gap-4 px-4">
+        {
+          books.map((book, index) => (
+            <a
+              class="carousel-slide relative block min-w-0 flex-[0_0_var(--slide-w)] transition-opacity"
+              data-index={index}
+              href={routes.books.detail(book.data.slug)}
+            >
+              <div class="relative">
+                <h2 class="sr-only">{book.data.title}</h2>
+                {isDefined(book.data.claim) && (
+                  <div class="font-alt absolute right-0 bottom-0 z-10 m-4 sm:max-w-1/2 text-right sm:text-xl text-md text-white italic">
+                    <span class="rounded bg-black/50 box-decoration-clone px-2 py-0.5 leading-relaxed">
+                      {tp(book.data.claim.replace(/[*>#]/g, ''))}
+                    </span>
+                  </div>
+                )}
+                <Image
+                  alt={book.data.title}
+                  title={book.data.title}
+                  src={book.data.cover}
+                  width={300}
+                  height={300}
+                  class="aspect-square w-full rounded-md border border-gray-200 shadow-2xl sm:hidden"
+                  fit="cover"
+                />
+                {book.data.coverTop && (
+                  <Image
+                    alt={book.data.title}
+                    title={book.data.title}
+                    src={book.data.coverTop}
+                    widths={[1675, 1337.5]}
+                    width={1337.5}
+                    height={1420}
+                    class="hidden w-full rounded-md border border-gray-200 shadow-2xl sm:block"
+                  />
+                )}
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <div
+    class="relative mx-auto mt-4 mb-40 flex w-(--slide-w) items-start justify-between gap-4"
+  >
+    <div class="carousel-stepper flex shrink-0 gap-2 max-sm:hidden">
+      {
+        books.map((book, index) => (
+          <button
+            class="carousel-step size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500"
+            data-index={index}
+            aria-label={book.data.title}
+            title={book.data.title}
+          >
+            <Image
+              src={book.data.cover}
+              alt={book.data.title}
+              width={40}
+              height={40}
+              class="size-full object-cover"
+            />
+          </button>
+        ))
+      }
+    </div>
+    <div class="grid grow">
+      {
+        books.map((book, index) => (
+          <div
+            class="carousel-authors [grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end"
+            data-index={index}
+          >
+            {book.data.authors
+              .filter((a) => a.isMain)
+              .map((a) => (
+                <AuthorSmall slug={a.slug.id} roles={a.role} />
+              ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import EmblaCarousel from 'embla-carousel'
+
+  function setup() {
+    const viewport = document.getElementById('carousel-viewport') as HTMLElement
+    if (!viewport) return
+
+    const outer = viewport.closest<HTMLElement>('[data-color-scales]')
+    const colorScales: Record<string, string>[] = outer
+      ? JSON.parse(outer.dataset.colorScales ?? '[]')
+      : []
+
+    const authorGroups = [...document.querySelectorAll<HTMLElement>('.carousel-authors')]
+    const stepButtons = [...document.querySelectorAll<HTMLElement>('.carousel-step')]
+
+    const embla = EmblaCarousel(viewport, {
+      loop: true,
+      align: 'center',
+    })
+
+    const slides = embla.slideNodes()
+
+    function updateActive() {
+      const selected = embla.selectedScrollSnap()
+      slides.forEach((slide, i) => {
+        slide.style.opacity = i === selected ? '1' : '0.3'
+      })
+      authorGroups.forEach((el, i) => {
+        el.style.opacity = i === selected ? '1' : '0'
+        el.style.pointerEvents = i === selected ? '' : 'none'
+      })
+      stepButtons.forEach((btn, i) => {
+        btn.style.opacity = i === selected ? '1' : '0.3'
+      })
+      const scale = colorScales[selected]
+      if (scale) {
+        Object.entries(scale).forEach(([key, value]) => {
+          document.documentElement.style.setProperty(`--${key}`, value)
+        })
+      }
+    }
+
+    embla.on('select', updateActive)
+    updateActive()
+
+    slides.forEach((slide, i) => {
+      slide.addEventListener('click', (e) => {
+        if (i !== embla.selectedScrollSnap()) {
+          e.preventDefault()
+          embla.scrollTo(i)
+        }
+      })
+    })
+
+    stepButtons.forEach((btn, i) => {
+      btn.addEventListener('click', () => embla.scrollTo(i))
+    })
+  }
+
+  document.addEventListener('astro:page-load', setup)
+</script>

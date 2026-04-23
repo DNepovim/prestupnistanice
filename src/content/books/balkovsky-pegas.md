@@ -53,7 +53,9 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/pegas_cover.png
+cover: ../images/pegasThumb.jpg
+coverImage: ../images/pegasCover.jpg
+coverTop: ../images/pegasTop.jpg
 isPromoted: true
 category: novel
 color: '#51609b'

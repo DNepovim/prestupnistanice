@@ -13,13 +13,13 @@ const { title, link, isWide, isFull, className } = Astro.props
 <section
   class:list={[
     'mx-auto mb-12',
-    isWide ? 'max-w-[70rem]' : isFull ? 'max-w-full' : 'max-w-[56rem]',
+    isWide ? 'max-w-[70rem]  px-6' : isFull ? 'max-w-full' : 'max-w-[56rem]  px-6',
     className,
   ]}
 >
   {
     title && (
-      <h2 class:list="mb-8 text-xl text-gray-500">
+      <h2 class="mb-8 text-xl text-gray-500">
         {link ? (
           <a
             class:list={[

@@ -36,7 +36,9 @@ authors:
     role:
       - typesetting
       - cover
-cover: ../images/diletantisumsadalsieseje.jpg
+cover: ../images/mlceniThumb.jpg
+coverImage: ../images/mlceniCover.jpg
+coverTop: ../images/mlceniTop.jpg
 category: philosophy
 color: '#b39e73'
 bgColor: '#c9bda4'

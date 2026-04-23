@@ -33,6 +33,8 @@ const book = defineCollection({
       font: z.string().optional(),
       isbn: z.string().optional(),
       cover: image(),
+      coverImage: image().optional(),
+      coverTop: image().optional(),
       authors: z.array(
         z.object({
           author: z.string(),
