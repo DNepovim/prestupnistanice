@@ -91,6 +91,14 @@ const config = {
 
     <Footer />
     <Analytics />
-    <script is:inline type="module" src="/scripts/hyphenopoly-init.js"></script>
+    <script>
+      window.Hyphenopoly = {
+        require: { cs: 'FORCEHYPHENOPOLY' },
+        setup: {
+          selectors: { '.hyphenate': {} },
+        },
+      }
+      await import('hyphenopoly/Hyphenopoly_Loader.js')
+    </script>
   </body>
 </html>
