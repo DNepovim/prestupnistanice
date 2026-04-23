@@ -25,6 +25,7 @@
     "@vercel/analytics": "^1.5.0",
     "astro": "^5.13.3",
     "astro-icon": "^1.1.5",
+    "bits-ui": "^2.18.0",
     "colord": "^2.9.3",
     "embla-carousel": "^8.6.0",
     "fuse.js": "^7.1.0",
