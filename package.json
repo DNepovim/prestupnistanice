@@ -28,6 +28,7 @@
     "colord": "^2.9.3",
     "embla-carousel": "^8.6.0",
     "fuse.js": "^7.1.0",
+    "hyphenopoly": "^6.1.0",
     "iconify-icon": "^3.0.1",
     "marked": "^16.4.0",
     "narrowland": "^1.5.0",
