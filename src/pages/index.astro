@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
+
 import ArrowLink from '@/components/ArrowLink.astro'
 import Book from '@/components/Book.astro'
 import BookExcerpt from '@/components/BookExcerpt.astro'
@@ -9,6 +10,7 @@ import Section from '@/components/Section.astro'
 import Theme from '@/components/Theme.astro'
 import Layout from '@/layouts/Layout.astro'
 import { routes } from '@/routes'
+
 const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
 )
@@ -43,9 +45,9 @@ const philosophyBooks = remainingBooks
   siteDescription="Přestupní stanice je roddinné knižní nakladatelství, které se ve své ediční činnosti soustředí na kvalitní nekomerční tituly."
 >
   <Section isFull>
-    <PromotedCarousel books={promotedBooks} />
+    <PromotedCarousel books={promotedBooks} client:load />
   </Section>
-  
+
   <Section>
     <div class="flex flex-col gap-16">
       {
