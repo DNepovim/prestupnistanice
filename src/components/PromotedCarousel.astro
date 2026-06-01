@@ -118,13 +118,6 @@ const bookColorScales = books.map((book) => ({
 
   const emblaByViewport = new WeakMap<HTMLElement, ReturnType<typeof EmblaCarousel>>()
 
-  const isIosSafari = () => {
-    const { userAgent, vendor } = window.navigator
-    const isIOS = /iP(ad|hone|od)/.test(userAgent) || (userAgent.includes('Mac') && 'ontouchend' in document)
-    const isWebKit = /AppleWebKit/.test(userAgent)
-    const isOtherBrowser = /CriOS|FxiOS|EdgiOS/.test(userAgent) || !vendor.includes('Apple')
-    return isIOS && isWebKit && !isOtherBrowser
-  }
 
   const destroyCarousel = (viewport: HTMLElement | null) => {
     if (!viewport) return
@@ -146,7 +139,7 @@ const bookColorScales = books.map((book) => ({
     const stepButtons = [...document.querySelectorAll<HTMLElement>('.carousel-step')]
 
     const embla = EmblaCarousel(viewport, {
-      loop: !isIosSafari(),
+      loop: true,
       align: 'center',
     })
     emblaByViewport.set(viewport, embla)
