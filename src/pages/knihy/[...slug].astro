@@ -9,9 +9,11 @@ import { categoryKeys } from '@/routes'
 export async function getStaticPaths() {
   const posts = await getCollection('book')
 
-  return [...posts.map(({ data }) => data.slug), ...categoryKeys].map((slug) => ({
-    params: { slug },
-  }))
+  return [...posts.map(({ data }) => data.slug), ...categoryKeys]
+    .filter((slug) => slug !== '')
+    .map((slug) => ({
+      params: { slug },
+    }))
 }
 
 const { slug } = Astro.params
