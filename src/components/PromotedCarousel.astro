@@ -22,16 +22,18 @@ const bookColorScales = books.map((book) => ({
 ---
 
 <div
-  class="[--slide-w:min(calc(100%-96px),70rem)]"
+  class="promoted-carousel [--slide-w:min(calc(100%-96px),70rem)]"
+  data-carousel
   data-color-scales={JSON.stringify(bookColorScales)}
 >
   <div class="relative mt-8">
-    <div id="carousel-viewport" class="overflow-hidden">
-      <div id="carousel-track" class="flex gap-4 px-4">
+    <div class="overflow-hidden" data-carousel-viewport>
+      <div class="flex gap-4 px-4 touch-pan-y">
         {
           books.map((book, index) => (
             <a
-              class="carousel-slide relative block min-w-0 flex-[0_0_var(--slide-w)] transition-opacity"
+              class="promoted-slide relative block min-w-0 flex-[0_0_var(--slide-w)] transition-opacity duration-500"
+              data-carousel-slide
               data-index={index}
               href={routes.books.detail(book.data.slug)}
             >
@@ -74,11 +76,13 @@ const bookColorScales = books.map((book) => ({
   <div
     class="relative mx-auto mt-4 mb-40 flex w-(--slide-w) items-start justify-between gap-4"
   >
-    <div class="carousel-stepper flex shrink-0 gap-2 max-sm:hidden">
+    <div class="flex shrink-0 gap-2 max-sm:hidden">
       {
         books.map((book, index) => (
           <button
-            class="carousel-step size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500"
+            type="button"
+            class="promoted-step size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500"
+            data-carousel-step
             data-index={index}
             aria-label={book.data.title}
             title={book.data.title}
@@ -98,7 +102,8 @@ const bookColorScales = books.map((book) => ({
       {
         books.map((book, index) => (
           <div
-            class="carousel-authors [grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end"
+            class="promoted-authors [grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end pointer-events-none"
+            data-carousel-authors
             data-index={index}
           >
             {book.data.authors
@@ -113,61 +118,74 @@ const bookColorScales = books.map((book) => ({
   </div>
 </div>
 
+<style>
+  .promoted-slide {
+    opacity: 0.3;
+  }
+  .promoted-slide.is-snapped {
+    opacity: 1;
+  }
+  .promoted-step.is-active {
+    opacity: 1;
+  }
+  .promoted-authors.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
 <script>
   import EmblaCarousel from 'embla-carousel'
+  import ClassNames from 'embla-carousel-class-names'
 
-  const emblaByViewport = new WeakMap<HTMLElement, ReturnType<typeof EmblaCarousel>>()
+  const instances = new WeakMap<HTMLElement, ReturnType<typeof EmblaCarousel>>()
 
+  function setupCarousel(root: HTMLElement) {
+    const viewport = root.querySelector<HTMLElement>('[data-carousel-viewport]')
+    if (!viewport || instances.has(viewport)) return
 
-  const destroyCarousel = (viewport: HTMLElement | null) => {
-    if (!viewport) return
-    emblaByViewport.get(viewport)?.destroy()
-    emblaByViewport.delete(viewport)
-  }
+    const colorScales: Record<string, string>[] = (() => {
+      try {
+        return JSON.parse(root.dataset.colorScales ?? '[]')
+      } catch {
+        return []
+      }
+    })()
 
-  function setup() {
-    const viewport = document.getElementById('carousel-viewport') as HTMLElement
-    if (!viewport) return
-    destroyCarousel(viewport)
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-carousel-step]')]
+    const authors = [...root.querySelectorAll<HTMLElement>('[data-carousel-authors]')]
+    const slides = [...root.querySelectorAll<HTMLAnchorElement>('[data-carousel-slide]')]
 
-    const outer = viewport.closest<HTMLElement>('[data-color-scales]')
-    const colorScales: Record<string, string>[] = outer
-      ? JSON.parse(outer.dataset.colorScales ?? '[]')
-      : []
+    const embla = EmblaCarousel(
+      viewport,
+      { loop: true, align: 'center', skipSnaps: false },
+      [ClassNames({ snapped: 'is-snapped' })],
+    )
+    instances.set(viewport, embla)
 
-    const authorGroups = [...document.querySelectorAll<HTMLElement>('.carousel-authors')]
-    const stepButtons = [...document.querySelectorAll<HTMLElement>('.carousel-step')]
-
-    const embla = EmblaCarousel(viewport, {
-      loop: true,
-      align: 'center',
-    })
-    emblaByViewport.set(viewport, embla)
-
-    const slides = embla.slideNodes()
-
-    function updateActive() {
-      const selected = embla.selectedScrollSnap()
-      slides.forEach((slide, i) => {
-        slide.style.opacity = i === selected ? '1' : '0.3'
-      })
-      authorGroups.forEach((el, i) => {
-        el.style.opacity = i === selected ? '1' : '0'
-        el.style.pointerEvents = i === selected ? '' : 'none'
-      })
-      stepButtons.forEach((btn, i) => {
-        btn.style.opacity = i === selected ? '1' : '0.3'
-      })
-      const scale = colorScales[selected]
+    const onSelect = () => {
+      const i = embla.selectedScrollSnap()
+      for (let s = 0; s < steps.length; s++) {
+        steps[s].classList.toggle('is-active', s === i)
+      }
+      for (let a = 0; a < authors.length; a++) {
+        authors[a].classList.toggle('is-active', a === i)
+      }
+      const scale = colorScales[i]
       if (scale) {
-        Object.entries(scale).forEach(([key, value]) => {
-          document.documentElement.style.setProperty(`--${key}`, value)
-        })
+        for (const key in scale) {
+          root.style.setProperty(`--${key}`, scale[key])
+        }
       }
     }
 
-    embla.on('select', updateActive)
-    updateActive()
+    embla.on('select', onSelect)
+    embla.on('reInit', onSelect)
+    onSelect()
+
+    steps.forEach((btn, i) => {
+      btn.addEventListener('click', () => embla.scrollTo(i))
+    })
 
     slides.forEach((slide, i) => {
       slide.addEventListener('click', (e) => {
@@ -177,15 +195,23 @@ const bookColorScales = books.map((book) => ({
         }
       })
     })
-
-    stepButtons.forEach((btn, i) => {
-      btn.addEventListener('click', () => embla.scrollTo(i))
-    })
   }
 
-  document.addEventListener('astro:page-load', setup)
-  document.addEventListener('astro:before-swap', () => {
-    const viewport = document.getElementById('carousel-viewport') as HTMLElement | null
-    destroyCarousel(viewport)
-  })
+  function teardownAll() {
+    document
+      .querySelectorAll<HTMLElement>('[data-carousel] [data-carousel-viewport]')
+      .forEach((vp) => {
+        instances.get(vp)?.destroy()
+        instances.delete(vp)
+      })
+  }
+
+  function setupAll() {
+    document
+      .querySelectorAll<HTMLElement>('[data-carousel]')
+      .forEach(setupCarousel)
+  }
+
+  document.addEventListener('astro:page-load', setupAll)
+  document.addEventListener('astro:before-swap', teardownAll)
 </script>

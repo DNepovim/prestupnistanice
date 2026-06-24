@@ -28,6 +28,7 @@
     "bits-ui": "^2.18.0",
     "colord": "^2.9.3",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-class-names": "^8.6.0",
     "fuse.js": "^7.1.0",
     "hyphenopoly": "^6.1.0",
     "iconify-icon": "^3.0.1",
