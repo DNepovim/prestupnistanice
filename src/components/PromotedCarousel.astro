@@ -22,7 +22,7 @@ const bookColorScales = books.map((book) => ({
 ---
 
 <div
-  class="promoted-carousel [--slide-w:min(calc(100%-96px),70rem)]"
+  class="promoted-carousel [--slide-w:min(calc(100%-48px),70rem)] sm:[--slide-w:min(calc(100%-96px),70rem)]"
   data-carousel
   data-color-scales={JSON.stringify(bookColorScales)}
 >
@@ -36,7 +36,7 @@ const bookColorScales = books.map((book) => ({
               : null
             return (
               <div
-                class="promoted-slide relative min-w-0 flex-[0_0_var(--slide-w)] transition-opacity duration-500"
+                class="relative min-w-0 flex-[0_0_var(--slide-w)] opacity-30 sm:origin-top sm:scale-[0.82] transition-[opacity,scale] duration-500 [&.is-snapped]:opacity-100 sm:[&.is-snapped]:scale-100"
                 data-carousel-slide
                 data-index={index}
               >
@@ -90,7 +90,7 @@ const bookColorScales = books.map((book) => ({
           : null
         return (
           <div
-            class="promoted-mobile-caption pointer-events-none [grid-area:1/1] flex flex-col gap-4 opacity-0 transition-opacity duration-500"
+            class="pointer-events-none [grid-area:1/1] flex flex-col gap-4 opacity-0 transition-opacity duration-500 [&.is-active]:pointer-events-auto [&.is-active]:opacity-100"
             data-carousel-mobile
             data-index={index}
           >
@@ -119,7 +119,7 @@ const bookColorScales = books.map((book) => ({
         books.map((book, index) => (
           <button
             type="button"
-            class="promoted-step size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500"
+            class="size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500 [&.is-active]:opacity-100"
             data-carousel-step
             data-index={index}
             aria-label={book.data.title}
@@ -140,7 +140,7 @@ const bookColorScales = books.map((book) => ({
       {
         books.map((book, index) => (
           <div
-            class="promoted-authors [grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end pointer-events-none"
+            class="[grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end pointer-events-none [&.is-active]:opacity-100 [&.is-active]:pointer-events-auto"
             data-carousel-authors
             data-index={index}
           >
@@ -155,35 +155,6 @@ const bookColorScales = books.map((book) => ({
     </div>
   </div>
 </div>
-
-<style>
-  .promoted-slide {
-    opacity: 0.3;
-  }
-  .promoted-slide.is-snapped {
-    opacity: 1;
-  }
-  @media (min-width: 640px) {
-    .promoted-slide {
-      transform: scale(0.82);
-      transform-origin: top center;
-      transition:
-        opacity 500ms,
-        transform 500ms;
-    }
-    .promoted-slide.is-snapped {
-      transform: scale(1);
-    }
-  }
-  .promoted-step.is-active {
-    opacity: 1;
-  }
-  .promoted-authors.is-active,
-  .promoted-mobile-caption.is-active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-</style>
 
 <script>
   import EmblaCarousel from 'embla-carousel'
