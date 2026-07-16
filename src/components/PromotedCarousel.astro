@@ -36,7 +36,7 @@ const bookColorScales = books.map((book) => ({
               : null
             return (
               <div
-                class="relative min-w-0 flex-[0_0_var(--slide-w)] opacity-30 sm:origin-top sm:scale-[0.82] transition-[opacity,scale] duration-500 [&.is-snapped]:opacity-100 sm:[&.is-snapped]:scale-100"
+                class="relative min-w-0 flex-[0_0_var(--slide-w)] opacity-30 transition-opacity duration-500 [&.is-snapped]:opacity-100"
                 data-carousel-slide
                 data-index={index}
               >
@@ -112,14 +112,14 @@ const bookColorScales = books.map((book) => ({
     }
   </div>
   <div
-    class="relative mx-auto mt-4 mb-40 hidden w-(--slide-w) items-start justify-between gap-4 sm:flex"
+    class="relative mt-4 mb-40 hidden items-start justify-between gap-4 px-[calc((100%-var(--slide-w))/2)] sm:flex"
   >
-    <div class="flex shrink-0 gap-2">
+    <div class="flex shrink-0 gap-2 pl-4">
       {
         books.map((book, index) => (
           <button
             type="button"
-            class="size-10 cursor-pointer overflow-hidden rounded-sm opacity-30 transition-opacity duration-500 [&.is-active]:opacity-100"
+            class="size-10 cursor-pointer overflow-hidden rounded-md opacity-30 transition-opacity duration-500 [&.is-active]:opacity-100"
             data-carousel-step
             data-index={index}
             aria-label={book.data.title}

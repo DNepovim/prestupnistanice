@@ -153,7 +153,7 @@
                       src={book.item.image.src}
                       alt={book.item.title}
                       class={[
-                        'w-20 rounded shadow-2xl',
+                        'w-20 rounded-md shadow-2xl',
                         book.item.type === 'author' && 'rounded-full',
                       ]}
                     />

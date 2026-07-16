@@ -17,7 +17,7 @@
         {alt}
         loading="eager"
         decoding="async"
-        class="h-auto w-full border border-gray-200 shadow-xl"
+        class="h-auto w-full rounded-md border border-gray-200 shadow-xl"
       />
     {/if}
   </div>
