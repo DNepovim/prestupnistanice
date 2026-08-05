@@ -12,6 +12,8 @@ export default {
     ],
     project: ['src/**/*'],
   },
-  ignore: [ 'tina/**/*', 'public/**/*', 'astro-tina-directive/**/*'],
-  ignoreDependencies: ['@iconify-json/ph'],
+  entry: ['tina/config.ts'],
+  project: ['src/**/*', 'tina/**/*.{ts,tsx}'],
+  ignore: ['tina/__generated__/**'],
+  ignoreDependencies: ['@iconify-json/ph', 'sharp', 'eslint-plugin-jsx-a11y'],
 } satisfies KnipConfig

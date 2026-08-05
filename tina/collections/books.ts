@@ -1,9 +1,17 @@
 import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
-import type { Books } from '../__generated__/types'
 import { getSlugFromPath } from '../../src/utils/getSlugFromPath'
 import { MarkdownInput } from '../components/Markdown'
+
+type BookAuthorFormValue = {
+  author: string
+}
+
+type BooksFormValues = {
+  title: string
+  authors?: BookAuthorFormValue[]
+}
 
 export const BooksCollection: Collection = {
   name: 'books',
@@ -15,10 +23,10 @@ export const BooksCollection: Collection = {
       slugify: (v?: { title?: string }) => (v?.title ? slugify(v.title) : ''),
     },
     // @ts-expect-error wrongly typed tina cms
-    beforeSubmit: ({ values }: { values: Books }) => ({
+    beforeSubmit: ({ values }: { values: BooksFormValues }) => ({
       ...values,
       slug: slugify(values.title),
-      authors: ( values.authors ?? [] ).map((a) => ({
+      authors: (values.authors ?? []).map((a) => ({
         ...a,
         slug: getSlugFromPath(a.author),
       })),
@@ -159,6 +167,7 @@ export const BooksCollection: Collection = {
       label: 'Popis',
       isBody: true,
       ui: {
+        // @ts-expect-error wrongly typed tina cms
         component: MarkdownInput,
       },
     },

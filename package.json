@@ -11,8 +11,9 @@
     "lint:check": "eslint './src/**/*.{ts,tsx,js,cjs,mjs,svelte,astro}'",
     "lint:fix": "eslint --fix --cache './src/**/*.{ts,tsx,js,cjs,mjs,svelte,astro}'",
     "format:check": "prettier --check '**/*.{ts,tsx,js,cjs,json,svg}'",
-    "format:write": "prettier --write --cache 'src/**/*.{ts,tsx,js,cjs,json,svg}'",
-    "knip": "knip"
+    "format:write": "prettier --write --cache '**/*.{ts,tsx,js,cjs,json,svg}'",
+    "knip": "knip",
+    "check": "pnpm lint:check && pnpm format:check && pnpm typecheck && pnpm knip"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
@@ -50,6 +51,8 @@
     "@iconify-json/ph": "^1.2.2",
     "@tinacms/cli": "^1.10.2",
     "@types/node": "^22.18.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@types/typopo": "^2.5.4",
     "eslint": "^9.37.0",
     "eslint-plugin-astro": "^1.3.1",

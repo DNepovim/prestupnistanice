@@ -34,6 +34,7 @@ export const PagesCollection: Collection = {
       label: 'Obsah',
       isBody: true,
       ui: {
+        // @ts-expect-error wrongly typed tina cms
         component: MarkdownInput,
       },
     },

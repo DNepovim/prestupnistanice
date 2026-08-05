@@ -80,6 +80,7 @@ export const AuthorsCollection: Collection = {
       label: 'Popis',
       isBody: true,
       ui: {
+        // @ts-expect-error wrongly typed tina cms
         component: MarkdownInput,
       },
     },
