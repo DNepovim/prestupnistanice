@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { orderStore, getDeliveryPrice, getPaymentPrice, getTotalItems, resetOrder, setCurrentState } from "@/stores/order";
-  import { orderStore, getDeliveryPrice, getPaymentPrice, getTotalItems, resetOrder, setCurrentState } from "../stores/order";
   import {
     getDeliveryPrice,
     getPaymentPrice,
@@ -8,7 +6,7 @@
     orderStore,
     resetOrder,
     setCurrentState,
-  } from '../stores/order'
+  } from '@/stores/order'
 
   type BookDetails = {
     slug: string

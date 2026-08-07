@@ -2,16 +2,16 @@ import { persistentAtom } from '@nanostores/persistent'
 
 export type OrderState = 'cartContent' | 'deliveryPayment' | 'personalData' | 'summary'
 
-export type CartItem = {
+type CartItem = {
   slug: string
   count: number
 }
 
-export type DeliveryOption = 'balikovna' | 'balikovna-adresa' | 'osobni-prevzeti'
-export type PaymentOption = 'prevodem' | 'dobirkou' | 'hotovost'
-export type PickupLocation = 'praha-kralin' | 'melnik' | 'revnice'
+type DeliveryOption = 'balikovna' | 'balikovna-adresa' | 'osobni-prevzeti'
+type PaymentOption = 'prevodem' | 'dobirkou' | 'hotovost'
+type PickupLocation = 'praha-kralin' | 'melnik' | 'revnice'
 
-export type PersonalData = {
+type PersonalData = {
   firstname: string
   surname: string
   email: string
@@ -22,7 +22,7 @@ export type PersonalData = {
   postcode?: string
 }
 
-export type OrderStore = {
+type OrderStore = {
   currentState: OrderState
   cart: CartItem[]
   delivery: DeliveryOption | null

@@ -67,9 +67,11 @@ export async function GET({ url }: APIContext) {
         .filter(Boolean)
 
       const authors = authorSlugs.length
-        ? (await Promise.all(authorSlugs.map((as) => Promise.resolve(getEntry('author', as))))).filter(
-            (a): a is NonNullable<typeof a> => Boolean(a),
-          )
+        ? (
+            await Promise.all(
+              authorSlugs.map((as) => Promise.resolve(getEntry('author', as))),
+            )
+          ).filter((a): a is NonNullable<typeof a> => Boolean(a))
         : []
 
       const authorName = authors
@@ -109,9 +111,11 @@ export async function GET({ url }: APIContext) {
           .map((a) => (typeof a.slug === 'string' ? a.slug : a.slug.id))
           .filter(Boolean)
         const authors = authorSlugs.length
-          ? (await Promise.all(authorSlugs.map((as) => Promise.resolve(getEntry('author', as))))).filter(
-              (a): a is NonNullable<typeof a> => Boolean(a),
-            )
+          ? (
+              await Promise.all(
+                authorSlugs.map((as) => Promise.resolve(getEntry('author', as))),
+              )
+            ).filter((a): a is NonNullable<typeof a> => Boolean(a))
           : []
         const authorName = authors
           .map((a) => {
