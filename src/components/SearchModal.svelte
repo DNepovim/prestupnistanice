@@ -54,16 +54,45 @@
   }
 
   const keepFocusOnInput = (event: KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      event.preventDefault()
+    if (
+      !['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes(event.key)
+    )
       return
-    }
-    if (!['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes(event.key)) return
     window.requestAnimationFrame(scrollCurrentSelectionIntoView)
   }
 
+  let dialogEl: HTMLElement | undefined
+
+  const trapFocus = (event: KeyboardEvent) => {
+    if (event.key !== 'Tab' || !dialogEl) return
+
+    const focusable = [
+      ...dialogEl.querySelectorAll<HTMLElement>('a[href], button, input, [tabindex]'),
+    ].filter(
+      (el) =>
+        el.getAttribute('tabindex') !== '-1' &&
+        (el.offsetWidth > 0 || el.offsetHeight > 0),
+    )
+
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (!first || !last) return
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault()
+      last.focus()
+      return
+    }
+    if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault()
+      first.focus()
+    }
+  }
+
   $: filteredBooks =
-    normalizeSearch(searchValue) === '' ? data.map((item) => ({ item })) : fuse.search(searchValue)
+    normalizeSearch(searchValue) === ''
+      ? data.map((item) => ({ item }))
+      : fuse.search(searchValue)
 
   onMount(() => {
     const previousOverflow = document.body.style.overflow
@@ -74,11 +103,19 @@
   })
 </script>
 
-<div class="fixed inset-0 z-100 px-4">
+<div
+  class="fixed inset-0 z-100 px-4"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Vyhledávání knih a autorů"
+  tabindex={-1}
+  bind:this={dialogEl}
+  onkeydown={trapFocus}
+>
   <button
     type="button"
     class="fixed inset-0 size-full bg-gradient-to-t from-brand-second-50/90 to-white/90"
-    aria-label="Zavřít vyhledávání"
+    aria-hidden="true"
     tabindex={-1}
     onclick={() => {
       toggle(false)
@@ -92,17 +129,10 @@
       toggle(false)
     }}
   >
-    <iconify-icon
-      icon="ph:x"
-      class="text-3xl"
-      noobserver
-    ></iconify-icon>
+    <iconify-icon icon="ph:x" class="text-3xl" noobserver></iconify-icon>
   </button>
   <div class="block mx-auto max-w-160 mt-20">
-    <Command.Root
-      class="w-full"
-      shouldFilter={false}
-    >
+    <Command.Root class="w-full" shouldFilter={false}>
       <label class="relative text-5xl">
         <div
           class="absolute bottom-[0.15em] inset-x-0 h-[1px] w-full border-b-2 border-dotted border-brand-first-900"

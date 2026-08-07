@@ -28,20 +28,26 @@ const categoryName = CATEGORIES[categoryKey].name
   >
     {slug && categoryName}
   </p>
-  <div
+  <nav
+    aria-label="Kategorie knih"
     class="text-brand-second mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col min-md:mb-16"
   >
     {
       Object.entries(CATEGORIES).map(([key, values], index) => (
         <>
           {index !== 0 && (
-            <Icon name="ph:tilde-thin" class="text-brand-second-300 max-md:hidden" />
+            <Icon
+              name="ph:tilde-thin"
+              aria-hidden="true"
+              class="text-brand-second-300 max-md:hidden"
+            />
           )}
           <a
             class:list={[
-              'font-alt text-brand-first-100 group relative text-xl',
+              'font-alt group relative text-xl text-gray-500',
               slug === values.slug && 'text-brand-first-500 text-2xl',
             ]}
+            aria-current={slug === values.slug ? 'page' : undefined}
             href={routes.books.category(key as keyof typeof CATEGORIES)}
           >
             <span class="relative z-10">
@@ -54,7 +60,7 @@ const categoryName = CATEGORIES[categoryKey].name
         </>
       ))
     }
-  </div>
+  </nav>
   <div class="flex flex-col gap-20 pt-16">
     {
       books.map((book, index) => (

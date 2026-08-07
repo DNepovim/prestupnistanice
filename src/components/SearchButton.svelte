@@ -15,18 +15,29 @@
   export let data: SearchItem[]
 
   let isOpen = false
+  let triggerEl: HTMLButtonElement | undefined
 
-  const toggle = (is?: boolean) => (isOpen = is ?? !isOpen)
+  const toggle = (is?: boolean) => {
+    const next = is ?? !isOpen
+    if (!next && isOpen) {
+      triggerEl?.focus()
+    }
+    isOpen = next
+  }
 </script>
 
 <button
+  bind:this={triggerEl}
   onclick={() => {
     toggle(true)
   }}
   class="font-liga font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-brand-first-500 no-underline"
-  title="Vyhledávání"
+  aria-label="Vyhledávání"
+  aria-haspopup="dialog"
+  aria-expanded={isOpen}
 >
-  <iconify-icon class="-mb-1" icon="ph:magnifying-glass" noobserver></iconify-icon>
+  <iconify-icon class="-mb-1" icon="ph:magnifying-glass" noobserver aria-hidden="true"
+  ></iconify-icon>
   <span
     class="bg-brand-first-500 absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
   ></span>

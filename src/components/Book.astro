@@ -34,9 +34,9 @@ const authors = await getEntries(
   <article class="jus flex w-64 justify-end gap-4 min-md:mb-12">
     {
       (
-        <a href={link} class="width-8 block shrink-0">
+        <a href={link} class="block shrink-0" tabindex="-1" aria-hidden="true">
           <Image
-            alt={b.title}
+            alt=""
             src={b.cover}
             width={157.5}
             height={225}

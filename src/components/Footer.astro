@@ -7,32 +7,31 @@ import { Icon } from 'astro-icon/components'
     <div
       class="border-brand-first-100 text-brand-first-500 bg-brand-second-50/30 flex items-stretch justify-between gap-8 rounded-sm border p-4 max-sm:flex-col"
     >
-      <div class="flex-2">
-        <h3 class="mb-2">Obsah</h3>
+      <nav class="flex-2" aria-label="Obsah webu">
+        <h2 class="mb-2">Obsah</h2>
         <menu class="text-sm">
           <li class="mb-1"><a class="hover:underline" href="/knihy">Naše knihy</a></li>
           <li class="mb-1"><a class="hover:underline" href="/autori">Autoři</a></li>
           <li class="mb-1">
-            <a class="hover:underline" href="/o-nakladatelstvi">O nakladatelstvi</a>
+            <a class="hover:underline" href="/o-nakladatelstvi">O nakladatelství</a>
           </li>
         </menu>
-      </div>
+      </nav>
 
       <div class="flex-1">
-        <h3 class="mb-2">Kontakty</h3>
+        <h2 class="mb-2">Kontakty</h2>
         <p class="mb-2 flex items-center gap-2 text-sm">
-          <Icon name="ph:envelope-light" class="size-6" />
-          <a class="hover:underline" href="mailto:skalak@knihyps.cz" target="_blank"
-            >skalak@knihyps.cz</a
-          >
+          <Icon name="ph:envelope-light" class="size-6" aria-hidden="true" />
+          <a class="hover:underline" href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</a>
         </p>
         <p class="mb-2 flex items-center gap-2 text-sm">
-          <Icon name="ph:facebook-logo-light" class="size-6" />
+          <Icon name="ph:facebook-logo-light" class="size-6" aria-hidden="true" />
 
           <a
             class="hover:underline"
             href="https://www.facebook.com/knihyprestupnistanice"
-            target="_blank">knihyprestupnistanice</a
+            target="_blank"
+            rel="noopener noreferrer">knihyprestupnistanice</a
           >
         </p>
         <p class="mt-6 text-xs">
@@ -50,17 +49,17 @@ import { Icon } from 'astro-icon/components'
         class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://fonts.adobe.com/fonts/quiche-flare"
         target="_blank"
-        rel="noopener noreferer">Quiche Flare</a
+        rel="noopener noreferrer">Quiche Flare</a
       > a <a
         class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://fonts.adobe.com/fonts/montserrat"
         target="_blank"
-        rel="noopener noreferer">Montserrat</a
+        rel="noopener noreferrer">Montserrat</a
       > vysázel <a
         class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
         href="https://www.dominikblaha.cz"
         target="_blank"
-        rel="noopener noreferer">Dominik Bláha</a
+        rel="noopener noreferrer">Dominik Bláha</a
       >
     </p>
   </footer>

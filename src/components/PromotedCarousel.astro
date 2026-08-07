@@ -22,11 +22,16 @@ const bookColorScales = books.map((book) => ({
 ---
 
 <div
-  class="promoted-carousel [--slide-spacing:1rem] [--slide-size:min(calc(100%-2rem),70rem)] sm:[--slide-size:min(calc(100%-5rem),70rem)]"
+  class="promoted-carousel [--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)]"
   data-carousel
   data-color-scales={JSON.stringify(bookColorScales)}
 >
-  <div class="relative mt-8">
+  <div
+    class="relative mt-8"
+    role="group"
+    aria-roledescription="carousel"
+    aria-label="Vybrané knihy"
+  >
     <div class="overflow-hidden" data-carousel-viewport>
       <div class="flex touch-pan-y touch-pinch-zoom items-start">
         {
@@ -39,6 +44,9 @@ const bookColorScales = books.map((book) => ({
                 class="relative min-w-0 flex-[0_0_var(--slide-size)] px-[calc(var(--slide-spacing)/2)] opacity-30 transition-opacity duration-500 [&.is-snapped]:opacity-100"
                 data-carousel-slide
                 data-index={index}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${String(index + 1)} z ${String(books.length)}: ${book.data.title}`}
               >
                 <a
                   class="relative block"
@@ -47,15 +55,14 @@ const bookColorScales = books.map((book) => ({
                 >
                   <h2 class="sr-only">{book.data.title}</h2>
                   {cleanClaim && (
-                    <div class="font-alt absolute right-0 bottom-0 z-10 m-4 max-w-1/2 text-right text-xl text-white italic hidden sm:block">
+                    <div class="font-alt absolute right-0 bottom-0 z-10 m-4 hidden max-w-1/2 text-right text-xl text-white italic sm:block">
                       <span class="rounded bg-black/50 box-decoration-clone px-2 py-0.5 leading-relaxed">
                         {cleanClaim}
                       </span>
                     </div>
                   )}
                   <Image
-                    alt={book.data.title}
-                    title={book.data.title}
+                    alt=""
                     src={book.data.cover}
                     width={300}
                     height={300}
@@ -64,8 +71,7 @@ const bookColorScales = books.map((book) => ({
                   />
                   {book.data.coverTop && (
                     <Image
-                      alt={book.data.title}
-                      title={book.data.title}
+                      alt=""
                       src={book.data.coverTop}
                       widths={[1675, 1338]}
                       width={1338}
@@ -90,17 +96,18 @@ const bookColorScales = books.map((book) => ({
           : null
         return (
           <div
-            class="pointer-events-none [grid-area:1/1] flex flex-col gap-4 opacity-0 transition-opacity duration-500 [&.is-active]:pointer-events-auto [&.is-active]:opacity-100"
+            class="pointer-events-none flex flex-col gap-4 opacity-0 transition-opacity duration-500 [grid-area:1/1] [&.is-active]:pointer-events-auto [&.is-active]:opacity-100"
             data-carousel-sync
             data-index={index}
+            inert={index !== 0}
           >
             {cleanClaim && (
-              <p class="font-alt text-base text-gray-700 italic leading-relaxed">
+              <p class="font-alt text-base leading-relaxed text-gray-700 italic">
                 {cleanClaim}
               </p>
             )}
             {mainAuthors.length > 0 && (
-              <div class="flex flex-wrap gap-2 -ml-4">
+              <div class="-ml-4 flex flex-wrap gap-2">
                 {mainAuthors.map((a) => (
                   <AuthorSmall slug={a.slug.id} roles={a.role} />
                 ))}
@@ -124,11 +131,10 @@ const bookColorScales = books.map((book) => ({
             data-carousel-sync
             data-index={index}
             aria-label={book.data.title}
-            title={book.data.title}
           >
             <Image
               src={book.data.cover}
-              alt={book.data.title}
+              alt=""
               width={40}
               height={40}
               class="size-full object-cover"
@@ -141,9 +147,10 @@ const bookColorScales = books.map((book) => ({
       {
         books.map((book, index) => (
           <div
-            class="[grid-area:1/1] flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 min-sm:justify-end pointer-events-none [&.is-active]:opacity-100 [&.is-active]:pointer-events-auto"
+            class="pointer-events-none flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 [grid-area:1/1] min-sm:justify-end [&.is-active]:pointer-events-auto [&.is-active]:opacity-100"
             data-carousel-sync
             data-index={index}
+            inert={index !== 0}
           >
             {book.data.authors
               .filter((a) => a.isMain)
@@ -188,7 +195,19 @@ const bookColorScales = books.map((book) => ({
       const selected = embla.selectedScrollSnap()
 
       synced.forEach((el) => {
-        el.classList.toggle('is-active', Number(el.dataset.index) === selected)
+        const isActive = Number(el.dataset.index) === selected
+        el.classList.toggle('is-active', isActive)
+
+        if (el.hasAttribute('data-carousel-step')) {
+          if (isActive) {
+            el.setAttribute('aria-current', 'true')
+          } else {
+            el.removeAttribute('aria-current')
+          }
+          return
+        }
+
+        el.inert = !isActive
       })
 
       Object.entries(colorScales[selected] ?? {}).forEach(([key, value]) => {
@@ -223,9 +242,7 @@ const bookColorScales = books.map((book) => ({
   }
 
   function setupAll() {
-    document
-      .querySelectorAll<HTMLElement>('[data-carousel]')
-      .forEach(setupCarousel)
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupCarousel)
   }
 
   document.addEventListener('astro:page-load', setupAll)

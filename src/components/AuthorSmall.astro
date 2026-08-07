@@ -36,13 +36,16 @@ const { data: author } = entry
     author.image ? (
       <Image
         src={author.image}
-        alt={`${author.firstname} ${author.surname}`}
+        alt=""
         width={40}
         height={40}
         class="size-10 rounded-full"
       />
     ) : (
-      <div class="from-brand-first-200 to-brand-second-200 size-10 shrink-0 rounded-full bg-gradient-to-tr" />
+      <div
+        aria-hidden="true"
+        class="from-brand-first-200 to-brand-second-200 size-10 shrink-0 rounded-full bg-gradient-to-tr"
+      />
     )
   }
   <div>

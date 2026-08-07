@@ -30,9 +30,14 @@ const name = `${a.firstname} ${a.surname}`
 <article class="max-xs:flex max-xs:flex-col flex gap-8">
   {
     a.image && (
-      <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
+      <a
+        class="block w-[20rem] flex-1"
+        href={routes.authors.detail(slug)}
+        tabindex="-1"
+        aria-hidden="true"
+      >
         <Image
-          alt={name}
+          alt=""
           src={a.image}
           width={157.5}
           height={157.5}

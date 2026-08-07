@@ -24,7 +24,6 @@
 </script>
 
 <div
-  role="group"
   on:mouseenter={onEnter}
   on:mouseleave={onLeave}
   on:mousemove={onMove}
@@ -35,7 +34,7 @@
     <div
       class="pointer-events-none fixed z-50 shadow-2xl transition-opacity opacity-100"
       style={`left:${left};top:${top}`}
-      aria-hidden={!visible}
+      aria-hidden="true"
     >
       <slot name="popup" />
     </div>

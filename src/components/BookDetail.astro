@@ -106,13 +106,10 @@ const mainAuthorsWithRoles = mainAuthors.map((a) => ({
   roles: book.authors.find((ba) => ba.slug.id === a.data.slug)?.role ?? [],
 }))
 
-const mainAuthorSlug = book.authors.find(
-  (a) => a.isMain && a.role.includes('author'),
-)?.slug.id
+const mainAuthorSlug = book.authors.find((a) => a.isMain && a.role.includes('author'))
+  ?.slug.id
 
-const mainAuthor = mainAuthorSlug
-  ? await getEntry('author', mainAuthorSlug)
-  : undefined
+const mainAuthor = mainAuthorSlug ? await getEntry('author', mainAuthorSlug) : undefined
 
 const authorsBooks = mainAuthorSlug
   ? await getCollection(

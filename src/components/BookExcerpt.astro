@@ -35,9 +35,14 @@ const authors = await getEntries(
   >
   {
     (
-      <a class="block w-[20rem] flex-1" href={routes.books.detail(slug)}>
+      <a
+        class="block w-[20rem] flex-1"
+        href={routes.books.detail(slug)}
+        tabindex="-1"
+        aria-hidden="true"
+      >
         <Image
-          alt={b.title}
+          alt=""
           src={b.cover}
           width={158}
           widths={[316, 158]}
