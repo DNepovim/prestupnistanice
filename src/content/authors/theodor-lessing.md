@@ -1,5 +1,6 @@
 ---
 slug: theodor-lessing
+name: Theodor Lessing
 firstname: Theodor
 firstnameSecond: Theodora
 surname: Lessing

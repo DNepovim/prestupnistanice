@@ -1,5 +1,6 @@
 ---
 slug: anna-anisimova
+name: Anna Anisimová
 firstname: Anna
 firstnameSecond: Anny
 surname: Anisimová

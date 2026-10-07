@@ -1,5 +1,6 @@
 ---
 slug: wolf-erlbruch
+name: Wolf Erlbruch
 firstname: Wolf
 firstnameSecond: Wolfa
 surname: Erlbruch

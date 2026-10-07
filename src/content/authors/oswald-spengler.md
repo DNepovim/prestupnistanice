@@ -1,5 +1,6 @@
 ---
 slug: oswald-spengler
+name: Oswald Spengler
 firstname: Oswald
 firstnameSecond: Oswalda
 surname: Spengler

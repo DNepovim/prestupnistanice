@@ -1,5 +1,6 @@
 ---
 slug: vilem-flusser
+name: Vilém Flusser
 firstname: Vilém
 firstnameSecond: Viléma
 surname: Flusser

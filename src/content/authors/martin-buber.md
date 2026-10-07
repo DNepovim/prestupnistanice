@@ -1,5 +1,6 @@
 ---
 slug: martin-buber
+name: Martin Buber
 firstname: Martin
 firstnameSecond: Martina
 surname: Buber

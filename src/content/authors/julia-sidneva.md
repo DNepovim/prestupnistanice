@@ -1,6 +1,7 @@
 ---
 cover: /sidneva.png
 slug: julia-sidneva
+name: Julia Sidneva
 firstname: Julia
 firstnameSecond: Julie
 surname: Sidneva

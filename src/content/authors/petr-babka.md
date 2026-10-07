@@ -1,5 +1,6 @@
 ---
 slug: petr-babka
+name: Petr Babka
 firstname: Petr
 firstnameSecond: Petra
 surname: Babka

@@ -1,5 +1,6 @@
 ---
 slug: jaromir-sebek
+name: Jaromír Šebek
 firstname: Jaromír
 firstnameSecond: Jaromíra
 surname: Šebek

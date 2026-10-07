@@ -1,5 +1,6 @@
 ---
 slug: max-picard
+name: Max Picard
 firstname: Max
 firstnameSecond: Maxe
 surname: Picard

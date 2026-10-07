@@ -1,5 +1,6 @@
 ---
 slug: marie-blahova
+name: Marie Bláhová
 firstname: Marie
 firstnameSecond: Marie
 surname: Bláhová

@@ -1,5 +1,6 @@
 ---
 slug: krystof-skalak
+name: Kryštof Skalák
 firstname: Kryštof
 firstnameSecond: Kryštofa
 surname: Skalák

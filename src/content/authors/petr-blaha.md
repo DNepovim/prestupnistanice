@@ -1,12 +1,15 @@
 ---
 slug: petr-blaha
+name: Petr Bláha
 firstname: Petr
 firstnameSecond: Petra
 surname: Bláha
 surnameSecond: Bláhy
 birthDate: 1965-05-17T00:00:00.000Z
 gender: male
+aboutRole: 'píše, překládá, koriguje'
 ---
+
 
 
 

@@ -1,5 +1,6 @@
 ---
 slug: rudolf-kassner
+name: Rudolf Kassner
 firstname: Rudolf
 firstnameSecond: Rudolfa
 surname: Kassner

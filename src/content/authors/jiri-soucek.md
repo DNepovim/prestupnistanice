@@ -1,5 +1,6 @@
 ---
 slug: jiri-soucek
+name: Jiří Souček
 firstname: Jiří
 firstnameSecond: Jiřího
 surname: Souček

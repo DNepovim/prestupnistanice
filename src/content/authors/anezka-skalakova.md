@@ -1,5 +1,6 @@
 ---
 slug: anezka-skalakova
+name: Anežka Skaláková
 firstname: Anežka
 firstnameSecond: Anežky
 surname: Skaláková

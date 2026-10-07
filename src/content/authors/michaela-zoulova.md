@@ -1,5 +1,6 @@
 ---
 slug: michaela-zoulova
+name: Michaela Zoulová
 firstname: Michaela
 firstnameSecond: Michaely
 surname: Zoulová

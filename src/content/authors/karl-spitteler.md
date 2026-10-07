@@ -1,5 +1,6 @@
 ---
 slug: karl-spitteler
+name: Karl Spitteler
 firstname: Karl
 firstnameSecond: Karla
 surname: Spitteler

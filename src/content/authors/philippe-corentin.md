@@ -1,5 +1,6 @@
 ---
 slug: philippe-corentin
+name: Philippe Corentin
 firstname: Philippe
 firstnameSecond: Philippa
 surname: Corentin
