@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets'
 import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
-import { isDefined, isNonEmptyString } from 'narrowland'
+import { isDefined, isNonEmptyArray, isNonEmptyString } from 'narrowland'
 
 import Tooltip from '@/components/Tooltip.astro'
 import { routes } from '@/routes'
@@ -28,6 +28,8 @@ if (!entry) {
 }
 
 const { data: author } = entry
+
+const hasRole = isNonEmptyArray(roles ?? []) || isNonEmptyString(role)
 ---
 
 <a
@@ -52,7 +54,7 @@ const { data: author } = entry
   }
   <div>
     {
-      !imperfect && (
+      !imperfect && hasRole && (
         <div class="text-sm text-gray-500">
           {joinWords([
             ...(roles ?? [])
@@ -80,7 +82,7 @@ const { data: author } = entry
       ></span>
     </p>
     {
-      imperfect && (
+      imperfect && hasRole && (
         <div class="text-sm text-gray-500">
           {joinWords([
             ...(roles ?? [])

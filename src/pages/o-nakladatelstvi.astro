@@ -67,21 +67,16 @@ const authorRolesMap = books
     return { ...acc, [slug]: mergedRoles }
   }, {})
 
-const boardRolesMap = {
-  'jakub-skalak': 'ředitel nakladatelství',
-  'petr-blaha': 'člen redakční rady',
-  'dominik-blaha': 'člen redakční rady',
-}
+const boardMemberSlugs = ['jakub-skalak', 'petr-blaha', 'dominik-blaha']
 
-const boardMembers = Object.entries(boardRolesMap).map(([slug, role]) => ({
+const boardMembers = boardMemberSlugs.map((slug) => ({
   slug,
-  role,
   description: authors.find((a) => a.data.slug === slug)?.data.aboutRole,
 }))
 
 const collaborators = authors
   .filter((a) => a.data.showOnAboutPage)
-  .filter((a) => !isOneOf(a.data.slug, Object.keys(boardRolesMap)))
+  .filter((a) => !isOneOf(a.data.slug, boardMemberSlugs))
   .map((a) => ({
     slug: a.data.slug,
     role: a.data.aboutRole,
@@ -99,8 +94,8 @@ const collaborators = authors
   <Section title="Redakční rada">
     <BooksGrid>
       {
-        boardMembers.map(({ slug, role, description }) => (
-          <AuthorSmall slug={slug} role={role} description={description} imperfect />
+        boardMembers.map(({ slug, description }) => (
+          <AuthorSmall slug={slug} description={description} imperfect />
         ))
       }
     </BooksGrid>
