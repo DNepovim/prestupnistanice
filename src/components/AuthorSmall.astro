@@ -8,16 +8,18 @@ import Tooltip from '@/components/Tooltip.astro'
 import { routes } from '@/routes'
 import { joinWords } from '@/utils/joinWords'
 import { rolesMap } from '@/utils/rolesMap'
+import { tp } from '@/utils/tp'
 
 type Props = {
   slug: string
   imperfect?: boolean
   roles?: string[]
   role?: string
+  description?: string
   col?: string
 }
 
-const { slug, imperfect, roles, role, col } = Astro.props
+const { slug, imperfect, roles, role, description, col } = Astro.props
 
 const entry = await getEntry('author', slug)
 
@@ -87,6 +89,11 @@ const { data: author } = entry
             ...(role ? [role] : []),
           ])}
         </div>
+      )
+    }
+    {
+      isNonEmptyString(description) && (
+        <div class="mt-1 text-sm text-gray-500">{tp(description)}</div>
       )
     }
   </div>

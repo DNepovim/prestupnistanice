@@ -1,0 +1,16 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+type Props = {
+  title: string
+  link: string
+  logo: ImageMetadata
+}
+
+const { title, link, logo } = Astro.props
+---
+
+<a href={link} target="_blank" rel="noopener noreferrer">
+  <Image alt={title} src={logo} width={150} height={100} widths={[300, 150]} />
+</a>

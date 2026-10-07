@@ -1,13 +1,13 @@
 ---
-import { Image } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
-import { isOneOf } from 'narrowland'
+import { isNonEmptyArray, isNonEmptyString, isOneOf } from 'narrowland'
 
 import AuthorSmall from '@/components/AuthorSmall.astro'
 import BooksGrid from '@/components/BooksGrid.astro'
 import Markdown from '@/components/Markdown.astro'
 import PageTitle from '@/components/PageTitle.astro'
 import Section from '@/components/Section.astro'
+import SponsorLogo from '@/components/SponsorLogo.astro'
 import LogoFondBudoucnosti from '@/content/images/fondBudoucnosti.png'
 import LogoFondKultury from '@/content/images/fondKultury.png'
 import LogoGi from '@/content/images/gi.png'
@@ -33,12 +33,15 @@ const sponsors = [
     link: 'https://www.mk.gov.cz/statni-fond-kultury-cr-cs-42',
     logo: LogoFondKultury,
   },
-  {
-    title: 'Jiří Málek – KIMA Transport s. r. o.',
-    link: 'https://www.kimatransport.cz/',
-    logo: LogoKima,
-  },
 ]
+
+const kimaSponsor = {
+  title: 'Jiří Málek – KIMA Transport s. r. o.',
+  link: 'https://www.kimatransport.cz/',
+  logo: LogoKima,
+}
+
+const textSponsors = [{ prefix: 'manželé', name: 'Winklerovi' }]
 
 const entry = await getEntry('page', 'o-nakladatelstvi')
 
@@ -71,18 +74,18 @@ const boardRolesMap = {
 }
 
 const boardMembers = Object.entries(boardRolesMap).map(([slug, role]) => ({
-  ...authors.find((a) => a.data.slug === slug),
+  slug,
   role,
+  description: authors.find((a) => a.data.slug === slug)?.data.aboutRole,
 }))
 
-console.log(boardMembers)
-
 const collaborators = authors
-  .filter((a) => authorRolesMap[a.data.slug])
+  .filter((a) => a.data.showOnAboutPage)
   .filter((a) => !isOneOf(a.data.slug, Object.keys(boardRolesMap)))
   .map((a) => ({
-    ...a,
-    roles: authorRolesMap[a.data.slug],
+    slug: a.data.slug,
+    role: a.data.aboutRole,
+    roles: isNonEmptyString(a.data.aboutRole) ? [] : (authorRolesMap[a.data.slug] ?? []),
   }))
 ---
 
@@ -96,36 +99,37 @@ const collaborators = authors
   <Section title="Redakční rada">
     <BooksGrid>
       {
-        boardMembers.map(({ data, role }) => (
-          <AuthorSmall slug={data?.slug ?? ''} role={role} imperfect />
+        boardMembers.map(({ slug, role, description }) => (
+          <AuthorSmall slug={slug} role={role} description={description} imperfect />
         ))
       }
     </BooksGrid>
   </Section>
-  <Section title="Spolupracují s námi">
-    <BooksGrid>
-      {
-        collaborators.map(({ data, roles }) => (
-          <AuthorSmall slug={data.slug} roles={roles ?? []} imperfect />
-        ))
-      }
-    </BooksGrid>
-  </Section>
+  {
+    isNonEmptyArray(collaborators) && (
+      <Section title="Spolupracují s námi">
+        <BooksGrid>
+          {collaborators.map(({ slug, role, roles }) => (
+            <AuthorSmall slug={slug} role={role} roles={roles} imperfect />
+          ))}
+        </BooksGrid>
+      </Section>
+    )
+  }
   <Section title="Podporují nás">
     <div class="flex flex-wrap items-center justify-center gap-8">
-      {
-        sponsors.map((s) => (
-          <a href={s.link} target="_blank" rel="noopener noreferrer">
-            <Image
-              alt={s.title}
-              src={s.logo}
-              width={150}
-              height={100}
-              widths={[300, 150]}
-            />
-          </a>
-        ))
-      }
+      {sponsors.map((sponsor) => <SponsorLogo {...sponsor} />)}
+      <div class="flex items-center gap-8">
+        <SponsorLogo {...kimaSponsor} />
+        {
+          textSponsors.map((sponsor) => (
+            <p class="font-alt text-brand-first-700 text-left leading-tight">
+              <span class="block text-sm">{sponsor.prefix}</span>
+              <span class="block text-lg">{sponsor.name}</span>
+            </p>
+          ))
+        }
+      </div>
     </div>
   </Section>
 </Layout>

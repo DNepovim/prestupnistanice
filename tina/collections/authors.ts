@@ -75,6 +75,17 @@ export const AuthorsCollection: Collection = {
     { type: 'image', name: 'image', label: 'Fotka' },
     { type: 'string', name: 'claim', label: 'Úvod' },
     {
+      type: 'boolean',
+      name: 'showOnAboutPage',
+      label: 'Zobrazit na stránce O nakladatelství',
+    },
+    {
+      type: 'string',
+      name: 'aboutRole',
+      label: 'Role na stránce O nakladatelství',
+      description: 'Nahradí automaticky vygenerovaný popis rolí',
+    },
+    {
       type: 'string',
       name: 'description',
       label: 'Popis',

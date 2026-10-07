@@ -15,6 +15,8 @@ const author = defineCollection({
       gender: z.enum(['male', 'female']),
       image: image().optional(),
       claim: z.string().optional(),
+      showOnAboutPage: z.boolean().optional(),
+      aboutRole: z.string().optional(),
     }),
 })
 
