@@ -15,15 +15,25 @@ export const AuthorsCollection: Collection = {
     },
     // @ts-expect-error wrongly typed tina cms
     beforeSubmit: ({ values }) => {
+      const name = [values.firstname, values.surname].filter(Boolean).join(' ')
+
       return {
         ...values,
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        slug: slugify(`${values.firstname} ${values.surname}`),
+        name,
+        slug: slugify(name),
       }
     },
   },
   fields: [
     { type: 'string', name: 'slug', ui: { component: 'hidden' } },
+    {
+      type: 'string',
+      name: 'name',
+      label: 'Celé jméno',
+      required: true,
+      isTitle: true,
+      ui: { component: 'hidden' },
+    },
     {
       type: 'string',
       name: 'firstname',
@@ -40,7 +50,6 @@ export const AuthorsCollection: Collection = {
       name: 'surname',
       label: 'Příjmení',
       required: true,
-      isTitle: true,
     },
     {
       type: 'string',

@@ -6,6 +6,7 @@ const author = defineCollection({
   schema: ({ image }) =>
     z.object({
       slug: z.string(),
+      name: z.string().optional(),
       firstname: z.string(),
       firstnameSecond: z.string().optional(),
       surname: z.string(),
