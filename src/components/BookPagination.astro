@@ -19,10 +19,9 @@ type NavItem = {
 type Props = {
   prev?: NavItem
   next?: NavItem
-  order?: number
 }
 
-const { prev, next, order } = Astro.props
+const { prev, next } = Astro.props
 ---
 
 <div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
@@ -37,7 +36,6 @@ const { prev, next, order } = Astro.props
       )
     }
   </div>
-  {order && <div class="text-brand-second-500 font-alt text-center">{order}.</div>}
   <div class="flex-1 text-right">
     {
       next && (

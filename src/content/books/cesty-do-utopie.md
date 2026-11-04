@@ -5,6 +5,7 @@ date: 2020
 order: 8
 pagesCount: 178
 isbn: 978-80-907627-3-2
+kosmasUrl: https://www.kosmas.cz/knihy/284803/cesty-do-utopie/
 authors:
   - author: src/content/authors/martin-buber.md
     slug: martin-buber

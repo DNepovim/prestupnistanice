@@ -5,6 +5,7 @@ date: 2022
 order: 12
 pagesCount: 88
 isbn: 978-80-907627-6-3
+kosmasUrl: https://www.kosmas.cz/knihy/515372/pesimismus/
 authors:
   - author: src/content/authors/oswald-spengler.md
     slug: oswald-spengler

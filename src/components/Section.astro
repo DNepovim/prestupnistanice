@@ -19,12 +19,12 @@ const { title, link, isWide, isFull, className } = Astro.props
 >
   {
     title && (
-      <h2 class="mb-8 text-xl text-gray-500">
+      <h2 class="mb-8 text-xl text-black">
         {link ? (
           <a
             class:list={[
               className,
-              'font-alt group text-brand-first-500 text-md relative tracking-wider',
+              'font-alt group text-md relative tracking-wider text-black',
             ]}
             href={link}
           >

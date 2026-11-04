@@ -35,6 +35,7 @@ const book = defineCollection({
       paper: z.string().optional(),
       font: z.string().optional(),
       isbn: z.string().optional(),
+      kosmasUrl: z.string().url().optional(),
       cover: image(),
       coverImage: image().optional(),
       coverTop: image().optional(),
@@ -62,9 +63,24 @@ const book = defineCollection({
       ),
       category: z.enum(['forKids', 'philosophy', 'novel', 'poetry']),
       isPromoted: z.boolean().optional(),
+      isUpcoming: z.boolean().optional(),
       claim: z.string().optional(),
       color: z.string().optional(),
       bgColor: z.string().optional(),
+    }),
+})
+
+const event = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
+  schema: ({ image }) =>
+    z.object({
+      slug: z.string(),
+      title: z.string(),
+      date: z.date(),
+      time: z.string().optional(),
+      place: z.string(),
+      images: z.array(image()).optional(),
+      description: z.string().optional(),
     }),
 })
 
@@ -76,4 +92,4 @@ const page = defineCollection({
     content: z.string().optional(),
   }),
 })
-export const collections = { book, author, page }
+export const collections = { book, author, event, page }

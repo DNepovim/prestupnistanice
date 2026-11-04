@@ -9,6 +9,7 @@ width: 130
 height: 196
 paper: ''
 isbn: 978–80–909036–5–4
+kosmasUrl: https://www.kosmas.cz/knihy/563481/svet-mlceni/
 authors:
   - author: src/content/authors/max-picard.md
     slug: max-picard

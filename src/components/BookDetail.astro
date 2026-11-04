@@ -16,6 +16,7 @@ import { tp } from '@/utils/tp'
 import AuthorExcerpt from './AuthorExcerpt.astro'
 import AuthorSmall from './AuthorSmall.astro'
 import Blockquote from './Blockquote.astro'
+import KosmasButton from './KosmasButton.svelte'
 import Markdown from './Markdown.astro'
 
 type Props = {
@@ -133,26 +134,7 @@ const categoryBooks = await getCollection(
   secondColor={book.bgColor}
 >
   <Section>
-    <BookPagination
-      order={book.order}
-      prev={prevBook
-        ? {
-            slug: prevBook.data.slug,
-            title: prevBook.data.title,
-            order: prevBook.data.order,
-            cover: prevBook.data.cover,
-          }
-        : undefined}
-      next={nextBook
-        ? {
-            slug: nextBook.data.slug,
-            title: nextBook.data.title,
-            order: nextBook.data.order,
-            cover: nextBook.data.cover,
-          }
-        : undefined}
-    />
-    <PageTitle>{tp(book.title)}</PageTitle>
+    <PageTitle size="large">{tp(book.title)}</PageTitle>
     {
       mainAuthors.length > 0 && (
         <p class="mb-8 text-2xl">
@@ -205,6 +187,13 @@ const categoryBooks = await getCollection(
         </div>
       )
     }
+    {
+      book.kosmasUrl && (
+        <div class="mb-8 flex justify-end">
+          <KosmasButton client:visible href={book.kosmasUrl} slug={book.slug} />
+        </div>
+      )
+    }
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
     <div class="clear-both"></div>
   </Section>
@@ -235,7 +224,7 @@ const categoryBooks = await getCollection(
         : undefined}
     />
   </Section>
-  <Section className="grid max-w-3xl grid-cols-3">
+  <Section className="grid max-w-3xl grid-cols-1 min-sm:grid-cols-2 min-md:grid-cols-3">
     {
       book.authors
         .filter((a) => !a.isMain)

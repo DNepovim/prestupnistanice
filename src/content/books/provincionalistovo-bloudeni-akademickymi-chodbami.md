@@ -5,6 +5,7 @@ date: 2021
 order: 9
 pagesCount: 122
 isbn: 978-80-907627-5-6
+kosmasUrl: https://www.kosmas.cz/knihy/292736/provincionalistovo-bloudeni-akademickymi-chodbami/
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha

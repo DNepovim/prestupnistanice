@@ -5,6 +5,7 @@ date: 2018
 order: 2
 pagesCount: 121
 isbn: 978-80-270-4476-4
+kosmasUrl: https://www.kosmas.cz/knihy/254429/postdejiny/
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser

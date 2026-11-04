@@ -5,6 +5,7 @@ date: 2011
 order: 1
 pagesCount: 146
 isbn: 978-80-254-7924-7
+kosmasUrl: https://www.kosmas.cz/knihy/164372/ta-moje-realita/
 authors:
   - author: src/content/authors/jiri-soucek.md
     slug: jiri-soucek

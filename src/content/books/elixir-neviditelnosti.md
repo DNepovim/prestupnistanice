@@ -10,6 +10,7 @@ height: 200
 paper: Volumen a Munken Print Creame
 font: Lapture a Museo Sans
 isbn: 978-80-907627-9-4
+kosmasUrl: https://www.kosmas.cz/knihy/529248/elixir-neviditelnosti/
 authors:
   - author: src/content/authors/marie-blahova.md
     slug: marie-blahova

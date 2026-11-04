@@ -5,6 +5,7 @@ date: 2020
 order: 6
 pagesCount: 176
 isbn: 978-80-907627-1-8
+kosmasUrl: https://www.kosmas.cz/knihy/275411/od-subjektu-k-projektu/
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser

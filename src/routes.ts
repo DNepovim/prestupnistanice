@@ -40,4 +40,7 @@ export const routes = {
   authors: {
     detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
+  api: {
+    kosmasStatus: (slug: string) => `/api/kosmas/${slug}`,
+  },
 }

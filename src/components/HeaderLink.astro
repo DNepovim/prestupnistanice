@@ -11,13 +11,13 @@ const isActive = href === `/${pathname}`
 <a
   href={href}
   class:list={[
-    'group font-alt hover:text-brand-first-500 text-md text-brand-first-500 relative no-underline transition-colors duration-500',
-    isActive && 'text-brand-first-500',
+    'group font-alt text-md relative text-black no-underline',
+    isActive && 'text-black',
   ]}
   {...props}
 >
   <slot />
   <span
-    class="bg-brand-first-500 absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
+    class="absolute bottom-0 left-0 h-[1px] w-0 bg-black transition-all duration-600 group-hover:w-full"
   ></span>
 </a>

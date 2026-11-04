@@ -7,6 +7,7 @@ pagesCount: 104
 width: 130
 height: 200
 isbn: 978-80-909036-6-1
+kosmasUrl: https://www.kosmas.cz/knihy/563479/diletantismus-a-dalsi-eseje/
 authors:
   - author: src/content/authors/rudolf-kassner.md
     slug: rudolf-kassner

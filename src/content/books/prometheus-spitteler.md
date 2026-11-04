@@ -5,6 +5,7 @@ date: 2022
 order: 11
 pagesCount: 576
 isbn: 978–80–907627–4–9
+kosmasUrl: https://www.kosmas.cz/knihy/506280/prometheus-spitteler/
 authors:
   - author: src/content/authors/karl-spitteler.md
     slug: karl-spitteler

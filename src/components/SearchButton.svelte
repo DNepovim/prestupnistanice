@@ -31,7 +31,7 @@
   onclick={() => {
     toggle(true)
   }}
-  class="font-liga font-head hover:text-brand-first-500 cursor-pointer relative text-2xl text-brand-first-500 no-underline"
+  class="font-liga font-head cursor-pointer relative text-2xl text-black no-underline"
   aria-label="Vyhledávání"
   aria-haspopup="dialog"
   aria-expanded={isOpen}
@@ -39,7 +39,7 @@
   <iconify-icon class="-mb-1" icon="ph:magnifying-glass" noobserver aria-hidden="true"
   ></iconify-icon>
   <span
-    class="bg-brand-first-500 absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
+    class="bg-black absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full"
   ></span>
 </button>
 

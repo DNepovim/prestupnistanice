@@ -31,6 +31,11 @@
 
   const fuse = new Fuse(data, fuseOptions)
 
+  const ITEM_IMAGE_CLASSES = {
+    book: 'rounded-md',
+    author: 'aspect-square rounded-full object-cover',
+  } as const satisfies Record<SearchItem['type'], string>
+
   const normalizeSearch = (value: string) => value.trim()
 
   const createKeywords = (item: SearchItem) =>
@@ -114,7 +119,7 @@
 >
   <button
     type="button"
-    class="fixed inset-0 size-full bg-gradient-to-t from-brand-second-50/90 to-white/90"
+    class="fixed inset-0 size-full bg-gradient-to-t from-brand-second-50/97 to-white/97"
     aria-hidden="true"
     tabindex={-1}
     onclick={() => {
@@ -131,14 +136,14 @@
   >
     <iconify-icon icon="ph:x" class="text-3xl" noobserver></iconify-icon>
   </button>
-  <div class="block mx-auto max-w-160 mt-20">
+  <div class="block mx-auto max-w-160 mt-20 max-md:mt-16">
     <Command.Root class="w-full" shouldFilter={false}>
-      <label class="relative text-5xl">
+      <label class="relative text-5xl max-md:text-2xl">
         <div
           class="absolute bottom-[0.15em] inset-x-0 h-[1px] w-full border-b-2 border-dotted border-brand-first-900"
         ></div>
         <Command.Input
-          class="relative w-full bg-transparent pt-4 font-alt leading-[1em] text-brand-first-500 text-5xl text-outline-white outline-none placeholder:text-brand-first-500"
+          class="relative w-full bg-transparent pt-4 pr-12 font-alt leading-[1em] text-brand-first-500 text-5xl text-outline-white outline-none placeholder:text-brand-first-500 max-md:pr-9 max-md:text-2xl"
           placeholder="najděte si svou knihu…"
           bind:value={searchValue}
           onkeydown={keepFocusOnInput}
@@ -146,24 +151,24 @@
         />
         <iconify-icon
           icon="ph:magnifying-glass"
-          class="absolute right-2 bottom-1/2 translate-y-1/2 text-4xl text-brand-first-500"
+          class="absolute right-2 bottom-1/2 translate-y-1/2 text-4xl text-brand-first-500 max-md:text-2xl"
           noobserver
         ></iconify-icon>
       </label>
       <Command.List
-        class="relative mt-4 h-[calc(100vh-13rem)] overflow-y-auto"
+        class="relative mt-4 h-[calc(100dvh-13rem)] overflow-y-auto max-md:h-[calc(100dvh-10rem)]"
         tabindex={-1}
       >
         <Command.Empty class="px-4 py-6 text-brand-first-500">
           Žádné výsledky.
         </Command.Empty>
-        <ul class="px-4">
+        <ul class="px-4 max-md:px-0">
           {#each filteredBooks as book (book.item.link)}
             <li class="py-4">
               <Command.Item
                 value={book.item.link}
                 keywords={createKeywords(book.item)}
-                class="block w-full cursor-pointer border-l-2 border-transparent px-4 outline-none data-[selected]:border-brand-first-500"
+                class="block w-full cursor-pointer border-l-2 border-transparent px-4 outline-none data-[selected]:border-brand-first-500 max-md:px-3"
                 tabindex={-1}
                 onSelect={() => {
                   goToItem(book.item)
@@ -183,17 +188,19 @@
                       src={book.item.image.src}
                       alt={book.item.title}
                       class={[
-                        'w-20 rounded-md shadow-2xl',
-                        book.item.type === 'author' && 'rounded-full',
+                        'w-20 shadow-2xl max-md:w-14',
+                        ITEM_IMAGE_CLASSES[book.item.type],
                       ]}
                     />
                   {:else}
                     <div
-                      class="size-20 rounded-full bg-gradient-to-tr from-brand-first-200 to-brand-second-200"
+                      class="size-20 rounded-full bg-gradient-to-tr from-brand-first-200 to-brand-second-200 max-md:size-14"
                     ></div>
                   {/if}
                   <div>
-                    <p class="font-alt text-xl font-bold text-brand-first-500">
+                    <p
+                      class="font-alt text-xl font-bold text-brand-first-500 max-md:text-base"
+                    >
                       {book.item.title}
                     </p>
                     <p>{book.item.subtitle}</p>

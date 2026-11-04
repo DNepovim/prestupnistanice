@@ -5,6 +5,7 @@ date: 2018
 order: 3
 pagesCount: 206
 isbn: 978-80-270-2504-6
+kosmasUrl: https://www.kosmas.cz/knihy/251515/filosoficke-eseje/
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha

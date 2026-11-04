@@ -5,6 +5,7 @@ date: 2025
 order: 19
 pagesCount: 216
 isbn: 978-80-909036-4-7
+kosmasUrl: https://www.kosmas.cz/knihy/563179/balkovsky-pegas/
 authors:
   - author: src/content/authors/jaromir-sebek.md
     slug: jaromir-sebek

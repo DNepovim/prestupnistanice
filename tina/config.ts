@@ -2,6 +2,7 @@ import { defineConfig } from 'tinacms'
 
 import { AuthorsCollection } from './collections/authors'
 import { BooksCollection } from './collections/books'
+import { EventsCollection } from './collections/events'
 import { GlobalConfigCollection } from './collections/global-config'
 import { PagesCollection } from './collections/pages'
 
@@ -28,6 +29,7 @@ export default defineConfig({
     collections: [
       BooksCollection,
       AuthorsCollection,
+      EventsCollection,
       PagesCollection,
       GlobalConfigCollection,
     ],

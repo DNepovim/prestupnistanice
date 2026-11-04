@@ -5,6 +5,7 @@ date: 2022
 order: 13
 pagesCount: 29
 isbn: 978-80-907627-7-0
+kosmasUrl: https://www.kosmas.cz/knihy/521707/tati/
 authors:
   - author: src/content/authors/philippe-corentin.md
     slug: philippe-corentin

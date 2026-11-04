@@ -31,7 +31,7 @@ const name = `${a.firstname} ${a.surname}`
   {
     a.image && (
       <a
-        class="block w-[20rem] flex-1"
+        class="block w-[20rem] max-w-full flex-1"
         href={routes.authors.detail(slug)}
         tabindex="-1"
         aria-hidden="true"
@@ -41,7 +41,8 @@ const name = `${a.firstname} ${a.surname}`
           src={a.image}
           width={157.5}
           height={157.5}
-          class="rounded-full border border-gray-200 shadow-2xl"
+          fit="cover"
+          class="aspect-square rounded-full border border-gray-200 object-cover shadow-2xl"
         />
       </a>
     )
@@ -57,7 +58,7 @@ const name = `${a.firstname} ${a.surname}`
           </p>
         )
       }
-      <h2 class="peer text-brand-first-500 font-alt group relative inline text-4xl">
+      <h2 class="peer font-alt group relative inline text-4xl text-black">
         <a href={routes.authors.detail(slug)}>{name}</a>
       </h2>
     </div>

@@ -5,6 +5,7 @@ date: 2025
 order: 18
 pagesCount: 108
 isbn: 978-80-909036-3-0
+kosmasUrl: https://www.kosmas.cz/knihy/552573/neviditelny-slon/
 authors:
   - author: src/content/authors/anna-anisimova.md
     slug: anna-anisimova

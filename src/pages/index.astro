@@ -8,6 +8,7 @@ import BooksGrid from '@/components/BooksGrid.astro'
 import PromotedCarousel from '@/components/PromotedCarousel.astro'
 import Section from '@/components/Section.astro'
 import Theme from '@/components/Theme.astro'
+import Upcoming from '@/components/Upcoming.astro'
 import Layout from '@/layouts/Layout.astro'
 import { routes } from '@/routes'
 
@@ -24,8 +25,19 @@ if (promotedBooks.length === 0) {
   return
 }
 
+const upcomingBooks = books.filter((b) => b.data.isUpcoming)
+
+const now = new Date()
+const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+const upcomingEvents = (await getCollection('event'))
+  .filter((e) => e.data.date >= startOfToday)
+  .toSorted((a, b) => a.data.date.getTime() - b.data.date.getTime())
+
 const remainingBooks = books.filter(
-  (b) => !promotedBooks.some((p) => p.data.slug === b.data.slug),
+  (b) =>
+    !promotedBooks.some((p) => p.data.slug === b.data.slug) &&
+    !upcomingBooks.some((u) => u.data.slug === b.data.slug),
 )
 
 const recentBooks = remainingBooks.slice(0, 3)
@@ -49,6 +61,8 @@ const philosophyBooks = remainingBooks
   <Section isFull>
     <PromotedCarousel books={promotedBooks} />
   </Section>
+
+  <Upcoming books={upcomingBooks} events={upcomingEvents} />
 
   <Section>
     <div class="flex flex-col gap-16">

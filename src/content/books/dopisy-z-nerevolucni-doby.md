@@ -5,6 +5,7 @@ date: 2019
 order: 5
 pagesCount: 271
 isbn: 978-80-907627-0-1
+kosmasUrl: https://www.kosmas.cz/knihy/269561/dopisy-z-nerevolucni-doby/
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha

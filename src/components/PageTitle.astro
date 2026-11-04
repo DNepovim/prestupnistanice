@@ -1,6 +1,21 @@
+---
+type Props = {
+  size?: 'default' | 'large'
+}
+
+const TITLE_SIZES = {
+  default: 'max-md:text-[10vw]',
+  large: 'max-md:text-[12vw]',
+} as const satisfies Record<NonNullable<Props['size']>, string>
+
+const { size = 'default' } = Astro.props
+---
+
 <h1
-  style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
-  class="font-liga font-head text-outline-white text-brand-second-100 selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-[56rem] font-bold text-shadow-lg max-md:text-[10vw] min-md:text-8xl"
+  class:list={[
+    'font-liga font-head hyphenate selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-full font-bold break-words text-black min-md:text-8xl',
+    TITLE_SIZES[size],
+  ]}
 >
   <div class="relative z-10"><slot /></div>
   <span

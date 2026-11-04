@@ -88,6 +88,13 @@ export const BooksCollection: Collection = {
       label: 'ISBN',
     },
     {
+      type: 'string',
+      name: 'kosmasUrl',
+      label: 'Odkaz na Kosmas',
+      description:
+        'Adresa detailu knihy na kosmas.cz, např. https://www.kosmas.cz/knihy/123456/nazev/',
+    },
+    {
       name: 'authors',
       label: 'Autoři',
       type: 'object',
@@ -137,6 +144,11 @@ export const BooksCollection: Collection = {
       type: 'boolean',
       name: 'isPromoted',
       label: 'Propagovaná kniha',
+    },
+    {
+      type: 'boolean',
+      name: 'isUpcoming',
+      label: 'Připravujeme k vydání',
     },
     {
       type: 'string',

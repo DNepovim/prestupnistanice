@@ -5,6 +5,7 @@ date: 2022
 order: 10
 pagesCount: 128
 isbn: 978-80-907627-9-4
+kosmasUrl: https://www.kosmas.cz/knihy/503162/hluk-proti-hlucnosti-naseho-zivota/
 authors:
   - author: src/content/authors/theodor-lessing.md
     slug: theodor-lessing

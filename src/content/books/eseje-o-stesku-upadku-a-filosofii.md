@@ -5,6 +5,7 @@ date: 2022
 order: 14
 pagesCount: 219
 isbn: 978-80-907627-8-7
+kosmasUrl: https://www.kosmas.cz/knihy/521417/eseje-o-stesku-upadku-a-filosofii/
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha

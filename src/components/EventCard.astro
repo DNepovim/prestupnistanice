@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets'
+import { getEntry } from 'astro:content'
+import { Icon } from 'astro-icon/components'
+import { isDefined, isNonEmptyArray } from 'narrowland'
+
+import { tp } from '@/utils/tp'
+
+type Props = {
+  slug: string
+}
+
+const { slug } = Astro.props
+
+const entry = await getEntry('event', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: e } = entry
+
+const dateLabel = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+}).format(e.date)
+
+const cover = isNonEmptyArray(e.images) ? e.images[0] : undefined
+---
+
+<article class="group/event flex gap-4">
+  {
+    isDefined(cover) && (
+      <Image
+        alt=""
+        src={cover}
+        width={160}
+        height={160}
+        class="border-brand-first-200 size-20 shrink-0 rounded-md border object-cover shadow-sm transition-transform duration-700 group-hover/event:scale-105"
+        fit="cover"
+      />
+    )
+  }
+  <div class="flex min-w-0 flex-col gap-1">
+    <p
+      class="font-alt text-brand-first-600 flex items-center gap-1.5 text-xs tracking-wider"
+    >
+      <Icon name="ph:calendar-blank-light" class="size-4" aria-hidden="true" />
+      {dateLabel}
+      {e.time && <span class="text-gray-400">·</span>}
+      {e.time}
+    </p>
+    <h4 class="font-alt text-sm leading-snug text-black">{tp(e.title)}</h4>
+    <p class="flex items-start gap-1.5 text-xs leading-snug text-gray-500">
+      <Icon name="ph:map-pin-light" class="mt-[1px] size-4 shrink-0" aria-hidden="true" />
+      <span class="line-clamp-2">{tp(e.place)}</span>
+    </p>
+  </div>
+</article>

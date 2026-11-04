@@ -7,6 +7,7 @@ import { routes } from '@/routes'
 import { tp } from '@/utils/tp'
 
 import FloatingImage from './FloatingImage.svelte'
+import KosmasButton from './KosmasButton.svelte'
 
 type Props = {
   class?: string
@@ -36,7 +37,7 @@ const authors = await getEntries(
   {
     (
       <a
-        class="block w-[20rem] flex-1"
+        class="block w-[20rem] max-w-full flex-1"
         href={routes.books.detail(slug)}
         tabindex="-1"
         aria-hidden="true"
@@ -55,8 +56,7 @@ const authors = await getEntries(
   <div class="flex flex-4 flex-col gap-4">
     <div class="max-sm:flex max-sm:flex-col">
       <h2
-        style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: var(--color-brand-first-500);"
-        class="peer text-brand-second-100 font-head font-liga group relative inline text-5xl leading-[1.2em] font-bold tracking-wide text-shadow-lg"
+        class="peer font-head font-liga hyphenate group relative inline text-5xl leading-[1.2em] font-bold tracking-wide break-words text-black"
       >
         <a href={routes.books.detail(slug)}>{tp(b.title)}</a>
       </h2>
@@ -96,7 +96,8 @@ const authors = await getEntries(
     </div>
     {
       (
-        <div class="flex justify-end pr-4">
+        <div class="flex flex-col items-end gap-5 pr-4">
+          {b.kosmasUrl && <KosmasButton client:visible href={b.kosmasUrl} slug={slug} />}
           <ArrowLink href={routes.books.detail(slug)}>více o knize</ArrowLink>
         </div>
       )

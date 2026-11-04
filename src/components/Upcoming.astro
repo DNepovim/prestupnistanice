@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { Icon } from 'astro-icon/components'
+import { isNonEmptyArray } from 'narrowland'
+
+import EventCard from '@/components/EventCard.astro'
+import UpcomingBook from '@/components/UpcomingBook.astro'
+
+type Props = {
+  books: CollectionEntry<'book'>[]
+  events: CollectionEntry<'event'>[]
+  class?: string
+}
+
+const { books, events, class: className } = Astro.props
+
+if (!isNonEmptyArray(books) && !isNonEmptyArray(events)) {
+  return
+}
+---
+
+<section
+  class:list={[
+    className,
+    'border-brand-first-200 bg-brand-first-100/50 mb-12 border-y py-14',
+  ]}
+  aria-labelledby="pripravujeme"
+>
+  <div class="mx-auto max-w-[70rem] px-6">
+    <h2
+      id="pripravujeme"
+      class="font-liga font-head relative mb-10 inline-block font-bold text-black max-md:text-[9vw] min-md:text-5xl"
+    >
+      Připravujeme
+      <span
+        class="animate-width-expand from-brand-first-400 absolute bottom-0 left-0 h-[3px] w-[60%] bg-gradient-to-r to-transparent"
+      ></span>
+    </h2>
+
+    <div class="grid items-start gap-12 min-lg:grid-cols-3">
+      {
+        isNonEmptyArray(books) && (
+          <div class="min-lg:col-span-2">
+            <div class="grid grid-cols-1 gap-10 min-md:grid-cols-2">
+              {books.map((book) => (
+                <UpcomingBook slug={book.data.slug} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+      {
+        isNonEmptyArray(events) && (
+          <div class="border-brand-first-200 min-lg:border-l min-lg:pl-10">
+            <h3 class="font-alt mb-6 flex items-center gap-2 text-xs tracking-[0.2em] text-black uppercase">
+              <Icon name="ph:tilde-thin" class="size-4" aria-hidden="true" />
+              chystané akce
+            </h3>
+            <div class="flex flex-col gap-6">
+              {events.map((event) => (
+                <EventCard slug={event.data.slug} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
