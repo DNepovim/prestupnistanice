@@ -134,7 +134,7 @@ const categoryBooks = await getCollection(
   secondColor={book.bgColor}
 >
   <Section>
-    <PageTitle size="large">{tp(book.title)}</PageTitle>
+    <PageTitle variant="book">{tp(book.title)}</PageTitle>
     {
       mainAuthors.length > 0 && (
         <p class="mb-8 text-2xl">
@@ -189,7 +189,7 @@ const categoryBooks = await getCollection(
     }
     {
       book.kosmasUrl && (
-        <div class="mb-8 flex justify-end">
+        <div class="mb-8 flex justify-end pr-9">
           <KosmasButton client:visible href={book.kosmasUrl} slug={book.slug} />
         </div>
       )

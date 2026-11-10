@@ -28,6 +28,7 @@ const book = defineCollection({
       slug: z.string(),
       title: z.string(),
       date: z.number(),
+      releaseNote: z.string().optional(),
       order: z.number(),
       pagesCount: z.number().optional(),
       width: z.number().optional(),

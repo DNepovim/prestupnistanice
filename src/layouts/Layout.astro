@@ -75,9 +75,9 @@ const config = {
   </head>
   <body
     class:list={[
-      'font-display bg-brand-second-50/40 flex min-h-screen min-w-full flex-col',
+      'font-display flex min-h-screen min-w-full flex-col',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
-      'from-brand-first-50/50 bg-gradient-to-t to-white',
+      '[--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)]',
       isDev && 'debug-screens',
     ]}
   >

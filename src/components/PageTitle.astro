@@ -1,20 +1,20 @@
 ---
 type Props = {
-  size?: 'default' | 'large'
+  variant?: 'default' | 'book'
 }
 
-const TITLE_SIZES = {
-  default: 'max-md:text-[10vw]',
-  large: 'max-md:text-[12vw]',
-} as const satisfies Record<NonNullable<Props['size']>, string>
+const TITLE_VARIANTS = {
+  default: 'text-gray-800 max-md:text-[10vw]',
+  book: 'text-gray-600 max-md:text-[12vw]',
+} as const satisfies Record<NonNullable<Props['variant']>, string>
 
-const { size = 'default' } = Astro.props
+const { variant = 'default' } = Astro.props
 ---
 
 <h1
   class:list={[
-    'font-liga font-head hyphenate selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-full font-bold break-words text-black min-md:text-8xl',
-    TITLE_SIZES[size],
+    'font-liga font-head hyphenate selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-full font-bold break-words min-md:text-8xl',
+    TITLE_VARIANTS[variant],
   ]}
 >
   <div class="relative z-10"><slot /></div>

@@ -53,6 +53,11 @@ export const BooksCollection: Collection = {
       required: true,
     },
     {
+      type: 'string',
+      name: 'releaseNote',
+      label: 'Kdy vyjde',
+    },
+    {
       type: 'number',
       name: 'order',
       label: 'Pořadí publikace',

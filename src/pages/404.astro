@@ -23,12 +23,12 @@ const slug = segments[1]
 
 <Layout siteDescription="Zde nic není...">
   <Section
-    ><h1 class="font-alt mb-40 pt-20 text-4xl text-black">
+    ><h1 class="font-alt mb-40 pt-20 text-4xl text-gray-800">
       {
         slug && category === 'knihy' ? (
           <>
             Knihu{' '}
-            <span class="font-liga font-head my-4 block text-7xl text-black">
+            <span class="font-liga font-head my-4 block text-7xl text-gray-800">
               {uppercaseFirstLetter(slug.replace(/-/g, ' '))}
             </span>{' '}
             jsme zatím nevydali.
@@ -36,7 +36,7 @@ const slug = segments[1]
         ) : slug && category === 'autori' ? (
           <>
             Od autora{' '}
-            <span class="font-liga font-head my-4 block text-7xl text-black">
+            <span class="font-liga font-head my-4 block text-7xl text-gray-800">
               {uppercaseEveryFirstLetters(slug.replace(/-/g, ' '))}
             </span>{' '}
             jsme zatím nic nevydali

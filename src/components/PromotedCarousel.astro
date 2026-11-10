@@ -22,7 +22,7 @@ const bookColorScales = books.map((book) => ({
 ---
 
 <div
-  class="promoted-carousel [--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)]"
+  class="promoted-carousel"
   data-carousel
   data-color-scales={JSON.stringify(bookColorScales)}
 >
@@ -87,7 +87,9 @@ const bookColorScales = books.map((book) => ({
       </div>
     </div>
   </div>
-  <div class="mt-6 grid px-4 sm:hidden">
+  <div
+    class="mt-6 grid px-[calc((100%-var(--slide-size))/2+var(--slide-spacing)/2)] sm:hidden"
+  >
     {
       books.map((book, index) => {
         const mainAuthors = book.data.authors.filter((a) => a.isMain)
@@ -119,9 +121,9 @@ const bookColorScales = books.map((book) => ({
     }
   </div>
   <div
-    class="relative mt-4 mb-40 hidden items-start justify-between gap-4 px-[calc((100%-var(--slide-size))/2)] sm:flex"
+    class="relative mt-4 mb-40 hidden items-start justify-between gap-4 px-[calc((100%-var(--slide-size))/2+var(--slide-spacing)/2)] sm:flex"
   >
-    <div class="flex shrink-0 gap-2 pl-4">
+    <div class="flex shrink-0 gap-2">
       {
         books.map((book, index) => (
           <button
@@ -143,7 +145,7 @@ const bookColorScales = books.map((book) => ({
         ))
       }
     </div>
-    <div class="grid grow">
+    <div class="-mr-4 grid grow">
       {
         books.map((book, index) => (
           <div

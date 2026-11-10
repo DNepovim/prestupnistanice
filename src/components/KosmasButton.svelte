@@ -49,13 +49,17 @@
     target="_blank"
     rel="noopener"
     class={[
-      'font-alt inline-flex items-center gap-2 rounded-full border border-black px-5 py-2 text-sm tracking-wider text-black uppercase transition-colors hover:bg-black hover:text-white',
+      'font-alt group text-brand-second-500 relative text-sm font-semibold tracking-wider uppercase',
       className,
     ]}
   >
-    <iconify-icon icon="ph:shopping-cart-simple" noobserver aria-hidden="true"
-    ></iconify-icon>
     Kup na Kosmasu
     <span class="sr-only">(otevře se v novém okně)</span>
+    <span
+      class="border-brand-second-500 absolute -right-7 bottom-1/2 block size-2 translate-y-1/2 rotate-45 border-t border-r"
+    ></span>
+    <span
+      class="bg-brand-second-500 absolute -right-[29px] bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]"
+    ></span>
   </a>
 {/if}

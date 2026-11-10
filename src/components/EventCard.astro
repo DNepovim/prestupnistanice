@@ -50,7 +50,7 @@ const cover = isNonEmptyArray(e.images) ? e.images[0] : undefined
       {e.time && <span class="text-gray-400">·</span>}
       {e.time}
     </p>
-    <h4 class="font-alt text-sm leading-snug text-black">{tp(e.title)}</h4>
+    <h4 class="font-alt text-sm leading-snug text-gray-800">{tp(e.title)}</h4>
     <p class="flex items-start gap-1.5 text-xs leading-snug text-gray-500">
       <Icon name="ph:map-pin-light" class="mt-[1px] size-4 shrink-0" aria-hidden="true" />
       <span class="line-clamp-2">{tp(e.place)}</span>

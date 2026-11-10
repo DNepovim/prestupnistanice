@@ -47,7 +47,7 @@ const authors = await getEntries(
     }
 
     <div class="flex-1">
-      <h2 class="group font-alt text-xl font-semibold text-black">
+      <h2 class="group font-alt text-xl font-semibold text-gray-600">
         <a class="relative" href={link}
           >{tp(b.title)}
           <span
@@ -55,6 +55,7 @@ const authors = await getEntries(
           ></span>
         </a>
       </h2>
+      {b.releaseNote && <p class="text-sm text-gray-500">{tp(b.releaseNote)}</p>}
       <div class="text-gray-500">
         {
           authors.map((a, index) => (
