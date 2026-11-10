@@ -151,3 +151,7 @@ yarn.lock
 bun.lockb
 deno.lock
 
+
+# Print masters — too large for GitHub (100MB limit)
+*.tif
+*.tiff
