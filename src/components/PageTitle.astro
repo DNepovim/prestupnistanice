@@ -5,7 +5,7 @@ type Props = {
 
 const TITLE_VARIANTS = {
   default: 'text-gray-800 max-md:text-[10vw]',
-  book: 'text-gray-600 max-md:text-[12vw]',
+  book: 'text-black max-md:text-[12vw]',
 } as const satisfies Record<NonNullable<Props['variant']>, string>
 
 const { variant = 'default' } = Astro.props
