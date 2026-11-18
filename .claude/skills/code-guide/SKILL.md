@@ -87,7 +87,7 @@ Tailwind utilities only — no ad-hoc CSS files, no inline `style` for anything
 Tailwind can express. Custom utilities, keyframes, and font tokens live in
 `src/styles/global.css` via `@utility` / `@theme`.
 
-- Fonts: `font-head` (quiche-flare), `font-display` (montserrat), `font-alt`
+- Fonts: `font-head` (Alegreya), `font-display` (montserrat), `font-alt`
   (montserrat-alternates), `font-liga` (ligatures + oldstyle numerals)
 - Custom utilities: `text-stroke-*`, `text-outline-*`, `animate-width-expand`,
   `animate-rotate-on-load`, `animate-small-rotate-on-load`,

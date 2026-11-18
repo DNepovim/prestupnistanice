@@ -1,0 +1,120 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { isNonEmptyArray } from 'narrowland'
+
+type Props = {
+  reviews: CollectionEntry<'review'>[]
+}
+
+type ReviewSource = CollectionEntry<'review'>['data']['source']
+
+const SOURCE_LABELS = {
+  kosmas: 'Kosmas',
+  databazeknih: 'Databáze knih',
+  press: 'Tisk',
+  web: 'Web',
+} as const satisfies Record<ReviewSource, string>
+
+const LONG_REVIEW_LENGTH = 260
+
+const { reviews } = Astro.props
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+
+const getHost = (url: string) => new URL(url).host.replace(/^www\./, '')
+
+const toParagraphs = (body: string | undefined) =>
+  (body ?? '')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter((p) => p !== '')
+---
+
+{
+  isNonEmptyArray(reviews) && (
+    <ul class="flex flex-col gap-11">
+      {reviews.map((review) => {
+        const { data } = review
+        const paragraphs = toParagraphs(review.body)
+        const isLong =
+          paragraphs.length > 1 || (paragraphs[0]?.length ?? 0) > LONG_REVIEW_LENGTH
+        const inputId = `review-${review.id}`
+
+        return (
+          <li class="border-brand-first-500 relative border border-dashed px-8 pt-9 pb-6 max-sm:px-5">
+            <span class="font-alt text-brand-first-700 bg-paper-fixed absolute -top-[0.6rem] left-6 px-3 text-[0.65rem] leading-snug font-semibold tracking-[0.08em] uppercase">
+              {SOURCE_LABELS[data.source]}
+            </span>
+            <span
+              aria-hidden="true"
+              class="text-brand-first-500 bg-paper-fixed absolute -top-[0.7rem] right-5 px-2 text-[1.1rem] leading-snug"
+            >
+              ✂
+            </span>
+            {isNonEmptyArray(paragraphs) && (
+              <div>
+                {isLong && (
+                  <input
+                    id={inputId}
+                    type="checkbox"
+                    class="peer sr-only"
+                    aria-label="Zobrazit celou recenzi"
+                  />
+                )}
+                <div
+                  class:list={[
+                    "before:font-head before:text-brand-first-500 flex flex-col gap-3 before:float-left before:pr-1 before:text-[3.4em] before:leading-[0.7] before:font-extrabold before:content-['„']",
+                    isLong
+                      ? 'text-[1rem] leading-[1.5] peer-not-checked:line-clamp-7'
+                      : 'font-alt text-[1.15rem] leading-[1.5] italic',
+                  ]}
+                >
+                  {paragraphs.map((p) => (
+                    <p class="whitespace-pre-line">{p}</p>
+                  ))}
+                </div>
+                {isLong && (
+                  <label
+                    for={inputId}
+                    class="font-alt text-brand-first-700 border-brand-first-500 peer-focus-visible:outline-brand-first-500 mt-4 inline-block cursor-pointer border-b pb-0.5 text-[0.7rem] leading-none font-semibold tracking-[0.06em] peer-checked:hidden peer-focus-visible:outline-2"
+                  >
+                    Číst celou recenzi
+                  </label>
+                )}
+              </div>
+            )}
+            <p class="font-alt text-brand-first-700 mt-4 text-[0.65rem] leading-[1.4] tracking-[0.06em] uppercase">
+              <b class="font-semibold">{data.reviewer}</b>
+              {data.url && (
+                <>
+                  {' · '}
+                  <a
+                    href={data.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="underline underline-offset-[0.15em]"
+                  >
+                    {getHost(data.url)}
+                    <span class="sr-only">(otevře se v novém okně)</span>
+                  </a>
+                </>
+              )}
+              {data.date && (
+                <>
+                  {' · '}
+                  <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+                </>
+              )}
+            </p>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}

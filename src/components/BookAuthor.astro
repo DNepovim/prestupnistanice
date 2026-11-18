@@ -1,0 +1,73 @@
+---
+import { getEntry } from 'astro:content'
+import { isDefined } from 'narrowland'
+
+import Portrait from '@/components/Portrait.astro'
+import { routes } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
+import { rolesMap } from '@/utils/rolesMap'
+import { tp } from '@/utils/tp'
+
+type Props = {
+  slug: string
+  roles: string[]
+}
+
+const { slug, roles } = Astro.props
+
+const entry = await getEntry('author', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: author } = entry
+
+const roleText = joinWords(
+  roles.map((r) => rolesMap[r]?.perfect[author.gender]).filter(isDefined),
+)
+
+const bio = entry.body?.replace(/[*>#]/g, '').trim()
+---
+
+<div class="group/person flex max-w-[30rem] items-start gap-6 max-sm:gap-4">
+  <a
+    href={routes.authors.detail(author.slug)}
+    tabindex="-1"
+    aria-hidden="true"
+    class="shrink-0"
+  >
+    <Portrait
+      image={author.image}
+      size={240}
+      revealOnHover
+      class="w-[7.2rem] shadow-[0_0.15rem_0.7rem_rgba(0,0,0,0.14)] max-sm:w-[5.2rem]"
+    />
+  </a>
+  <div class="min-w-0 flex-1">
+    {
+      roleText && (
+        <p class="font-alt text-brand-first-700 text-[0.85rem] leading-none tracking-[0.04em]">
+          {roleText}
+        </p>
+      )
+    }
+    <p class="font-alt mt-1 text-[1.6rem] leading-[1.2] italic max-sm:text-[1.2rem]">
+      <a href={routes.authors.detail(author.slug)}>{author.firstname} {author.surname}</a>
+    </p>
+    {
+      bio && (
+        <p class="mt-2 line-clamp-3 text-[0.82rem] leading-[1.55] text-gray-800">
+          {tp(bio)}
+        </p>
+      )
+    }
+    <p
+      class="font-alt text-brand-first-700 mt-3 text-[0.7rem] leading-none tracking-[0.06em]"
+    >
+      <a href={routes.authors.detail(author.slug)}>
+        více o {author.gender === 'male' ? 'autorovi' : 'autorce'} →
+      </a>
+    </p>
+  </div>
+</div>

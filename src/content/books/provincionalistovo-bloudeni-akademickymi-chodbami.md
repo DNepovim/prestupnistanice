@@ -21,7 +21,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: ../images/provincionalistovo-bloudeni-akademickymi-chodbami.jpg
+coverImage: ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/cover.jpg
 category: philosophy
 color: '#562e2e'
 bgColor: '#c8b4ae'

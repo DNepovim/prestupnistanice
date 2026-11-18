@@ -6,6 +6,8 @@ order: 10
 pagesCount: 128
 isbn: 978-80-907627-9-4
 kosmasUrl: https://www.kosmas.cz/knihy/503162/hluk-proti-hlucnosti-naseho-zivota/
+price: 259
+stock: 11
 authors:
   - author: src/content/authors/theodor-lessing.md
     slug: theodor-lessing
@@ -32,9 +34,8 @@ authors:
     slug: dominik-blaha
     role:
       - typesetting
-cover: ../images/hlukThumb.jpg
-coverImage: ../images/hlukCover.jpg
-coverTop: ../images/hlukTop.jpg
+cover: ../images/books/hluk-proti-hlucnosti-naseho-zivota/thumb.jpg
+coverTop: ../images/books/hluk-proti-hlucnosti-naseho-zivota/wide.jpg
 category: philosophy
 color: '#24211b'
 bgColor: '#e0dcd0'

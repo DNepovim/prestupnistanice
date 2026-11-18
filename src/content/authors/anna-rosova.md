@@ -6,7 +6,7 @@ firstnameSecond: Anny
 surname: Rosová
 surnameSecond: Rosové
 gender: female
-image: ../images/rosova.jpg
+image: ../images/authors/rosova.jpg
 ---
 
 

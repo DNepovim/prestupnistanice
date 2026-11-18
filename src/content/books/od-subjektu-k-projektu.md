@@ -25,7 +25,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: ../images/od-subjektu-k-projektu.jpg
+coverImage: ../images/books/od-subjektu-k-projektu/cover.jpg
 category: philosophy
 color: '#5a4931'
 bgColor: '#fff8f0'

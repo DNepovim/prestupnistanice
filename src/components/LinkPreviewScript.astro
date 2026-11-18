@@ -1,0 +1,59 @@
+---
+
+---
+
+<script>
+  const PREVIEW_ID = 'link-preview'
+  const OFFSET_PX = 16
+  const PREVIEW_WIDTH_PX = 168
+
+  const getPreview = () => {
+    const existing = document.getElementById(PREVIEW_ID)
+    if (existing instanceof HTMLImageElement) {
+      return existing
+    }
+    const image = document.createElement('img')
+    image.id = PREVIEW_ID
+    image.alt = ''
+    image.className =
+      'pointer-events-none fixed z-50 hidden w-[168px] rounded-md border border-gray-200 shadow-xl'
+    document.body.append(image)
+    return image
+  }
+
+  const getLink = (target: EventTarget | null) =>
+    target instanceof Element
+      ? target.closest<HTMLAnchorElement>('a[data-preview]')
+      : null
+
+  const canHover = window.matchMedia('(hover: hover)').matches
+
+  if (canHover) {
+    document.addEventListener('mouseover', (event) => {
+      const link = getLink(event.target)
+      const src = link?.dataset['preview']
+      if (!src) {
+        return
+      }
+      const preview = getPreview()
+      preview.src = src
+      preview.classList.remove('hidden')
+    })
+
+    document.addEventListener('mousemove', (event) => {
+      if (!getLink(event.target)) {
+        return
+      }
+      const preview = getPreview()
+      const fitsRight = event.clientX + OFFSET_PX + PREVIEW_WIDTH_PX < window.innerWidth
+      preview.style.left = `${String(fitsRight ? event.clientX + OFFSET_PX : event.clientX - OFFSET_PX - PREVIEW_WIDTH_PX)}px`
+      preview.style.top = `${String(event.clientY + OFFSET_PX)}px`
+    })
+
+    document.addEventListener('mouseout', (event) => {
+      if (getLink(event.target) && !getLink(event.relatedTarget)) {
+        getPreview().classList.add('hidden')
+      }
+    })
+  }
+</script>

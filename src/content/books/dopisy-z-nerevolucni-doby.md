@@ -6,6 +6,8 @@ order: 5
 pagesCount: 271
 isbn: 978-80-907627-0-1
 kosmasUrl: https://www.kosmas.cz/knihy/269561/dopisy-z-nerevolucni-doby/
+price: 199
+stock: 0
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha
@@ -21,7 +23,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: ../images/dopisy-z-nerevolucni-doby.jpg
+coverImage: ../images/books/dopisy-z-nerevolucni-doby/cover.jpg
 category: philosophy
 color: '#4f0708'
 bgColor: '#bda19c'

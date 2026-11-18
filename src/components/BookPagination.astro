@@ -1,7 +1,6 @@
 ---
 import { routes } from '@/routes'
 
-import ArrowLink from './ArrowLink.astro'
 import FloatingImage from './FloatingImage.svelte'
 
 type NavItem = {
@@ -22,29 +21,46 @@ type Props = {
 }
 
 const { prev, next } = Astro.props
+
+const LINK =
+  'hover:text-brand-first-700 focus-visible:text-brand-first-700 focus-visible:outline-brand-first-700 flex items-baseline gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4'
 ---
 
-<div class="text-brand-first-500 mt-6 flex items-center justify-between px-8">
-  <div class="flex-1 text-left">
-    {
-      prev && (
-        <FloatingImage client:visible src={prev.cover?.src} alt={prev.title}>
-          <ArrowLink hasArrowLeft href={routes.books.detail(prev.slug)} class="text-xs">
-            {prev.order}. {prev.title}
-          </ArrowLink>
-        </FloatingImage>
-      )
-    }
-  </div>
-  <div class="flex-1 text-right">
-    {
-      next && (
-        <FloatingImage client:visible src={next.cover?.src} alt={next.title}>
-          <ArrowLink href={routes.books.detail(next.slug)} class="text-xs">
-            {next.order}. {next.title}
-          </ArrowLink>
-        </FloatingImage>
-      )
-    }
-  </div>
-</div>
+<nav
+  aria-label="Předchozí a další kniha"
+  class="font-alt text-brand-first-300/60 flex items-baseline justify-between gap-6 text-[0.72rem] leading-[1.3] tracking-[0.06em] uppercase max-md:flex-col"
+>
+  {
+    prev ? (
+      <FloatingImage client:visible src={prev.cover?.src} alt={prev.title}>
+        <a href={routes.books.detail(prev.slug)} class={LINK}>
+          <span aria-hidden="true">←</span>
+          <span class="font-head text-[1.1rem] font-extrabold tracking-normal normal-case">
+            {prev.order}.
+          </span>
+          {prev.title}
+        </a>
+      </FloatingImage>
+    ) : (
+      <span />
+    )
+  }
+  {
+    next ? (
+      <FloatingImage client:visible src={next.cover?.src} alt={next.title}>
+        <a
+          href={routes.books.detail(next.slug)}
+          class:list={[LINK, 'flex-row-reverse text-right']}
+        >
+          <span aria-hidden="true">→</span>
+          <span class="font-head text-[1.1rem] font-extrabold tracking-normal normal-case">
+            {next.order}.
+          </span>
+          {next.title}
+        </a>
+      </FloatingImage>
+    ) : (
+      <span />
+    )
+  }
+</nav>

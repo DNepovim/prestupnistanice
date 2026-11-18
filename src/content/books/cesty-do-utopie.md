@@ -6,6 +6,8 @@ order: 8
 pagesCount: 178
 isbn: 978-80-907627-3-2
 kosmasUrl: https://www.kosmas.cz/knihy/284803/cesty-do-utopie/
+price: 279
+stock: 5
 authors:
   - author: src/content/authors/martin-buber.md
     slug: martin-buber
@@ -29,7 +31,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: ../images/cesty-do-utopie.jpg
+coverImage: ../images/books/cesty-do-utopie/cover.jpg
 category: philosophy
 color: '#153341'
 bgColor: '#b8b9a7'

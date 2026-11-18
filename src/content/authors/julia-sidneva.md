@@ -7,7 +7,7 @@ firstnameSecond: Julie
 surname: Sidneva
 surnameSecond: Sidnevy
 gender: female
-image: ../images/sidneva.png
+image: ../images/authors/sidneva.png
 claim: 'Umělkyně, ilustrátorka a členka Moskevského svazu umělců.'
 ---
 

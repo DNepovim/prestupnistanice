@@ -32,7 +32,7 @@ authors:
     slug: filip-komberec
     role:
       - corrector
-cover: ../images/ta-moje-realita.jpg
+coverImage: ../images/books/ta-moje-realita/cover.jpg
 category: poetry
 color: '#535b59'
 bgColor: '#dbece2'

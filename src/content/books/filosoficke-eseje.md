@@ -24,7 +24,7 @@ authors:
     slug: jakub-skalak
     role:
       - reviewer
-cover: ../images/filosoficke-eseje.jpg
+coverImage: ../images/books/filosoficke-eseje/cover.jpg
 category: philosophy
 color: '#b26436'
 bgColor: '#c59e61'

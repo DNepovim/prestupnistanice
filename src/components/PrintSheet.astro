@@ -1,0 +1,149 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Edge = 'first' | 'middle' | 'last' | 'only'
+type Corner = 'tl' | 'tr' | 'bl' | 'br'
+type Registration = 't' | 'b' | 'l' | 'r'
+
+type Props = {
+  edge: Edge
+  regs?: Registration[]
+  slug?: string
+  sideSlug?: string
+  cutAtBottom?: boolean
+  class?: HTMLAttributes<'section'>['class']
+}
+
+const CORNER_CLASSES = {
+  tl: '-top-(--mk-s) -left-(--mk-s)',
+  tr: '-top-(--mk-s) -right-(--mk-s) -scale-x-100',
+  bl: '-bottom-(--mk-s) -left-(--mk-s) -scale-y-100',
+  br: '-right-(--mk-s) -bottom-(--mk-s) -scale-100',
+} as const satisfies Record<Corner, string>
+
+const REGISTRATION_CLASSES = {
+  t: '-top-(--mk-h) left-1/2 -translate-x-1/2 -translate-y-1/2',
+  b: '-bottom-(--mk-h) left-1/2 -translate-x-1/2 translate-y-1/2',
+  l: '-left-(--mk-h) top-1/2 -translate-x-1/2 -translate-y-1/2',
+  r: '-right-(--mk-h) top-1/2 translate-x-1/2 -translate-y-1/2',
+} as const satisfies Record<Registration, string>
+
+const EDGE_CORNERS = {
+  first: ['tl', 'tr'],
+  middle: [],
+  last: ['bl', 'br'],
+  only: ['tl', 'tr', 'bl', 'br'],
+} as const satisfies Record<Edge, readonly Corner[]>
+
+const EDGE_HAS_CUT = {
+  first: true,
+  middle: true,
+  last: false,
+  only: false,
+} as const satisfies Record<Edge, boolean>
+
+const EDGE_MARGIN = {
+  first: 'mb-16',
+  middle: 'mb-16',
+  last: 'mb-24',
+  only: 'mb-24',
+} as const satisfies Record<Edge, string>
+
+const EDGE_HAS_TOP = {
+  first: true,
+  middle: false,
+  last: false,
+  only: true,
+} as const satisfies Record<Edge, boolean>
+
+const {
+  edge,
+  regs = [],
+  slug,
+  sideSlug,
+  cutAtBottom = false,
+  class: className,
+} = Astro.props
+---
+
+<div class="mx-auto w-full max-w-[64rem] px-[5rem] max-md:px-9">
+  <section
+    class:list={[
+      'text-brand-first-300/60 relative',
+      '[--mk-g:0.5rem] [--mk-l:1.25rem] md:[--mk-g:0.9rem] md:[--mk-l:2rem]',
+      '[--mk-h:calc(var(--mk-g)+var(--mk-l)/2)] [--mk-s:calc(var(--mk-g)+var(--mk-l))]',
+      EDGE_HAS_TOP[edge] && 'mt-[calc(var(--mk-s)+1.2rem)]',
+      EDGE_MARGIN[edge],
+      className,
+    ]}
+  >
+    {
+      EDGE_CORNERS[edge].map((corner) => (
+        <span
+          aria-hidden="true"
+          class:list={[
+            'pointer-events-none absolute size-(--mk-s)',
+            'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+            'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+            CORNER_CLASSES[corner],
+          ]}
+        />
+      ))
+    }
+    {
+      regs.map((reg) => (
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 4 4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="0.12"
+          class:list={[
+            'pointer-events-none absolute size-[1.7rem] md:size-[2.4rem]',
+            REGISTRATION_CLASSES[reg],
+          ]}
+        >
+          <circle cx="2" cy="2" r="0.95" />
+          <circle cx="2" cy="2" r="0.38" />
+          <path d="M0 2H4M2 0V4" />
+        </svg>
+      ))
+    }
+    {
+      slug && EDGE_HAS_TOP[edge] && (
+        <span
+          aria-hidden="true"
+          class="font-alt text-brand-first-700 pointer-events-none absolute -top-(--mk-s) left-4 flex h-(--mk-l) max-w-[calc(50%-2rem)] items-center overflow-hidden text-[0.62rem] tracking-[0.06em] text-ellipsis whitespace-nowrap"
+        >
+          {slug}
+        </span>
+      )
+    }
+    {
+      sideSlug && (
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute top-4 bottom-4 -left-(--mk-h) hidden w-6 -translate-x-1/2 min-md:block"
+        >
+          <span class="font-alt text-brand-first-700 sticky top-6 block max-h-[calc(100svh-3rem)] w-6 rotate-180 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
+            {sideSlug}
+          </span>
+        </div>
+      )
+    }
+    {
+      EDGE_HAS_CUT[edge] && (
+        <span
+          aria-hidden="true"
+          class:list={[
+            'pointer-events-none absolute -right-(--mk-s) -left-(--mk-s) h-0',
+            'before:absolute before:left-0 before:w-(--mk-l) before:border-t',
+            'after:absolute after:right-0 after:w-(--mk-l) after:border-t',
+            cutAtBottom ? 'top-full' : 'top-[calc(100%+2rem)]',
+          ]}
+        />
+      )
+    }
+    <div class="text-gray-900"><slot /></div>
+  </section>
+</div>

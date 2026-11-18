@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  from: string
+  to: string
+  class?: HTMLAttributes<'div'>['class']
+}
+
+const STEPS = [
+  'bg-[color-mix(in_srgb,var(--to)_0%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_11%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_22%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_33%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_44%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_56%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_67%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_78%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_89%,var(--from))]',
+  'bg-[color-mix(in_srgb,var(--to)_100%,var(--from))]',
+] as const
+
+const { from, to, class: className } = Astro.props
+---
+
+<div
+  aria-hidden="true"
+  style={`--from:${from};--to:${to}`}
+  class:list={['pointer-events-none flex w-76 max-w-full opacity-50', className]}
+>
+  {STEPS.map((step) => <span class:list={['block h-[1.1rem] flex-1', step]} />)}
+</div>

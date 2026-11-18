@@ -6,6 +6,8 @@ order: 13
 pagesCount: 29
 isbn: 978-80-907627-7-0
 kosmasUrl: https://www.kosmas.cz/knihy/521707/tati/
+price: 259
+stock: 14
 authors:
   - author: src/content/authors/philippe-corentin.md
     slug: philippe-corentin
@@ -20,7 +22,7 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/tati.jpg
+coverImage: ../images/books/tati/cover.jpg
 category: forKids
 color: '#775c4b'
 bgColor: '#81937c'

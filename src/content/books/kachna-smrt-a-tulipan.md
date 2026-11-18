@@ -1,12 +1,14 @@
 ---
 slug: kachna-smrt-a-tulipan
 title: 'Kachna, smrt a tulipán'
-originlName: 'Ente, Tod und Tulpe'
+originalName: 'Ente, Tod und Tulpe'
 date: 2025
 order: 17
 pagesCount: 38
 isbn: 978–80–909036–2–3
 kosmasUrl: https://www.kosmas.cz/knihy/548353/kachna-smrt-a-tulipan/
+price: 349
+stock: 2
 authors:
   - author: src/content/authors/wolf-erlbruch.md
     slug: wolf-erlbruch
@@ -41,9 +43,8 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/kachanThumb.jpg
-coverImage: ../images/kachnaCover.jpg
-coverTop: ../images/kachnaTop.jpg
+cover: ../images/books/kachna-smrt-a-tulipan/thumb.jpg
+coverTop: ../images/books/kachna-smrt-a-tulipan/wide.jpg
 category: forKids
 color: '#dd6a55'
 bgColor: '#efa931'

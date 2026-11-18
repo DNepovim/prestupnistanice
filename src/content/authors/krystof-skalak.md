@@ -7,7 +7,7 @@ surname: Skalák
 surnameSecond: Skaláka
 birthDate: 2017-02-17T23:00:00.000Z
 gender: male
-image: ../images/krystofSkalak.png
+image: ../images/authors/krystofSkalak.png
 claim: Jsem Kryštof a je mi 8 let.
 ---
 

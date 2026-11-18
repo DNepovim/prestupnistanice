@@ -8,7 +8,7 @@ surnameSecond: Kassnera
 birthDate: 1873-11-10T23:02:16.000Z
 deathDate: 1959-03-31T23:00:00.000Z
 gender: male
-image: ../images/kassner.jpg
+image: ../images/authors/kassner.jpg
 claim: >-
   Jedna z nejvíce pozoruhodných a zároveň nejméně známých osobností evropského
   kulturního myšlení první poloviny 20. století.

@@ -1,0 +1,102 @@
+---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+
+import Barcode from '@/components/Barcode.astro'
+
+type Props = {
+  year?: number
+  pagesCount?: number
+  width?: number
+  height?: number
+  paper?: string
+  font?: string
+  isbn?: string
+  cover?: ImageMetadata
+}
+
+const { year, pagesCount, width, height, paper, font, isbn, cover } = Astro.props
+
+const hasDimensions = Boolean(width && height)
+const coverRatio = cover ? cover.height / cover.width : 1.43
+const ratio = width && height ? height / width : coverRatio
+
+const callouts = [
+  year ? { label: 'Rok uvedení', text: String(year) } : undefined,
+  pagesCount ? { label: 'Počet stran', text: String(pagesCount) } : undefined,
+  paper ? { label: 'Papír', text: paper } : undefined,
+  font ? { label: 'Písmo', text: font } : undefined,
+].filter((item) => item !== undefined)
+
+const LABEL =
+  'font-alt text-brand-first-700 text-[0.62rem] leading-[1.2] tracking-[0.1em] uppercase'
+const VALUE =
+  'text-[1.1rem] leading-[1.15] font-normal [font-variant-numeric:lining-nums] break-words max-sm:text-[0.95rem]'
+---
+
+<div
+  class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-[var(--kg)] [--cw:5.2rem] [--kg:1rem] min-md:[--cw:11rem] min-md:[--kg:2.6rem]"
+  style={`--ar:${ratio.toFixed(4)}`}
+>
+  <div
+    class:list={[
+      'relative pt-[2.2rem]',
+      hasDimensions ? 'w-[calc(var(--cw)+2.5rem)] pl-[2.5rem]' : 'w-(--cw)',
+    ]}
+  >
+    {
+      hasDimensions && (
+        <>
+          <div class="text-brand-first-500 absolute top-0 right-0 left-[2.5rem] h-8 before:absolute before:inset-x-0 before:bottom-[0.2rem] before:h-[0.8rem] before:border-x after:absolute after:inset-x-0 after:bottom-[0.6rem] after:border-t">
+            <span class="font-alt text-brand-first-700 bg-paper-fixed absolute bottom-[0.6rem] left-1/2 -translate-x-1/2 translate-y-1/2 px-2 text-[0.62rem] leading-none whitespace-nowrap">
+              {width} mm
+            </span>
+          </div>
+          <div class="text-brand-first-500 absolute top-[2.2rem] bottom-0 left-0 w-[2.1rem] before:absolute before:inset-y-0 before:right-[0.2rem] before:w-[0.8rem] before:border-y after:absolute after:inset-y-0 after:right-[0.6rem] after:border-l">
+            <span class="font-alt text-brand-first-700 bg-paper-fixed absolute top-1/2 right-[0.6rem] translate-x-1/2 -translate-y-1/2 rotate-180 py-2 text-[0.62rem] leading-none whitespace-nowrap [writing-mode:vertical-rl]">
+              {height} mm
+            </span>
+          </div>
+        </>
+      )
+    }
+    <div
+      class:list={[
+        'border-brand-first-500 [aspect-ratio:1/var(--ar)] w-(--cw) overflow-hidden border',
+        !cover && 'bg-brand-first-200',
+      ]}
+    >
+      {cover && <Image src={cover} alt="" width={240} class="size-full object-contain" />}
+    </div>
+  </div>
+  <dl
+    class="mt-[2.2rem] flex [height:calc(var(--cw)*var(--ar))] min-w-0 flex-col justify-between"
+  >
+    {
+      callouts.map((item) => (
+        <div class="before:border-brand-first-500 after:bg-brand-first-500 relative flex flex-col gap-1.5 before:absolute before:top-[0.37rem] before:right-full before:w-(--kg) before:border-t after:absolute after:top-[calc(0.37rem-0.15rem)] after:right-[calc(100%+var(--kg)-0.15rem)] after:size-[0.3rem] after:rounded-full">
+          <dt class={LABEL}>{item.label}</dt>
+          <dd class={VALUE}>{item.text}</dd>
+        </div>
+      ))
+    }
+    {
+      isbn && (
+        <div class="before:border-brand-first-500 after:bg-brand-first-500 relative flex flex-col gap-1.5 before:absolute before:top-[0.37rem] before:right-full before:w-(--kg) before:border-t after:absolute after:top-[calc(0.37rem-0.15rem)] after:right-[calc(100%+var(--kg)-0.15rem)] after:size-[0.3rem] after:rounded-full max-md:hidden">
+          <dt class={LABEL}>ISBN</dt>
+          <dd class:list={[VALUE, 'text-[0.95rem]']}>{isbn}</dd>
+          <Barcode isbn={isbn} class="mt-1 h-[1.4rem] w-[6.5rem]" />
+        </div>
+      )
+    }
+  </dl>
+  {
+    isbn && (
+      <div class="col-span-2 mt-8 flex flex-col gap-1.5 min-md:hidden">
+        <p class={LABEL}>ISBN</p>
+        <p class:list={[VALUE, 'text-[0.9rem]']}>{isbn}</p>
+        <Barcode isbn={isbn} class="mt-1 h-[1.4rem] w-[6.5rem]" />
+      </div>
+    )
+  }
+</div>

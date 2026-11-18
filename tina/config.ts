@@ -5,6 +5,7 @@ import { BooksCollection } from './collections/books'
 import { EventsCollection } from './collections/events'
 import { GlobalConfigCollection } from './collections/global-config'
 import { PagesCollection } from './collections/pages'
+import { ReviewsCollection } from './collections/reviews'
 
 export default defineConfig({
   branch: 'main',
@@ -31,6 +32,7 @@ export default defineConfig({
       AuthorsCollection,
       EventsCollection,
       PagesCollection,
+      ReviewsCollection,
       GlobalConfigCollection,
     ],
   },

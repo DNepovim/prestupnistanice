@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 
-import { fetchKosmasStatus } from '@/utils/kosmas'
+import { fetchKosmasOffer } from '@/utils/kosmas'
 
 export const prerender = false
 
@@ -26,11 +26,11 @@ export const GET: APIRoute = async ({ params }) => {
     return json({ error: 'not-found' }, 404, FAILURE_CACHE)
   }
 
-  const status = await fetchKosmasStatus(kosmasUrl).catch(() => undefined)
+  const offer = await fetchKosmasOffer(kosmasUrl).catch(() => undefined)
 
-  if (!status) {
+  if (!offer) {
     return json({ error: 'unavailable-upstream' }, 502, FAILURE_CACHE)
   }
 
-  return json({ status }, 200, SUCCESS_CACHE)
+  return json(offer, 200, SUCCESS_CACHE)
 }

@@ -32,6 +32,8 @@ const AVAILABILITY_TO_STATUS = {
   Discontinued: 'soldOut',
 } as const satisfies Record<SchemaAvailability, KosmasStatus>
 
+const PRICE_PATTERN = /"price"\s*:\s*"?(\d+(?:\.\d+)?)/
+
 const AVAILABILITY_PATTERN = /"availability"\s*:\s*"(?:https?:\/\/schema\.org\/)?(\w+)"/
 
 const FETCH_TIMEOUT_MS = 8000
@@ -43,7 +45,12 @@ const parseStatus = (html: string): KosmasStatus | undefined => {
     : undefined
 }
 
-export const fetchKosmasStatus = async (url: string) => {
+const parsePrice = (html: string) => {
+  const price = Number(PRICE_PATTERN.exec(html)?.[1])
+  return Number.isFinite(price) && price > 0 ? Math.round(price) : undefined
+}
+
+export const fetchKosmasOffer = async (url: string) => {
   const response = await fetch(url, {
     headers: { 'user-agent': 'Mozilla/5.0 (compatible; prestupnistanice.cz)' },
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
@@ -53,5 +60,8 @@ export const fetchKosmasStatus = async (url: string) => {
     return undefined
   }
 
-  return parseStatus(await response.text())
+  const html = await response.text()
+  const status = parseStatus(html)
+
+  return status ? { status, price: parsePrice(html) } : undefined
 }

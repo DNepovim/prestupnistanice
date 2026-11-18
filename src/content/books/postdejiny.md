@@ -6,6 +6,8 @@ order: 2
 pagesCount: 121
 isbn: 978-80-270-4476-4
 kosmasUrl: https://www.kosmas.cz/knihy/254429/postdejiny/
+price: 249
+stock: 4
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser
@@ -36,7 +38,7 @@ authors:
     slug: tlama-design
     role:
       - typesetting
-cover: ../images/postdejiny.jpg
+coverImage: ../images/books/postdejiny/cover.jpg
 category: philosophy
 color: '#b85c63'
 bgColor: '#e7e4dd'

@@ -1,0 +1,29 @@
+---
+import type { ImageMetadata } from 'astro'
+import { getImage } from 'astro:assets'
+
+import BookFlip from '@/components/BookFlip.svelte'
+
+type Props = {
+  pages: ImageMetadata[]
+  title: string
+}
+
+const SAMPLE_PAGE_WIDTH = 1100
+
+const { pages, title } = Astro.props
+
+const optimizedPages = await Promise.all(
+  pages.map(async (page) => {
+    const width = Math.min(SAMPLE_PAGE_WIDTH, page.width)
+    const image = await getImage({ src: page, width, format: 'webp' })
+    return {
+      src: image.src,
+      width,
+      height: Math.round((width * page.height) / page.width),
+    }
+  }),
+)
+---
+
+<BookFlip client:visible pages={optimizedPages} title={title} />

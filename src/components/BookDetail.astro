@@ -1,27 +1,48 @@
 ---
 import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
 import { getCollection, getEntries, getEntry } from 'astro:content'
-import { Icon } from 'astro-icon/components'
+import { isDefined, isNonEmptyArray } from 'narrowland'
 
-import Book from '@/components/Book.astro'
+import BookAuthor from '@/components/BookAuthor.astro'
+import BookBuy from '@/components/BookBuy.svelte'
+import BookCrew from '@/components/BookCrew.astro'
+import BookMeta from '@/components/BookMeta.astro'
 import BookPagination from '@/components/BookPagination.astro'
-import BooksGrid from '@/components/BooksGrid.astro'
-import PageTitle from '@/components/PageTitle.astro'
-import Section from '@/components/Section.astro'
+import BookReviews from '@/components/BookReviews.astro'
+import BookSample from '@/components/BookSample.astro'
+import BooksContactSheet from '@/components/BooksContactSheet.astro'
+import BooksIndex from '@/components/BooksIndex.astro'
+import CmykBar from '@/components/CmykBar.astro'
+import ColorBar from '@/components/ColorBar.astro'
+import FloatingImage from '@/components/FloatingImage.svelte'
+import Markdown from '@/components/Markdown.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
+import { joinWords } from '@/utils/joinWords'
+import { ROLE_ORDER, rolesMap } from '@/utils/rolesMap'
+import { getTitleFit } from '@/utils/titleFit'
 import { tp } from '@/utils/tp'
-
-import AuthorExcerpt from './AuthorExcerpt.astro'
-import AuthorSmall from './AuthorSmall.astro'
-import Blockquote from './Blockquote.astro'
-import KosmasButton from './KosmasButton.svelte'
-import Markdown from './Markdown.astro'
 
 type Props = {
   slug: string
 }
+
+type SheetKey = 'hero' | 'text' | 'sample' | 'meta' | 'turn' | 'author' | 'category'
+type Category = CollectionEntry<'book'>['data']['category']
+
+const CATEGORY_LABELS = {
+  forKids: 'Pro děti',
+  philosophy: 'Filosofie',
+  novel: 'Román',
+  poetry: 'Poesie',
+} as const satisfies Record<Category, string>
+
+const NON_PRINTING_MARK =
+  'font-alt text-brand-first-700/45 align-baseline font-normal select-none'
 
 const { slug } = Astro.props
 
@@ -40,63 +61,6 @@ const prevBook = books[currentBookIndex - 1]
 const nextBook = books[currentBookIndex + 1]
 
 const { data: book } = entry
-
-const data = [
-  ...(book.date
-    ? [
-        {
-          icon: 'ph:calendar',
-          label: 'Rok uvedení',
-          text: book.date,
-        },
-      ]
-    : []),
-  ...(book.pagesCount
-    ? [
-        {
-          icon: 'ph:book-open-text',
-          label: 'Počet stran',
-          text: book.pagesCount,
-        },
-      ]
-    : []),
-  ...(book.width && book.height
-    ? [
-        {
-          icon: 'ph:arrows-out-simple',
-          label: 'Rozměry',
-          text: `${String(book.width)} × ${String(book.height)} mm`,
-        },
-      ]
-    : []),
-  ...(book.paper
-    ? [
-        {
-          icon: 'ph:file',
-          label: 'Papír',
-          text: book.paper,
-        },
-      ]
-    : []),
-  ...(book.font
-    ? [
-        {
-          icon: 'ph:text-aa',
-          label: 'Písmo',
-          text: book.font,
-        },
-      ]
-    : []),
-  ...(book.isbn
-    ? [
-        {
-          icon: 'ph:barcode',
-          label: 'ISBN',
-          text: book.isbn,
-        },
-      ]
-    : []),
-]
 
 const mainAuthors = await getEntries(
   book.authors.filter((b) => b.isMain).map((b) => b.slug),
@@ -125,132 +89,359 @@ const categoryBooks = await getCollection(
   'book',
   (b) => b.data.slug !== slug && b.data.category === book.category,
 )
+
+const otherCategoryBooks = categoryBooks.filter(
+  (b) => !authorsBooks.some((a) => a.data.slug === b.data.slug),
+)
+
+const reviews = (await getCollection('review', (r) => r.data.book === slug)).toSorted(
+  (a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0),
+)
+
+const getFullName = (a: CollectionEntry<'author'>['data']) =>
+  `${a.firstname} ${a.surname}`
+
+const people = (
+  await Promise.all(
+    book.authors
+      .filter((a) => !a.isMain)
+      .map(async (a) => {
+        const person = await getEntry('author', a.slug.id)
+        if (!person) {
+          return undefined
+        }
+        const roles = ROLE_ORDER.filter((role) => a.role.includes(role))
+        return {
+          slug: a.slug.id,
+          name: getFullName(person.data),
+          image: person.data.image,
+          roles: joinWords(
+            roles
+              .map((role) => rolesMap[role]?.perfect[person.data.gender])
+              .filter(isDefined),
+          ),
+          col: a.col,
+          order: Math.min(...roles.map((role) => ROLE_ORDER.indexOf(role))),
+        }
+      }),
+  )
+)
+  .filter(isDefined)
+  .toSorted((a, b) => a.order - b.order)
+
+const samplePages = book.samplePages ?? []
+
+const hasMeta =
+  !book.isUpcoming &&
+  [
+    book.date,
+    book.pagesCount,
+    book.width && book.height,
+    book.paper,
+    book.font,
+    book.isbn,
+  ].some(Boolean)
+
+const candidateSheetKeys: (SheetKey | undefined)[] = [
+  book.coverTop ? 'hero' : undefined,
+  'text',
+  isNonEmptyArray(samplePages) ? 'sample' : undefined,
+  hasMeta || isNonEmptyArray(people) ? 'meta' : undefined,
+  'turn',
+  mainAuthor && isNonEmptyArray(authorsBooks) ? 'author' : undefined,
+  isNonEmptyArray(otherCategoryBooks) ? 'category' : undefined,
+]
+
+const sheetKeys = candidateSheetKeys.filter(isDefined)
+
+const getEdge = (key: SheetKey) => {
+  const index = sheetKeys.indexOf(key)
+  if (sheetKeys.length === 1) {
+    return 'only'
+  }
+  if (index === 0) {
+    return 'first'
+  }
+  return index === sheetKeys.length - 1 ? 'last' : 'middle'
+}
+
+const titleFit = getTitleFit(tp(book.title))
+
+const getSeparator = (index: number, total: number) => {
+  if (index === 0) {
+    return ''
+  }
+  return index === total - 1 ? ' a ' : ', '
+}
+
+const authorsLine = joinWords(mainAuthors.map((a) => getFullName(a.data)))
+
+const orderedTitle = `${String(book.order)}. ${book.title}`
+
+const fileSlug = authorsLine ? `${orderedTitle} · ${authorsLine}` : orderedTitle
+
+const dimensions =
+  book.width && book.height ? `${String(book.width)} × ${String(book.height)} mm` : ''
+
+const sideSlug = [
+  orderedTitle,
+  String(book.date),
+  book.pagesCount ? `${String(book.pagesCount)} stran` : '',
+  dimensions,
+  book.paper ? `papír ${book.paper}` : '',
+  book.font ? `písmo ${book.font}` : '',
+  book.isbn ? `ISBN ${book.isbn}` : '',
+]
+  .filter((part) => part !== '')
+  .join(' · ')
 ---
 
 <Layout
+  keepHue
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
   firstColor={book.color}
   secondColor={book.bgColor}
 >
-  <Section>
-    <PageTitle variant="book">{tp(book.title)}</PageTitle>
+  <div class="pt-4">
     {
-      mainAuthors.length > 0 && (
-        <p class="mb-8 text-2xl">
-          {mainAuthors.map(({ data: a }, index) => (
-            <>
-              <a
-                class="group font-alt relative text-gray-600 transition-colors hover:text-black"
-                href={routes.authors.detail(a.slug)}
-              >
-                {a.firstname}
-                {a.surname}
-              </a>
-              {index === mainAuthors.length - 2
-                ? ' & '
-                : index === mainAuthors.length - 1
-                  ? ''
-                  : ', '}
-            </>
-          ))}
-        </p>
+      book.coverTop && (
+        <PrintSheet edge={getEdge('hero')} regs={['t']} slug={fileSlug} cutAtBottom>
+          <Image
+            alt=""
+            src={book.coverTop}
+            width={2400}
+            widths={[1024, 1600, 2400]}
+            sizes="(min-width: 72rem) 62rem, 100vw"
+            loading="eager"
+            class="aspect-[5/2] w-full object-cover"
+          />
+          <ColorBar
+            from={book.color ?? FALLBACK_COLOR_FIRST}
+            to={book.bgColor ?? FALLBACK_COLOR_SECOND}
+            class="absolute top-[calc(100%+0.5rem)] left-0"
+          />
+          <CmykBar class="absolute top-[calc(100%+0.5rem)] right-0" />
+        </PrintSheet>
       )
     }
-    {
-      (
-        <Image
-          alt={book.title}
-          src={book.cover}
-          width={336}
-          height={480}
-          class="animate-small-rotate-on-load mb-4 rounded-md border border-gray-200 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
-        />
-      )
-    }
-    {book.claim && <Blockquote text={book.claim} />}
-    {
-      data.length > 0 && (
-        <div class="from-brand-second-50/30 relative -right-4 mb-8 flex flex-col items-end gap-2 bg-gradient-to-l to-transparent px-4 pt-2 pb-3">
-          {data.map((d) => (
-            <div>
-              <p class="text-right text-[0.6rem] text-gray-400 lowercase">{d.label}</p>
-              <div
-                title={d.label}
-                class="text-brand-first-500 flex items-center justify-end gap-2 leading-1 oldstyle-nums"
-              >
-                <Icon class="size-4" name={`${d.icon}-light`} />
-                {d.text}
+    <PrintSheet
+      edge={getEdge('text')}
+      regs={['r']}
+      slug={book.coverTop ? undefined : fileSlug}
+      sideSlug={sideSlug}
+    >
+      <div
+        class="grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem] px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_10rem] min-md:px-[2.6rem] min-md:py-[2.5rem] min-lg:grid-cols-[minmax(0,1fr)_15.5rem]"
+      >
+        <header class="[container-type:inline-size] min-md:col-start-1">
+          <p
+            class="font-alt text-brand-first-700 mb-[1.3rem] text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase"
+          >
+            {CATEGORY_LABELS[book.category]}
+          </p>
+          <h1
+            style={`--title-w:${titleFit.widthEm.toFixed(3)}`}
+            class="font-head [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em] text-black"
+          >
+            {
+              titleFit.lines.map((line, index) => (
+                <span class="block whitespace-nowrap">
+                  {line}
+                  {index === titleFit.lines.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      class:list={[NON_PRINTING_MARK, 'ml-[0.25em] text-[0.3em]']}
+                    >
+                      ↵
+                    </span>
+                  )}
+                </span>
+              ))
+            }
+          </h1>
+          {
+            authorsLine && (
+              <div class="font-alt mt-2 text-[1.2rem] leading-[1.2] text-gray-800 italic min-md:text-[1.4rem] min-lg:text-[1.6rem]">
+                {mainAuthors.map(({ data: a }, index) => (
+                  <>
+                    {getSeparator(index, mainAuthors.length)}
+                    <FloatingImage client:visible src={a.image?.src} alt={getFullName(a)}>
+                      <a
+                        class="transition-colors hover:text-black"
+                        href={routes.authors.detail(a.slug)}
+                      >
+                        {getFullName(a)}
+                      </a>
+                    </FloatingImage>
+                  </>
+                ))}
               </div>
+            )
+          }
+        </header>
+        <aside
+          class="flex flex-col items-start gap-6 max-md:my-6 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-6 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
+        >
+          <div class="w-full max-w-[16rem]">
+            <Image
+              alt={book.title}
+              src={book.coverImage ?? book.cover}
+              width={560}
+              class="h-auto w-full shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)]"
+            />
+            {
+              !book.coverTop && (
+                <ColorBar
+                  from={book.color ?? FALLBACK_COLOR_FIRST}
+                  to={book.bgColor ?? FALLBACK_COLOR_SECOND}
+                  class="mt-4"
+                />
+              )
+            }
+          </div>
+          <BookBuy
+            client:load
+            slug={book.slug}
+            kosmasUrl={book.kosmasUrl}
+            price={book.price}
+            stock={book.stock}
+            isUpcoming={book.isUpcoming}
+            releaseNote={book.releaseNote}
+          />
+        </aside>
+        <div class="mt-[1.4rem] min-md:col-start-1">
+          {
+            book.claim && (
+              <blockquote class="font-alt first-letter:text-brand-first-500 mb-8 text-[1rem] leading-[1.45] text-gray-800 italic first-letter:float-left first-letter:pt-[0.06em] first-letter:pr-[0.1em] first-letter:text-[3.1em] first-letter:leading-[0.82] first-letter:font-bold first-letter:not-italic min-lg:text-[1.15rem]">
+                {tp(book.claim)}
+                <span
+                  aria-hidden="true"
+                  class:list={[NON_PRINTING_MARK, 'ml-1.5 text-[0.6em]']}
+                >
+                  ¶
+                </span>
+              </blockquote>
+            )
+          }
+          {entry.body && <Markdown showMarks class="text-[1rem]" text={entry.body} />}
+        </div>
+        {
+          isNonEmptyArray(mainAuthorsWithRoles) && (
+            <div class="mt-10 flex flex-col gap-8 min-md:col-start-1">
+              {mainAuthorsWithRoles.map(({ author, roles }) => (
+                <BookAuthor slug={author.data.slug} roles={roles} />
+              ))}
             </div>
-          ))}
-        </div>
+          )
+        }
+        {
+          isNonEmptyArray(reviews) && (
+            <div class="mt-12 min-md:col-start-1">
+              <p class="font-alt text-brand-first-700 mb-8 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
+                Recenze
+              </p>
+              <BookReviews reviews={reviews} />
+            </div>
+          )
+        }
+      </div>
+    </PrintSheet>
+    {
+      isNonEmptyArray(samplePages) && (
+        <PrintSheet edge={getEdge('sample')} regs={['r']}>
+          <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+            <p class="font-alt text-brand-first-700 mb-8 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
+              Ukázka z knihy
+            </p>
+            <BookSample pages={samplePages} title={book.title} />
+          </div>
+        </PrintSheet>
       )
     }
     {
-      book.kosmasUrl && (
-        <div class="mb-8 flex justify-end pr-9">
-          <KosmasButton client:visible href={book.kosmasUrl} slug={book.slug} />
-        </div>
+      sheetKeys.includes('meta') && (
+        <PrintSheet edge={getEdge('meta')} regs={['r', 'b']}>
+          <div class="grid gap-10 px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_auto] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+            <div class="max-md:order-2">
+              <BookCrew people={people} />
+            </div>
+            {hasMeta && (
+              <div class="max-md:order-1">
+                <BookMeta
+                  cover={book.coverImage}
+                  year={book.date}
+                  pagesCount={book.pagesCount}
+                  width={book.width}
+                  height={book.height}
+                  paper={book.paper}
+                  font={book.font}
+                  isbn={book.isbn}
+                />
+              </div>
+            )}
+          </div>
+        </PrintSheet>
       )
     }
-    {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
-    <div class="clear-both"></div>
-  </Section>
-  <Section className="clear-both my-24 mb-16 flex flex-col gap-12">
+    <PrintSheet edge={getEdge('turn')} slug={`${book.slug}_navigace.pdf`}>
+      <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
+        <BookPagination
+          prev={prevBook
+            ? {
+                slug: prevBook.data.slug,
+                title: prevBook.data.title,
+                order: prevBook.data.order,
+                cover: prevBook.data.cover,
+              }
+            : undefined}
+          next={nextBook
+            ? {
+                slug: nextBook.data.slug,
+                title: nextBook.data.title,
+                order: nextBook.data.order,
+                cover: nextBook.data.cover,
+              }
+            : undefined}
+        />
+      </div>
+    </PrintSheet>
     {
-      mainAuthorsWithRoles.map(({ author, roles }) => (
-        <AuthorExcerpt slug={author.data.slug} roles={roles} />
-      ))
+      mainAuthor && isNonEmptyArray(authorsBooks) && (
+        <PrintSheet
+          edge={getEdge('author')}
+          slug={`od-autora_${mainAuthor.data.slug}.pdf`}
+        >
+          <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
+            <p class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase">
+              Od stejného autora
+            </p>
+            <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
+              Další knihy od {getAuthorsSecondName(mainAuthor.data)}
+            </h2>
+            <BooksContactSheet books={authorsBooks} />
+          </div>
+        </PrintSheet>
+      )
     }
-  </Section>
-  <Section>
-    <BookPagination
-      prev={prevBook
-        ? {
-            slug: prevBook.data.slug,
-            title: prevBook.data.title,
-            order: prevBook.data.order,
-            cover: prevBook.data.cover,
-          }
-        : undefined}
-      next={nextBook
-        ? {
-            slug: nextBook.data.slug,
-            title: nextBook.data.title,
-            order: nextBook.data.order,
-            cover: nextBook.data.cover,
-          }
-        : undefined}
-    />
-  </Section>
-  <Section className="grid max-w-3xl grid-cols-1 min-sm:grid-cols-2 min-md:grid-cols-3">
     {
-      book.authors
-        .filter((a) => !a.isMain)
-        .map((a) => <AuthorSmall col={a.col} slug={a.slug.id} roles={a.role} />)
+      isNonEmptyArray(otherCategoryBooks) && (
+        <PrintSheet
+          edge={getEdge('category')}
+          regs={['b']}
+          slug={`kategorie_${book.category}.pdf`}
+        >
+          <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
+            <p class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase">
+              Ve stejné kategorii
+            </p>
+            <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
+              Další knihy {CATEGORIES[book.category].name}
+            </h2>
+            <BooksIndex books={otherCategoryBooks} />
+          </div>
+        </PrintSheet>
+      )
     }
-  </Section>
-  {
-    mainAuthor && authorsBooks.length > 0 && (
-      <Section title={`Další knihy od ${getAuthorsSecondName(mainAuthor.data)}`}>
-        <BooksGrid>
-          {authorsBooks.map((b) => (
-            <Book slug={b.data.slug} />
-          ))}
-        </BooksGrid>
-      </Section>
-    )
-  }
-  {
-    categoryBooks.length > 0 && (
-      <Section title={`Další knihy ${CATEGORIES[book.category].name}`}>
-        <BooksGrid>
-          {categoryBooks.map((b) => (
-            <Book slug={b.data.slug} />
-          ))}
-        </BooksGrid>
-      </Section>
-    )
-  }
+  </div>
 </Layout>

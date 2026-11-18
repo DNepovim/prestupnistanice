@@ -6,7 +6,7 @@ firstnameSecond: Terezy
 surname: Diepoltová
 surnameSecond: Diepoltové
 gender: female
-image: ../images/diepoltova.jpeg
+image: ../images/authors/diepoltova.jpeg
 showOnAboutPage: true
 ---
 

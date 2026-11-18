@@ -6,6 +6,6 @@ firstnameSecond: Petra
 surname: Babka
 surnameSecond: Babky
 gender: male
-image: ../images/babka.png
+image: ../images/authors/babka.png
 ---
 

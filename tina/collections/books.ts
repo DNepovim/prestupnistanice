@@ -43,7 +43,7 @@ export const BooksCollection: Collection = {
     },
     {
       type: 'string',
-      name: 'originlName',
+      name: 'originalName',
       label: 'Původní název',
     },
     {
@@ -100,6 +100,17 @@ export const BooksCollection: Collection = {
         'Adresa detailu knihy na kosmas.cz, např. https://www.kosmas.cz/knihy/123456/nazev/',
     },
     {
+      type: 'number',
+      name: 'price',
+      label: 'Cena v našem e-shopu (Kč)',
+    },
+    {
+      type: 'number',
+      name: 'stock',
+      label: 'Skladem u nás (ks)',
+      description: 'Při 0 nebo prázdném poli se kniha nabízí jen přes Kosmas.',
+    },
+    {
       name: 'authors',
       label: 'Autoři',
       type: 'object',
@@ -144,7 +155,33 @@ export const BooksCollection: Collection = {
         { name: 'col', label: 'Kolektiv', type: 'string' },
       ],
     },
-    { type: 'image', name: 'cover', label: 'Obálka' },
+    {
+      type: 'image',
+      name: 'cover',
+      label: 'Fotka knihy',
+      description: 'Malý náhled ve výpisech knih. Když chybí, použije se obálka.',
+    },
+    {
+      type: 'image',
+      name: 'coverImage',
+      label: 'Obálka',
+      description: 'Zobrazuje se na detailu knihy. Když chybí, použije se fotka knihy.',
+    },
+    {
+      type: 'image',
+      name: 'coverTop',
+      label: 'Fotografie knihy (široká)',
+      description:
+        'Zobrazí se přes celou šířku nad textem. Bez ní se obálka ukáže vedle textu.',
+    },
+    {
+      type: 'image',
+      name: 'samplePages',
+      label: 'Ukázka z knihy (strany)',
+      description:
+        'Jednotlivé strany v pořadí, nejlépe WebP nebo PNG, cca 1100 px na šířku.',
+      list: true,
+    },
     {
       type: 'boolean',
       name: 'isPromoted',

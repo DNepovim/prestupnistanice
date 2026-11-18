@@ -54,9 +54,8 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/pegasThumb.jpg
-coverImage: ../images/pegasCover.jpg
-coverTop: ../images/pegasTop.jpg
+cover: ../images/books/balkovsky-pegas/thumb.jpg
+coverTop: ../images/books/balkovsky-pegas/wide.jpg
 isPromoted: true
 category: novel
 color: '#51609b'

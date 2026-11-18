@@ -1,0 +1,160 @@
+---
+
+---
+
+<script>
+  import csPatterns from 'hyphenation.cs'
+  import { createHyphenator, justifyContent } from 'tex-linebreak'
+
+  const MARKER = 'insertedByTexLinebreak'
+  const HANGING = new Set(['.', ',', ';', ':', '!', '?', '“', '”', '’', ')'])
+  const HYPHEN = '-'
+  const DEBOUNCE_MS = 150
+  const HANG_CLASS = 'hang'
+
+  const hyphenate = createHyphenator(csPatterns)
+
+  const mark = (node: Node) => {
+    Reflect.set(node, MARKER, true)
+  }
+
+  const isMarked = (node: Node) => Object.prototype.hasOwnProperty.call(node, MARKER)
+
+  const isHidden = (node: Node) =>
+    node.parentElement?.closest('[aria-hidden="true"]') !== null &&
+    node.parentElement?.closest('[aria-hidden="true"]') !== undefined
+
+  const collect = (walker: TreeWalker, nodes: Node[] = []): Node[] => {
+    const next = walker.nextNode()
+    if (!next) {
+      return nodes
+    }
+    nodes.push(next)
+    return collect(walker, nodes)
+  }
+
+  const getLines = (paragraph: HTMLElement) =>
+    collect(
+      document.createTreeWalker(
+        paragraph,
+        NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      ),
+    ).reduce<Text[][]>(
+      (lines, node) => {
+        if (node instanceof HTMLBRElement && isMarked(node)) {
+          return [...lines, []]
+        }
+        if (node instanceof Text && !isHidden(node)) {
+          return [...lines.slice(0, -1), [...(lines.at(-1) ?? []), node]]
+        }
+        return lines
+      },
+      [[]],
+    )
+
+  const measureChar = (node: Text, index: number) => {
+    const range = document.createRange()
+    range.setStart(node, index)
+    range.setEnd(node, index + 1)
+    return range.getBoundingClientRect().width
+  }
+
+  const wrapHang = (node: Text, index: number, width: number) => {
+    const target = index > 0 ? node.splitText(index) : node
+    if (target.length > 1) {
+      target.splitText(1)
+    }
+    const span = document.createElement('span')
+    span.className = HANG_CLASS
+    span.style.marginRight = `${String(-width)}px`
+    mark(span)
+    target.replaceWith(span)
+    span.append(target)
+  }
+
+  const widenSpacing = (line: Text[], extra: number) => {
+    new Set(line.map((node) => node.parentElement)).forEach((element) => {
+      if (element && isMarked(element)) {
+        element.style.wordSpacing = `${String(parseFloat(element.style.wordSpacing) + extra)}px`
+      }
+    })
+  }
+
+  const hangLine = (line: Text[]) => {
+    const last = line.at(-1)
+    if (!last) {
+      return
+    }
+    const text = line.map((node) => node.data).join('')
+    const spaces = (text.trim().match(/\s+/g) ?? []).length
+    if (spaces === 0) {
+      return
+    }
+    const trimmed = last.data.trimEnd()
+    const index = trimmed.length - 1
+    const char = trimmed.charAt(index)
+    const isHyphen = isMarked(last) && last.data === HYPHEN
+    if (!isHyphen && !HANGING.has(char)) {
+      return
+    }
+    const width = measureChar(last, isHyphen ? 0 : index)
+    if (width <= 0) {
+      return
+    }
+    widenSpacing(line, width / spaces)
+    if (isHyphen) {
+      const span = document.createElement('span')
+      span.className = HANG_CLASS
+      span.style.marginRight = `${String(-width)}px`
+      mark(span)
+      last.replaceWith(span)
+      span.append(last)
+      return
+    }
+    wrapHang(last, index, width)
+  }
+
+  const hangParagraph = (paragraph: HTMLElement) => {
+    getLines(paragraph)
+      .slice(0, -1)
+      .forEach((line) => {
+        hangLine(line)
+      })
+  }
+
+  const justify = (paragraphs: HTMLElement[]) => {
+    justifyContent(paragraphs, hyphenate)
+    paragraphs.forEach(hangParagraph)
+  }
+
+  const setup = (container: HTMLElement) => {
+    if (container.dataset['justifyReady']) {
+      return
+    }
+    container.dataset['justifyReady'] = 'true'
+    const paragraphs = Array.from(container.querySelectorAll('p'))
+    const timer: { id: number | undefined } = { id: undefined }
+    const run = () => {
+      justify(paragraphs)
+    }
+    const schedule = () => {
+      window.clearTimeout(timer.id)
+      timer.id = window.setTimeout(run, DEBOUNCE_MS)
+    }
+    const width = { value: container.clientWidth }
+    new ResizeObserver(() => {
+      if (container.clientWidth !== width.value) {
+        width.value = container.clientWidth
+        schedule()
+      }
+    }).observe(container)
+    void document.fonts.ready.then(run)
+  }
+
+  const init = () => {
+    document.querySelectorAll<HTMLElement>('[data-justify]').forEach(setup)
+  }
+
+  init()
+  document.addEventListener('astro:page-load', init)
+</script>

@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  class?: HTMLAttributes<'div'>['class']
+}
+
+const SWATCHES = [
+  'bg-[#fff23d]',
+  'bg-[#c8317e]',
+  'bg-[#00a0dc]',
+  'bg-[#2b2c80]',
+  'bg-[#009a4e]',
+  'bg-[#c8383a]',
+  'bg-[#1a1a1a]',
+  'bg-[#fff7a0]',
+  'bg-[#e09ab8]',
+  'bg-[#8ac8e6]',
+  'bg-[#8c8c8c]',
+] as const
+
+const { class: className } = Astro.props
+---
+
+<div aria-hidden="true" class:list={['pointer-events-none flex opacity-50', className]}>
+  {
+    SWATCHES.map((swatch) => (
+      <span class:list={['block h-[1.1rem] w-[1.9rem]', swatch]} />
+    ))
+  }
+</div>

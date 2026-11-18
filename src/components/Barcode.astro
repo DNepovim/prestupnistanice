@@ -1,0 +1,34 @@
+---
+import { getEan13Modules } from '@/utils/ean13'
+
+type Props = {
+  isbn: string
+  class?: string
+}
+
+const { isbn, class: className } = Astro.props
+
+const modules = getEan13Modules(isbn)
+
+const bars = [...(modules ?? '').matchAll(/1+/g)].map((match) => ({
+  x: match.index,
+  width: match[0].length,
+}))
+---
+
+{
+  modules && (
+    <svg
+      role="img"
+      aria-label={`Čárový kód ISBN ${isbn}`}
+      viewBox={`0 0 ${String(modules.length)} 20`}
+      preserveAspectRatio="none"
+      shape-rendering="crispEdges"
+      class:list={['h-6 w-28 text-gray-900', className]}
+    >
+      {bars.map((bar) => (
+        <rect x={bar.x} y="0" width={bar.width} height="20" fill="currentColor" />
+      ))}
+    </svg>
+  )
+}

@@ -6,7 +6,7 @@ firstnameSecond: Jakuba
 surname: Skalák
 surnameSecond: Skaláka
 gender: male
-image: ../images/jakubSkalak.jpg
+image: ../images/authors/jakubSkalak.jpg
 claim: >-
   Jakub Skalák patří k lidem, kteří se v českém školství pohybují s lehkostí
   těch, kdo učí rádi a zároveň vědí i proč. Dějepis, společenské vědy a

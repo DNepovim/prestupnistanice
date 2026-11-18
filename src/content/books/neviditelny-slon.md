@@ -6,6 +6,8 @@ order: 18
 pagesCount: 108
 isbn: 978-80-909036-3-0
 kosmasUrl: https://www.kosmas.cz/knihy/552573/neviditelny-slon/
+price: 329
+stock: 3
 authors:
   - author: src/content/authors/anna-anisimova.md
     slug: anna-anisimova
@@ -50,9 +52,8 @@ authors:
     slug: filip-skalak
     role:
       - typesetting
-cover: ../images/slonThumb.jpg
-coverImage: ../images/slonCover.jpg
-coverTop: ../images/slonTop.jpg
+cover: ../images/books/neviditelny-slon/thumb.jpg
+coverTop: ../images/books/neviditelny-slon/wide.jpg
 isPromoted: true
 category: forKids
 color: '#434991'

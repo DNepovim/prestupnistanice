@@ -4,8 +4,8 @@ type Props = {
 }
 
 const TITLE_VARIANTS = {
-  default: 'text-gray-800 max-md:text-[10vw]',
-  book: 'text-black max-md:text-[12vw]',
+  default: 'text-gray-800 max-md:text-[10vw] min-md:text-8xl',
+  book: 'text-black max-md:text-[9vw] min-md:text-4xl min-lg:text-5xl',
 } as const satisfies Record<NonNullable<Props['variant']>, string>
 
 const { variant = 'default' } = Astro.props
@@ -13,7 +13,7 @@ const { variant = 'default' } = Astro.props
 
 <h1
   class:list={[
-    'font-liga font-head hyphenate selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-full font-bold break-words min-md:text-8xl',
+    'font-liga font-head hyphenate selection:bg-brand-first-100! relative mx-auto mt-6 mb-6 inline-block max-w-full font-bold break-words',
     TITLE_VARIANTS[variant],
   ]}
 >

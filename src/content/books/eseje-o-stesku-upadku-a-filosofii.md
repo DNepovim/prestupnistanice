@@ -6,6 +6,8 @@ order: 14
 pagesCount: 219
 isbn: 978-80-907627-8-7
 kosmasUrl: https://www.kosmas.cz/knihy/521417/eseje-o-stesku-upadku-a-filosofii/
+price: 269
+stock: 0
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha
@@ -21,7 +23,7 @@ authors:
     role:
       - cover
       - typesetting
-cover: ../images/eseje-o-stesku-upadku-a-filosofii.jpg
+coverImage: ../images/books/eseje-o-stesku-upadku-a-filosofii/cover.jpg
 category: philosophy
 color: '#2a5365'
 bgColor: '#417a97'

@@ -20,7 +20,7 @@ authors:
     slug: dominik-blaha
     role:
       - typesetting
-cover: ../images/provincionalistovoaPremyslovaniOOsuduKnih.png
+coverImage: ../images/books/provincionalistovo-premyslovani-o-osudu-knih/cover.png
 category: philosophy
 color: '#562e2e'
 bgColor: '#c8b4ae'

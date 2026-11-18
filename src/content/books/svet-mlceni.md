@@ -1,7 +1,7 @@
 ---
 slug: svet-mlceni
 title: Svět mlčení
-originlName: Die Welt desSchweigens
+originalName: Die Welt des Schweigens
 date: 2025
 order: 20
 pagesCount: 173
@@ -37,9 +37,8 @@ authors:
     role:
       - typesetting
       - cover
-cover: ../images/mlceniThumb.jpg
-coverImage: ../images/mlceniCover.jpg
-coverTop: ../images/mlceniTop.jpg
+cover: ../images/books/svet-mlceni/thumb.jpg
+coverTop: ../images/books/svet-mlceni/wide.jpg
 category: philosophy
 color: '#b39e73'
 bgColor: '#c9bda4'

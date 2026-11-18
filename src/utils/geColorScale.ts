@@ -18,8 +18,9 @@ const toReadable = (color: Colord, step = 0): Colord =>
 export const getColorScale = (
   baseColor: string,
   prefix: string,
+  keepHue = false,
 ): Record<`${string}${colorsSteps[number]}`, string> => {
-  const base = toReadable(colord(baseColor).grayscale())
+  const base = toReadable(keepHue ? colord(baseColor) : colord(baseColor).grayscale())
 
   const tints = base.tints(6).toReversed().slice(1)
   const shades = base.shades(6)

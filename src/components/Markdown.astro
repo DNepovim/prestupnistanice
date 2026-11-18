@@ -1,6 +1,9 @@
 ---
 import { marked, parseInline } from 'marked'
 
+import JustifiedText from '@/components/JustifiedText.astro'
+import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
+import { getLinkPreviews } from '@/utils/getLinkPreviews'
 import { html } from '@/utils/html'
 import { isLinkExternal } from '@/utils/isLinkExteral'
 import { tp } from '@/utils/tp'
@@ -8,9 +11,17 @@ import { tp } from '@/utils/tp'
 type Props = {
   text: string
   class?: string
+  showMarks?: boolean
 }
 
-const { text, class: className } = Astro.props
+const { text, class: className, showMarks = false } = Astro.props
+
+const linkPreviews = await getLinkPreviews(text)
+
+const NP_BASE = 'font-alt text-brand-first-700/45 text-[0.6em] select-none'
+
+const TAB_MARK = html`<span aria-hidden="true" class="${NP_BASE} mr-2">⇥</span>`
+const PILCROW_MARK = html`<span aria-hidden="true" class="${NP_BASE} ml-1.5">¶</span>`
 
 marked.use({
   renderer: {
@@ -19,12 +30,19 @@ marked.use({
     strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
     paragraph: ({ text }) =>
-      html`<p class="hyphenate mb-6 text-justify indent-12 break-words hyphens-auto">
-        ${parseInline(tp(text))}
-      </p>`,
+      showMarks
+        ? html`<p
+            class="mb-[0.7em] text-justify leading-[1.6] break-words hyphens-auto"
+          >
+            ${TAB_MARK}${parseInline(tp(text))}${PILCROW_MARK}
+          </p>`
+        : html`<p class="hyphenate mb-6 text-justify indent-12 break-words hyphens-auto">
+            ${parseInline(tp(text))}
+          </p>`,
     link: ({ text, href }) =>
       html`<a
         href="${href}"
+        ${linkPreviews.has(href) ? `data-preview="${linkPreviews.get(href) ?? ''}"` : ''}
         target="${isLinkExternal(href) ? '_blank' : '_self'}"
         class="font-alt text-brand-first-500 hover:border-brand-second-500 border-b border-transparent"
         >${tp(text)}</a
@@ -37,4 +55,10 @@ marked.use({
 })
 ---
 
-<div set:html={marked(text)} class={className} />
+<div
+  set:html={marked(text)}
+  class={className}
+  data-justify={showMarks ? '' : undefined}
+/>
+{showMarks && <JustifiedText />}
+<LinkPreviewScript />

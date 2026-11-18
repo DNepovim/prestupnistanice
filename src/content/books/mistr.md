@@ -25,7 +25,7 @@ authors:
     slug: petr-blaha
     role:
       - editor
-cover: ../images/mistr.png
+coverImage: ../images/books/mistr/cover.png
 category: philosophy
 color: '#000000'
 bgColor: '#555555'

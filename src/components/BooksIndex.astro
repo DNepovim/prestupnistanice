@@ -1,0 +1,65 @@
+---
+import { getImage } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import { getEntries } from 'astro:content'
+
+import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
+import { FALLBACK_COLOR_FIRST } from '@/consts'
+import { routes } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
+import { tp } from '@/utils/tp'
+
+type Props = {
+  books: CollectionEntry<'book'>[]
+}
+
+const PREVIEW_WIDTH = 336
+
+const { books } = Astro.props
+
+const items = await Promise.all(
+  books.map(async (b) => {
+    const [authors, preview] = await Promise.all([
+      getEntries(b.data.authors.filter((a) => a.isMain).map((a) => a.slug)),
+      getImage({ src: b.data.cover, width: PREVIEW_WIDTH }),
+    ])
+    return {
+      book: b,
+      preview: preview.src,
+      authors: joinWords(authors.map((a) => `${a.data.firstname} ${a.data.surname}`)),
+    }
+  }),
+)
+---
+
+<ul class="border-brand-first-300/60 border-t">
+  {
+    items.map(({ book, preview, authors }) => (
+      <li>
+        <a
+          href={routes.books.detail(book.data.slug)}
+          data-preview={preview}
+          style={`--c1:${book.data.color ?? FALLBACK_COLOR_FIRST}`}
+          class="group/row border-brand-first-300/60 grid grid-cols-[2rem_minmax(0,1fr)_3rem] items-baseline gap-x-4 gap-y-1 border-b px-1 py-3 transition-colors hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--c1) min-md:grid-cols-[2.6rem_minmax(0,1fr)_minmax(0,12rem)_3.2rem_4.4rem]"
+        >
+          <span class="font-head text-brand-first-700 text-base leading-none font-extrabold oldstyle-nums">
+            {book.data.order}.
+          </span>
+          <span class="font-head text-[1.3rem] leading-[1.1] font-extrabold transition-colors group-hover/row:text-(--c1)">
+            {tp(book.data.title)}
+          </span>
+          <span class="text-[0.88rem] leading-tight text-gray-700 italic max-md:col-span-2 max-md:col-start-2 max-md:row-start-2 md:col-auto">
+            {authors}
+          </span>
+          <span class="font-alt text-brand-first-700 text-right text-[0.66rem] leading-none tracking-[0.06em] uppercase">
+            {book.data.date}
+          </span>
+          <span class="font-alt text-brand-first-700 text-right text-[0.66rem] leading-none tracking-[0.06em] uppercase max-md:hidden">
+            {book.data.pagesCount ? `${String(book.data.pagesCount)} s.` : ''}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+<LinkPreviewScript />

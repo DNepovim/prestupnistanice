@@ -1,10 +1,29 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/alegreya';
+@import '@fontsource-variable/alegreya/wght-italic.css';
 @plugin "tailwindcss-debug-screens";
 
 @layer base {
   html {
     font-size: 18px;
   }
+
+  :root {
+    --paper-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.5 0 0 0 0 0.35 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  }
+
+  body {
+    background-color: var(--color-paper);
+    background-image: var(--paper-image);
+    background-attachment: fixed;
+  }
+}
+
+@utility bg-paper-fixed {
+  background-color: var(--color-paper);
+  background-image: var(--paper-image);
+  background-attachment: fixed;
 }
 
 @utility animate-width-expand {
@@ -42,7 +61,8 @@
 }
 
 @theme {
-  --font-head: 'quiche-flare', sans-serif;
+  --color-paper: #fcf9f2;
+  --font-head: 'Alegreya Variable', serif;
   --font-display: 'montserrat', sans-serif;
   --font-alt: 'montserrat-alternates', sans-serif;
 

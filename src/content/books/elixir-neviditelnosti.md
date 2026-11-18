@@ -37,7 +37,7 @@ authors:
     slug: dominik-blaha
     role:
       - typesetting
-cover: ../images/elixir-neviditelnosti.jpg
+coverImage: ../images/books/elixir-neviditelnosti/cover.jpg
 category: novel
 color: '#3d6431'
 bgColor: '#bdd743'

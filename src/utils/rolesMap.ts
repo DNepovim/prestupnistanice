@@ -46,3 +46,16 @@ export const rolesMap: Record<
     imperfect: { male: 'konzultuje', female: 'konzultuje' },
   },
 }
+
+export const ROLE_ORDER = [
+  'author',
+  'translate',
+  'editor',
+  'supereditor',
+  'reviewer',
+  'consultation',
+  'corrector',
+  'typesetting',
+  'cover',
+  'illustration',
+] as const

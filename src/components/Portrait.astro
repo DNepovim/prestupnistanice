@@ -1,0 +1,44 @@
+---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  image?: ImageMetadata
+  size: number
+  revealOnHover?: boolean
+  class?: HTMLAttributes<'div'>['class']
+  style?: string
+}
+
+const { image, size, revealOnHover = false, class: className, style } = Astro.props
+---
+
+<div
+  style={style}
+  class:list={[
+    'relative isolate aspect-square shrink-0 overflow-hidden rounded-full',
+    image
+      ? 'bg-brand-first-100'
+      : 'from-brand-first-200 to-brand-first-50 bg-gradient-to-tr',
+    revealOnHover && 'transition-colors duration-500 group-hover/person:bg-white',
+    className,
+  ]}
+>
+  {
+    image && (
+      <Image
+        src={image}
+        alt=""
+        width={size}
+        height={size}
+        fit="cover"
+        class:list={[
+          'size-full object-cover object-[50%_25%] mix-blend-multiply brightness-[1.2] contrast-[0.92] grayscale',
+          revealOnHover &&
+            'transition-[filter] duration-500 group-hover/person:brightness-100 group-hover/person:contrast-100 group-hover/person:grayscale-0',
+        ]}
+      />
+    )
+  }
+</div>

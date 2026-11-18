@@ -39,9 +39,8 @@ authors:
     role:
       - typesetting
       - cover
-cover: ../images/diletantismusThumb.jpg
-coverImage: ../images/diletantisumsCover.jpg
-coverTop: ../images/diletantismusTop.jpg
+cover: ../images/books/diletantismus-a-dalsi-eseje/thumb.jpg
+coverTop: ../images/books/diletantismus-a-dalsi-eseje/wide.jpg
 isPromoted: true
 category: philosophy
 color: '#b39e73'

@@ -1,66 +1,81 @@
 ---
 import { Icon } from 'astro-icon/components'
+
+import PrintSheet from '@/components/PrintSheet.astro'
+
+const EYEBROW =
+  'font-alt text-brand-first-700 mb-5 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
+const LINK = 'hover:text-brand-first-700 underline-offset-4 hover:underline'
+const CREDIT_LINK = 'underline underline-offset-2 hover:text-black'
 ---
 
-<div class="w-full">
-  <footer class="font-alt mx-auto max-w-[56rem]">
+<footer class="font-alt mt-8">
+  <PrintSheet edge="only" regs={['b']} class="mb-20!">
     <div
-      class="border-brand-first-100 text-brand-first-500 bg-brand-second-50/30 flex items-stretch justify-between gap-8 rounded-sm border p-4 max-sm:flex-col"
+      class="grid gap-10 px-[0.9rem] py-8 min-md:grid-cols-[2fr_3fr_3fr] min-md:px-[2.6rem]"
     >
-      <nav class="flex-2" aria-label="Obsah webu">
-        <h2 class="mb-2">Obsah</h2>
-        <menu class="text-sm">
-          <li class="mb-1"><a class="hover:underline" href="/knihy">Naše knihy</a></li>
-          <li class="mb-1"><a class="hover:underline" href="/autori">Autoři</a></li>
-          <li class="mb-1">
-            <a class="hover:underline" href="/o-nakladatelstvi">O nakladatelství</a>
-          </li>
+      <nav aria-label="Obsah webu">
+        <h2 class={EYEBROW}>Obsah</h2>
+        <menu class="flex flex-col gap-2 text-[1rem] leading-tight">
+          <li><a class={LINK} href="/knihy">Naše knihy</a></li>
+          <li><a class={LINK} href="/autori">Autoři</a></li>
+          <li><a class={LINK} href="/o-nakladatelstvi">O nakladatelství</a></li>
         </menu>
       </nav>
 
-      <div class="flex-1">
-        <h2 class="mb-2">Kontakty</h2>
-        <p class="mb-2 flex items-center gap-2 text-sm">
-          <Icon name="ph:envelope-light" class="size-6" aria-hidden="true" />
-          <a class="hover:underline" href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</a>
+      <div>
+        <h2 class={EYEBROW}>Kontakty</h2>
+        <p class="mb-3 flex items-center gap-3 text-[1rem] leading-tight">
+          <Icon
+            name="ph:envelope-light"
+            class="text-brand-first-700 size-5"
+            aria-hidden="true"
+          />
+          <a class={LINK} href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</a>
         </p>
-        <p class="mb-2 flex items-center gap-2 text-sm">
-          <Icon name="ph:facebook-logo-light" class="size-6" aria-hidden="true" />
-
+        <p class="flex items-center gap-3 text-[1rem] leading-tight">
+          <Icon
+            name="ph:facebook-logo-light"
+            class="text-brand-first-700 size-5"
+            aria-hidden="true"
+          />
           <a
-            class="hover:underline"
+            class={LINK}
             href="https://www.facebook.com/knihyprestupnistanice"
             target="_blank"
             rel="noopener noreferrer">knihyprestupnistanice</a
           >
         </p>
-        <p class="mt-6 text-xs">
+      </div>
+
+      <div>
+        <h2 class={EYEBROW}>Tiráž</h2>
+        <p class="text-[0.8rem] leading-[1.6] text-gray-800">
           Naše knihy jsou dostupné v distribuci <a
-            class="underline hover:no-underline"
+            class={CREDIT_LINK}
             href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
             >Kosmas</a
           >.
         </p>
+        <p class="mt-3 text-[0.8rem] leading-[1.6] text-gray-800">
+          Web písmy <a
+            class={CREDIT_LINK}
+            href="https://fonts.google.com/specimen/Alegreya"
+            target="_blank"
+            rel="noopener noreferrer">Alegreya</a
+          > a <a
+            class={CREDIT_LINK}
+            href="https://fonts.adobe.com/fonts/montserrat"
+            target="_blank"
+            rel="noopener noreferrer">Montserrat</a
+          > vysázel <a
+            class={CREDIT_LINK}
+            href="https://www.dominikblaha.cz"
+            target="_blank"
+            rel="noopener noreferrer">Dominik Bláha</a
+          >.
+        </p>
       </div>
     </div>
-
-    <p class="text-brand-first-500 my-2 text-right text-xs">
-      Web písmy <a
-        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
-        href="https://fonts.adobe.com/fonts/quiche-flare"
-        target="_blank"
-        rel="noopener noreferrer">Quiche Flare</a
-      > a <a
-        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
-        href="https://fonts.adobe.com/fonts/montserrat"
-        target="_blank"
-        rel="noopener noreferrer">Montserrat</a
-      > vysázel <a
-        class="hover:bg-brand-second-200 underline transition-colors hover:text-white"
-        href="https://www.dominikblaha.cz"
-        target="_blank"
-        rel="noopener noreferrer">Dominik Bláha</a
-      >
-    </p>
-  </footer>
-</div>
+  </PrintSheet>
+</footer>
