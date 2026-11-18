@@ -27,7 +27,7 @@ There is no test framework in this repo — don't assume one exists.
 
 ## Skills
 
-`.claude/skills/` holds three project skills: **`check`** (the static-check suite and how to fix each failure), **`code-guide`** (style and pattern reference — consult before writing or reviewing code), and **`ship`** (gate on checks, then branch + PR or push to `main`).
+`.claude/skills/` holds four project skills: **`check`** (the static-check suite and how to fix each failure), **`code-guide`** (style and pattern reference — consult before writing or reviewing code), **`commit`** (gate on checks, then Conventional Commit(s) on the current branch), and **`ship`** (`commit`, then branch + PR or push to `main`).
 
 ## Architecture
 
