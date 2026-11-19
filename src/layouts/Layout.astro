@@ -11,6 +11,7 @@ import { getColorScale } from '@/utils/geColorScale'
 type Props = {
   siteTitle?: string
   siteDescription: string
+  noindex?: boolean
   firstColor?: string
   secondColor?: string
   keepHue?: boolean
@@ -26,6 +27,7 @@ const promotedBook = books.find((b) => b.data.isPromoted) ?? books[0]
 const {
   siteTitle,
   siteDescription,
+  noindex = false,
   firstColor,
   secondColor,
   keepHue = false,
@@ -51,6 +53,7 @@ const config = {
     <BaseHead
       title={`${siteTitle ? siteTitle + ' | ' : ''}Přestupní stanice`}
       description={siteDescription}
+      noindex={noindex}
     />
     <style is:global define:vars={{ ...colorBrandFirstScale, ...colorBrandSecondScale }}>
       @import 'tailwindcss';

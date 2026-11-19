@@ -1,8 +1,8 @@
 import type { CollectionEntry } from 'astro:content'
 
-type GapGroup = 'images' | 'metadata'
+export type GapGroup = 'images' | 'metadata'
 
-type Gap = {
+export type Gap = {
   key: string
   label: string
   group: GapGroup

@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content'
+
+import GapsTable from '@/components/GapsTable.astro'
+import Layout from '@/layouts/Layout.astro'
+import { routes } from '@/routes'
+import { getAuthorGaps } from '@/utils/getAuthorGaps'
+
+const authors = await getCollection('author')
+
+const rows = authors
+  .toSorted((a, b) => a.data.surname.localeCompare(b.data.surname, 'cs'))
+  .map((author) => ({
+    href: routes.authors.detail(author.id),
+    title: `${author.data.surname} ${author.data.firstname}`,
+    gaps: getAuthorGaps(author),
+  }))
+---
+
+<Layout
+  siteTitle="Chybějící podklady autorů"
+  siteDescription="Interní přehled podkladů autorů"
+  noindex
+>
+  <GapsTable
+    title="Chybějící podklady autorů"
+    subject="autorů"
+    rowLabel="Autor"
+    rows={rows}
+  />
+</Layout>

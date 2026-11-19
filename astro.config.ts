@@ -21,9 +21,10 @@ export default defineConfig({
 
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({ filter: (page) => !page.includes('/interni/') }),
     tinaDirective(),
-    ENV_NAME === 'production' && sitemap({ lastmod: new Date() }),
+    ENV_NAME === 'production' &&
+      sitemap({ lastmod: new Date(), filter: (page) => !page.includes('/interni/') }),
     icon(),
     svelte(),
   ],

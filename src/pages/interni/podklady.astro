@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content'
+
+import GapsTable from '@/components/GapsTable.astro'
+import Layout from '@/layouts/Layout.astro'
+import { routes } from '@/routes'
+import { getBookGaps } from '@/utils/getBookGaps'
+
+const galleryPaths = Object.keys(
+  import.meta.glob('/src/content/images/books/*/gallery/*.{jpg,jpeg,png,webp,gif,GIF}'),
+)
+
+const countGalleryImages = (slug: string) =>
+  galleryPaths.filter((path) => path.includes(`/books/${slug}/gallery/`)).length
+
+const books = (await getCollection('book')).toSorted(
+  (a, b) => b.data.order - a.data.order,
+)
+
+const rows = books.map((book) => ({
+  href: routes.books.detail(book.data.slug),
+  title: `${String(book.data.order)}.${book.data.title}`,
+  note: book.data.isUpcoming ? 'připravujeme' : undefined,
+  gaps: getBookGaps(book, countGalleryImages(book.data.slug)),
+}))
+---
+
+<Layout
+  siteTitle="Chybějící podklady knih"
+  siteDescription="Interní přehled podkladů knih"
+  noindex
+>
+  <GapsTable
+    title="Chybějící podklady knih"
+    subject="knih"
+    rowLabel="Kniha"
+    rows={rows}
+  />
+</Layout>

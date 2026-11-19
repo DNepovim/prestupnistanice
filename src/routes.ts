@@ -40,6 +40,10 @@ export const routes = {
   authors: {
     detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
+  internal: {
+    books: () => '/interni/podklady',
+    authors: () => '/interni/autori',
+  },
   api: {
     kosmasStatus: (slug: string) => `/api/kosmas/${slug}`,
   },
