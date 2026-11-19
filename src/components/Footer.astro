@@ -1,18 +1,54 @@
 ---
 import { Icon } from 'astro-icon/components'
 
-import PrintSheet from '@/components/PrintSheet.astro'
+import { tp } from '@/utils/tp'
 
 const EYEBROW =
-  'font-alt text-brand-first-700 mb-5 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
-const LINK = 'hover:text-brand-first-700 underline-offset-4 hover:underline'
-const CREDIT_LINK = 'underline underline-offset-2 hover:text-black'
+  'font-alt text-brand-second-200 mb-5 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
+const LINK =
+  'underline-offset-4 hover:text-brand-second-200 hover:underline focus-visible:outline-2 focus-visible:outline-brand-second-200'
+const CREDIT_LINK =
+  'text-brand-second-200 underline underline-offset-2 hover:text-white focus-visible:outline-2 focus-visible:outline-brand-second-200'
+const NEW_WINDOW = '(otevře se v novém okně)'
 ---
 
-<footer class="font-alt mt-8">
-  <PrintSheet edge="only" regs={['b']} class="mb-20!">
+<footer
+  class="font-alt bg-brand-first-700 relative mt-8 overflow-hidden text-white [container-type:inline-size]"
+>
+  <span aria-hidden="true" class="absolute top-4 left-4 size-5 border-t border-l border-brand-second-300/60"></span>
+  <span aria-hidden="true" class="absolute top-4 right-4 size-5 border-t border-r border-brand-second-300/60"></span>
+
+  <div class="px-[0.9rem] pt-16 min-md:px-[2.6rem] min-md:pt-20 min-[1100px]:px-[5rem]">
+    <form class="max-w-[64rem]">
+      <label for="newsletter-email" class="sr-only">E-mail pro odběr novinek</label>
+      <p
+        class="font-head max-w-[21em] text-[clamp(1.9rem,6.2cqw,3.7rem)] leading-[1.15] font-extrabold tracking-[-0.01em] text-balance"
+      >
+        {tp('Posílejte mi novinky z nakladatelství na')}
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder={tp('váš e-mail')}
+          class="text-brand-second-300 placeholder:text-brand-second-300/50 border-brand-second-300 w-[min(100%,8.5em)] border-b-2 border-dashed bg-transparent px-[0.1em] font-[inherit] outline-none focus:border-solid"
+        />
+        <button
+          type="submit"
+          aria-label="Odeslat"
+          class="bg-brand-second-300 text-brand-first-900 hover:bg-brand-second-200 ml-[0.2em] inline-grid size-[1.1em] cursor-pointer place-items-center align-[-0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+        >
+          <Icon name="ph:arrow-right-bold" class="size-[55%]" aria-hidden="true" />
+        </button>
+      </p>
+      <p class="mt-5 text-[0.7rem] leading-none tracking-[0.1em] text-white/70 uppercase">
+        Dozvíte se o každé nové knize. Odhlásit se můžete kdykoli.
+      </p>
+    </form>
+
     <div
-      class="grid gap-10 px-[0.9rem] py-8 min-md:grid-cols-[2fr_3fr_3fr] min-md:px-[2.6rem]"
+      class="mt-14 grid max-w-[64rem] gap-10 border-t border-dashed border-brand-second-300/60 pt-8 min-md:grid-cols-[2fr_3fr_3fr]"
     >
       <nav aria-label="Obsah webu">
         <h2 class={EYEBROW}>Obsah</h2>
@@ -28,7 +64,7 @@ const CREDIT_LINK = 'underline underline-offset-2 hover:text-black'
         <p class="mb-3 flex items-center gap-3 text-[1rem] leading-tight">
           <Icon
             name="ph:envelope-light"
-            class="text-brand-first-700 size-5"
+            class="text-brand-second-200 size-5"
             aria-hidden="true"
           />
           <a class={LINK} href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</a>
@@ -36,46 +72,57 @@ const CREDIT_LINK = 'underline underline-offset-2 hover:text-black'
         <p class="flex items-center gap-3 text-[1rem] leading-tight">
           <Icon
             name="ph:facebook-logo-light"
-            class="text-brand-first-700 size-5"
+            class="text-brand-second-200 size-5"
             aria-hidden="true"
           />
           <a
             class={LINK}
             href="https://www.facebook.com/knihyprestupnistanice"
             target="_blank"
-            rel="noopener noreferrer">knihyprestupnistanice</a
+            rel="noopener noreferrer"
+            >knihyprestupnistanice<span class="sr-only">{NEW_WINDOW}</span></a
           >
         </p>
       </div>
 
       <div>
         <h2 class={EYEBROW}>Tiráž</h2>
-        <p class="text-[0.8rem] leading-[1.6] text-gray-800">
+        <p class="text-[0.8rem] leading-[1.6] text-white/80">
           Naše knihy jsou dostupné v distribuci <a
             class={CREDIT_LINK}
             href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
             >Kosmas</a
           >.
         </p>
-        <p class="mt-3 text-[0.8rem] leading-[1.6] text-gray-800">
+        <p class="mt-3 text-[0.8rem] leading-[1.6] text-white/80">
           Web písmy <a
             class={CREDIT_LINK}
             href="https://fonts.google.com/specimen/Alegreya"
             target="_blank"
-            rel="noopener noreferrer">Alegreya</a
+            rel="noopener noreferrer"
+            >Alegreya<span class="sr-only">{NEW_WINDOW}</span></a
           > a <a
             class={CREDIT_LINK}
             href="https://fonts.adobe.com/fonts/montserrat"
             target="_blank"
-            rel="noopener noreferrer">Montserrat</a
+            rel="noopener noreferrer"
+            >Montserrat<span class="sr-only">{NEW_WINDOW}</span></a
           > vysázel <a
             class={CREDIT_LINK}
             href="https://www.dominikblaha.cz"
             target="_blank"
-            rel="noopener noreferrer">Dominik Bláha</a
+            rel="noopener noreferrer"
+            >Dominik Bláha<span class="sr-only">{NEW_WINDOW}</span></a
           >.
         </p>
       </div>
     </div>
-  </PrintSheet>
+  </div>
+
+  <span
+    aria-hidden="true"
+    class="font-display text-stroke-brand-second-300 pointer-events-none mt-14 block h-[0.76em] overflow-hidden px-[0.9rem] pt-[0.1em] text-[8.4cqw] leading-[0.8] font-extrabold tracking-[-0.02em] whitespace-nowrap text-transparent select-none min-md:px-[2.6rem] min-[1100px]:px-[5rem]"
+  >
+    Přestupní stanice
+  </span>
 </footer>
