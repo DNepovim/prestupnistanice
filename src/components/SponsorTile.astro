@@ -1,0 +1,86 @@
+---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  title: string
+  tone: 'first' | 'second'
+  link?: string
+  logo?: ImageMetadata
+  prefix?: string
+  color?: string
+  pantone?: string
+  class?: HTMLAttributes<'div'>['class']
+}
+
+const TONE_CLASSES = {
+  first: 'bg-brand-first-100 group-hover:bg-brand-first-200',
+  second: 'bg-brand-second-100 group-hover:bg-brand-second-200',
+} as const satisfies Record<Props['tone'], string>
+
+const { title, tone, link, logo, prefix, color, pantone, class: className } = Astro.props
+
+const Tag = link ? 'a' : 'div'
+const linkProps = link ? { href: link, target: '_blank', rel: 'noopener noreferrer' } : {}
+const swatchCode = [pantone ? `Pantone ${pantone}` : undefined, color?.toUpperCase()]
+  .filter((part) => part !== undefined)
+  .join(' · ')
+---
+
+<Tag
+  {...linkProps}
+  class:list={[
+    'group block bg-white shadow-[0_0.2rem_0.9rem_rgba(0,0,0,0.14)]',
+    className,
+  ]}
+>
+  <span
+    style={color ? `background-color:${color}` : undefined}
+    class:list={[
+      'flex h-24 items-center justify-center px-4 transition-[background-color,filter] duration-500 motion-reduce:transition-none',
+      color ? 'group-hover:brightness-90' : TONE_CLASSES[tone],
+    ]}
+  >
+    {
+      logo ? (
+        <Image
+          alt=""
+          src={logo}
+          width={150}
+          height={100}
+          widths={[300, 150]}
+          class:list={[
+            'max-h-16 w-auto object-contain',
+            color ? 'brightness-0 invert' : 'mix-blend-multiply',
+          ]}
+        />
+      ) : (
+        <span class="font-head text-brand-first-700 text-center text-[1.5rem] leading-none font-extrabold">
+          {prefix && (
+            <span class="font-alt mb-1 block text-[0.7rem] leading-none font-medium tracking-[0.1em] uppercase">
+              {prefix}
+            </span>
+          )}
+          {title}
+        </span>
+      )
+    }
+  </span>
+  <span class="block px-3 pt-2 pb-3">
+    <span class="font-alt block text-[0.8rem] leading-[1.25] font-semibold text-gray-800">
+      {prefix ? `${prefix} ${title}` : title}
+      {link && <span class="sr-only">(otevře se v novém okně)</span>}
+    </span>
+    {
+      swatchCode && (
+        <span
+          aria-hidden="true"
+          class="font-alt text-brand-first-700/70 mt-1.5 block text-[0.55rem] leading-none tracking-[0.08em] uppercase [font-variant-numeric:lining-nums]"
+        >
+          {swatchCode}
+        </span>
+      )
+    }
+  </span>
+</Tag>

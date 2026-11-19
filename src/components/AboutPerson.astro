@@ -1,0 +1,38 @@
+---
+import type { ImageMetadata } from 'astro'
+import { isNonEmptyString } from 'narrowland'
+
+import Portrait from '@/components/Portrait.astro'
+import { routes } from '@/routes'
+import { tp } from '@/utils/tp'
+
+type Props = {
+  slug: string
+  name: string
+  image?: ImageMetadata
+  description?: string
+}
+
+const { slug, name, image, description } = Astro.props
+---
+
+<div class="group/person relative flex items-start gap-4">
+  <Portrait image={image} size={96} revealOnHover class="w-12" />
+  <div class="min-w-0">
+    <p class="font-head text-[1.15rem] leading-tight font-extrabold">
+      <a
+        class="hover:text-brand-first-500 transition-colors after:absolute after:inset-0"
+        href={routes.authors.detail(slug)}
+      >
+        {name}
+      </a>
+    </p>
+    {
+      isNonEmptyString(description) && (
+        <p class="font-alt mt-1 text-[0.8rem] leading-[1.35] text-gray-800 italic">
+          {tp(description)}
+        </p>
+      )
+    }
+  </div>
+</div>

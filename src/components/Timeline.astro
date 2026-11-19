@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  items: { year: number; text: string; href?: string }[]
+  class?: HTMLAttributes<'div'>['class']
+}
+
+const { items, class: className } = Astro.props
+---
+
+<div class={className}>
+  <p
+    class="font-alt text-brand-first-700 mb-5 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
+  >
+    Z historie
+  </p>
+  <ol class="flex flex-col">
+    {
+      items.map(({ year, text, href }) => (
+        <li class="group relative pb-6 pl-4 last:pb-0">
+          <span
+            aria-hidden="true"
+            class="border-brand-first-500 absolute top-[0.65rem] -bottom-[0.65rem] left-0 border-l group-last:hidden"
+          />
+          <span
+            aria-hidden="true"
+            class="bg-brand-first-500 absolute top-[0.35rem] -left-[0.3rem] size-[0.6rem] rounded-full"
+          />
+          <p class="font-head text-brand-first-500 text-[1.5rem] leading-none font-extrabold [font-variant-numeric:lining-nums]">
+            {year}
+          </p>
+          <p class="font-alt mt-1 text-[0.8rem] leading-[1.35] text-gray-800">
+            {
+              href ? (
+                <a
+                  class="hover:border-brand-second-500 border-b border-transparent transition-colors"
+                  href={href}
+                >
+                  {text}
+                </a>
+              ) : (
+                text
+              )
+            }
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+</div>

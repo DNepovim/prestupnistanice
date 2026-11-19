@@ -1,25 +1,46 @@
 ---
 import { getCollection, getEntry } from 'astro:content'
-import { isNonEmptyArray, isNonEmptyString, isOneOf } from 'narrowland'
+import { isDefined, isNonEmptyArray, isNonEmptyString, isOneOf } from 'narrowland'
 
-import AuthorSmall from '@/components/AuthorSmall.astro'
-import BooksGrid from '@/components/BooksGrid.astro'
+import AboutPerson from '@/components/AboutPerson.astro'
 import Markdown from '@/components/Markdown.astro'
-import PageTitle from '@/components/PageTitle.astro'
-import Section from '@/components/Section.astro'
-import SponsorLogo from '@/components/SponsorLogo.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
+import SponsorTile from '@/components/SponsorTile.astro'
+import Timeline from '@/components/Timeline.astro'
 import LogoFondBudoucnosti from '@/content/images/sponsors/fondBudoucnosti.png'
 import LogoFondKultury from '@/content/images/sponsors/fondKultury.png'
 import LogoGi from '@/content/images/sponsors/gi.png'
 import LogoKima from '@/content/images/sponsors/kima.png'
 import LogoMk from '@/content/images/sponsors/mk.png'
 import Layout from '@/layouts/Layout.astro'
+import { CATEGORIES, routes } from '@/routes'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
+import { joinWords } from '@/utils/joinWords'
+import { pluralize } from '@/utils/pluralize'
+import { rolesMap } from '@/utils/rolesMap'
+import { getTitleFit } from '@/utils/titleFit'
+import { tp } from '@/utils/tp'
+
+type SheetKey = 'text' | 'people' | 'sponsors'
+
+const NON_PRINTING_MARK =
+  'font-alt text-brand-first-700/45 align-baseline font-normal select-none'
+
+const SHEET_PADDING = 'px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]'
+
+const SECTION_LABEL =
+  'font-alt text-brand-first-700 mb-7 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
+
+const FOUNDING_YEAR = 2005
 
 const sponsors = [
-  { title: 'Ministerstov kultury ČR', link: 'https://www.mk.gov.cz/', logo: LogoMk },
+  { title: 'Ministerstvo kultury ČR', link: 'https://www.mk.gov.cz/',
+    logo: LogoMk,
+    color: '#D70C0F',
+    pantone: '485 C',
+  },
   {
-    title: 'Goethe institut',
+    title: 'Goethe-Institut',
     link: 'https://www.goethe.de/ins/cz/cs/index.html',
     logo: LogoGi,
   },
@@ -27,21 +48,23 @@ const sponsors = [
     title: 'Česko-německý fond budoucnosti',
     link: 'https://www.fondbudoucnosti.cz/',
     logo: LogoFondBudoucnosti,
+    color: '#334C58',
+    pantone: '7546 C',
   },
   {
     title: 'Státní fond kultury ČR',
     link: 'https://www.mk.gov.cz/statni-fond-kultury-cr-cs-42',
     logo: LogoFondKultury,
   },
+  {
+    title: 'Jiří Málek – KIMA Transport s. r. o.',
+    link: 'https://www.kimatransport.cz/',
+    logo: LogoKima,
+    color: '#00A4E0',
+    pantone: '2995 C',
+  },
+  { title: 'Winklerovi', prefix: 'manželé' },
 ]
-
-const kimaSponsor = {
-  title: 'Jiří Málek – KIMA Transport s. r. o.',
-  link: 'https://www.kimatransport.cz/',
-  logo: LogoKima,
-}
-
-const textSponsors = [{ prefix: 'manželé', name: 'Winklerovi' }]
 
 const entry = await getEntry('page', 'o-nakladatelstvi')
 
@@ -54,77 +77,201 @@ const { data: page } = entry
 const books = await getCollection('book')
 const authors = await getCollection('author')
 
+const publishedBooks = books
+  .filter((book) => book.data.isUpcoming !== true)
+  .toSorted((a, b) => a.data.date - b.data.date || a.data.order - b.data.order)
+
+const firstBook = publishedBooks[0]
+
+const firstBooksByCategory = (['forKids', 'philosophy', 'novel', 'poetry'] as const)
+  .map((key) => ({
+    key,
+    book: publishedBooks.find((book) => book.data.category === key),
+  }))
+  .filter(({ book }) => isDefined(book) && book.data.slug !== firstBook?.data.slug)
+
+const timelineItems = [
+  {
+    year: FOUNDING_YEAR,
+    text: 'Divadelní soubor DS Naslouchání se přejmenuje na Přestupní stanici',
+  },
+  ...(firstBook
+    ? [
+        {
+          year: firstBook.data.date,
+          text: `Vychází první kniha: ${firstBook.data.title}`,
+          href: routes.books.detail(firstBook.data.slug),
+        },
+      ]
+    : []),
+  ...firstBooksByCategory.map(({ key, book }) => ({
+    year: book?.data.date ?? FOUNDING_YEAR,
+    text: `První kniha ${CATEGORIES[key].name}: ${book?.data.title ?? ''}`,
+    href: routes.books.detail(book?.data.slug ?? ''),
+  })),
+].toSorted((a, b) => a.year - b.year)
+
 const authorRolesMap = books
   .flatMap((book) => book.data.authors)
   .filter((entry) => !entry.isMain)
   .reduce<Record<string, string[]>>((acc, entry) => {
     const slug = getSlugFromPath(entry.author)
-    const newRoles = entry.role
     const existing = acc[slug] ?? []
 
-    const mergedRoles = Array.from(new Set([...existing, ...newRoles]))
-
-    return { ...acc, [slug]: mergedRoles }
+    return { ...acc, [slug]: Array.from(new Set([...existing, ...entry.role])) }
   }, {})
 
 const boardMemberSlugs = ['jakub-skalak', 'petr-blaha', 'dominik-blaha']
 
-const boardMembers = boardMemberSlugs.map((slug) => ({
-  slug,
-  description: authors.find((a) => a.data.slug === slug)?.data.aboutRole,
-}))
+const getFullName = (a: (typeof authors)[number]['data']) =>
+  `${a.firstname} ${a.surname}`
+
+const boardMembers = boardMemberSlugs
+  .map((slug) => authors.find((a) => a.data.slug === slug))
+  .filter(isDefined)
+  .map(({ data }) => ({
+    slug: data.slug,
+    name: getFullName(data),
+    image: data.image,
+    description: data.aboutRole,
+  }))
 
 const collaborators = authors
   .filter((a) => a.data.showOnAboutPage)
   .filter((a) => !isOneOf(a.data.slug, boardMemberSlugs))
-  .map((a) => ({
-    slug: a.data.slug,
-    role: a.data.aboutRole,
-    roles: isNonEmptyString(a.data.aboutRole) ? [] : (authorRolesMap[a.data.slug] ?? []),
+  .map(({ data }) => ({
+    slug: data.slug,
+    name: getFullName(data),
+    image: data.image,
+    description: isNonEmptyString(data.aboutRole)
+      ? data.aboutRole
+      : joinWords(
+          (authorRolesMap[data.slug] ?? [])
+            .map((role) => rolesMap[role]?.imperfect[data.gender])
+            .filter(isDefined),
+        ),
   }))
+
+const sheetKeys: SheetKey[] = [
+  'text',
+  ...(isNonEmptyArray(boardMembers) || isNonEmptyArray(collaborators)
+    ? (['people'] as const)
+    : []),
+  'sponsors',
+]
+
+const getEdge = (key: SheetKey) => {
+  const index = sheetKeys.indexOf(key)
+  if (sheetKeys.length === 1) {
+    return 'only'
+  }
+  if (index === 0) {
+    return 'first'
+  }
+  return index === sheetKeys.length - 1 ? 'last' : 'middle'
+}
+
+const titleFit = getTitleFit(tp(page.title))
+
+const mainAuthorsCount = new Set(
+  books.flatMap((book) =>
+    book.data.authors.filter((a) => a.isMain).map((a) => a.slug.id),
+  ),
+).size
+
+const yearsCount = new Date().getFullYear() - FOUNDING_YEAR
+
+const sideSlug = [
+  pluralize(yearsCount, ['rok', 'roky', 'let']),
+  pluralize(books.length, ['kniha', 'knihy', 'knih']),
+  pluralize(mainAuthorsCount, ['autor', 'autoři', 'autorů']),
+  pluralize(collaborators.length, ['spolupracovník', 'spolupracovníci', 'spolupracovníků']),
+].join(' · ')
 ---
 
 <Layout siteTitle={page.title} siteDescription={page.content?.substring(0, 900) ?? ''}>
-  <Section>
-    <PageTitle>{page.title}</PageTitle>
-    <div class="mx-auto mt-16 max-w-2xl leading-8">
-      {entry.body && <Markdown text={entry.body} />}
+  <PrintSheet
+    edge={getEdge('text')}
+    regs={['r']}
+    slug="o-nakladatelstvi.pdf"
+    sideSlug={sideSlug}
+  >
+    <div
+      class:list={[
+        'relative grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem]',
+        SHEET_PADDING,
+        'min-md:grid-cols-[minmax(0,1fr)_11rem] min-lg:grid-cols-[minmax(0,1fr)_15.5rem]',
+      ]}
+    >
+      <header class="[container-type:inline-size] min-md:col-start-1">
+        <h1
+          style={`--title-w:${titleFit.widthEm.toFixed(3)}`}
+          class="font-head text-brand-first-500 [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em]"
+        >
+          {
+            titleFit.lines.map((line, index) => (
+              <span class="block whitespace-nowrap">
+                {line}
+                {index === titleFit.lines.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    class:list={[NON_PRINTING_MARK, 'ml-[0.25em] text-[0.3em]']}
+                  >
+                    ↵
+                  </span>
+                )}
+              </span>
+            ))
+          }
+        </h1>
+      </header>
+      <Timeline
+        items={timelineItems.map((item) => ({ ...item, text: tp(item.text) }))}
+        class="max-md:order-last max-md:mt-12 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-3 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
+      />
+      <div class="mt-[1.4rem] min-md:col-start-1">
+        {entry.body && <Markdown showMarks class="text-[1rem]" text={entry.body} />}
+      </div>
     </div>
-  </Section>
-  <Section title="Redakční rada">
-    <BooksGrid>
-      {
-        boardMembers.map(({ slug, description }) => (
-          <AuthorSmall slug={slug} description={description} imperfect />
-        ))
-      }
-    </BooksGrid>
-  </Section>
+  </PrintSheet>
   {
-    isNonEmptyArray(collaborators) && (
-      <Section title="Spolupracují s námi">
-        <BooksGrid>
-          {collaborators.map(({ slug, role, roles }) => (
-            <AuthorSmall slug={slug} role={role} roles={roles} imperfect />
-          ))}
-        </BooksGrid>
-      </Section>
+    sheetKeys.includes('people') && (
+      <PrintSheet edge={getEdge('people')} regs={['l']} slug="redakce_a_spolupracovnici.pdf">
+        <div class:list={[SHEET_PADDING, 'flex flex-col gap-10']}>
+          {isNonEmptyArray(boardMembers) && (
+            <div>
+              <h2 class={SECTION_LABEL}>Redakční rada</h2>
+              <div class="grid gap-x-8 gap-y-7 min-md:grid-cols-3">
+                {boardMembers.map((person) => (
+                  <AboutPerson {...person} />
+                ))}
+              </div>
+            </div>
+          )}
+          {isNonEmptyArray(collaborators) && (
+            <div class="border-brand-first-300/60 border-t border-dashed pt-10">
+              <h2 class={SECTION_LABEL}>Spolupracují s námi</h2>
+              <div class="grid gap-x-8 gap-y-7 min-md:grid-cols-2 min-lg:grid-cols-3">
+                {collaborators.map((person) => (
+                  <AboutPerson {...person} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </PrintSheet>
     )
   }
-  <Section title="Podporují nás">
-    <div class="flex flex-wrap items-center justify-center gap-8">
-      {sponsors.map((sponsor) => <SponsorLogo {...sponsor} />)}
-      <div class="flex items-center gap-8">
-        <SponsorLogo {...kimaSponsor} />
+  <PrintSheet edge={getEdge('sponsors')} regs={['b']} slug="podporovatele.pdf" bare>
+    <div>
+      <h2 class={SECTION_LABEL}>Podporují nás</h2>
+      <div class="grid grid-cols-2 gap-4 min-md:grid-cols-3 min-lg:grid-cols-6">
         {
-          textSponsors.map((sponsor) => (
-            <p class="font-alt text-brand-first-700 text-left leading-tight">
-              <span class="block text-sm">{sponsor.prefix}</span>
-              <span class="block text-lg">{sponsor.name}</span>
-            </p>
+          sponsors.map((sponsor, index) => (
+            <SponsorTile {...sponsor} tone={index % 2 === 0 ? 'first' : 'second'} />
           ))
         }
       </div>
     </div>
-  </Section>
+  </PrintSheet>
 </Layout>
