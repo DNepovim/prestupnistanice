@@ -14,6 +14,7 @@ type Props = {
   firstColor?: string
   secondColor?: string
   keepHue?: boolean
+  tintedHeader?: boolean
 }
 
 const books = (await getCollection('book')).toSorted(
@@ -28,6 +29,7 @@ const {
   firstColor,
   secondColor,
   keepHue = false,
+  tintedHeader = false,
 } = Astro.props
 
 const colorBrandFirst = firstColor ?? promotedBook?.data.color ?? '#434991'
@@ -95,7 +97,7 @@ const config = {
       Přeskočit na obsah
     </a>
 
-    <Header />
+    <Header tinted={tintedHeader} />
 
     <main id="obsah" class="flex-1 pb-16">
       <slot />

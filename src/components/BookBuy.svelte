@@ -80,9 +80,6 @@
         class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
       ></span>
     </button>
-    <p class="text-brand-first-700 text-[0.7rem] leading-none tracking-[0.04em]">
-      Skladem {stock} ks
-    </p>
     {#if kosmasUrl && kosmasHasIt}
       <a
         href={kosmasUrl}

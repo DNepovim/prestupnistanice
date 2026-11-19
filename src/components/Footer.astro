@@ -1,22 +1,24 @@
 ---
 import { Icon } from 'astro-icon/components'
 
+import HeaderLink from '@/components/HeaderLink.astro'
 import { tp } from '@/utils/tp'
 
 const EYEBROW =
   'font-alt text-brand-second-200 mb-5 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
-const LINK =
-  'underline-offset-4 hover:text-brand-second-200 hover:underline focus-visible:outline-2 focus-visible:outline-brand-second-200'
+const LINK = 'focus-visible:outline-2 focus-visible:outline-brand-second-200'
 const CREDIT_LINK =
-  'text-brand-second-200 underline underline-offset-2 hover:text-white focus-visible:outline-2 focus-visible:outline-brand-second-200'
+  'text-white text-[1em]! focus-visible:outline-2 focus-visible:outline-brand-second-200'
 const NEW_WINDOW = '(otevře se v novém okně)'
 ---
 
-<footer
-  class="font-alt bg-brand-first-700 relative mt-8 overflow-hidden text-white [container-type:inline-size]"
->
+<div class="footer-slot mt-8">
+<footer class="footer-reveal font-alt bg-brand-first-700 overflow-hidden text-white">
+<div class="relative mx-auto w-full max-w-[68rem] [container-type:inline-size]">
   <span aria-hidden="true" class="absolute top-4 left-4 size-5 border-t border-l border-brand-second-300/60"></span>
   <span aria-hidden="true" class="absolute top-4 right-4 size-5 border-t border-r border-brand-second-300/60"></span>
+  <span aria-hidden="true" class="absolute bottom-4 left-4 size-5 border-b border-l border-brand-second-300/60"></span>
+  <span aria-hidden="true" class="absolute right-4 bottom-4 size-5 border-r border-b border-brand-second-300/60"></span>
 
   <div class="px-[0.9rem] pt-16 min-md:px-[2.6rem] min-md:pt-20 min-[1100px]:px-[5rem]">
     <form class="max-w-[64rem]">
@@ -32,12 +34,12 @@ const NEW_WINDOW = '(otevře se v novém okně)'
           required
           autocomplete="email"
           placeholder={tp('váš e-mail')}
-          class="text-brand-second-300 placeholder:text-brand-second-300/50 border-brand-second-300 w-[min(100%,8.5em)] border-b-2 border-dashed bg-transparent px-[0.1em] font-[inherit] outline-none focus:border-solid"
+          class="border-brand-second-300 w-[min(100%,8.5em)] border-b-2 border-dashed bg-transparent px-[0.1em] font-[inherit] text-white outline-none placeholder:text-white/50 focus:border-solid"
         />
         <button
           type="submit"
           aria-label="Odeslat"
-          class="bg-brand-second-300 text-brand-first-900 hover:bg-brand-second-200 ml-[0.2em] inline-grid size-[1.1em] cursor-pointer place-items-center align-[-0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+          class="bg-white text-brand-first-900 hover:bg-white/80 ml-[0.2em] inline-grid size-[1.1em] cursor-pointer place-items-center align-[-0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
         >
           <Icon name="ph:arrow-right-bold" class="size-[55%]" aria-hidden="true" />
         </button>
@@ -53,9 +55,9 @@ const NEW_WINDOW = '(otevře se v novém okně)'
       <nav aria-label="Obsah webu">
         <h2 class={EYEBROW}>Obsah</h2>
         <menu class="flex flex-col gap-2 text-[1rem] leading-tight">
-          <li><a class={LINK} href="/knihy">Naše knihy</a></li>
-          <li><a class={LINK} href="/autori">Autoři</a></li>
-          <li><a class={LINK} href="/o-nakladatelstvi">O nakladatelství</a></li>
+          <li><HeaderLink class={LINK} href="/knihy">Naše knihy</HeaderLink></li>
+          <li><HeaderLink class={LINK} href="/autori">Autoři</HeaderLink></li>
+          <li><HeaderLink class={LINK} href="/o-nakladatelstvi">O nakladatelství</HeaderLink></li>
         </menu>
       </nav>
 
@@ -67,7 +69,7 @@ const NEW_WINDOW = '(otevře se v novém okně)'
             class="text-brand-second-200 size-5"
             aria-hidden="true"
           />
-          <a class={LINK} href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</a>
+          <HeaderLink class={LINK} href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</HeaderLink>
         </p>
         <p class="flex items-center gap-3 text-[1rem] leading-tight">
           <Icon
@@ -75,12 +77,12 @@ const NEW_WINDOW = '(otevře se v novém okně)'
             class="text-brand-second-200 size-5"
             aria-hidden="true"
           />
-          <a
+          <HeaderLink
             class={LINK}
             href="https://www.facebook.com/knihyprestupnistanice"
             target="_blank"
             rel="noopener noreferrer"
-            >knihyprestupnistanice<span class="sr-only">{NEW_WINDOW}</span></a
+            >knihyprestupnistanice<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
           >
         </p>
       </div>
@@ -88,31 +90,31 @@ const NEW_WINDOW = '(otevře se v novém okně)'
       <div>
         <h2 class={EYEBROW}>Tiráž</h2>
         <p class="text-[0.8rem] leading-[1.6] text-white/80">
-          Naše knihy jsou dostupné v distribuci <a
+          Naše knihy jsou dostupné v distribuci <HeaderLink
             class={CREDIT_LINK}
             href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
-            >Kosmas</a
+            >Kosmas</HeaderLink
           >.
         </p>
         <p class="mt-3 text-[0.8rem] leading-[1.6] text-white/80">
-          Web písmy <a
+          Web písmy <HeaderLink
             class={CREDIT_LINK}
             href="https://fonts.google.com/specimen/Alegreya"
             target="_blank"
             rel="noopener noreferrer"
-            >Alegreya<span class="sr-only">{NEW_WINDOW}</span></a
-          > a <a
+            >Alegreya<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+          > a <HeaderLink
             class={CREDIT_LINK}
             href="https://fonts.adobe.com/fonts/montserrat"
             target="_blank"
             rel="noopener noreferrer"
-            >Montserrat<span class="sr-only">{NEW_WINDOW}</span></a
-          > vysázel <a
+            >Montserrat<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+          > vysázel <HeaderLink
             class={CREDIT_LINK}
             href="https://www.dominikblaha.cz"
             target="_blank"
             rel="noopener noreferrer"
-            >Dominik Bláha<span class="sr-only">{NEW_WINDOW}</span></a
+            >Dominik Bláha<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
           >.
         </p>
       </div>
@@ -125,4 +127,32 @@ const NEW_WINDOW = '(otevře se v novém okně)'
   >
     Přestupní stanice
   </span>
+</div>
 </footer>
+</div>
+
+<style>
+  @supports (animation-timeline: view()) {
+    @keyframes footer-reveal {
+      from {
+        clip-path: inset(100% 0 0 0);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    .footer-slot {
+      view-timeline: --footer-slot block;
+    }
+
+    .footer-reveal {
+      position: sticky;
+      bottom: 0;
+      z-index: -10;
+      animation: footer-reveal linear both;
+      animation-timeline: --footer-slot;
+      animation-range: entry 0% entry 100%;
+    }
+  }
+</style>

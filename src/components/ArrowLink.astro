@@ -3,27 +3,37 @@ type Props = {
   href: string
   class?: string
   hasArrowLeft?: boolean
+  tone?: keyof typeof TONES
 }
 
-const { href, class: className, hasArrowLeft } = Astro.props
+const TONES = {
+  first: { text: 'text-brand-first-500', border: 'border-brand-first-500', bg: 'bg-brand-first-500' },
+  second: { text: 'text-brand-second-500', border: 'border-brand-second-500', bg: 'bg-brand-second-500' },
+} as const
+
+const { href, class: className, hasArrowLeft, tone = 'second' } = Astro.props
+const colors = TONES[tone]
 ---
 
 <a
   class:list={[
     className,
-    'font-alt group text-brand-second-500 relative text-sm tracking-wider uppercase',
+    colors.text,
+    'font-alt group relative text-sm tracking-wider uppercase',
   ]}
   href={href}
 >
   <slot />
   <span
     class:list={[
-      'border-brand-second-500 absolute bottom-1/2 block size-2 translate-y-1/2 rotate-45',
+      colors.border,
+      'absolute bottom-1/2 block size-2 translate-y-1/2 rotate-45',
       hasArrowLeft ? '-left-7 border-b border-l' : '-right-7 border-t border-r',
     ]}></span>
   <span
     class:list={[
-      'bg-brand-second-500 absolute bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]',
+      colors.bg,
+      'absolute bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]',
       hasArrowLeft ? '-left-[29px]' : '-right-[29px]',
     ]}></span>
 </a>

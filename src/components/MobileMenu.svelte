@@ -34,7 +34,7 @@
 <div class="relative" bind:this={containerEl}>
   <button
     type="button"
-    class="font-alt flex cursor-pointer items-center gap-2 text-xs tracking-wider text-black uppercase"
+    class="font-alt flex cursor-pointer items-center gap-2 text-xs tracking-wider text-inherit uppercase"
     aria-expanded={isOpen}
     aria-controls="mobile-menu"
     onclick={() => {

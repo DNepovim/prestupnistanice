@@ -26,6 +26,12 @@
       ? target.closest<HTMLAnchorElement>('a[data-preview]')
       : null
 
+  const placePreview = (preview: HTMLImageElement, event: MouseEvent) => {
+    const fitsRight = event.clientX + OFFSET_PX + PREVIEW_WIDTH_PX < window.innerWidth
+    preview.style.left = `${String(fitsRight ? event.clientX + OFFSET_PX : event.clientX - OFFSET_PX - PREVIEW_WIDTH_PX)}px`
+    preview.style.top = `${String(event.clientY + OFFSET_PX)}px`
+  }
+
   const canHover = window.matchMedia('(hover: hover)').matches
 
   if (canHover) {
@@ -37,6 +43,7 @@
       }
       const preview = getPreview()
       preview.src = src
+      placePreview(preview, event)
       preview.classList.remove('hidden')
     })
 
@@ -44,10 +51,7 @@
       if (!getLink(event.target)) {
         return
       }
-      const preview = getPreview()
-      const fitsRight = event.clientX + OFFSET_PX + PREVIEW_WIDTH_PX < window.innerWidth
-      preview.style.left = `${String(fitsRight ? event.clientX + OFFSET_PX : event.clientX - OFFSET_PX - PREVIEW_WIDTH_PX)}px`
-      preview.style.top = `${String(event.clientY + OFFSET_PX)}px`
+      placePreview(getPreview(), event)
     })
 
     document.addEventListener('mouseout', (event) => {

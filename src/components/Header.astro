@@ -69,6 +69,12 @@ const searchData = [...bookItems, ...authorItems].filter(
   (item, index, arr) => index === arr.findIndex((el) => el.slug === item.slug),
 )
 
+type Props = {
+  tinted?: boolean
+}
+
+const { tinted = false } = Astro.props
+
 const navigations = [
   {
     link: routes.books.list(),
@@ -81,12 +87,17 @@ const navigations = [
 ]
 ---
 
-<header class="min-w-full">
+<header
+  class:list={[
+    'site-header sticky top-0 z-0 min-w-full pt-2 has-[[aria-expanded=true]]:z-20 has-[[role=dialog]]:z-20',
+    tinted && 'bg-brand-first-500 text-white',
+  ]}
+>
   <div
-    class="mx-auto mt-2 flex w-[calc(var(--slide-size)-var(--slide-spacing))] items-center justify-between gap-4 py-1"
+    class="header-content mx-auto flex w-[calc(var(--slide-size)-var(--slide-spacing))] items-center justify-between gap-4 py-1"
   >
     <p
-      class="font-liga font-head m-0 whitespace-nowrap text-black max-md:text-[4.3vw] min-md:text-3xl"
+      class="font-liga font-head m-0 whitespace-nowrap text-inherit max-md:text-[4.3vw] min-md:text-3xl"
     >
       <a class="no-underline" href="/">Přestupní stanice</a>
     </p>
@@ -98,7 +109,7 @@ const navigations = [
               {index !== 0 && (
                 <span
                   aria-hidden="true"
-                  class="mr-2 inline-block h-[1px] w-8 bg-gray-300"
+                  class="mr-2 inline-block h-[1px] w-8 bg-current opacity-30"
                 />
               )}
               <HeaderLink href={link}>{label}</HeaderLink>
@@ -111,8 +122,29 @@ const navigations = [
       </div>
       <span
         aria-hidden="true"
-        class="mr-2 inline-block h-[1px] w-8 bg-gray-300 max-md:hidden"></span>
+        class="mr-2 inline-block h-[1px] w-8 bg-current opacity-30 max-md:hidden"></span>
       <SearchButton client:idle data={searchData} />
     </div>
   </div>
 </header>
+
+<style>
+  @supports (animation-timeline: scroll()) {
+    @keyframes header-fade-out {
+      to {
+        opacity: 0;
+      }
+    }
+
+    .header-content {
+      animation: header-fade-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 5rem;
+    }
+
+    .site-header:has([aria-expanded='true']) .header-content,
+    .site-header:has([role='dialog']) .header-content {
+      animation: none;
+    }
+  }
+</style>

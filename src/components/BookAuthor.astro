@@ -27,7 +27,7 @@ const roleText = joinWords(
   roles.map((r) => rolesMap[r]?.perfect[author.gender]).filter(isDefined),
 )
 
-const bio = entry.body?.replace(/[*>#]/g, '').trim()
+const bio = author.claim ?? entry.body?.replace(/[*>#]/g, '').trim()
 ---
 
 <div class="group/person flex max-w-[30rem] items-start gap-6 max-sm:gap-4">

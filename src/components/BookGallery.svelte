@@ -92,7 +92,7 @@
         type="button"
         aria-label={`Zvětšit: ${entry.alt}`}
         class={[
-          'border-brand-first-500 block cursor-zoom-in border bg-white p-1 pb-5 shadow-[0_0.3rem_1rem_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.03] hover:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 min-md:p-1.5 min-md:pb-7',
+          'border-brand-first-500 block cursor-zoom-in border bg-white p-1 pb-5 shadow-[0_0.2rem_0.7rem_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-[1.03] hover:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 min-md:p-1.5 min-md:pb-7',
           !fitsInRow && 'w-fit',
           TILTS[index % TILTS.length],
         ]}

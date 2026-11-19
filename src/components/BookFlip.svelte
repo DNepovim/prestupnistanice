@@ -115,7 +115,7 @@
     <div class="flex w-full items-center justify-center gap-2 min-sm:gap-5">
       <button
         type="button"
-        class="border-brand-first-500 text-brand-first-700 flex shrink-0 items-center justify-center border px-2 py-3 text-lg font-semibold disabled:opacity-30 min-sm:px-4"
+        class="border-white/70 text-white flex shrink-0 items-center justify-center border px-2 py-3 text-lg font-semibold disabled:opacity-30 min-sm:px-4"
         disabled={position === 0}
         aria-label="Předchozí strana"
         on:click={() => turn('prev')}
@@ -214,7 +214,7 @@
       </div>
       <button
         type="button"
-        class="border-brand-first-500 text-brand-first-700 flex shrink-0 items-center justify-center border px-2 py-3 text-lg font-semibold disabled:opacity-30 min-sm:px-4"
+        class="border-white/70 text-white flex shrink-0 items-center justify-center border px-2 py-3 text-lg font-semibold disabled:opacity-30 min-sm:px-4"
         disabled={position >= maxPosition}
         aria-label="Další strana"
         on:click={() => turn('next')}
@@ -223,7 +223,7 @@
       </button>
     </div>
     <span
-      class="font-alt text-brand-first-700 text-[0.65rem] font-medium"
+      class="font-alt text-white text-[0.65rem] font-medium"
       aria-live="polite"
     >
       {label}

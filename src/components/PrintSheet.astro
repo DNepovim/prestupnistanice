@@ -11,6 +11,7 @@ type Props = {
   slug?: string
   sideSlug?: string
   cutAtBottom?: boolean
+  bare?: boolean
   class?: HTMLAttributes<'section'>['class']
 }
 
@@ -62,6 +63,7 @@ const {
   slug,
   sideSlug,
   cutAtBottom = false,
+  bare = false,
   class: className,
 } = Astro.props
 ---
@@ -69,7 +71,7 @@ const {
 <div class="mx-auto w-full max-w-[64rem] px-[5rem] max-md:px-9">
   <section
     class:list={[
-      'text-brand-first-300/60 relative',
+      'text-brand-second-300/60 relative',
       '[--mk-g:0.8rem] [--mk-l:1.25rem] md:[--mk-g:0.9rem] md:[--mk-l:2rem]',
       '[--mk-h:calc(var(--mk-g)+var(--mk-l)/2)] [--mk-s:calc(var(--mk-g)+var(--mk-l))]',
       EDGE_HAS_TOP[edge] && 'mt-[calc(var(--mk-s)+1.2rem)]',
@@ -110,10 +112,10 @@ const {
       ))
     }
     {
-      slug && EDGE_HAS_TOP[edge] && (
+      slug && (
         <span
           aria-hidden="true"
-          class="font-alt text-brand-first-700 pointer-events-none absolute -top-(--mk-s) left-4 flex h-(--mk-l) max-w-[calc(50%-2rem)] items-center overflow-hidden text-[0.62rem] tracking-[0.06em] text-ellipsis whitespace-nowrap"
+          class="font-alt text-brand-second-200 pointer-events-none absolute -top-(--mk-s) left-4 flex h-(--mk-l) max-w-[calc(50%-2rem)] items-center overflow-hidden text-[0.62rem] tracking-[0.06em] text-ellipsis whitespace-nowrap"
         >
           {slug}
         </span>
@@ -125,7 +127,7 @@ const {
           aria-hidden="true"
           class="pointer-events-none absolute top-4 bottom-4 -left-(--mk-h) hidden w-6 -translate-x-1/2 min-md:block"
         >
-          <span class="font-alt text-brand-first-700 sticky top-6 block max-h-[calc(100svh-3rem)] w-6 rotate-180 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
+          <span class="font-alt text-brand-second-200 sticky top-6 block max-h-[calc(100svh-3rem)] w-6 rotate-180 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
             {sideSlug}
           </span>
         </div>
@@ -144,6 +146,6 @@ const {
         />
       )
     }
-    <div class="text-gray-900"><slot /></div>
+    <div class:list={[!bare && 'bg-white', 'text-gray-900']}><slot /></div>
   </section>
 </div>

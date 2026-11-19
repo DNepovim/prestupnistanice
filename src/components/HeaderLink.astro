@@ -3,21 +3,16 @@ import type { HTMLAttributes } from 'astro/types'
 
 type Props = HTMLAttributes<'a'>
 
-const { href, ...props } = Astro.props
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '')
-const isActive = href === `/${pathname}`
+const { href, class: className, ...props } = Astro.props
 ---
 
 <a
   href={href}
-  class:list={[
-    'group font-alt text-md relative text-black no-underline',
-    isActive && 'text-black',
-  ]}
+  class:list={['group font-alt text-md relative text-inherit no-underline', className]}
   {...props}
 >
   <slot />
   <span
-    class="absolute bottom-0 left-0 h-[1px] w-0 bg-black transition-all duration-600 group-hover:w-full"
+    class="absolute bottom-0 left-0 h-[1px] w-0 bg-current transition-all duration-600 group-hover:w-full"
   ></span>
 </a>

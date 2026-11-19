@@ -5,6 +5,7 @@ import type { CollectionEntry } from 'astro:content'
 import { getCollection, getEntry } from 'astro:content'
 import { isDefined, isNonEmptyArray } from 'narrowland'
 
+import ArrowLink from '@/components/ArrowLink.astro'
 import BookAuthor from '@/components/BookAuthor.astro'
 import BookBuy from '@/components/BookBuy.svelte'
 import BookCrew from '@/components/BookCrew.astro'
@@ -215,12 +216,13 @@ const sideSlug = [
 
 <Layout
   keepHue
+  tintedHeader
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
   firstColor={book.color}
   secondColor={book.bgColor}
 >
-  <div class="pt-4">
+  <div class="bg-brand-first-500 -mb-24 pt-4 pb-24">
     {
       book.coverTop && (
         <PrintSheet edge={getEdge('hero')} regs={['t']} slug={fileSlug} cutAtBottom>
@@ -314,13 +316,13 @@ const sideSlug = [
           <div
             data-reveal-on-stick={book.coverTop ? '' : undefined}
             class:list={[
-              'grid w-full max-w-[16rem] grid-rows-[1fr]',
+              'grid w-full max-w-[16rem] grid-cols-[minmax(0,1fr)] grid-rows-[1fr]',
               book.coverTop
                 ? 'min-md:grid-rows-[0fr] min-md:opacity-0 min-md:transition-[grid-template-rows,opacity] min-md:duration-500 min-md:ease-out min-md:data-stuck:grid-rows-[1fr] min-md:data-stuck:opacity-100 min-md:motion-reduce:transition-none'
                 : '',
             ]}
           >
-            <div class="min-h-0 overflow-y-clip">
+            <div class="min-h-0 min-w-0 overflow-y-clip">
               <div class="pb-7">
                 <Image
                   alt={book.title}
@@ -355,7 +357,7 @@ const sideSlug = [
         <div class="mt-[1.4rem] min-md:col-start-1">
           {
             book.claim && (
-              <blockquote class="font-alt first-letter:text-brand-first-500 mb-8 text-[1rem] leading-[1.45] text-gray-800 italic first-letter:float-left first-letter:pt-[0.06em] first-letter:pr-[0.1em] first-letter:text-[3.1em] first-letter:leading-[0.82] first-letter:font-bold first-letter:not-italic min-lg:text-[1.15rem]">
+              <blockquote class="font-alt first-letter:text-brand-first-500 mb-8 text-[1rem] leading-[1.45] text-gray-800 italic first-letter:float-left first-letter:pt-[0.06em] first-letter:pr-[0.1em] first-letter:text-[3.1em] first-letter:leading-[0.82] first-letter:font-bold min-lg:text-[1.15rem]">
                 {tp(book.claim)}
                 <span
                   aria-hidden="true"
@@ -391,11 +393,8 @@ const sideSlug = [
     </PrintSheet>
     {
       isNonEmptyArray(samplePages) && (
-        <PrintSheet edge={getEdge('sample')} regs={['r']}>
+        <PrintSheet edge={getEdge('sample')} regs={['r']} bare>
           <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
-            <p class="font-alt text-brand-first-700 mb-8 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
-              Ukázka z knihy
-            </p>
             <BookSample pages={samplePages} title={book.title} />
           </div>
         </PrintSheet>
@@ -403,7 +402,7 @@ const sideSlug = [
     }
     {
       isNonEmptyArray(galleryImages) && (
-        <PrintSheet edge={getEdge('gallery')} regs={['r']}>
+        <PrintSheet edge={getEdge('gallery')} regs={['r']} bare>
           <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
             <BookGallery images={galleryImages} title={book.title} />
           </div>
@@ -462,6 +461,9 @@ const sideSlug = [
               Další knihy {CATEGORIES[book.category].name}
             </h2>
             <BooksIndex books={otherCategoryBooks} />
+            <div class="mt-10 pr-7 text-center">
+              <ArrowLink tone="first" href={routes.books.list()}>Všechny knihy</ArrowLink>
+            </div>
           </div>
         </PrintSheet>
       )
