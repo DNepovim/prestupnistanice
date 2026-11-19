@@ -1,18 +1,47 @@
 ---
 import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
 import { getCollection, getEntry } from 'astro:content'
+import { isDefined } from 'narrowland'
 
 import BooksContactSheet from '@/components/BooksContactSheet.astro'
+import CmykBar from '@/components/CmykBar.astro'
+import Colophon from '@/components/Colophon.astro'
+import ColorBar from '@/components/ColorBar.astro'
 import Markdown from '@/components/Markdown.astro'
-import PageTitle from '@/components/PageTitle.astro'
-import Section from '@/components/Section.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
+import { getTitleFit } from '@/utils/titleFit'
 import { tp } from '@/utils/tp'
 
 // eslint-disable-next-line no-restricted-imports
 import { client } from '../../../tina/__generated__/client.ts'
+
+type Gender = CollectionEntry<'author'>['data']['gender']
+
+const BORN_LABELS = {
+  male: 'Narozen',
+  female: 'Narozena',
+} as const satisfies Record<Gender, string>
+
+const DIED_LABELS = {
+  male: 'Zemřel',
+  female: 'Zemřela',
+} as const satisfies Record<Gender, string>
+
+const NON_PRINTING_MARK =
+  'font-alt text-brand-first-700/45 align-baseline font-normal select-none'
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
 
 export async function getStaticPaths() {
   const authors = await getCollection('author')
@@ -46,45 +75,137 @@ const { data: author } = entry
 const books = await getCollection('book', ({ data }) =>
   data.authors.some(({ isMain, author }) => isMain && getSlugFromPath(author) === slug),
 )
+
+const fullName = `${author.firstname} ${author.surname}`
+const titleFit = getTitleFit(tp(fullName))
+
+const newestBook = books.toSorted((a, b) => b.data.order - a.data.order)[0]
+const totalPages = books.reduce((sum, book) => sum + (book.data.pagesCount ?? 0), 0)
+
+const colophonRows = [
+  author.birthDate
+    ? { label: BORN_LABELS[author.gender], value: formatDate(author.birthDate) }
+    : undefined,
+  author.deathDate
+    ? { label: DIED_LABELS[author.gender], value: formatDate(author.deathDate) }
+    : undefined,
+].filter(isDefined)
+
+const lifeSpan = author.birthDate
+  ? author.deathDate
+    ? `${formatDate(author.birthDate)} – ${formatDate(author.deathDate)}`
+    : `${BORN_LABELS[author.gender]} ${formatDate(author.birthDate)}`
+  : undefined
+
+const topSlug = [fullName, lifeSpan].filter(isDefined).join(' · ')
+
+const sideSlug = [
+  newestBook ? `Vydaných knih ${String(books.length)}` : undefined,
+  totalPages > 0 ? `Celkem stran ${totalPages.toLocaleString('cs-CZ')}` : undefined,
+]
+  .filter(isDefined)
+  .join(' · ')
 ---
 
 <Layout
-  siteTitle={`${author.firstname} ${author.surname}`}
+  keepHue
+  tintedHeader
+  tintedBackground
+  siteTitle={fullName}
   siteDescription={author.claim ?? ''}
   firstColor={books[0]?.data.color ?? undefined}
   secondColor={books[0]?.data.bgColor ?? undefined}
 >
-  <Section className="mb-32">
-    <PageTitle>
-      {author.firstname}{' '}{author.surname}
-    </PageTitle>
+  <div class="pt-4">
+    <PrintSheet
+      edge={newestBook ? 'first' : 'only'}
+      regs={['r']}
+      slug={topSlug}
+      sideSlug={sideSlug}
+    >
+      <div
+        class:list={[
+          'grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem] gap-y-8 px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]',
+          author.image && 'min-md:grid-cols-[15.5rem_minmax(0,1fr)]',
+        ]}
+      >
+        {
+          author.image && (
+            <aside class="flex flex-col items-start gap-4 min-md:sticky min-md:top-6 min-md:self-start">
+              <Image
+                src={author.image}
+                alt={fullName}
+                width={560}
+                loading="eager"
+                class="h-auto w-full shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)]"
+              />
+              {colophonRows.length > 0 && (
+                <div class="border-brand-first-300/60 w-full border-t border-dashed pt-4">
+                  <Colophon rows={colophonRows} />
+                </div>
+              )}
+              <div class="mt-2 flex w-full flex-col gap-1.5">
+                <ColorBar
+                  from={books[0]?.data.color ?? FALLBACK_COLOR_FIRST}
+                  to={books[0]?.data.bgColor ?? FALLBACK_COLOR_SECOND}
+                  class="w-full"
+                />
+                <CmykBar class="w-full [&>span]:w-auto [&>span]:flex-1" />
+              </div>
+            </aside>
+          )
+        }
+        <div class="min-w-0">
+          <header class="[container-type:inline-size]">
+            <h1
+              style={`--title-w:${titleFit.widthEm.toFixed(3)}`}
+              class="font-head text-brand-first-500 [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em]"
+            >
+              {
+                titleFit.lines.map((line, index) => (
+                  <span class="block whitespace-nowrap">
+                    {line}
+                    {index === titleFit.lines.length - 1 && (
+                      <span
+                        aria-hidden="true"
+                        class:list={[NON_PRINTING_MARK, 'ml-[0.25em] text-[0.3em]']}
+                      >
+                        ↵
+                      </span>
+                    )}
+                  </span>
+                ))
+              }
+            </h1>
+          </header>
+          {
+            author.claim && (
+              <blockquote class="font-alt first-letter:text-brand-first-500 mt-[1.4rem] mb-8 text-[1rem] leading-[1.45] text-gray-800 italic first-letter:float-left first-letter:pt-[0.06em] first-letter:pr-[0.1em] first-letter:text-[3.1em] first-letter:leading-[0.82] first-letter:font-bold min-lg:text-[1.15rem]">
+                {tp(author.claim)}
+                <span
+                  aria-hidden="true"
+                  class:list={[NON_PRINTING_MARK, 'ml-1.5 text-[0.6em]']}
+                >
+                  ¶
+                </span>
+              </blockquote>
+            )
+          }
+          {entry.body && <Markdown showMarks class="text-[1rem]" text={entry.body} />}
+        </div>
+      </div>
+    </PrintSheet>
     {
-      author.image && (
-        <Image
-          alt={`${author.firstname} ${author.surname}`}
-          src={author.image}
-          width={420}
-          height={600}
-          class="animate-slide-on-load border-brand-second-50 mb-4 rounded-xl border-4 shadow-2xl max-sm:w-full min-sm:float-left min-sm:mr-8 min-sm:-ml-4"
-        />
+      newestBook && (
+        <PrintSheet edge="last" regs={['b']}>
+          <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
+            <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
+              Knihy {getAuthorsSecondName(author)}
+            </h2>
+            <BooksContactSheet books={books} />
+          </div>
+        </PrintSheet>
       )
     }
-    <blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">
-      {author.claim && tp(author.claim)}
-    </blockquote>
-
-    {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
-  </Section>
-  <Section className="clear-both">
-    {
-      books.length > 0 && (
-        <>
-          <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
-            Knihy {getAuthorsSecondName(author)}
-          </h2>
-          <BooksContactSheet books={books} />
-        </>
-      )
-    }
-  </Section>
+  </div>
 </Layout>
