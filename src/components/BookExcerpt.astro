@@ -1,20 +1,22 @@
 ---
+import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { getEntries, getEntry } from 'astro:content'
 
-import ArrowLink from '@/components/ArrowLink.astro'
+import BookBuy from '@/components/BookBuy.svelte'
 import { routes } from '@/routes'
+import { getExcerptText } from '@/utils/getExcerptText'
 import { tp } from '@/utils/tp'
 
 import FloatingImage from './FloatingImage.svelte'
-import KosmasButton from './KosmasButton.svelte'
 
 type Props = {
   class?: string
   slug: string
+  bleed?: boolean
 }
 
-const { slug, class: className } = Astro.props
+const { slug, class: className, bleed = false } = Astro.props
 
 const entry = await getEntry('book', slug)
 
@@ -23,6 +25,8 @@ if (!entry) {
 }
 
 const { data: b } = entry
+
+const claim = b.claim ?? (entry.body ? getExcerptText(entry.body, 260) : undefined)
 
 const authors = await getEntries(
   b.authors.filter((a) => a.isMain && a.role.includes('author')).map((a) => a.slug),
@@ -37,7 +41,10 @@ const authors = await getEntries(
   {
     (
       <a
-        class="block w-[20rem] max-w-full flex-1"
+        class:list={[
+          'block w-[20rem] max-w-full flex-1',
+          bleed && '-mt-[calc(var(--sheet-py)+3mm)] -ml-[calc(var(--sheet-px)+3mm)]',
+        ]}
         href={routes.books.detail(slug)}
         tabindex="-1"
         aria-hidden="true"
@@ -46,63 +53,85 @@ const authors = await getEntries(
           alt=""
           src={b.cover}
           width={158}
-          widths={[316, 158]}
+          widths={[158, 316, 480]}
           height={200}
-          class="rounded-md border border-gray-200 shadow-2xl"
+          class:list={[
+            'shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)]',
+            bleed && 'h-auto w-full',
+          ]}
         />
       </a>
     )
   }
-  <div class="flex flex-4 flex-col gap-4">
-    <div class="max-sm:flex max-sm:flex-col">
-      <h2
-        class="peer font-head font-liga hyphenate group relative inline text-5xl leading-[1.2em] font-bold tracking-wide break-words text-black"
+  <div class="flex flex-4 flex-col gap-1">
+    <h2
+      class="font-head font-liga hyphenate text-brand-first-500 relative text-5xl leading-[1.2em] font-bold tracking-wide break-words"
+    >
+      <a href={routes.books.detail(slug)}>{tp(b.title)}</a>
+      <span
+        aria-hidden="true"
+        class="font-alt text-brand-first-700/45 ml-1.5 text-[0.5em] font-normal select-none"
+        >↵</span
       >
-        <a href={routes.books.detail(slug)}>{tp(b.title)}</a>
-      </h2>
-      <div class="relative mx-2 mb-2 inline-block w-8">
-        <div
-          class="absolute bottom-0 left-0 h-[1px] w-8 bg-gray-400 transition-all duration-500 peer-has-hover:-left-24 peer-has-hover:w-32 max-sm:hidden"
-        >
-        </div>
-      </div>
-      <div class="inline text-xl text-gray-500">
-        {
-          authors.map(({ data: a }, index) => (
-            <>
-              {index !== 0 ? ', ' : ''}
-              <FloatingImage
-                client:visible
-                src={a.image?.src}
-                alt={`${a.firstname} ${a.surname}`}
-              >
-                <a
-                  class="group font-alt text-gray-500 transition-colors hover:text-black"
-                  href={routes.authors.detail(a.slug)}
+    </h2>
+
+    <div class="flex gap-8 max-sm:flex-col">
+      <div class="flex min-w-0 flex-1 flex-col gap-5">
+        <div class="text-xl text-gray-500">
+          {
+            authors.map(({ data: a }, index) => (
+              <>
+                {index !== 0 ? ', ' : ''}
+                <FloatingImage
+                  client:visible
+                  src={a.image?.src}
+                  alt={`${a.firstname} ${a.surname}`}
                 >
-                  {a.firstname} {a.surname}
-                </a>
-              </FloatingImage>
-            </>
-          ))
-        }
-      </div>
-    </div>
-
-    {b.releaseNote && <p class="text-gray-500">{tp(b.releaseNote)}</p>}
-
-    <div class="min-sm:pl-8">
-      <div class="line-clamp-3">
-        {b.claim && tp(b.claim)}
-      </div>
-    </div>
-    {
-      (
-        <div class="flex flex-col items-end gap-5 pr-4">
-          {b.kosmasUrl && <KosmasButton client:visible href={b.kosmasUrl} slug={slug} />}
-          <ArrowLink href={routes.books.detail(slug)}>více o knize</ArrowLink>
+                  <a
+                    class="group font-alt text-gray-500 transition-colors hover:text-black"
+                    href={routes.authors.detail(a.slug)}
+                  >
+                    {a.firstname} {a.surname}
+                  </a>
+                </FloatingImage>
+              </>
+            ))
+          }
+          <span
+            aria-hidden="true"
+            class="font-alt text-brand-first-700/45 ml-1.5 text-[0.7em] font-normal select-none"
+            >¶</span
+          >
         </div>
-      )
-    }
+
+        <p>
+          {claim && tp(claim)}
+          {' '}
+          <a
+            class="group text-brand-first-500 hover:text-brand-first-700 whitespace-nowrap transition-colors"
+            href={routes.books.detail(slug)}
+          >
+            více o knize
+            <Icon
+              name="ph:arrow-right"
+              aria-hidden="true"
+              class="inline size-[1em] align-[-0.12em] transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+            />
+          </a>
+        </p>
+      </div>
+
+      <div class="flex shrink-0 flex-col items-start gap-5 pt-3 min-sm:w-[13rem]">
+        <BookBuy
+          client:visible
+          slug={slug}
+          kosmasUrl={b.kosmasUrl}
+          price={b.price}
+          stock={b.stock}
+          isUpcoming={b.isUpcoming}
+          releaseNote={b.releaseNote}
+        />
+      </div>
+    </div>
   </div>
 </article>

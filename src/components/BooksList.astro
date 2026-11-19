@@ -1,12 +1,13 @@
 ---
-import type { CollectionEntry } from 'astro:content'
-import { Icon } from 'astro-icon/components'
+import { getCollection, getEntries, type CollectionEntry } from 'astro:content'
 
 import BookExcerpt from '@/components/BookExcerpt.astro'
 import PageTitle from '@/components/PageTitle.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
 import Section from '@/components/Section.astro'
 import Theme from '@/components/Theme.astro'
 import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '@/routes'
+import { joinWords } from '@/utils/joinWords'
 import { uppercaseFirstLetter } from '@/utils/uppercaseFirstLetter'
 
 type Props = {
@@ -19,61 +20,237 @@ const { books, slug } = Astro.props
 const categoryKey = slug ? categoriesSlugToKey[slug] : 'all'
 
 const categoryName = CATEGORIES[categoryKey].name
+
+const CORNER_CLASSES = {
+  tl: '-top-(--mk-s) -left-(--mk-s)',
+  tr: '-top-(--mk-s) -right-(--mk-s) -scale-x-100',
+  bl: '-bottom-(--mk-s) -left-(--mk-s) -scale-y-100',
+  br: '-right-(--mk-s) -bottom-(--mk-s) -scale-100',
+} as const
+
+const allBooks = await getCollection('book')
+
+const sheetSlugs = await Promise.all(
+  books.map(async (book) => {
+    const authors = await getEntries(
+      book.data.authors
+        .filter((a) => a.isMain && a.role.includes('author'))
+        .map((a) => a.slug),
+    )
+    const authorsLine = joinWords(
+      authors.map(({ data: a }) => `${a.firstname} ${a.surname}`),
+    )
+    const orderedTitle = `${String(book.data.order)}. ${book.data.title}`
+    return authorsLine ? `${orderedTitle} · ${authorsLine}` : orderedTitle
+  }),
+)
+
+const getEdge = (index: number) => {
+  if (books.length === 1) {
+    return 'only'
+  }
+  if (index === 0) {
+    return 'first'
+  }
+  return index === books.length - 1 ? 'last' : 'middle'
+}
 ---
 
 <Section>
-  <PageTitle><a href={routes.books.list()}>Naše knihy</a></PageTitle>
+  <PageTitle><a href={routes.books.list()} data-filter>Naše knihy</a></PageTitle>
   <p
+    data-swap="label"
     class="font-alt text-brand-second-500 mb-4 h-[1.2em] text-[5vw] min-md:mb-16 min-md:ml-110 min-md:text-4xl"
   >
     {slug && categoryName}
   </p>
   <nav
+    data-swap="nav"
     aria-label="Kategorie knih"
-    class="text-brand-second mb-4 flex items-center justify-center gap-2 text-center text-xl max-md:flex-col min-md:mb-16"
+    class="text-brand-second mb-4 flex items-center justify-center gap-6 text-center text-xl max-md:flex-col max-md:gap-4 min-md:mb-16"
   >
     {
-      Object.entries(CATEGORIES).map(([key, values], index) => (
-        <>
-          {index !== 0 && (
-            <Icon
-              name="ph:tilde-thin"
-              aria-hidden="true"
-              class="text-brand-second-300 max-md:hidden"
-            />
-          )}
+      Object.entries(CATEGORIES).map(([key, values]) => {
+        const isActive = slug === values.slug
+        const count = allBooks.filter((b) => b.data.category === key).length
+        return (
           <a
+            data-filter
             class:list={[
-              'font-alt group relative text-xl text-gray-500',
-              slug === values.slug && 'text-brand-first-500 text-2xl',
+              'font-alt group relative px-3 py-1 text-xl transition-colors duration-300 [--mk-g:0.3rem] [--mk-l:0.6rem] [--mk-s:calc(var(--mk-g)+var(--mk-l))]',
+              isActive ? 'font-semibold text-black' : 'text-gray-500 hover:text-black',
             ]}
-            aria-current={slug === values.slug ? 'page' : undefined}
+            aria-current={isActive ? 'page' : undefined}
             href={routes.books.category(key as keyof typeof CATEGORIES)}
           >
+            {isActive &&
+              Object.values(CORNER_CLASSES).map((corner) => (
+                <span
+                  aria-hidden="true"
+                  class:list={[
+                    'pointer-events-none absolute size-(--mk-s) text-gray-400',
+                    'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+                    'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+                    corner,
+                  ]}
+                />
+              ))}
             <span class="relative z-10">
-              {slug === values.slug ? uppercaseFirstLetter(values.name) : values.name}
+              {isActive ? uppercaseFirstLetter(values.name) : values.name}
+              <sup
+                aria-hidden="true"
+                class:list={[
+                  'font-alt ml-1 align-top text-[0.55rem] font-normal tracking-[0.1em] [font-variant-numeric:lining-nums]',
+                  isActive ? 'text-gray-500' : 'text-gray-400',
+                ]}
+              >
+                {String(count).padStart(2, '0')}
+              </sup>
             </span>
-            {slug !== values.slug && (
-              <span class="bg-brand-second-500 absolute bottom-1 left-0 h-[1px] w-0 transition-all duration-600 group-hover:w-full" />
-            )}
           </a>
-        </>
-      ))
+        )
+      })
     }
   </nav>
-  <div class="flex flex-col gap-20 pt-16">
-    {
-      books.map((book, index) => (
-        <Theme
-          firstColor={book.data.color ?? undefined}
-          secondColor={book.data.bgColor ?? undefined}
-        >
-          <BookExcerpt
-            class={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
-            slug={book.data.slug}
-          />
-        </Theme>
-      ))
-    }
-  </div>
 </Section>
+
+<div data-swap="list">
+  {
+    books.map((book, index) => (
+      <div
+        class="animate-sheet-parallax"
+        style={`view-transition-name:book-${book.data.slug};view-transition-class:book`}
+      >
+        <PrintSheet
+          edge={getEdge(index)}
+          regs={index % 2 === 0 ? ['r'] : ['l']}
+          slug={sheetSlugs[index]}
+        >
+          <Theme
+            keepHue
+            firstColor={book.data.color ?? undefined}
+            secondColor={book.data.bgColor ?? undefined}
+          >
+            <div
+              class="px-(--sheet-px) py-(--sheet-py) [--sheet-px:0.9rem] [--sheet-py:2.2rem] min-md:[--sheet-px:2.6rem] min-md:[--sheet-py:2.5rem]"
+            >
+              <BookExcerpt bleed slug={book.data.slug} />
+            </div>
+          </Theme>
+        </PrintSheet>
+      </div>
+    ))
+  }
+</div>
+
+<style is:global>
+  ::view-transition-group(*) {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.6s;
+  }
+
+  ::view-transition-new(.book):only-child {
+    animation-name: book-enter;
+  }
+
+  ::view-transition-old(.book):only-child {
+    animation-name: book-leave;
+  }
+
+  @keyframes book-enter {
+    from {
+      opacity: 0;
+      transform: translateY(2.5rem);
+    }
+  }
+
+  @keyframes book-leave {
+    to {
+      opacity: 0;
+      transform: translateY(-1.5rem);
+    }
+  }
+</style>
+
+<script>
+  const pageCache = new Map<string, Promise<Document>>()
+
+  const loadDocument = (url: string) => {
+    const cached = pageCache.get(url)
+    if (cached) {
+      return cached
+    }
+    const request = fetch(url)
+      .then((response) => response.text())
+      .then((html) => new DOMParser().parseFromString(html, 'text/html'))
+      .catch((error: unknown) => {
+        pageCache.delete(url)
+        throw error
+      })
+    pageCache.set(url, request)
+    return request
+  }
+
+  const applyDocument = (next: Document) => {
+    document.title = next.title
+    document.querySelectorAll<HTMLElement>('[data-swap]').forEach((current) => {
+      const replacement = next.querySelector(`[data-swap="${current.dataset.swap ?? ''}"]`)
+      if (replacement) {
+        current.replaceWith(document.importNode(replacement, true))
+      }
+    })
+  }
+
+  const navigate = async (url: string, shouldPush: boolean) => {
+    const next = await loadDocument(url)
+    const update = () => {
+      applyDocument(next)
+      if (shouldPush) {
+        history.pushState(null, '', url)
+      }
+    }
+    const canAnimate =
+      typeof document.startViewTransition === 'function' &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (canAnimate) {
+      await document.startViewTransition(update).finished
+    } else {
+      update()
+    }
+  }
+
+  const getFilterLink = (target: EventTarget | null) =>
+    target instanceof Element ? target.closest<HTMLAnchorElement>('a[data-filter]') : null
+
+  document.addEventListener('click', (event) => {
+    const link = getFilterLink(event.target)
+    const isModified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+    if (!link || event.defaultPrevented || event.button !== 0 || isModified) {
+      return
+    }
+    event.preventDefault()
+    if (link.href !== location.href) {
+      navigate(link.href, true).catch(() => {
+        location.assign(link.href)
+      })
+    }
+  })
+
+  document.addEventListener('pointerover', (event) => {
+    const link = getFilterLink(event.target)
+    if (link) {
+      loadDocument(link.href).catch(() => undefined)
+    }
+  })
+
+  window.addEventListener('popstate', () => {
+    navigate(location.href, false).catch(() => {
+      location.reload()
+    })
+  })
+</script>

@@ -30,6 +30,17 @@
   background-attachment: fixed;
 }
 
+@utility animate-sheet-parallax {
+  --sheet-parallax: 1.25rem;
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: sheet-parallax linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
 @utility animate-width-expand {
   transform-origin: left;
   animation: width-expand 0.6s ease-out forwards;
@@ -71,6 +82,42 @@
   --font-alt: 'montserrat-alternates', sans-serif;
 
   --breakpoint-xs: 30rem;
+
+  @keyframes sheet-parallax {
+    0% {
+      transform: translateY(var(--sheet-parallax));
+    }
+    10% {
+      transform: translateY(calc(var(--sheet-parallax) * 0.512));
+    }
+    20% {
+      transform: translateY(calc(var(--sheet-parallax) * 0.216));
+    }
+    30% {
+      transform: translateY(calc(var(--sheet-parallax) * 0.064));
+    }
+    40% {
+      transform: translateY(calc(var(--sheet-parallax) * 0.008));
+    }
+    50% {
+      transform: translateY(0);
+    }
+    60% {
+      transform: translateY(calc(var(--sheet-parallax) * -0.008));
+    }
+    70% {
+      transform: translateY(calc(var(--sheet-parallax) * -0.064));
+    }
+    80% {
+      transform: translateY(calc(var(--sheet-parallax) * -0.216));
+    }
+    90% {
+      transform: translateY(calc(var(--sheet-parallax) * -0.512));
+    }
+    100% {
+      transform: translateY(calc(var(--sheet-parallax) * -1));
+    }
+  }
 
   @keyframes width-expand {
     from {

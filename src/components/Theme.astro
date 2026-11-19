@@ -5,15 +5,16 @@ import { getColorScale } from '@/utils/geColorScale'
 type Props = {
   firstColor?: string
   secondColor?: string
+  keepHue?: boolean
 }
 
-const { firstColor, secondColor } = Astro.props
+const { firstColor, secondColor, keepHue = false } = Astro.props
 
 const firstColorWithFallback = firstColor ?? FALLBACK_COLOR_FIRST
 const secondColorWithFallback = secondColor ?? FALLBACK_COLOR_SECOND
 
-const colorBrandFirstScale = getColorScale(firstColorWithFallback, 'color-brand-first')
-const colorBrandSecondScale = getColorScale(secondColorWithFallback, 'color-brand-second')
+const colorBrandFirstScale = getColorScale(firstColorWithFallback, 'color-brand-first', keepHue)
+const colorBrandSecondScale = getColorScale(secondColorWithFallback, 'color-brand-second', keepHue)
 ---
 
 {
