@@ -2,6 +2,7 @@ import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
 import { MarkdownInput } from '../components/Markdown'
+import { imageUi } from '../imageUi'
 
 export const EventsCollection: Collection = {
   name: 'events',
@@ -47,6 +48,7 @@ export const EventsCollection: Collection = {
     {
       type: 'image',
       name: 'images',
+      ui: imageUi,
       label: 'Fotky',
       list: true,
     },

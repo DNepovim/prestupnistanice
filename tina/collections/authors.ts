@@ -2,6 +2,7 @@ import slugify from '@sindresorhus/slugify'
 import type { Collection } from 'tinacms'
 
 import { MarkdownInput } from '../components/Markdown'
+import { imageUi } from '../imageUi'
 
 export const AuthorsCollection: Collection = {
   name: 'authors',
@@ -81,7 +82,7 @@ export const AuthorsCollection: Collection = {
         },
       ],
     },
-    { type: 'image', name: 'image', label: 'Fotka' },
+    { type: 'image', name: 'image', ui: imageUi, label: 'Fotka' },
     { type: 'string', name: 'claim', label: 'Úvod' },
     {
       type: 'boolean',

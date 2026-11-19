@@ -3,6 +3,7 @@ import type { Collection } from 'tinacms'
 
 import { getSlugFromPath } from '../../src/utils/getSlugFromPath'
 import { MarkdownInput } from '../components/Markdown'
+import { imageUi } from '../imageUi'
 
 type BookAuthorFormValue = {
   author: string
@@ -158,18 +159,21 @@ export const BooksCollection: Collection = {
     {
       type: 'image',
       name: 'cover',
+      ui: imageUi,
       label: 'Fotka knihy',
       description: 'Malý náhled ve výpisech knih. Když chybí, použije se obálka.',
     },
     {
       type: 'image',
       name: 'coverImage',
+      ui: imageUi,
       label: 'Obálka',
       description: 'Zobrazuje se na detailu knihy. Když chybí, použije se fotka knihy.',
     },
     {
       type: 'image',
       name: 'coverTop',
+      ui: imageUi,
       label: 'Fotografie knihy (široká)',
       description:
         'Zobrazí se přes celou šířku nad textem. Bez ní se obálka ukáže vedle textu.',
@@ -177,6 +181,7 @@ export const BooksCollection: Collection = {
     {
       type: 'image',
       name: 'samplePages',
+      ui: imageUi,
       label: 'Ukázka z knihy (strany)',
       description:
         'Jednotlivé strany v pořadí, nejlépe WebP nebo PNG, cca 1100 px na šířku.',

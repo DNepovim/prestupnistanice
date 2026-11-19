@@ -33,6 +33,10 @@ export default defineConfig({
     plugins: [...tailwindcss()],
   },
 
+  redirects: {
+    '/admin': '/admin/index.html',
+  },
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
