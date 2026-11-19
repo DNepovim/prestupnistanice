@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+
+import Theme from '@/components/Theme.astro'
+import { routes } from '@/routes'
+
+type Side = 'prev' | 'next'
+type Corner = 'tl' | 'tr' | 'bl' | 'br'
+
+type Props = {
+  side: Side
+  book?: CollectionEntry<'book'>
+  slug?: string
+}
+
+const SIDE_CLASSES = {
+  prev: 'right-[calc(100%+2*var(--mk-s)+0.5rem)]',
+  next: 'left-[calc(100%+2*var(--mk-s)+0.5rem)]',
+} as const satisfies Record<Side, string>
+
+const SIDE_SLUG_CLASSES = {
+  prev: '-right-(--mk-h) translate-x-1/2',
+  next: '-left-(--mk-h) -translate-x-1/2 rotate-180',
+} as const satisfies Record<Side, string>
+
+const SIDE_CORNERS = {
+  prev: ['tr', 'br'],
+  next: ['tl', 'bl'],
+} as const satisfies Record<Side, readonly Corner[]>
+
+const CORNER_CLASSES = {
+  tl: '-top-(--mk-s) -left-(--mk-s)',
+  tr: '-top-(--mk-s) -right-(--mk-s) -scale-x-100',
+  bl: '-bottom-(--mk-s) -left-(--mk-s) -scale-y-100',
+  br: '-right-(--mk-s) -bottom-(--mk-s) -scale-100',
+} as const satisfies Record<Corner, string>
+
+const { side, book, slug } = Astro.props
+
+const Tag = book ? 'a' : 'div'
+---
+
+<Theme firstColor={book?.data.color} secondColor={book?.data.bgColor} keepHue>
+  <Tag
+    href={book ? routes.books.detail(book.data.slug) : undefined}
+    aria-label={book?.data.title}
+    data-slide={book ? side : undefined}
+    class:list={[
+      'hero-neighbour group absolute top-0 hidden aspect-[5/2] w-full min-xl:block',
+      !book && 'pointer-events-none',
+      SIDE_CLASSES[side],
+    ]}
+  >
+    {
+      SIDE_CORNERS[side].map((corner) => (
+        <span
+          aria-hidden="true"
+          class:list={[
+            'text-brand-second-500/90 pointer-events-none absolute size-(--mk-s)',
+            'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+            'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+            CORNER_CLASSES[corner],
+          ]}
+        />
+      ))
+    }
+    {
+      slug && (
+        <div
+          aria-hidden="true"
+          class:list={[
+            'pointer-events-none absolute top-4 bottom-4 w-6',
+            SIDE_SLUG_CLASSES[side],
+          ]}
+        >
+          <span class="font-alt text-brand-second-500 block max-h-full w-6 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
+            {slug}
+          </span>
+        </div>
+      )
+    }
+    <div
+      aria-hidden="true"
+      class="bg-brand-first-500 absolute inset-0 overflow-hidden opacity-50 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none"
+    >
+      {
+        book?.data.coverTop && (
+          <Image
+            alt=""
+            src={book.data.coverTop}
+            width={1200}
+            widths={[800, 1200]}
+            sizes="30rem"
+            loading="lazy"
+            class="size-full max-w-none object-cover"
+          />
+        )
+      }
+    </div>
+  </Tag>
+</Theme>
+
+<style>
+  @supports (animation-timeline: scroll()) {
+    @keyframes hero-neighbour-fade-out {
+      to {
+        opacity: 0;
+      }
+    }
+
+    .hero-neighbour {
+      animation: hero-neighbour-fade-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 16rem;
+    }
+  }
+</style>

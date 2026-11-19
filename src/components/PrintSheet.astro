@@ -10,6 +10,7 @@ type Props = {
   regs?: Registration[]
   slug?: string
   sideSlug?: string
+  revealSideSlugOnScroll?: boolean
   cutAtBottom?: boolean
   bare?: boolean
   class?: HTMLAttributes<'section'>['class']
@@ -62,6 +63,7 @@ const {
   regs = [],
   slug,
   sideSlug,
+  revealSideSlugOnScroll = false,
   cutAtBottom = false,
   bare = false,
   class: className,
@@ -125,7 +127,10 @@ const {
       sideSlug && (
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute top-4 bottom-4 -left-(--mk-h) hidden w-6 -translate-x-1/2 min-md:block"
+          class:list={[
+            'pointer-events-none absolute top-4 bottom-4 -left-(--mk-h) hidden w-6 -translate-x-1/2 min-md:block',
+            revealSideSlugOnScroll && 'side-slug-reveal',
+          ]}
         >
           <span class="font-alt text-brand-second-200 sticky top-6 block max-h-[calc(100svh-3rem)] w-6 rotate-180 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
             {sideSlug}
@@ -149,3 +154,19 @@ const {
     <div class:list={[!bare && 'bg-white', 'text-gray-900']}><slot /></div>
   </section>
 </div>
+
+<style>
+  @supports (animation-timeline: scroll()) {
+    @keyframes side-slug-reveal {
+      from {
+        opacity: 0;
+      }
+    }
+
+    .side-slug-reveal {
+      animation: side-slug-reveal linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 16rem;
+    }
+  }
+</style>

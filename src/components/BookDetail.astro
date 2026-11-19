@@ -18,6 +18,7 @@ import BooksIndex from '@/components/BooksIndex.astro'
 import CmykBar from '@/components/CmykBar.astro'
 import ColorBar from '@/components/ColorBar.astro'
 import FloatingImage from '@/components/FloatingImage.svelte'
+import HeroNeighbour from '@/components/HeroNeighbour.astro'
 import Markdown from '@/components/Markdown.astro'
 import PrintSheet from '@/components/PrintSheet.astro'
 import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
@@ -202,6 +203,36 @@ const fileSlug = authorsLine ? `${orderedTitle} · ${authorsLine}` : orderedTitl
 const dimensions =
   book.width && book.height ? `${String(book.width)} × ${String(book.height)} mm` : ''
 
+const orderedBooks = (await getCollection('book')).toSorted(
+  (a, b) => a.data.order - b.data.order,
+)
+
+const bookIndex = orderedBooks.findIndex((b) => b.data.slug === slug)
+
+const getNeighbourSlug = async (neighbour: CollectionEntry<'book'> | undefined) => {
+  if (!neighbour) {
+    return undefined
+  }
+  const neighbourAuthors = (
+    await Promise.all(
+      neighbour.data.authors
+        .filter((a) => a.isMain)
+        .map(async (a) => getEntry('author', a.slug.id)),
+    )
+  ).filter(isDefined)
+  const neighbourAuthorsLine = joinWords(neighbourAuthors.map((a) => getFullName(a.data)))
+  const neighbourOrderedTitle = `${String(neighbour.data.order)}. ${neighbour.data.title}`
+  return neighbourAuthorsLine
+    ? `${neighbourOrderedTitle} · ${neighbourAuthorsLine}`
+    : neighbourOrderedTitle
+}
+
+const prevBook = bookIndex > 0 ? orderedBooks[bookIndex - 1] : undefined
+const nextBook = bookIndex >= 0 ? orderedBooks[bookIndex + 1] : undefined
+
+const prevSlug = await getNeighbourSlug(prevBook)
+const nextSlug = await getNeighbourSlug(nextBook)
+
 const sideSlug = [
   String(book.date),
   book.pagesCount ? `${String(book.pagesCount)} stran` : '',
@@ -223,7 +254,7 @@ const sideSlug = [
   firstColor={book.color}
   secondColor={book.bgColor}
 >
-  <div class="pt-4">
+  <div class="overflow-x-clip pt-4 [view-transition-name:book-sheets]">
     {
       book.coverTop && (
         <PrintSheet edge={getEdge('hero')} regs={['t']} slug={fileSlug} cutAtBottom>
@@ -244,6 +275,8 @@ const sideSlug = [
             class="absolute top-[calc(100%+3mm+0.5rem)] left-0"
           />
           <CmykBar class="absolute top-[calc(100%+3mm+0.5rem)] right-0" />
+          <HeroNeighbour side="prev" book={prevBook} slug={prevSlug} />
+          <HeroNeighbour side="next" book={nextBook} slug={nextSlug} />
         </PrintSheet>
       )
     }
@@ -252,7 +285,16 @@ const sideSlug = [
       regs={['r']}
       slug={book.coverTop ? undefined : fileSlug}
       sideSlug={sideSlug}
+      revealSideSlugOnScroll={!book.coverTop}
     >
+      {
+        !book.coverTop && (
+          <>
+            <HeroNeighbour side="prev" book={prevBook} slug={prevSlug} />
+            <HeroNeighbour side="next" book={nextBook} slug={nextSlug} />
+          </>
+        )
+      }
       <div
         class="relative grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem] px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_10rem] min-md:px-[2.6rem] min-md:py-[2.5rem] min-lg:grid-cols-[minmax(0,1fr)_15.5rem]"
       >
@@ -312,7 +354,7 @@ const sideSlug = [
           }
         </header>
         <aside
-          class="flex flex-col items-start max-md:my-6 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-6 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
+          class="min-md:animate-sticky-ease flex flex-col items-start max-md:my-6 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-6 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
         >
           <div
             data-reveal-on-stick={book.coverTop ? '' : undefined}
@@ -463,7 +505,9 @@ const sideSlug = [
             </h2>
             <BooksIndex books={otherCategoryBooks} />
             <div class="mt-10 pr-7 text-center">
-              <ArrowLink tone="first" href={routes.books.list()}>Všechny knihy</ArrowLink>
+              <ArrowLink tone="first" href={routes.books.list()}>
+                Všechny knihy
+              </ArrowLink>
             </div>
           </div>
         </PrintSheet>
@@ -475,20 +519,46 @@ const sideSlug = [
 <script>
   const STICK_OFFSET_PX = 24
 
-  const sentinel = document.querySelector('[data-stick-sentinel]')
-  const target = document.querySelector('[data-reveal-on-stick]')
+  const observeStick = () => {
+    const sentinel = document.querySelector('[data-stick-sentinel]')
+    const target = document.querySelector('[data-reveal-on-stick]')
 
-  if (sentinel && target) {
-    new IntersectionObserver(
-      ([entry]) => {
-        if (entry) {
-          target.toggleAttribute(
-            'data-stuck',
-            !entry.isIntersecting && entry.boundingClientRect.top < STICK_OFFSET_PX + 1,
-          )
-        }
-      },
-      { rootMargin: `-${String(STICK_OFFSET_PX + 1)}px 0px 0px 0px` },
-    ).observe(sentinel)
+    if (sentinel && target) {
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry) {
+            target.toggleAttribute(
+              'data-stuck',
+              !entry.isIntersecting && entry.boundingClientRect.top < STICK_OFFSET_PX + 1,
+            )
+          }
+        },
+        { rootMargin: `-${String(STICK_OFFSET_PX + 1)}px 0px 0px 0px` },
+      ).observe(sentinel)
+    }
   }
+
+  document.addEventListener('astro:page-load', observeStick)
+
+  document.addEventListener('astro:before-preparation', (event) => {
+    const slide =
+      event.sourceElement instanceof HTMLElement
+        ? event.sourceElement.closest<HTMLElement>('[data-slide]')?.dataset.slide
+        : undefined
+
+    if (slide) {
+      document.documentElement.dataset.slide = slide
+    }
+  })
+
+  document.addEventListener('astro:before-swap', (event) => {
+    const { slide } = document.documentElement.dataset
+
+    if (slide) {
+      event.newDocument.documentElement.dataset.slide = slide
+      void event.viewTransition.finished.then(() => {
+        delete document.documentElement.dataset.slide
+      })
+    }
+  })
 </script>
