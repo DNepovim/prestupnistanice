@@ -3,10 +3,11 @@ import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { getEntries } from 'astro:content'
 
+import AddToCartButton from '@/components/AddToCartButton.svelte'
+import FloatingImage from '@/components/FloatingImage.svelte'
 import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
 import { FALLBACK_COLOR_FIRST } from '@/consts'
 import { routes } from '@/routes'
-import { joinWords } from '@/utils/joinWords'
 import { tp } from '@/utils/tp'
 
 type Props = {
@@ -15,7 +16,25 @@ type Props = {
 
 const PREVIEW_WIDTH = 336
 
-const { books } = Astro.props
+const isOnSale = (book: CollectionEntry<'book'>) =>
+  !book.data.isUpcoming && book.data.price !== undefined && (book.data.stock ?? 0) > 0
+
+const priceFormat = new Intl.NumberFormat('cs-CZ', {
+  style: 'currency',
+  currency: 'CZK',
+  maximumFractionDigits: 0,
+})
+
+const getSeparator = (index: number, total: number) => {
+  if (index === 0) {
+    return ''
+  }
+  return index === total - 1 ? ' a ' : ', '
+}
+
+const { books: unsortedBooks } = Astro.props
+
+const books = unsortedBooks.toSorted((a, b) => b.data.order - a.data.order)
 
 const items = await Promise.all(
   books.map(async (b) => {
@@ -26,38 +45,99 @@ const items = await Promise.all(
     return {
       book: b,
       preview: preview.src,
-      authors: joinWords(authors.map((a) => `${a.data.firstname} ${a.data.surname}`)),
+      authors: authors.map((a) => ({
+        slug: a.data.slug,
+        name: `${a.data.firstname} ${a.data.surname}`,
+        image: a.data.image?.src,
+      })),
     }
   }),
 )
 ---
 
-<ul class="border-brand-first-300/60 border-t">
+<ul class="border-brand-first-300/60 border-t border-dashed">
   {
     items.map(({ book, preview, authors }) => (
-      <li>
-        <a
-          href={routes.books.detail(book.data.slug)}
-          data-preview={preview}
-          style={`--c1:${book.data.color ?? FALLBACK_COLOR_FIRST}`}
-          class="group/row border-brand-first-300/60 grid grid-cols-[2rem_minmax(0,1fr)_3rem] items-baseline gap-x-4 gap-y-1 border-b px-1 py-3 transition-colors hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--c1) min-md:grid-cols-[2.6rem_minmax(0,1fr)_minmax(0,12rem)_3.2rem_4.4rem]"
-        >
-          <span class="font-head text-brand-first-700 text-base leading-none font-extrabold oldstyle-nums">
-            {book.data.order}.
-          </span>
-          <span class="font-head text-[1.3rem] leading-[1.1] font-extrabold transition-colors group-hover/row:text-(--c1)">
+      <li
+        style={`--c1:${book.data.color ?? FALLBACK_COLOR_FIRST}`}
+        class="group/row border-brand-first-300/60 relative grid grid-cols-[2.4rem_minmax(0,1fr)_auto] items-start gap-x-4 border-b border-dashed px-1 py-3 transition-colors hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)]"
+      >
+        <span class="font-head text-brand-first-700 text-right text-[1.3rem] leading-[1.1] font-extrabold oldstyle-nums">
+          {book.data.order}.
+        </span>
+        <span class="min-w-0">
+          <a
+            href={routes.books.detail(book.data.slug)}
+            data-preview={preview}
+            class="font-head text-[1.3rem] leading-[1.1] font-extrabold transition-colors group-hover/row:text-(--c1) after:absolute after:inset-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--c1)"
+          >
             {tp(book.data.title)}
+          </a>
+          <span class="font-alt relative z-10 mt-1 block text-[0.95rem] leading-tight text-gray-700 italic">
+            {authors.map((author, index) => (
+              <>
+                {getSeparator(index, authors.length)}
+                <FloatingImage client:visible src={author.image} alt={author.name}>
+                  <a
+                    class="transition-colors hover:text-black"
+                    href={routes.authors.detail(author.slug)}
+                  >
+                    {author.name}
+                  </a>
+                </FloatingImage>
+              </>
+            ))}
+            <span class="text-brand-first-700 mx-1.5 not-italic" aria-hidden="true">
+              ·
+            </span>
+            <span class="font-alt text-brand-first-700 text-[0.7rem] tracking-[0.06em] uppercase not-italic">
+              {book.data.isUpcoming
+                ? (book.data.releaseNote ?? 'připravujeme')
+                : book.data.date}
+            </span>
           </span>
-          <span class="text-[0.88rem] leading-tight text-gray-700 italic max-md:col-span-2 max-md:col-start-2 max-md:row-start-2 md:col-auto">
-            {authors}
-          </span>
-          <span class="font-alt text-brand-first-700 text-right text-[0.66rem] leading-none tracking-[0.06em] uppercase">
-            {book.data.date}
-          </span>
-          <span class="font-alt text-brand-first-700 text-right text-[0.66rem] leading-none tracking-[0.06em] uppercase max-md:hidden">
-            {book.data.pagesCount ? `${String(book.data.pagesCount)} s.` : ''}
-          </span>
-        </a>
+        </span>
+        <span class="font-alt flex flex-col items-end gap-2">
+          {isOnSale(book) && book.data.price !== undefined && (
+            <span class="font-head text-[1.6rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]">
+              {priceFormat.format(book.data.price)}
+            </span>
+          )}
+          {isOnSale(book) && (
+            <AddToCartButton
+              client:visible
+              slug={book.data.slug}
+              title={book.data.title}
+            />
+          )}
+          {isOnSale(book) && (
+            <span class="text-brand-first-700 text-[0.7rem] leading-none tracking-[0.04em]">
+              Skladem {book.data.stock} ks
+            </span>
+          )}
+          {!book.data.isUpcoming && !isOnSale(book) && book.data.kosmasUrl && (
+            <a
+              href={book.data.kosmasUrl}
+              target="_blank"
+              rel="noopener"
+              class="group font-head text-brand-first-700 relative z-10 inline-block pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
+            >
+              Kup na Kosmasu
+              <span
+                aria-hidden="true"
+                class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
+              />
+              <span
+                aria-hidden="true"
+                class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
+              />
+              <span class="sr-only">(otevře se v novém okně)</span>
+            </a>
+          )}
+          {!book.data.isUpcoming && !isOnSale(book) && !book.data.kosmasUrl && (
+            <span class="text-[0.75rem] leading-snug text-gray-700">Není skladem</span>
+          )}
+        </span>
       </li>
     ))
   }

@@ -1,14 +1,13 @@
 ---
 import { Image } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
-import { isDefined } from 'narrowland'
 
-import Book from '@/components/Book.astro'
-import BooksGrid from '@/components/BooksGrid.astro'
+import BooksContactSheet from '@/components/BooksContactSheet.astro'
 import Markdown from '@/components/Markdown.astro'
 import PageTitle from '@/components/PageTitle.astro'
 import Section from '@/components/Section.astro'
 import Layout from '@/layouts/Layout.astro'
+import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
 import { tp } from '@/utils/tp'
 
@@ -76,15 +75,16 @@ const books = await getCollection('book', ({ data }) =>
 
     {entry.body && <Markdown class="text-[1.125rem]" text={entry.body} />}
   </Section>
-  <Section className="clear-both"
-    >{
+  <Section className="clear-both">
+    {
       books.length > 0 && (
-        <BooksGrid>
-          {books.filter(isDefined).map((book) => (
-            <Book slug={book.data.slug} />
-          ))}
-        </BooksGrid>
+        <>
+          <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
+            Knihy {getAuthorsSecondName(author)}
+          </h2>
+          <BooksContactSheet books={books} />
+        </>
       )
-    }</Section
-  >
+    }
+  </Section>
 </Layout>

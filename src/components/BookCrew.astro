@@ -23,14 +23,11 @@ const { people } = Astro.props
 {
   isNonEmptyArray(people) && (
     <div>
-      <p class="font-alt text-brand-first-700 mb-7 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
-        Kdo na knize pracoval
-      </p>
       <ol class="flex flex-col gap-5">
         {people.map((person) => (
           <li class="group group/person flex items-center gap-4">
             <div class="after:border-brand-first-500 relative shrink-0 after:absolute after:top-full after:left-1/2 after:h-5 after:border-l group-last:after:hidden">
-              <Portrait image={person.image} size={112} revealOnHover class="w-14" />
+              <Portrait image={person.image} size={80} revealOnHover class="w-10" />
             </div>
             <div class="min-w-0">
               <p class="font-alt text-brand-first-700 text-[0.85rem] leading-none tracking-[0.04em]">

@@ -1,14 +1,15 @@
 ---
+import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import { getCollection, getEntries, getEntry } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 import { isDefined, isNonEmptyArray } from 'narrowland'
 
 import BookAuthor from '@/components/BookAuthor.astro'
 import BookBuy from '@/components/BookBuy.svelte'
 import BookCrew from '@/components/BookCrew.astro'
+import BookGallery from '@/components/BookGallery.astro'
 import BookMeta from '@/components/BookMeta.astro'
-import BookPagination from '@/components/BookPagination.astro'
 import BookReviews from '@/components/BookReviews.astro'
 import BookSample from '@/components/BookSample.astro'
 import BooksContactSheet from '@/components/BooksContactSheet.astro'
@@ -31,24 +32,18 @@ type Props = {
   slug: string
 }
 
-type SheetKey = 'hero' | 'text' | 'sample' | 'meta' | 'turn' | 'author' | 'category'
+type SheetKey = 'hero' | 'text' | 'sample' | 'gallery' | 'meta' | 'author' | 'category'
 type Category = CollectionEntry<'book'>['data']['category']
+type Role = CollectionEntry<'book'>['data']['authors'][number]['role'][number]
+type Contributor = { slug: string; isMain: boolean; col?: string; roles: Role[] }
 
-const CATEGORY_LABELS = {
-  forKids: 'Pro děti',
-  philosophy: 'Filosofie',
-  novel: 'Román',
-  poetry: 'Poesie',
-} as const satisfies Record<Category, string>
+const getCategoryLabel = (category: Category) =>
+  CATEGORIES[category].name.charAt(0).toUpperCase() + CATEGORIES[category].name.slice(1)
 
 const NON_PRINTING_MARK =
   'font-alt text-brand-first-700/45 align-baseline font-normal select-none'
 
 const { slug } = Astro.props
-
-const books = (await getCollection('book')).toSorted(
-  (a, b) => b.data.order - a.data.order,
-)
 
 const entry = await getEntry('book', slug)
 
@@ -56,19 +51,32 @@ if (!entry) {
   return
 }
 
-const currentBookIndex = books.findIndex((b) => b.data.slug === slug)
-const prevBook = books[currentBookIndex - 1]
-const nextBook = books[currentBookIndex + 1]
-
 const { data: book } = entry
 
-const mainAuthors = await getEntries(
-  book.authors.filter((b) => b.isMain).map((b) => b.slug),
+const contributors = Object.values(
+  book.authors.reduce<Record<string, Contributor>>((acc, a) => {
+    const existing = acc[a.slug.id]
+    return {
+      ...acc,
+      [a.slug.id]: {
+        slug: a.slug.id,
+        isMain: existing?.isMain === true || a.isMain === true,
+        col: existing?.col ?? a.col,
+        roles: [...new Set([...(existing?.roles ?? []), ...a.role])],
+      },
+    }
+  }, {}),
 )
+
+const mainContributors = contributors.filter((c) => c.isMain)
+
+const mainAuthors = (
+  await Promise.all(mainContributors.map(async (c) => getEntry('author', c.slug)))
+).filter(isDefined)
 
 const mainAuthorsWithRoles = mainAuthors.map((a) => ({
   author: a,
-  roles: book.authors.find((ba) => ba.slug.id === a.data.slug)?.role ?? [],
+  roles: mainContributors.find((c) => c.slug === a.id)?.roles ?? [],
 }))
 
 const mainAuthorSlug = book.authors.find((a) => a.isMain && a.role.includes('author'))
@@ -103,16 +111,16 @@ const getFullName = (a: CollectionEntry<'author'>['data']) =>
 
 const people = (
   await Promise.all(
-    book.authors
-      .filter((a) => !a.isMain)
+    contributors
+      .filter((c) => !c.isMain)
       .map(async (a) => {
-        const person = await getEntry('author', a.slug.id)
+        const person = await getEntry('author', a.slug)
         if (!person) {
           return undefined
         }
-        const roles = ROLE_ORDER.filter((role) => a.role.includes(role))
+        const roles = ROLE_ORDER.filter((role) => a.roles.includes(role))
         return {
-          slug: a.slug.id,
+          slug: a.slug,
           name: getFullName(person.data),
           image: person.data.image,
           roles: joinWords(
@@ -129,25 +137,35 @@ const people = (
   .filter(isDefined)
   .toSorted((a, b) => a.order - b.order)
 
+const asideCover = book.coverImage ?? book.cover
+
+const galleryModules = import.meta.glob<ImageMetadata>(
+  '/src/content/images/books/*/gallery/*.{jpg,jpeg,png,webp}',
+  { eager: true, import: 'default' },
+)
+
+const galleryImages = Object.entries(galleryModules)
+  .filter(([path]) => path.includes(`/books/${slug}/gallery/`))
+  .toSorted(([a], [b]) => a.localeCompare(b, 'cs', { numeric: true }))
+  .map(([, image]) => image)
+
 const samplePages = book.samplePages ?? []
 
-const hasMeta =
-  !book.isUpcoming &&
-  [
-    book.date,
-    book.pagesCount,
-    book.width && book.height,
-    book.paper,
-    book.font,
-    book.isbn,
-  ].some(Boolean)
+const hasMeta = [
+  book.date,
+  book.pagesCount,
+  book.width && book.height,
+  book.paper,
+  book.font,
+  book.isbn,
+].some(Boolean)
 
 const candidateSheetKeys: (SheetKey | undefined)[] = [
   book.coverTop ? 'hero' : undefined,
   'text',
   isNonEmptyArray(samplePages) ? 'sample' : undefined,
+  isNonEmptyArray(galleryImages) ? 'gallery' : undefined,
   hasMeta || isNonEmptyArray(people) ? 'meta' : undefined,
-  'turn',
   mainAuthor && isNonEmptyArray(authorsBooks) ? 'author' : undefined,
   isNonEmptyArray(otherCategoryBooks) ? 'category' : undefined,
 ]
@@ -184,7 +202,6 @@ const dimensions =
   book.width && book.height ? `${String(book.width)} × ${String(book.height)} mm` : ''
 
 const sideSlug = [
-  orderedTitle,
   String(book.date),
   book.pagesCount ? `${String(book.pagesCount)} stran` : '',
   dimensions,
@@ -207,21 +224,23 @@ const sideSlug = [
     {
       book.coverTop && (
         <PrintSheet edge={getEdge('hero')} regs={['t']} slug={fileSlug} cutAtBottom>
-          <Image
-            alt=""
-            src={book.coverTop}
-            width={2400}
-            widths={[1024, 1600, 2400]}
-            sizes="(min-width: 72rem) 62rem, 100vw"
-            loading="eager"
-            class="aspect-[5/2] w-full object-cover"
-          />
+          <div class="relative aspect-[5/2] w-full">
+            <Image
+              alt=""
+              src={book.coverTop}
+              width={2400}
+              widths={[1024, 1600, 2400]}
+              sizes="(min-width: 72rem) 62rem, 100vw"
+              loading="eager"
+              class="absolute -inset-[3mm] size-[calc(100%+6mm)] max-w-none object-cover"
+            />
+          </div>
           <ColorBar
             from={book.color ?? FALLBACK_COLOR_FIRST}
             to={book.bgColor ?? FALLBACK_COLOR_SECOND}
-            class="absolute top-[calc(100%+0.5rem)] left-0"
+            class="absolute top-[calc(100%+3mm+0.5rem)] left-0"
           />
-          <CmykBar class="absolute top-[calc(100%+0.5rem)] right-0" />
+          <CmykBar class="absolute top-[calc(100%+3mm+0.5rem)] right-0" />
         </PrintSheet>
       )
     }
@@ -232,17 +251,26 @@ const sideSlug = [
       sideSlug={sideSlug}
     >
       <div
-        class="grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem] px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_10rem] min-md:px-[2.6rem] min-md:py-[2.5rem] min-lg:grid-cols-[minmax(0,1fr)_15.5rem]"
+        class="relative grid grid-cols-[minmax(0,1fr)] gap-x-[2.6rem] px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_10rem] min-md:px-[2.6rem] min-md:py-[2.5rem] min-lg:grid-cols-[minmax(0,1fr)_15.5rem]"
       >
+        {
+          book.coverTop && (
+            <div
+              aria-hidden="true"
+              data-stick-sentinel
+              class="pointer-events-none absolute top-[2.5rem] left-0 h-px w-px"
+            />
+          )
+        }
         <header class="[container-type:inline-size] min-md:col-start-1">
           <p
             class="font-alt text-brand-first-700 mb-[1.3rem] text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase"
           >
-            {CATEGORY_LABELS[book.category]}
+            {getCategoryLabel(book.category)}
           </p>
           <h1
             style={`--title-w:${titleFit.widthEm.toFixed(3)}`}
-            class="font-head [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em] text-black"
+            class="font-head text-brand-first-500 [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em]"
           >
             {
               titleFit.lines.map((line, index) => (
@@ -281,24 +309,38 @@ const sideSlug = [
           }
         </header>
         <aside
-          class="flex flex-col items-start gap-6 max-md:my-6 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-6 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
+          class="flex flex-col items-start max-md:my-6 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-6 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
         >
-          <div class="w-full max-w-[16rem]">
-            <Image
-              alt={book.title}
-              src={book.coverImage ?? book.cover}
-              width={560}
-              class="h-auto w-full shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)]"
-            />
-            {
-              !book.coverTop && (
-                <ColorBar
-                  from={book.color ?? FALLBACK_COLOR_FIRST}
-                  to={book.bgColor ?? FALLBACK_COLOR_SECOND}
-                  class="mt-4"
+          <div
+            data-reveal-on-stick={book.coverTop ? '' : undefined}
+            class:list={[
+              'grid w-full max-w-[16rem] grid-rows-[1fr]',
+              book.coverTop
+                ? 'min-md:grid-rows-[0fr] min-md:opacity-0 min-md:transition-[grid-template-rows,opacity] min-md:duration-500 min-md:ease-out min-md:data-stuck:grid-rows-[1fr] min-md:data-stuck:opacity-100 min-md:motion-reduce:transition-none'
+                : '',
+            ]}
+          >
+            <div class="min-h-0 overflow-y-clip">
+              <div class="pb-7">
+                <Image
+                  alt={book.title}
+                  src={asideCover}
+                  width={560}
+                  loading="eager"
+                  style={`aspect-ratio:${String(asideCover.width)}/${String(asideCover.height)}`}
+                  class="h-auto w-full shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)]"
                 />
-              )
-            }
+                {
+                  !book.coverTop && (
+                    <ColorBar
+                      from={book.color ?? FALLBACK_COLOR_FIRST}
+                      to={book.bgColor ?? FALLBACK_COLOR_SECOND}
+                      class="mt-4"
+                    />
+                  )
+                }
+              </div>
+            </div>
           </div>
           <BookBuy
             client:load
@@ -360,6 +402,15 @@ const sideSlug = [
       )
     }
     {
+      isNonEmptyArray(galleryImages) && (
+        <PrintSheet edge={getEdge('gallery')} regs={['r']}>
+          <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+            <BookGallery images={galleryImages} title={book.title} />
+          </div>
+        </PrintSheet>
+      )
+    }
+    {
       sheetKeys.includes('meta') && (
         <PrintSheet edge={getEdge('meta')} regs={['r', 'b']}>
           <div class="grid gap-10 px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_auto] min-md:px-[2.6rem] min-md:py-[2.5rem]">
@@ -384,28 +435,6 @@ const sideSlug = [
         </PrintSheet>
       )
     }
-    <PrintSheet edge={getEdge('turn')} slug={`${book.slug}_navigace.pdf`}>
-      <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
-        <BookPagination
-          prev={prevBook
-            ? {
-                slug: prevBook.data.slug,
-                title: prevBook.data.title,
-                order: prevBook.data.order,
-                cover: prevBook.data.cover,
-              }
-            : undefined}
-          next={nextBook
-            ? {
-                slug: nextBook.data.slug,
-                title: nextBook.data.title,
-                order: nextBook.data.order,
-                cover: nextBook.data.cover,
-              }
-            : undefined}
-        />
-      </div>
-    </PrintSheet>
     {
       mainAuthor && isNonEmptyArray(authorsBooks) && (
         <PrintSheet
@@ -413,9 +442,6 @@ const sideSlug = [
           slug={`od-autora_${mainAuthor.data.slug}.pdf`}
         >
           <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
-            <p class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase">
-              Od stejného autora
-            </p>
             <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
               Další knihy od {getAuthorsSecondName(mainAuthor.data)}
             </h2>
@@ -432,9 +458,6 @@ const sideSlug = [
           slug={`kategorie_${book.category}.pdf`}
         >
           <div class="px-[0.9rem] py-8 min-md:px-[2.6rem]">
-            <p class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-[1.2] tracking-[0.1em] uppercase">
-              Ve stejné kategorii
-            </p>
             <h2 class="font-head mb-7 text-[1.9rem] leading-[1.1] font-extrabold text-balance">
               Další knihy {CATEGORIES[book.category].name}
             </h2>
@@ -445,3 +468,24 @@ const sideSlug = [
     }
   </div>
 </Layout>
+
+<script>
+  const STICK_OFFSET_PX = 24
+
+  const sentinel = document.querySelector('[data-stick-sentinel]')
+  const target = document.querySelector('[data-reveal-on-stick]')
+
+  if (sentinel && target) {
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry) {
+          target.toggleAttribute(
+            'data-stuck',
+            !entry.isIntersecting && entry.boundingClientRect.top < STICK_OFFSET_PX + 1,
+          )
+        }
+      },
+      { rootMargin: `-${String(STICK_OFFSET_PX + 1)}px 0px 0px 0px` },
+    ).observe(sentinel)
+  }
+</script>

@@ -67,10 +67,18 @@
     {/if}
     <button
       type="button"
-      class="bg-brand-first-700 hover:bg-brand-first-800 px-5 py-3 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors"
+      class="group font-head text-brand-first-700 relative inline-block cursor-pointer pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
       on:click={addToCart}
     >
       Přidat do košíku
+      <span
+        aria-hidden="true"
+        class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
+      ></span>
+      <span
+        aria-hidden="true"
+        class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
+      ></span>
     </button>
     <p class="text-brand-first-700 text-[0.7rem] leading-none tracking-[0.04em]">
       Skladem {stock} ks
@@ -80,7 +88,7 @@
         href={kosmasUrl}
         target="_blank"
         rel="noopener"
-        class="text-[0.7rem] leading-none text-gray-600 underline underline-offset-2 hover:text-black"
+        class="text-[0.7rem] leading-none text-gray-600 hover:text-black"
       >
         Koupit na Kosmasu
         <span class="sr-only">(otevře se v novém okně)</span>
@@ -100,9 +108,17 @@
       href={kosmasUrl}
       target="_blank"
       rel="noopener"
-      class="bg-brand-first-700 hover:bg-brand-first-800 px-5 py-3 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors"
+      class="group font-head text-brand-first-700 relative inline-block pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
     >
-      Kup na Kosmasu →
+      Kup na Kosmasu
+      <span
+        aria-hidden="true"
+        class="border-current absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2"
+      ></span>
+      <span
+        aria-hidden="true"
+        class="bg-current absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
+      ></span>
       <span class="sr-only">(otevře se v novém okně)</span>
     </a>
   {:else}

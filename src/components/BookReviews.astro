@@ -2,6 +2,8 @@
 import type { CollectionEntry } from 'astro:content'
 import { isNonEmptyArray } from 'narrowland'
 
+import ReviewByline from '@/components/ReviewByline.astro'
+
 type Props = {
   reviews: CollectionEntry<'review'>[]
 }
@@ -17,17 +19,10 @@ const SOURCE_LABELS = {
 
 const LONG_REVIEW_LENGTH = 260
 
+const QUOTE_MARK =
+  "before:font-head before:text-brand-first-500 flex flex-col gap-3 before:float-left before:pr-1 before:text-[3.4em] before:leading-[0.7] before:font-extrabold before:content-['„']"
+
 const { reviews } = Astro.props
-
-const formatDate = (date: Date) =>
-  date.toLocaleDateString('cs-CZ', {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
-
-const getHost = (url: string) => new URL(url).host.replace(/^www\./, '')
 
 const toParagraphs = (body: string | undefined) =>
   (body ?? '')
@@ -44,7 +39,7 @@ const toParagraphs = (body: string | undefined) =>
         const paragraphs = toParagraphs(review.body)
         const isLong =
           paragraphs.length > 1 || (paragraphs[0]?.length ?? 0) > LONG_REVIEW_LENGTH
-        const inputId = `review-${review.id}`
+        const dialogId = `review-${review.id}`
 
         return (
           <li class="border-brand-first-500 relative border border-dashed px-8 pt-9 pb-6 max-sm:px-5">
@@ -59,19 +54,11 @@ const toParagraphs = (body: string | undefined) =>
             </span>
             {isNonEmptyArray(paragraphs) && (
               <div>
-                {isLong && (
-                  <input
-                    id={inputId}
-                    type="checkbox"
-                    class="peer sr-only"
-                    aria-label="Zobrazit celou recenzi"
-                  />
-                )}
                 <div
                   class:list={[
-                    "before:font-head before:text-brand-first-500 flex flex-col gap-3 before:float-left before:pr-1 before:text-[3.4em] before:leading-[0.7] before:font-extrabold before:content-['„']",
+                    QUOTE_MARK,
                     isLong
-                      ? 'text-[1rem] leading-[1.5] peer-not-checked:line-clamp-7'
+                      ? 'line-clamp-7 text-[1rem] leading-[1.5]'
                       : 'font-alt text-[1.15rem] leading-[1.5] italic',
                   ]}
                 >
@@ -80,41 +67,72 @@ const toParagraphs = (body: string | undefined) =>
                   ))}
                 </div>
                 {isLong && (
-                  <label
-                    for={inputId}
-                    class="font-alt text-brand-first-700 border-brand-first-500 peer-focus-visible:outline-brand-first-500 mt-4 inline-block cursor-pointer border-b pb-0.5 text-[0.7rem] leading-none font-semibold tracking-[0.06em] peer-checked:hidden peer-focus-visible:outline-2"
+                  <button
+                    type="button"
+                    data-review-open={dialogId}
+                    class="font-alt text-brand-first-700 border-brand-first-500 focus-visible:outline-brand-first-500 mt-4 inline-block cursor-pointer border-b pb-0.5 text-[0.7rem] leading-none font-semibold tracking-[0.06em] focus-visible:outline-2"
                   >
                     Číst celou recenzi
-                  </label>
+                  </button>
                 )}
               </div>
             )}
-            <p class="font-alt text-brand-first-700 mt-4 text-[0.65rem] leading-[1.4] tracking-[0.06em] uppercase">
-              <b class="font-semibold">{data.reviewer}</b>
-              {data.url && (
-                <>
-                  {' · '}
-                  <a
-                    href={data.url}
-                    target="_blank"
-                    rel="noopener"
-                    class="underline underline-offset-[0.15em]"
-                  >
-                    {getHost(data.url)}
-                    <span class="sr-only">(otevře se v novém okně)</span>
-                  </a>
-                </>
-              )}
-              {data.date && (
-                <>
-                  {' · '}
-                  <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
-                </>
-              )}
-            </p>
+            <ReviewByline review={review} />
+            {isLong && (
+              <dialog
+                id={dialogId}
+                data-review-dialog
+                aria-label={`Recenze: ${data.reviewer}`}
+                class="border-brand-first-500 bg-paper-fixed m-auto max-h-[85vh] w-[min(42rem,calc(100%-2rem))] overflow-y-auto overscroll-contain border border-dashed p-0 text-gray-900 backdrop:bg-black/50"
+              >
+                <div class="relative px-8 pt-9 pb-8 max-sm:px-5">
+                  <span class="font-alt text-brand-first-700 absolute top-3 left-8 text-[0.65rem] leading-snug font-semibold tracking-[0.08em] uppercase max-sm:left-5">
+                    {SOURCE_LABELS[data.source]}
+                  </span>
+                  <form method="dialog" class="absolute top-2 right-3">
+                    <button
+                      type="submit"
+                      aria-label="Zavřít recenzi"
+                      class="text-brand-first-700 hover:text-brand-first-500 focus-visible:outline-brand-first-500 cursor-pointer px-2 py-1 text-[1.2rem] leading-none focus-visible:outline-2"
+                    >
+                      <span aria-hidden="true">✕</span>
+                    </button>
+                  </form>
+                  <div class:list={[QUOTE_MARK, 'mt-4 text-[1rem] leading-[1.5]']}>
+                    {paragraphs.map((p) => (
+                      <p class="whitespace-pre-line">{p}</p>
+                    ))}
+                  </div>
+                  <ReviewByline review={review} />
+                </div>
+              </dialog>
+            )}
           </li>
         )
       })}
     </ul>
   )
 }
+
+<script>
+  document.addEventListener('click', (event) => {
+    const { target } = event
+    if (!(target instanceof Element)) {
+      return
+    }
+    const opener = target.closest<HTMLElement>('[data-review-open]')
+    if (opener) {
+      const dialog = document.getElementById(opener.dataset['reviewOpen'] ?? '')
+      if (dialog instanceof HTMLDialogElement) {
+        dialog.showModal()
+      }
+      return
+    }
+    if (
+      target instanceof HTMLDialogElement &&
+      target.hasAttribute('data-review-dialog')
+    ) {
+      target.close()
+    }
+  })
+</script>

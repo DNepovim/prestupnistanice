@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+type Props = {
+  review: CollectionEntry<'review'>
+}
+
+const { review } = Astro.props
+const { data } = review
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+
+const getHost = (url: string) => new URL(url).host.replace(/^www\./, '')
+---
+
+<p
+  class="font-alt text-brand-first-700 mt-4 text-[0.65rem] leading-[1.4] tracking-[0.06em] uppercase"
+>
+  <b class="font-semibold">{data.reviewer}</b>
+  {
+    data.url && (
+      <>
+        {' · '}
+        <a
+          href={data.url}
+          target="_blank"
+          rel="noopener"
+          class="underline underline-offset-[0.15em]"
+        >
+          {getHost(data.url)}
+          <span class="sr-only">(otevře se v novém okně)</span>
+        </a>
+      </>
+    )
+  }
+  {
+    data.date && (
+      <>
+        {' · '}
+        <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+      </>
+    )
+  }
+</p>
