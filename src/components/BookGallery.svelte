@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { tick } from 'svelte'
+
   type Item = {
     alt: string
     ratio: number
@@ -14,25 +16,98 @@
   const MAX_UNSCROLLED = 3
   const MAX_FRAME_WIDTH_REM = 24
   const SWIPE_THRESHOLD_PX = 40
+  const OPEN_DURATION_MS = 450
+  const CLOSE_DURATION_MS = 200
+  const STEP_DURATION_MS = 300
+  const STEP_OFFSET_PX = 48
+  const EASE_OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)'
 
   let dialog: HTMLDialogElement | undefined
+  let lightboxImage: HTMLElement | undefined
+  let loadedUrls: string[] = []
+  let requestedUrls: string[] = []
   let current = 0
   let dragStartX: number | undefined
 
   $: fitsInRow = items.length <= MAX_UNSCROLLED
   $: item = items[current]
 
-  const open = (index: number) => {
+  const prefersReducedMotion = () =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const preload = (index: number) => {
+    const url = items[(index + items.length) % items.length]?.full
+    if (!url || requestedUrls.includes(url)) {
+      return
+    }
+    requestedUrls = [...requestedUrls, url]
+    const image = document.createElement('img')
+    image.onload = () => {
+      loadedUrls = [...loadedUrls, url]
+    }
+    image.src = url
+  }
+
+  const preloadAround = (index: number) => {
+    ;[index, index + 1, index - 1].forEach(preload)
+  }
+
+  const open = async (index: number, trigger: HTMLElement) => {
     current = index
+    preloadAround(index)
     dialog?.showModal()
+    await tick()
+    const thumb = trigger.querySelector('img')
+    if (!dialog || !lightboxImage || !thumb || prefersReducedMotion()) {
+      return
+    }
+    const from = thumb.getBoundingClientRect()
+    const to = lightboxImage.getBoundingClientRect()
+    const scale = from.width / to.width
+    const dx = from.left + from.width / 2 - (to.left + to.width / 2)
+    const dy = from.top + from.height / 2 - (to.top + to.height / 2)
+    dialog.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: OPEN_DURATION_MS,
+      easing: 'ease-out',
+    })
+    lightboxImage.animate(
+      [
+        {
+          transform: `translate(${String(dx)}px, ${String(dy)}px) scale(${String(scale)})`,
+        },
+        { transform: 'none' },
+      ],
+      { duration: OPEN_DURATION_MS, easing: EASE_OUT },
+    )
   }
 
-  const close = () => {
-    dialog?.close()
+  const close = async () => {
+    if (!dialog) {
+      return
+    }
+    if (!prefersReducedMotion()) {
+      await dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: CLOSE_DURATION_MS,
+        easing: 'ease-in',
+      }).finished
+    }
+    dialog.close()
   }
 
-  const step = (delta: number) => {
+  const step = async (delta: number) => {
     current = (current + delta + items.length) % items.length
+    preloadAround(current)
+    await tick()
+    if (!lightboxImage || prefersReducedMotion()) {
+      return
+    }
+    lightboxImage.animate(
+      [
+        { opacity: 0, transform: `translateX(${String(delta * STEP_OFFSET_PX)}px)` },
+        { opacity: 1, transform: 'none' },
+      ],
+      { duration: STEP_DURATION_MS, easing: EASE_OUT },
+    )
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -41,11 +116,11 @@
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault()
-      step(1)
+      void step(1)
     }
     if (event.key === 'ArrowLeft') {
       event.preventDefault()
-      step(-1)
+      void step(-1)
     }
   }
 
@@ -60,13 +135,13 @@
     const delta = event.clientX - dragStartX
     dragStartX = undefined
     if (Math.abs(delta) >= SWIPE_THRESHOLD_PX) {
-      step(delta < 0 ? 1 : -1)
+      void step(delta < 0 ? 1 : -1)
     }
   }
 
   const onDialogClick = (event: MouseEvent) => {
     if (event.target === event.currentTarget) {
-      close()
+      void close()
     }
   }
 </script>
@@ -96,8 +171,8 @@
           !fitsInRow && 'w-fit',
           TILTS[index % TILTS.length],
         ]}
-        on:click={() => {
-          open(index)
+        on:click={(event) => {
+          void open(index, event.currentTarget)
         }}
       >
         <img
@@ -123,30 +198,41 @@
 >
   {#if item}
     <div
-      class="flex size-full flex-col items-center justify-center gap-4 p-4 min-md:p-10"
+      class="flex size-full flex-col items-center justify-center p-4 min-md:p-10"
       role="presentation"
       on:click={onDialogClick}
       on:pointerdown={onPointerDown}
       on:pointerup={onPointerUp}
       on:pointercancel={() => (dragStartX = undefined)}
     >
-      <img
-        src={item.full}
-        alt={item.alt}
-        width={item.fullWidth}
-        height={item.fullHeight}
-        draggable="false"
-        class="max-h-[calc(100%-3rem)] max-w-full object-contain select-none"
-      />
-      <p class="font-alt text-xs text-white/70" aria-live="polite">
-        {current + 1} / {items.length}
-      </p>
+      {#if loadedUrls.includes(item.full)}
+        <img
+          bind:this={lightboxImage}
+          src={item.full}
+          alt={item.alt}
+          width={item.fullWidth}
+          height={item.fullHeight}
+          draggable="false"
+          class="max-h-full max-w-full object-contain select-none"
+        />
+      {:else}
+        <div
+          bind:this={lightboxImage}
+          role="status"
+          aria-label="Načítání fotografie"
+          style:aspect-ratio={item.fullWidth / item.fullHeight}
+          style:width={`min(100%, calc((100dvh - 5rem) * ${String(item.fullWidth / item.fullHeight)}))`}
+          class="animate-pulse bg-white/10"
+        ></div>
+      {/if}
     </div>
     <button
       type="button"
       class="absolute top-3 right-3 border border-white/40 px-3 py-2 text-lg leading-none text-white hover:bg-white/10"
       aria-label="Zavřít"
-      on:click={close}
+      on:click={() => {
+        void close()
+      }}
     >
       <span aria-hidden="true">✕</span>
     </button>
@@ -156,7 +242,7 @@
         class="absolute top-1/2 left-3 -translate-y-1/2 border border-white/40 px-3 py-4 text-xl leading-none text-white hover:bg-white/10"
         aria-label="Předchozí fotografie"
         on:click={() => {
-          step(-1)
+          void step(-1)
         }}
       >
         <span aria-hidden="true">←</span>
@@ -166,7 +252,7 @@
         class="absolute top-1/2 right-3 -translate-y-1/2 border border-white/40 px-3 py-4 text-xl leading-none text-white hover:bg-white/10"
         aria-label="Další fotografie"
         on:click={() => {
-          step(1)
+          void step(1)
         }}
       >
         <span aria-hidden="true">→</span>
