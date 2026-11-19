@@ -8,10 +8,10 @@ import PrintSheet from '@/components/PrintSheet.astro'
 import SponsorTile from '@/components/SponsorTile.astro'
 import Timeline from '@/components/Timeline.astro'
 import LogoFondBudoucnosti from '@/content/images/sponsors/fondBudoucnosti.png'
-import LogoFondKultury from '@/content/images/sponsors/fondKultury.png'
+import LogoFondKultury from '@/content/images/sponsors/sfk.svg'
 import LogoGi from '@/content/images/sponsors/gi.png'
 import LogoKima from '@/content/images/sponsors/kima.png'
-import LogoMk from '@/content/images/sponsors/mk.png'
+import LogoMk from '@/content/images/sponsors/mk.svg'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
@@ -36,6 +36,7 @@ const FOUNDING_YEAR = 2005
 const sponsors = [
   { title: 'Ministerstvo kultury ČR', link: 'https://www.mk.gov.cz/',
     logo: LogoMk,
+    plain: true,
     color: '#D70C0F',
     pantone: '485 C',
   },
@@ -43,6 +44,8 @@ const sponsors = [
     title: 'Goethe-Institut',
     link: 'https://www.goethe.de/ins/cz/cs/index.html',
     logo: LogoGi,
+    color: '#A0C814',
+    pantone: '375 C',
   },
   {
     title: 'Česko-německý fond budoucnosti',
@@ -55,6 +58,7 @@ const sponsors = [
     title: 'Státní fond kultury ČR',
     link: 'https://www.mk.gov.cz/statni-fond-kultury-cr-cs-42',
     logo: LogoFondKultury,
+    plain: true,
   },
   {
     title: 'Jiří Málek – KIMA Transport s. r. o.',
@@ -63,7 +67,7 @@ const sponsors = [
     color: '#00A4E0',
     pantone: '2995 C',
   },
-  { title: 'Winklerovi', prefix: 'manželé' },
+  { title: 'Winklerovi', prefix: 'manželé', monogram: 'W' },
 ]
 
 const entry = await getEntry('page', 'o-nakladatelstvi')
