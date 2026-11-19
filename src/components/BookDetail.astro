@@ -217,12 +217,13 @@ const sideSlug = [
 <Layout
   keepHue
   tintedHeader
+  tintedBackground
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
   firstColor={book.color}
   secondColor={book.bgColor}
 >
-  <div class="bg-brand-first-500 -mb-24 pt-4 pb-24">
+  <div class="pt-4">
     {
       book.coverTop && (
         <PrintSheet edge={getEdge('hero')} regs={['t']} slug={fileSlug} cutAtBottom>

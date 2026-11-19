@@ -16,6 +16,7 @@ type Props = {
   secondColor?: string
   keepHue?: boolean
   tintedHeader?: boolean
+  tintedBackground?: boolean
 }
 
 const books = (await getCollection('book')).toSorted(
@@ -32,6 +33,7 @@ const {
   secondColor,
   keepHue = false,
   tintedHeader = false,
+  tintedBackground = false,
 } = Astro.props
 
 const colorBrandFirst = firstColor ?? promotedBook?.data.color ?? '#434991'
@@ -90,6 +92,7 @@ const config = {
       'font-display flex min-h-screen min-w-full flex-col',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
       '[--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)]',
+      tintedBackground && 'bg-brand-first-500 bg-none',
       isDev && 'debug-screens',
     ]}
   >
@@ -100,13 +103,16 @@ const config = {
       Přeskočit na obsah
     </a>
 
-    <Header tinted={tintedHeader} />
-
-    <main id="obsah" class="flex-1 pb-16">
-      <slot />
-    </main>
-
     <Footer />
+
+    <div class="relative z-0 flex flex-1 flex-col">
+      <Header tinted={tintedHeader} />
+
+      <main id="obsah" class="flex-1 pb-16">
+        <slot />
+      </main>
+    </div>
+    <div aria-hidden="true" data-footer-spacer></div>
     <Analytics />
     <script>
       window.Hyphenopoly = {

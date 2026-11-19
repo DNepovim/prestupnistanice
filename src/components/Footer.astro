@@ -12,9 +12,14 @@ const CREDIT_LINK =
 const NEW_WINDOW = '(otevře se v novém okně)'
 ---
 
-<div class="footer-slot mt-8">
-<footer class="footer-reveal font-alt bg-brand-first-700 overflow-hidden text-white">
-<div class="relative mx-auto w-full max-w-[68rem] [container-type:inline-size]">
+<footer
+  data-footer
+  class="font-alt bg-brand-first-700 relative order-last overflow-hidden text-white"
+>
+<div
+    data-footer-content
+    class="relative mx-auto w-full max-w-[68rem] [container-type:inline-size]"
+  >
   <span aria-hidden="true" class="absolute top-4 left-4 size-5 border-t border-l border-brand-second-300/60"></span>
   <span aria-hidden="true" class="absolute top-4 right-4 size-5 border-t border-r border-brand-second-300/60"></span>
   <span aria-hidden="true" class="absolute bottom-4 left-4 size-5 border-b border-l border-brand-second-300/60"></span>
@@ -129,30 +134,97 @@ const NEW_WINDOW = '(otevře se v novém okně)'
   </span>
 </div>
 </footer>
-</div>
 
-<style>
-  @supports (animation-timeline: view()) {
-    @keyframes footer-reveal {
-      from {
-        clip-path: inset(100% 0 0 0);
-      }
-      to {
-        clip-path: inset(0 0 0 0);
-      }
-    }
+<style is:global>
+  [data-footer] {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    opacity: 0;
+  }
 
-    .footer-slot {
-      view-timeline: --footer-slot block;
-    }
+  [data-footer-spacer] {
+    height: 100svh;
+  }
 
-    .footer-reveal {
-      position: sticky;
-      bottom: 0;
-      z-index: -10;
-      animation: footer-reveal linear both;
-      animation-timeline: --footer-slot;
-      animation-range: entry 0% entry 100%;
-    }
+  html[data-footer-static] [data-footer] {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    display: block;
+    opacity: 1;
+  }
+
+  html[data-footer-static] [data-footer-spacer] {
+    display: none;
   }
 </style>
+
+<noscript>
+  <style>
+    [data-footer] {
+      position: relative;
+      inset: auto;
+      z-index: auto;
+      display: block;
+      opacity: 1;
+    }
+
+    [data-footer-spacer] {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<script>
+  const FOCUSABLE_FOOTER_SELECTOR = '[data-footer]'
+
+  const getElements = () => ({
+    footer: document.querySelector<HTMLElement>('[data-footer]'),
+    spacer: document.querySelector<HTMLElement>('[data-footer-spacer]'),
+  })
+
+  const update = () => {
+    const { footer, spacer } = getElements()
+    const content = footer?.querySelector<HTMLElement>('[data-footer-content]')
+    if (!footer || !spacer || !content) {
+      return
+    }
+    const root = document.documentElement
+    const height = content.offsetHeight
+    const isFixed = height <= window.innerHeight
+    root.toggleAttribute('data-footer-static', !isFixed)
+    const remaining = root.scrollHeight - window.innerHeight - window.scrollY
+    const progress = Math.min(1, Math.max(0, 1 - remaining / window.innerHeight))
+    footer.style.opacity = isFixed ? String(progress) : ''
+    root.style.setProperty('--footer-progress', isFixed ? String(progress) : '0')
+    footer.inert = isFixed && progress === 0
+  }
+
+  const resizeObserver = new ResizeObserver(update)
+
+  const setup = () => {
+    resizeObserver.disconnect()
+    const content = document.querySelector<HTMLElement>('[data-footer-content]')
+    if (content) {
+      resizeObserver.observe(content)
+    }
+    update()
+  }
+
+  window.addEventListener('scroll', update, { passive: true })
+  window.addEventListener('resize', update)
+  document.addEventListener('astro:page-load', setup)
+  document.addEventListener('focusin', (event) => {
+    if (
+      event.target instanceof Element &&
+      event.target.closest(FOCUSABLE_FOOTER_SELECTOR)
+    ) {
+      window.scrollTo({ top: document.documentElement.scrollHeight })
+    }
+  })
+  setup()
+</script>
