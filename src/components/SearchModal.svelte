@@ -1,72 +1,178 @@
 <script lang="ts">
   import { navigate } from 'astro:transitions/client'
-  import { Command } from 'bits-ui'
-  import Fuse from 'fuse.js'
-  import { onMount } from 'svelte'
+  import { isNonEmptyArray, isOneOf } from 'narrowland'
+  import { onDestroy, onMount, tick } from 'svelte'
 
-  type SearchItem = {
-    slug: string
-    title: string
-    subtitle?: string
-    image?: { src: string }
-    link: string
-    type: 'book' | 'author'
-  }
+  import SearchAuthorStrip from '@/components/search/SearchAuthorStrip.svelte'
+  import SearchColorBar from '@/components/search/SearchColorBar.svelte'
+  import SearchInput from '@/components/search/SearchInput.svelte'
+  import SearchQuickCategories from '@/components/search/SearchQuickCategories.svelte'
+  import SearchResults from '@/components/search/SearchResults.svelte'
+  import { routes } from '@/routes'
+  import { pluralize } from '@/utils/pluralize'
+  import { createSearcher } from '@/utils/search/createSearcher'
+  import {
+    findDefaultEntity,
+    getFocusedBookSlugs,
+    getOptionId,
+    getThemeSlug,
+  } from '@/utils/search/entities'
+  import type { SearchCategoryKey, SearchEntity, SearchIndex } from '@/utils/search/types'
 
-  export let data: SearchItem[]
+  export let data: SearchIndex
 
   export let toggle: (is?: boolean) => void
 
-  let searchValue = ''
+  const LIST_ID = 'search-results'
 
-  const fuseOptions = {
-    ignoreDiacritics: true,
-    includeMatches: false,
-    threshold: 0.4,
-    keys: [
-      { name: 'title', weight: 1 },
-      { name: 'subtitle', weight: 0.1 },
-    ],
+  const THEME_SETTLE_MS = 250
+
+  const ARROW_STEPS = { ArrowDown: 1, ArrowUp: -1 } as const
+
+  const search = createSearcher(data)
+
+  let query = ''
+  let category: SearchCategoryKey | null = null
+  let selectedId = ''
+  let dialogEl: HTMLElement | undefined
+  let inputElement: HTMLInputElement | undefined
+  let appliedThemeStyle: string | undefined
+  let themeTimer: ReturnType<typeof setTimeout> | undefined
+
+  $: result = search(query, category)
+  $: selectedId = findDefaultEntity(result.entities)?.id ?? ''
+  $: selectedEntity = result.entities.find((entity) => entity.id === selectedId)
+  $: focusedSlugs = new Set(
+    selectedEntity ? getFocusedBookSlugs(selectedEntity, data.books) : [],
+  )
+  $: themeStyle = selectedEntity
+    ? data.themes[getThemeSlug(selectedEntity, data.books)]
+    : undefined
+  $: highlightedCategories = category
+    ? [category]
+    : result.entities.flatMap((entity) =>
+        entity.kind === 'category' ? [entity.key] : [],
+      )
+  $: settleTheme(themeStyle)
+  $: selectedAuthorSlugs = new Set(getSelectedAuthorSlugs(selectedEntity))
+  $: resultsAnnouncement = pluralize(result.entities.length, [
+    'výsledek',
+    'výsledky',
+    'výsledků',
+  ])
+
+  const settleTheme = (style: string | undefined) => {
+    clearTimeout(themeTimer)
+    themeTimer = setTimeout(() => {
+      appliedThemeStyle = style
+    }, THEME_SETTLE_MS)
   }
 
-  const fuse = new Fuse(data, fuseOptions)
+  const getSelectedAuthorSlugs = (entity: SearchEntity | undefined) => {
+    if (entity?.kind === 'author') {
+      return [entity.author.slug]
+    }
+    return entity?.kind === 'book' ? entity.book.authorSlugs : []
+  }
 
-  const ITEM_IMAGE_CLASSES = {
-    book: 'rounded-md',
-    author: 'aspect-square rounded-full object-cover',
-  } as const satisfies Record<SearchItem['type'], string>
+  const selectCategory = (key: SearchCategoryKey) => {
+    category = key
+    query = ''
+    inputElement?.focus()
+  }
 
-  const normalizeSearch = (value: string) => value.trim()
+  const toggleCategory = (key: SearchCategoryKey) => {
+    if (category === key) {
+      category = null
+      inputElement?.focus()
+      return
+    }
+    selectCategory(key)
+  }
 
-  const createKeywords = (item: SearchItem) =>
-    [item.title, item.subtitle, item.slug]
-      .filter((part): part is string => typeof part === 'string' && part.length > 0)
-      .map((part) => part.toLowerCase())
-
-  const goToItem = (item: SearchItem) => {
+  const activate = (entity: SearchEntity) => {
+    if (entity.kind === 'category') {
+      selectCategory(entity.key)
+      return
+    }
     toggle(false)
-    void navigate(item.link)
+    void navigate(
+      entity.kind === 'author'
+        ? routes.authors.detail(entity.author.slug)
+        : routes.books.detail(entity.book.slug),
+    )
   }
 
-  const scrollCurrentSelectionIntoView = () => {
-    const selectedItem = document.querySelector<HTMLElement>(
-      '[cmdk-item][data-selected], [data-command-item][data-selected]',
-    )
-    if (!selectedItem) return
-    selectedItem.scrollIntoView({
-      block: 'nearest',
+  const select = (id: string) => {
+    if (id !== selectedId) {
+      selectedId = id
+    }
+  }
+
+  const findEntity = (predicate: (entity: SearchEntity) => boolean) =>
+    result.entities.find(predicate)
+
+  const selectBook = (slug: string) => {
+    const entity = findEntity((e) => e.kind === 'book' && e.book.slug === slug)
+    if (entity) {
+      select(entity.id)
+    }
+  }
+
+  const activateBook = (slug: string) => {
+    const entity = findEntity((e) => e.kind === 'book' && e.book.slug === slug)
+    if (entity) {
+      activate(entity)
+    }
+  }
+
+  const selectAuthor = (slug: string) => {
+    const entity = findEntity((e) => e.kind === 'author' && e.author.slug === slug)
+    if (entity) {
+      select(entity.id)
+    }
+  }
+
+  const filterByAuthor = (slug: string) => {
+    const author = data.authors.find((a) => a.slug === slug)
+    if (!author) {
+      return
+    }
+    query = query.trim() === author.name ? '' : `${author.name} `
+    inputElement?.focus()
+  }
+
+  const moveSelection = (step: number) => {
+    const { entities } = result
+    if (!isNonEmptyArray(entities)) {
+      return
+    }
+    const current = entities.findIndex((entity) => entity.id === selectedId)
+    const next = entities[(current + step + entities.length) % entities.length]
+    if (!next) {
+      return
+    }
+    selectedId = next.id
+    void tick().then(() => {
+      document.getElementById(getOptionId(next.id))?.scrollIntoView({ block: 'nearest' })
     })
   }
 
-  const keepFocusOnInput = (event: KeyboardEvent) => {
-    if (
-      !['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes(event.key)
-    )
+  const handleInputKeydown = (event: KeyboardEvent) => {
+    if (isOneOf(event.key, ['ArrowDown', 'ArrowUp'])) {
+      event.preventDefault()
+      moveSelection(ARROW_STEPS[event.key])
       return
-    window.requestAnimationFrame(scrollCurrentSelectionIntoView)
+    }
+    if (event.key === 'Enter' && selectedEntity) {
+      event.preventDefault()
+      activate(selectedEntity)
+      return
+    }
+    if (event.key === 'Backspace' && query === '' && category) {
+      category = null
+    }
   }
-
-  let dialogEl: HTMLElement | undefined
 
   const trapFocus = (event: KeyboardEvent) => {
     if (event.key !== 'Tab' || !dialogEl) return
@@ -94,14 +200,14 @@
     }
   }
 
-  $: filteredBooks =
-    normalizeSearch(searchValue) === ''
-      ? data.map((item) => ({ item }))
-      : fuse.search(searchValue)
+  onDestroy(() => {
+    clearTimeout(themeTimer)
+  })
 
   onMount(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    inputElement?.focus()
     return () => {
       document.body.style.overflow = previousOverflow
     }
@@ -109,26 +215,31 @@
 </script>
 
 <div
-  class="fixed inset-0 z-100 px-4"
+  class="transition-theme fixed inset-0 z-100 px-4"
   role="dialog"
   aria-modal="true"
-  aria-label="Vyhledávání knih a autorů"
+  aria-label="Vyhledávání knih, autorů a kategorií"
   tabindex={-1}
+  style={appliedThemeStyle}
   bind:this={dialogEl}
   onkeydown={trapFocus}
 >
   <button
     type="button"
-    class="fixed inset-0 size-full bg-gradient-to-t from-brand-second-50/97 to-white/97"
+    class="bg-paper/97 fixed inset-0 size-full"
     aria-hidden="true"
     tabindex={-1}
     onclick={() => {
       toggle(false)
     }}
   ></button>
+  <div
+    class="bg-brand-second-100/20 pointer-events-none fixed inset-0"
+    aria-hidden="true"
+  ></div>
   <button
     type="button"
-    class="absolute top-4 right-4 flex size-12 items-center justify-center text-brand-first-500 cursor-pointer transition-transform hover:rotate-90"
+    class="text-brand-first-500 absolute top-4 right-4 flex size-12 cursor-pointer items-center justify-center transition-transform hover:rotate-90"
     aria-label="Zavřít vyhledávání"
     onclick={() => {
       toggle(false)
@@ -136,81 +247,52 @@
   >
     <iconify-icon icon="ph:x" class="text-3xl" noobserver></iconify-icon>
   </button>
-  <div class="block mx-auto max-w-160 mt-20 max-md:mt-16">
-    <Command.Root class="w-full" shouldFilter={false}>
-      <label class="relative text-5xl max-md:text-2xl">
-        <div
-          class="absolute bottom-[0.15em] inset-x-0 h-[1px] w-full border-b-2 border-dotted border-brand-first-900"
-        ></div>
-        <Command.Input
-          class="relative w-full bg-transparent pt-4 pr-12 font-alt leading-[1em] text-brand-first-500 text-5xl text-outline-white outline-none placeholder:text-brand-first-500 max-md:pr-9 max-md:text-2xl"
-          placeholder="najděte si svou knihu…"
-          bind:value={searchValue}
-          onkeydown={keepFocusOnInput}
-          autofocus
-        />
-        <iconify-icon
-          icon="ph:magnifying-glass"
-          class="absolute right-2 bottom-1/2 translate-y-1/2 text-4xl text-brand-first-500 max-md:text-2xl"
-          noobserver
-        ></iconify-icon>
-      </label>
-      <Command.List
-        class="relative mt-4 h-[calc(100dvh-13rem)] overflow-y-auto max-md:h-[calc(100dvh-10rem)]"
-        tabindex={-1}
-      >
-        <Command.Empty class="px-4 py-6 text-brand-first-500">
-          Žádné výsledky.
-        </Command.Empty>
-        <ul class="px-4 max-md:px-0">
-          {#each filteredBooks as book (book.item.link)}
-            <li class="py-4">
-              <Command.Item
-                value={book.item.link}
-                keywords={createKeywords(book.item)}
-                class="block w-full cursor-pointer border-l-2 border-transparent px-4 outline-none data-[selected]:border-brand-first-500 max-md:px-3"
-                tabindex={-1}
-                onSelect={() => {
-                  goToItem(book.item)
-                }}
-              >
-                <a
-                  href={book.item.link}
-                  class="flex gap-4"
-                  tabindex={-1}
-                  onclick={(event) => {
-                    event.preventDefault()
-                    goToItem(book.item)
-                  }}
-                >
-                  {#if book.item.image}
-                    <img
-                      src={book.item.image.src}
-                      alt={book.item.title}
-                      class={[
-                        'w-20 shadow-2xl max-md:w-14',
-                        ITEM_IMAGE_CLASSES[book.item.type],
-                      ]}
-                    />
-                  {:else}
-                    <div
-                      class="size-20 rounded-full bg-gradient-to-tr from-brand-first-200 to-brand-second-200 max-md:size-14"
-                    ></div>
-                  {/if}
-                  <div>
-                    <p
-                      class="font-alt text-xl font-bold text-brand-first-500 max-md:text-base"
-                    >
-                      {book.item.title}
-                    </p>
-                    <p>{book.item.subtitle}</p>
-                  </div>
-                </a>
-              </Command.Item>
-            </li>
-          {/each}
-        </ul>
-      </Command.List>
-    </Command.Root>
+  <div
+    class="relative mx-auto flex h-dvh max-w-5xl flex-col pt-16 pb-4 max-md:pt-14 max-md:pb-2"
+  >
+    <SearchInput
+      bind:value={query}
+      bind:inputElement
+      {category}
+      listId={LIST_ID}
+      activeDescendant={selectedId ? getOptionId(selectedId) : undefined}
+      onkeydown={handleInputKeydown}
+      onclearcategory={() => {
+        category = null
+        inputElement?.focus()
+      }}
+    />
+    <SearchQuickCategories activeKeys={highlightedCategories} onselect={toggleCategory} />
+    <div class="max-md:hidden">
+      <SearchAuthorStrip
+        authors={data.authors}
+        matchedBookSlugs={result.matchedBookSlugs}
+        {selectedAuthorSlugs}
+        onhover={selectAuthor}
+        onfilter={filterByAuthor}
+      />
+    </div>
+    <SearchResults
+      entities={result.entities}
+      {selectedId}
+      terms={result.terms}
+      activeCategory={category}
+      index={data}
+      listId={LIST_ID}
+      onselect={select}
+      onactivate={activate}
+    />
+    <div class="max-md:hidden">
+      <SearchColorBar
+        index={data}
+        selected={selectedEntity}
+        {focusedSlugs}
+        matchedBookSlugs={result.matchedBookSlugs}
+        onhover={selectBook}
+        onactivate={activateBook}
+        oncategory={selectCategory}
+      />
+    </div>
+    <p class="sr-only" role="status">{resultsAnnouncement}</p>
   </div>
 </div>

@@ -1,73 +1,12 @@
 ---
-import { getImage } from 'astro:assets'
-import { getCollection } from 'astro:content'
-import { isDefined } from 'narrowland'
-
 import MobileMenu from '@/components/MobileMenu.svelte'
 import SearchButton from '@/components/SearchButton.svelte'
 import { routes } from '@/routes'
-import { joinWords } from '@/utils/joinWords'
+import { getSearchIndex } from '@/utils/search/getSearchIndex'
 
 import HeaderLink from './HeaderLink.astro'
 
-const books = await getCollection('book')
-const authors = await getCollection('author')
-
-const bookItems = await Promise.all(
-  books.map(async ({ data: { title, cover, slug, authors: as } }) => {
-    const optimized = await getImage({ src: cover, width: 160, format: 'webp' })
-    return {
-      slug,
-      title,
-      subtitle: joinWords(
-        as
-          .filter((a) => a.isMain)
-          .map((a) => {
-            const author = authors.find((as) => as.data.slug === a.slug.id)
-            if (!author) {
-              return null
-            }
-            return `${author.data.firstname} ${author.data.surname}`
-          })
-          .filter(isDefined),
-      ),
-      image: optimized,
-      link: `/knihy/${slug}`,
-      type: 'book' as const,
-    }
-  }),
-)
-
-const authorMainEntries = books
-  .flatMap((b) => b.data.authors)
-  .filter((a) => a.isMain)
-  .map((a) => authors.find((au) => au.id === a.slug.id))
-  .filter(isDefined)
-
-const authorItems = await Promise.all(
-  authorMainEntries.map(async ({ data: { firstname, surname, image, slug } }) => {
-    const optimized = image
-      ? await getImage({
-          src: image,
-          width: 160,
-          height: 160,
-          fit: 'cover',
-          format: 'webp',
-        })
-      : undefined
-    return {
-      slug,
-      title: `${firstname} ${surname}`,
-      image: optimized,
-      link: `/autori/${slug}`,
-      type: 'author' as const,
-    }
-  }),
-)
-
-const searchData = [...bookItems, ...authorItems].filter(
-  (item, index, arr) => index === arr.findIndex((el) => el.slug === item.slug),
-)
+const searchIndex = await getSearchIndex()
 
 type Props = {
   tinted?: boolean
@@ -124,7 +63,7 @@ const navigations = [
       <span
         aria-hidden="true"
         class="mr-2 inline-block h-[1px] w-8 bg-current opacity-30 max-md:hidden"></span>
-      <SearchButton client:idle data={searchData} />
+      <SearchButton client:idle data={searchIndex} />
     </div>
   </div>
 </header>

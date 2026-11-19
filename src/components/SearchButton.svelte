@@ -1,18 +1,11 @@
 <script lang="ts">
   import 'iconify-icon'
 
+  import type { SearchIndex } from '@/utils/search/types'
+
   import SearchModal from './SearchModal.svelte'
 
-  type SearchItem = {
-    slug: string
-    title: string
-    subtitle?: string
-    image?: { src: string }
-    link: string
-    type: 'book' | 'author'
-  }
-
-  export let data: SearchItem[]
+  export let data: SearchIndex
 
   let isOpen = false
   let triggerEl: HTMLButtonElement | undefined

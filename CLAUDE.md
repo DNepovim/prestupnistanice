@@ -64,7 +64,7 @@ Books optionally carry `color` / `bgColor`. `src/utils/geColorScale.ts` expands 
 
 ### Islands and search
 
-Svelte 5 components are the interactive layer (`SearchButton`, `SearchModal`, `FloatingImage`, `FloatingPopup`). `Header.astro` precomputes the entire search index at build time (books + main authors, covers optimised via `getImage`) and hands it to `SearchButton client:idle`; `SearchModal` filters it with Fuse.js and `bits-ui` `Command`. Prefer `client:idle` / `client:visible`.
+Svelte 5 components are the interactive layer (`SearchButton`, `SearchModal`, `FloatingImage`, `FloatingPopup`). `Header.astro` calls `getSearchIndex()` (`src/utils/search/`) at build time — books, main authors with portraits, and a per-book brand-token style string — and hands the result to `SearchButton client:idle`. `SearchModal` orchestrates the overlay from small islands in `components/search/`; matching lives in `createSearcher` (Fuse.js for books and authors, plus category aliases such as "filosofie" → `philosophy`), the colour-bar geometry in `barLayout`. Books always outrank authors (the first book is preselected), and the selected book, author or category re-themes the overlay by applying its precomputed `--color-brand-*` tokens to the dialog root. Prefer `client:idle` / `client:visible`.
 
 `astro-tina-directive/` registers a custom `client:tina` directive that only hydrates when the page is inside an iframe (TinaCMS visual editing). No component currently uses it.
 
