@@ -41,45 +41,45 @@ const { side, book, slug } = Astro.props
 const Tag = book ? 'a' : 'div'
 ---
 
-<Theme firstColor={book?.data.color} secondColor={book?.data.bgColor} keepHue>
-  <Tag
-    href={book ? routes.books.detail(book.data.slug) : undefined}
-    aria-label={book?.data.title}
-    data-slide={book ? side : undefined}
-    class:list={[
-      'hero-neighbour group absolute top-0 hidden aspect-[5/2] w-full min-xl:block',
-      !book && 'pointer-events-none',
-      SIDE_CLASSES[side],
-    ]}
-  >
-    {
-      SIDE_CORNERS[side].map((corner) => (
-        <span
-          aria-hidden="true"
-          class:list={[
-            'text-brand-second-500/90 pointer-events-none absolute size-(--mk-s)',
-            'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
-            'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
-            CORNER_CLASSES[corner],
-          ]}
-        />
-      ))
-    }
-    {
-      slug && (
-        <div
-          aria-hidden="true"
-          class:list={[
-            'pointer-events-none absolute top-4 bottom-4 w-6',
-            SIDE_SLUG_CLASSES[side],
-          ]}
-        >
-          <span class="font-alt text-brand-second-500 block max-h-full w-6 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
-            {slug}
-          </span>
-        </div>
-      )
-    }
+<Tag
+  href={book ? routes.books.detail(book.data.slug) : undefined}
+  aria-label={book?.data.title}
+  data-slide={book ? side : undefined}
+  class:list={[
+    'hero-neighbour group absolute top-0 hidden aspect-[5/2] w-full min-xl:block',
+    !book && 'pointer-events-none',
+    SIDE_CLASSES[side],
+  ]}
+>
+  {
+    SIDE_CORNERS[side].map((corner) => (
+      <span
+        aria-hidden="true"
+        class:list={[
+          'text-brand-second-500/90 pointer-events-none absolute size-(--mk-s)',
+          'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+          'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+          CORNER_CLASSES[corner],
+        ]}
+      />
+    ))
+  }
+  {
+    slug && (
+      <div
+        aria-hidden="true"
+        class:list={[
+          'pointer-events-none absolute top-4 bottom-4 w-6',
+          SIDE_SLUG_CLASSES[side],
+        ]}
+      >
+        <span class="font-alt text-brand-second-500 block max-h-full w-6 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
+          {slug}
+        </span>
+      </div>
+    )
+  }
+  <Theme firstColor={book?.data.color} secondColor={book?.data.bgColor} keepHue>
     <div
       aria-hidden="true"
       class="bg-brand-first-500 absolute inset-0 overflow-hidden opacity-50 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none"
@@ -98,8 +98,8 @@ const Tag = book ? 'a' : 'div'
         )
       }
     </div>
-  </Tag>
-</Theme>
+  </Theme>
+</Tag>
 
 <style>
   @supports (animation-timeline: scroll()) {
