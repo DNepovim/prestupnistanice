@@ -46,6 +46,7 @@ exactly once.
 | Circular author portrait | `Portrait` |
 | Credits list with roles | `BookCrew`, `AuthorSmall` |
 | Index row of books (number, title, authors, price) | `BooksIndex` |
+| A book as a list item (book list, homepage, upcoming): own print sheet with cover, title, authors, claim, buy block, colour bar | `BookSheet` (`edge` from `getSheetEdge(index, total)`) |
 | Markdown / typography | `Markdown`, `tp()` |
 
 When you add a component that other pages could reasonably want, add it to this
@@ -173,7 +174,7 @@ custom properties yourself.
 
 <!-- ✅ per-book palette for a subtree -->
 <Theme firstColor={book.color ?? undefined} secondColor={book.bgColor ?? undefined}>
-  <BookExcerpt slug={book.slug} />
+  <BookSheet book={book} edge="only" />
 </Theme>
 ```
 

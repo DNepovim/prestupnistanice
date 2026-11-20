@@ -1,0 +1,451 @@
+<title>Karty knihy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@400;500;600;700&family=Montserrat+Alternates:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: sticky control bar (variant, availability, books) above one variant at a time; every variant renders the same six real books in its own grid. */
+:root{
+  --page:#fcf9f2;--paper:#fff;--panel:#fcf9f2;--chip:#fff;
+  --ink:#101828;--head-ink:#1e2939;--ink2:#364153;--muted:#4a5565;--hair:rgba(209,213,220,.9);
+  --film:#15130f;--hole:#fff;--shadow:rgba(0,0,0,.18);--btn-fg:#fff;--mark:rgba(138,143,152,.6);
+  --paper-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.5 0 0 0 0 0.35 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --head:'Alegreya',Georgia,serif;--alt:'Montserrat Alternates','Montserrat',system-ui,sans-serif;--body:'Montserrat',system-ui,sans-serif;--hand:'Caveat','Comic Sans MS',cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{font-size:17px;-webkit-text-size-adjust:100%}
+body{margin:0;background-color:var(--page);background-image:var(--paper-image);background-attachment:fixed;color:var(--ink);font:400 1rem/1.5 var(--body);padding:0;min-height:100vh}
+body ::selection{background:#e5e5e5;text-decoration:underline}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc,var(--ink));outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{width:min(calc(100% - 2rem),70rem);margin-inline:auto;position:relative;z-index:1}
+@media (min-width:40rem){.wrap{width:min(calc(100% - 5rem),70rem)}}
+.site-h{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 0 .3rem}
+.site-h .brand{font:400 1.875rem/1.2 var(--head);font-feature-settings:'liga','onum';white-space:nowrap}
+.site-h nav{display:flex;align-items:center;gap:1rem}
+.site-h nav a{font:400 1rem/1.2 var(--alt);position:relative}
+.site-h nav a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .6s}
+.site-h nav a:hover::after{width:100%}
+.site-h nav i{display:inline-block;width:2rem;height:1px;background:currentColor;opacity:.3;margin-right:.5rem}
+.site-h .srch{font:400 1.5rem/1 var(--head);display:flex;align-items:center;gap:.2rem}
+@media (max-width:40rem){.site-h .brand{font-size:4.3vw}.site-h nav{display:none}}
+
+.kick{font:500 .64rem/1.2 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:var(--acc,var(--muted))}
+
+.row{display:flex;gap:.4rem 1.2rem;align-items:center;flex-wrap:wrap;min-width:0}
+.vnav{display:flex;gap:.3rem;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:thin}
+.vnav button{flex:none;border:1px solid var(--hair);background:transparent;padding:.4rem .7rem;cursor:pointer;font:600 .7rem/1 var(--alt);letter-spacing:.04em;display:flex;gap:.45rem;align-items:baseline}
+.vnav button b{font:800 1.05rem/1 var(--head);font-variant-numeric:lining-nums}
+.vnav button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--hair)}
+.seg button{border:0;background:transparent;padding:.42rem .75rem;cursor:pointer;font:600 .68rem/1 var(--alt);letter-spacing:.04em}
+.seg button+button{border-left:1px solid var(--hair)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.chips{display:flex;gap:.3rem;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:.4rem;border:1px solid var(--hair);background:transparent;padding:.2rem .6rem .2rem .2rem;cursor:pointer;font:600 .66rem/1.1 var(--alt);max-width:11rem}
+.chip img{height:1.6rem;width:auto;display:block}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip[aria-pressed="false"]{opacity:.42}
+.cartc{margin-left:auto;font:600 .7rem/1 var(--alt);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.cartc b{font:800 1.1rem/1 var(--head);color:var(--ink);margin-left:.3rem}
+.lab{font:500 .6rem/1 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.sheetw{width:100%;max-width:64rem;margin:calc(1.25rem + 1.9rem + 1.2rem) auto 0;padding-inline:5rem;position:relative;z-index:1}
+@media (max-width:48rem){.sheetw{padding-inline:2.25rem}}
+.sheet{position:relative;color:var(--mark);--mk-g:.9rem;--mk-l:2rem;--mk-h:calc(var(--mk-g) + var(--mk-l)/2);--mk-s:calc(var(--mk-g) + var(--mk-l));margin-bottom:6rem}
+@media (max-width:48rem){.sheet{--mk-g:.8rem;--mk-l:1.25rem}}
+.sheetw.st{margin-top:0}
+.sheetw.st.first{margin-top:calc(1.25rem + 1.9rem + 1.2rem)}
+.sheet.e-first,.sheet.e-middle{margin-bottom:4rem}
+.cut{position:absolute;left:calc(-1*var(--mk-s));right:calc(-1*var(--mk-s));top:calc(100% + 2rem);height:0;pointer-events:none}
+.cut::before,.cut::after{content:"";position:absolute;width:var(--mk-l);border-top:1px solid currentColor}
+.cut::before{left:0}.cut::after{right:0}
+.regm.r{right:calc(-1*var(--mk-h));top:50%;transform:translate(50%,-50%)}
+.sheet-in{background:#fff;color:var(--ink);padding:2.2rem .9rem}
+@media (min-width:48rem){.sheet-in{padding:2.5rem 2.6rem}}
+.mkc{position:absolute;width:var(--mk-s);height:var(--mk-s);pointer-events:none}
+.mkc::before{content:"";position:absolute;bottom:0;left:0;width:var(--mk-l);border-top:1px solid currentColor}
+.mkc::after{content:"";position:absolute;top:0;right:0;height:var(--mk-l);border-left:1px solid currentColor}
+.mkc.tl{top:calc(-1*var(--mk-s));left:calc(-1*var(--mk-s))}
+.mkc.tr{top:calc(-1*var(--mk-s));right:calc(-1*var(--mk-s));transform:scaleX(-1)}
+.mkc.bl{bottom:calc(-1*var(--mk-s));left:calc(-1*var(--mk-s));transform:scaleY(-1)}
+.mkc.br{bottom:calc(-1*var(--mk-s));right:calc(-1*var(--mk-s));transform:scale(-1)}
+.regm{position:absolute;width:2.4rem;height:2.4rem;pointer-events:none;fill:none;stroke:currentColor;stroke-width:.12}
+.regm.t{top:calc(-1*var(--mk-h));left:50%;transform:translate(-50%,-50%)}
+.regm.b{bottom:calc(-1*var(--mk-h));left:50%;transform:translate(-50%,50%)}
+.slug{position:absolute;top:calc(-1*var(--mk-s));left:1rem;height:var(--mk-l);max-width:calc(50% - 2rem);display:flex;align-items:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:500 .62rem/1 var(--alt);letter-spacing:.06em;color:#8a8f98;pointer-events:none}
+.sideslug{position:absolute;top:1rem;bottom:1rem;left:calc(-1*var(--mk-h));width:1.5rem;transform:translateX(-50%);pointer-events:none}
+.sideslug span{position:sticky;top:6rem;display:block;width:1.5rem;rotate:180deg;writing-mode:vertical-rl;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:500 .62rem/1 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:#8a8f98;max-height:calc(100svh - 8rem)}
+@media (max-width:48rem){.sideslug{display:none}}
+.vhead{padding:0 0 1.6rem;border-bottom:1px dashed var(--hair);margin-bottom:2.4rem;display:grid;gap:.5rem}
+.vhead h2{margin:0;font:800 clamp(1.8rem,5vw,2.6rem)/1.05 var(--head);letter-spacing:-.01em;color:var(--head-ink)}
+.vhead p{margin:0;max-width:44rem;color:var(--ink2);font-size:.92rem}
+.foot-note{margin-top:2.6rem;color:var(--muted);font-size:.75rem;max-width:40rem}
+
+.grid{display:grid;gap:2.6rem 2.2rem;grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--min,19rem)),1fr))}
+.bk{position:relative;min-width:0;container-type:inline-size;--acc:var(--c5);--acc7:color-mix(in srgb,var(--acc) 78%,#000);--hair:color-mix(in srgb,var(--c1) 28%,#fff)}
+.bk .t{margin:0;font:800 1.5rem/1.08 var(--head);letter-spacing:-.01em;text-wrap:balance;hyphens:auto}
+.bk .t a::after{content:"";position:absolute;inset:0;z-index:1}
+.bk:hover .t a{color:var(--acc)}
+.t a:focus-visible{outline:0}
+.t a:focus-visible::after{outline:2px solid var(--acc);outline-offset:3px}
+.au,.add,.kos,.more{position:relative;z-index:2}
+.aus{font:italic 500 1rem/1.3 var(--alt);color:var(--ink2);margin:0}
+.au{transition:color .2s}
+.au:hover{color:var(--ink)}
+.claim{font:italic 500 .86rem/1.5 var(--alt);color:var(--ink2);margin:0;text-wrap:pretty}
+.claim .pm,.pm{color:color-mix(in srgb,var(--acc) 55%,transparent);font-style:normal}
+.cv{display:block;aspect-ratio:var(--ar);height:min(var(--h,13rem),calc(var(--maxw,9rem)/var(--ar)));width:auto;max-width:100%;box-shadow:0 .3rem 1.4rem var(--shadow)}
+.pr{font:800 1.6rem/1 var(--head);font-variant-numeric:lining-nums;color:var(--ink);white-space:nowrap}
+.add{display:inline-flex;align-items:center;gap:.5rem;border:0;background:var(--acc7);color:var(--btn-fg);padding:.75rem 1.2rem;font:600 .875rem/1 var(--body);letter-spacing:.03em;cursor:pointer;transition:background-color .2s;white-space:nowrap}
+.add:hover{background:color-mix(in srgb,var(--acc7) 82%,#000)}
+.add svg{width:1.05rem;height:1.05rem;flex:none}
+.add.in{background:transparent;color:var(--acc);box-shadow:inset 0 0 0 1.5px var(--acc)}
+.al{display:inline-block;position:relative;padding-right:1.9rem;font:600 .68rem/1.2 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.al::after{content:"";position:absolute;right:0;top:50%;height:1px;width:1.4rem;background:currentColor;transition:width .45s ease}
+.al::before{content:"";position:absolute;right:0;top:50%;width:.42rem;height:.42rem;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:translateY(-50%) rotate(45deg);transform-origin:center}
+.al:hover::after{width:100%}
+.kos{font-size:.78rem;font-weight:700}
+.na{font:600 .68rem/1.2 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--hair);padding:.5rem .7rem;white-space:nowrap;display:inline-block}
+.buyrow{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem 1.1rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+#float{position:fixed;z-index:50;pointer-events:none;width:7rem;height:auto;box-shadow:0 .5rem 1.6rem rgba(0,0,0,.3);transform:translate(1rem,-50%)}
+
+
+/* real site chrome */
+.page{min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1}
+.page>main{flex:1}
+.site-header{position:sticky;top:0;z-index:5;padding-top:.5rem}
+@supports (animation-timeline:scroll()){@keyframes hf{to{opacity:0}}.site-header .site-h{animation:hf linear both;animation-timeline:scroll(root);animation-range:0 10rem}}
+.hl{position:relative;color:inherit}
+.hl::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .6s}
+.hl:hover::after{width:100%}
+.site-h .srch{font:400 1.5rem/1 var(--head);display:flex;align-items:center;gap:.25rem;cursor:pointer;position:relative}
+.site-h .srch svg{width:1.5rem;height:1.5rem;margin-bottom:-.25rem}
+.sec{max-width:56rem;margin:0 auto 3rem;padding-inline:1.5rem}
+.pt{position:relative;display:inline-block;max-width:100%;margin:1.5rem 0;font:700 clamp(2.6rem,10vw,6rem)/1.1 var(--head);font-feature-settings:'liga','onum';color:var(--head-ink);overflow-wrap:break-word}
+.pt::after{content:"";position:absolute;left:0;bottom:0;height:4px;width:60%;background:linear-gradient(to right,#e5e5e5,transparent)}
+.pt a{position:relative;z-index:1}
+.cats{display:flex;align-items:center;justify-content:center;gap:1.5rem;text-align:center;margin:1rem 0 0;font:400 1.25rem/1.3 var(--alt)}
+@media (max-width:48rem){.cats{flex-direction:column;gap:1rem}}
+.cats a{color:#6a7282;padding:.25rem .75rem;transition:color .3s}
+.cats a:hover{color:#000}
+.cats sup{font:400 .55rem/1 var(--alt);letter-spacing:.1em;margin-left:.25rem;vertical-align:top;color:#99a1af;font-variant-numeric:lining-nums}
+.cats-l{height:1.2em;margin:0 0 1rem}
+
+.foot{--f7:#3f3f3f;--f2:#d4d4d4;--f3:rgba(163,163,163,.6);background:var(--f7);color:#fff;font-family:var(--alt);position:relative;overflow:hidden}
+.foot-c{position:relative;margin-inline:auto;width:100%;max-width:68rem;container-type:inline-size}
+.fm{position:absolute;width:1.25rem;height:1.25rem;border:0 solid var(--f3);pointer-events:none}
+.fm.a{top:1rem;left:1rem;border-width:1px 0 0 1px}.fm.b{top:1rem;right:1rem;border-width:1px 1px 0 0}.fm.c{bottom:1rem;left:1rem;border-width:0 0 1px 1px}.fm.d{bottom:1rem;right:1rem;border-width:0 1px 1px 0}
+.foot-in{padding:4rem .9rem 0}
+@media (min-width:48rem){.foot-in{padding:5rem 2.6rem 0}}
+@media (min-width:1100px){.foot-in{padding-inline:5rem}}
+.foot form{max-width:64rem}
+.foot-q{margin:0;max-width:21em;font:800 clamp(1.9rem,6.2cqw,3.7rem)/1.15 var(--head);letter-spacing:-.01em;text-wrap:balance}
+.foot-q input{width:min(100%,8.5em);border:0;border-bottom:2px dashed #a3a3a3;background:transparent;padding:0 .1em;font:inherit;color:#fff;outline:0}
+.foot-q input::placeholder{color:rgba(255,255,255,.5)}
+.foot-q input:focus{border-bottom-style:solid}
+.foot-q button{display:inline-grid;place-items:center;width:1.1em;height:1.1em;margin-left:.2em;vertical-align:-.12em;border:0;background:#fff;color:#1a1a1a;cursor:pointer;transition:background-color .2s}
+.foot-q button:hover{background:rgba(255,255,255,.8)}
+.foot-q button svg{width:55%;height:55%}
+.foot-sub{margin:1.25rem 0 0;font-size:.7rem;line-height:1;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.foot-cols{margin-top:3.5rem;max-width:64rem;border-top:1px dashed var(--f3);padding-top:2rem;display:grid;gap:2.5rem}
+@media (min-width:48rem){.foot-cols{grid-template-columns:2fr 3fr 3fr}}
+.eyebrow{margin:0 0 1.25rem;font:500 .7rem/1 var(--alt);letter-spacing:.1em;text-transform:uppercase;color:var(--f2)}
+.foot menu{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:1rem;line-height:1.2}
+.foot p.ct{margin:0 0 .75rem;display:flex;align-items:center;gap:.75rem;font-size:1rem;line-height:1.2}
+.foot p.ct svg{width:1.25rem;height:1.25rem;color:var(--f2);flex:none}
+.foot .tir{margin:0 0 .75rem;font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.8)}
+.foot .tir a{color:#fff}
+.foot-big{display:block;margin-top:3.5rem;height:.76em;overflow:hidden;padding:.1em .9rem 0;font:800 8.4cqw/.8 var(--body);letter-spacing:-.02em;white-space:nowrap;color:transparent;-webkit-text-stroke:2px #a3a3a3;user-select:none;pointer-events:none}
+@media (min-width:48rem){.foot-big{padding-inline:2.6rem}}
+@media (min-width:1100px){.foot-big{padding-inline:5rem}}
+
+/* design panel, not part of the site */
+.dock{position:sticky;bottom:0;z-index:30;background:#101828;color:#f3f4f6;padding:.6rem max(16px,env(safe-area-inset-right,0px)) calc(.6rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -.4rem 1.4rem rgba(0,0,0,.28);font-family:var(--alt)}
+.dock-in{max-width:76rem;margin-inline:auto;display:grid;gap:.55rem}
+.dock-top{display:flex;gap:.6rem;align-items:flex-start}
+.dock-top .vnav{flex:1;min-width:0}
+.dock-tg{flex:none;border:1px solid rgba(255,255,255,.3);background:transparent;color:#f3f4f6;padding:.45rem .7rem;font:600 .68rem/1 var(--alt);letter-spacing:.06em;cursor:pointer}
+.dock.min .dock-body{display:none}
+.dock-info{margin:0;font-size:.78rem;line-height:1.45;color:#d1d5dc;max-width:62rem}
+.dock-info b{color:#fff;font-weight:700}
+.dock .vnav button,.dock .seg,.dock .chip{border-color:rgba(255,255,255,.28);color:#f3f4f6}
+.dock .seg button{color:#f3f4f6}
+.dock .seg button+button{border-left-color:rgba(255,255,255,.28)}
+.dock .vnav button[aria-pressed="true"],.dock .seg button[aria-pressed="true"]{background:#fff;color:#101828;border-color:#fff}
+.dock .lab{color:#9ca3af}
+.dock .cartc,.dock .cartc b{color:#d1d5dc}.dock .cartc b{color:#fff}
+.dock :focus-visible{outline-color:#fff}
+
+/* 3 Anatomie obálky */
+.v3-g{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 2.3rem;align-items:stretch}
+.v3-fig{position:relative;padding-top:1.5rem;width:max-content;max-width:100%}
+.v3-dim{position:absolute;top:0;left:0;right:0;height:.7rem;border-top:1px solid var(--acc)}
+.v3-dim::before,.v3-dim::after{content:"";position:absolute;top:0;width:1px;height:.55rem;background:var(--acc)}
+.v3-dim::before{left:0}.v3-dim::after{right:0}
+.v3-dim span{position:absolute;left:50%;top:-.42rem;transform:translateX(-50%);background:var(--paper);padding:0 .4rem;font:500 .6rem/1 var(--alt);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.v3-img{position:relative}
+.v3-img .cv{--h:13.5rem;--maxw:8.6rem}
+.v3-img::after{content:"";position:absolute;left:100%;top:50%;width:2.3rem;height:1px;background:var(--acc)}
+.v3-img::before{content:"";position:absolute;left:calc(100% - 3px);top:calc(50% - 2.5px);width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px var(--paper);z-index:2}
+.v3-data{border-left:1px solid var(--acc);padding-left:1.3rem;display:grid;gap:.15rem;align-content:start}
+.v3-row{position:relative;padding:.5rem 0 .6rem}
+.v3-row::before{content:"";position:absolute;left:-1.3rem;top:.74rem;width:.9rem;height:1px;background:var(--acc)}
+.v3-row>.kick{display:block;margin-bottom:.3rem;color:var(--acc)}
+.v3-row+.v3-row{border-top:1px dashed var(--hair)}
+.v3-buy{display:flex;gap:.6rem 1rem;align-items:center;flex-wrap:wrap}
+@container (max-width:22rem){.v3-g{grid-template-columns:1fr;gap:1rem}.v3-img::after,.v3-img::before{display:none}.v3-data{border-left:0;padding-left:0}.v3-row::before{display:none}}
+
+/* 7 Titulní strana */
+.v7-sheet{border-top:2px solid var(--acc);padding-top:.7rem;display:grid;gap:.9rem}
+.v7-top{display:flex;justify-content:space-between;gap:1rem}
+.v7 .t{font-size:var(--fit,3.4rem);line-height:.98;letter-spacing:-.025em;color:var(--acc);margin:.1rem 0 .15rem;text-wrap:balance;hyphens:manual}
+.v7 .t .rt{font-size:.4em;color:color-mix(in srgb,var(--acc) 45%,transparent);margin-left:.2em;font-weight:400;font-family:var(--body);letter-spacing:0}
+.v7-mid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.1rem;align-items:start}
+.v7-mid .aus{font-size:1.15rem}
+.v7-mid .claim{margin-top:.7rem;font-size:.84rem}
+.v7-mid .cv{--h:11rem;--maxw:7.4rem;transform:rotate(2deg);margin-top:.2rem}
+.v7-foot{display:flex;justify-content:space-between;align-items:center;gap:.7rem 1rem;flex-wrap:wrap;padding-top:.8rem;border-top:1px dashed var(--hair)}
+.v7-foot .buyrow{gap:.7rem 1rem}
+
+
+/* rows: one item per line */
+.grid.rows{gap:0;grid-template-columns:1fr}
+.grid.rows>.bk{padding:1.6rem .8rem;border-bottom:1px dashed var(--hair);transition:background-color .3s}
+.grid.rows>.bk:first-child{border-top:1px dashed var(--hair)}
+.grid.rows>.bk:hover{background:color-mix(in srgb,var(--c1) 9%,transparent)}
+.act{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem;text-align:right;min-width:0}
+.act .pr{font-size:1.7rem}
+.rowtx{display:grid;gap:.5rem;min-width:0;align-content:start}
+.rowtx .t{font-size:1.9rem}
+.rowtx .aus{font-size:1.1rem}
+@container (max-width:38rem){
+  .r2,.r6{grid-template-columns:auto minmax(0,1fr)!important}
+  .act{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;text-align:left}
+}
+
+/* R2 Kontrolní lišta */
+.r2{display:grid;grid-template-columns:auto minmax(0,1fr) 11rem;gap:1.2rem 1.6rem;align-items:start}
+.r2-strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(11,minmax(0,1fr))}
+.r2-strip i{display:block;height:.7rem;transform-origin:bottom;transition:transform .4s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*24ms)}
+.r2-strip em{display:block;margin-top:.35rem;font:500 .56rem/1 var(--alt);font-style:normal;letter-spacing:.06em;color:var(--muted);font-variant-numeric:lining-nums}
+.r2-strip span:nth-child(6) em{color:var(--acc);font-weight:700}
+.r2-strip span:nth-child(6) em::before{content:"▲ "}
+.bk:hover .r2-strip i{transform:scaleY(1.9)}
+.r2-cv .cv{--h:10rem;--maxw:7rem}
+
+/* R6 Samostatný list */
+.r6{display:grid;grid-template-columns:auto minmax(0,1fr) 11rem;gap:1.4rem 1.8rem;align-items:start}
+.r6-bar{grid-column:1/-1;display:flex;opacity:.75}
+.r6-bar span{flex:1;height:1.1rem;transform-origin:top;transition:transform .4s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*24ms)}
+.bk:hover .r6-bar span{transform:scaleY(1.9)}
+.r6-cv .cv{--h:12.5rem;--maxw:8.6rem}
+.r6 .rowtx .t{font-size:clamp(2.2rem,6.4cqw,3.3rem);line-height:1.04}
+.r6 .rowtx .aus{font-size:1.2rem}
+</style>
+
+<div class="page">
+<header class="site-header"><div class="wrap site-h">
+  <p class="brand" style="margin:0"><a href="#" class="hl">Přestupní stanice</a></p>
+  <nav aria-label="Hlavní navigace"><a class="hl" href="#">Naše knihy</a><i aria-hidden="true"></i><a class="hl" href="#">O nakladatelství</a><i aria-hidden="true"></i><span class="srch"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66 218.34l-50.07-50.06a88.11 88.11 0 1 0-11.31 11.31l50.06 50.07a8 8 0 0 0 11.32-11.32ZM40 112a72 72 0 1 1 72 72 72.08 72.08 0 0 1-72-72Z"/></svg>Hledat<span class="hl" style="position:absolute;inset:0" aria-hidden="true"></span></span></nav>
+</div></header>
+<section class="sec">
+  <h1 class="pt"><a href="#">Naše knihy</a></h1>
+  <p class="cats-l" aria-hidden="true"></p>
+  <nav class="cats" aria-label="Kategorie knih">
+    <a href="#">pro děti<sup aria-hidden="true">04</sup></a><a href="#">pro filosofy<sup aria-hidden="true">16</sup></a><a href="#">pro romantiky<sup aria-hidden="true">02</sup></a><a href="#">pro poéty<sup aria-hidden="true">01</sup></a>
+  </nav>
+</section>
+<main id="app"></main>
+<footer class="foot"><div class="foot-c">
+  <span class="fm a" aria-hidden="true"></span><span class="fm b" aria-hidden="true"></span><span class="fm c" aria-hidden="true"></span><span class="fm d" aria-hidden="true"></span>
+  <div class="foot-in">
+    <form onsubmit="return false">
+      <label for="newsletter-email" class="sr">E-mail pro odběr novinek</label>
+      <p class="foot-q">Posílejte mi novinky z nakladatelství na <input id="newsletter-email" type="email" name="email" autocomplete="email" placeholder="váš e-mail"> <button type="submit" aria-label="Odeslat"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66 133.66l-72 72a8 8 0 0 1-11.32-11.32L196.69 136H40a8 8 0 0 1 0-16h156.69l-58.35-58.34a8 8 0 0 1 11.32-11.32l72 72a8 8 0 0 1 0 11.32Z"/></svg></button></p>
+      <p class="foot-sub">Dozvíte se o každé nové knize. Odhlásit se můžete kdykoli.</p>
+    </form>
+    <div class="foot-cols">
+      <nav aria-label="Obsah webu"><h2 class="eyebrow">Obsah</h2><menu><li><a class="hl" href="#">Naše knihy</a></li><li><a class="hl" href="#">Autoři</a></li><li><a class="hl" href="#">O nakladatelství</a></li></menu></nav>
+      <div><h2 class="eyebrow">Kontakty</h2>
+        <p class="ct"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224 48H32a8 8 0 0 0-8 8v136a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a8 8 0 0 0-8-8Zm-96 85.15L52.57 64h150.86ZM98.71 128 40 181.81V74.19Zm11.84 10.85 12 11.05a8 8 0 0 0 10.82 0l12-11.05 58 53.15H52.57ZM157.29 128 216 74.18v107.64Z"/></svg><a class="hl" href="#">skalak@knihyps.cz</a></p>
+        <p class="ct"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24Zm8 191.18V152h24a8 8 0 0 0 0-16h-24v-24a16 16 0 0 1 16-16h16a8 8 0 0 0 0-16h-16a32 32 0 0 0-32 32v24H96a8 8 0 0 0 0 16h24v63.18a88 88 0 1 1 16 0Z"/></svg><a class="hl" href="#">knihyprestupnistanice</a></p>
+      </div>
+      <div><h2 class="eyebrow">Tiráž</h2>
+        <p class="tir">Naše knihy jsou dostupné v distribuci <a class="hl" href="#">Kosmas</a>.</p>
+        <p class="tir">Web písmy <a class="hl" href="#">Alegreya</a> a <a class="hl" href="#">Montserrat</a> vysázel <a class="hl" href="#">Dominik Bláha</a>.</p>
+      </div>
+    </div>
+  </div>
+  <span class="foot-big" aria-hidden="true">Přestupní stanice</span>
+</div></footer>
+<aside class="dock" id="dock" aria-label="Panel návrhu">
+ <div class="dock-in">
+  <div class="dock-top"><div class="vnav" id="vnav" role="group" aria-label="Varianty"></div><button type="button" class="dock-tg" id="dtg" aria-expanded="true">Skrýt panel</button></div>
+  <div class="dock-body">
+   <p class="dock-info" id="dockinfo"></p>
+   <div class="row"><span class="lab">Dostupnost</span><div class="seg" id="seg" role="group" aria-label="Dostupnost"></div><span class="lab">Knihy</span><div class="chips" id="chips"></div><span class="cartc">Košík<b id="cartc">0</b></span></div>
+  </div>
+ </div>
+</aside>
+</div>
+<img id="float" alt="" hidden>
+
+<script>
+const BOOKS=__BOOKS__;
+const NB=' ';
+const tp=s=>{let o=s;for(let i=0;i<2;i++)o=o.replace(/(^|[\s(])([kvszouaiKVSZOUAI])\s/g,'$1$2'+NB);return o};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>new Intl.NumberFormat('cs-CZ',{style:'currency',currency:'CZK',maximumFractionDigits:0}).format(n).replace(/\s/g,NB);
+
+const hex2=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const lum=c=>{const f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2])};
+const cr=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+const toHex=c=>'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');
+const tone=(hex,bg,dir)=>{const base=hex2(hex);for(let s=0;s<=20;s++){const c=mix(base,dir,s/20);if(cr(c,bg)>=4.6)return toHex(c)}return toHex(dir)};
+
+BOOKS.forEach(b=>{
+  b.c5=tone(b.c1,[252,249,242],[0,0,0]);
+  b.c5d=tone(b.c1,[24,22,17],[255,255,255]);
+  b.on2=cr(hex2(b.c2),[0,0,0])>cr(hex2(b.c2),[255,255,255])?'#15130f':'#ffffff';
+  b.ar=+(b.w/b.h).toFixed(4);
+  b.title=tp(b.title);
+  if(b.claim)b.claim=tp(b.claim);
+  b.style=`--c1:${b.c1};--c2:${b.c2};--c5:${b.c5};--c5d:${b.c5d};--on2:${b.on2};--ar:${b.ar};--pg:${b.pages||80}`;
+});
+
+BOOKS.sort((a,b)=>b.order-a.order);
+const state={v:1,avail:'real',shown:new Set(BOOKS.map(b=>b.slug)),cart:new Set()};
+const AVAIL=[['real','Podle dat'],['stock','Skladem'],['kosmas','Jen Kosmas'],['none','Nikde']];
+
+const status=b=>state.avail==='real'?(b.stock>0&&b.price?'stock':(b.kosmas?'kosmas':'none')):state.avail;
+const priceOf=b=>b.price||279;
+const cartIcon='<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.14 58.87A8 8 0 0 0 224 56H62.68L56.6 22.57A8 8 0 0 0 48.73 16H24a8 8 0 0 0 0 16h18l25.56 140.29a24 24 0 0 0 5.33 11.27A28 28 0 1 0 100 200h60a28 28 0 1 0 28-28H91.17a8 8 0 0 1-7.87-6.57L80.13 148h112a24 24 0 0 0 23.6-19.71l14.29-78.57a8 8 0 0 0-1.88-6.85ZM100 204a12 12 0 1 1-12-12 12 12 0 0 1 12 12Zm88 0a12 12 0 1 1-12-12 12 12 0 0 1 12 12Zm11.7-86.57a8 8 0 0 1-7.9 6.57H77.22L65.59 72h148.34Z"/></svg>';
+
+const authors=(b,sep=' a ')=>b.authors.map((a,i)=>{
+  const s=i===0?'':(i===b.authors.length-1?sep:', ');
+  return `${s}<a class="au" href="#" data-img="${a.img||''}">${a.name}</a>`}).join('');
+const authorsInv=b=>b.authors.map((a,i)=>{
+  const p=a.name.split(' ');const inv=p.length>1?`${p.slice(1).join(' ')}, ${p[0]}`:a.name;
+  return `${i?'; ':''}<a class="au" href="#" data-img="${a.img||''}">${inv}</a>`}).join('');
+const more=(txt='Více o knize')=>`<a class="more al" href="#">${txt}</a>`;
+const cartLabel=b=>state.cart.has(b.slug)?'V košíku':'Do košíku';
+const buy=b=>{
+  const s=status(b);
+  if(s==='stock')return `<button type="button" class="add${state.cart.has(b.slug)?' in':''}" data-slug="${b.slug}">${cartIcon}<span>${cartLabel(b)}</span></button>`;
+  if(s==='kosmas')return `<a class="kos al" href="${b.kosmas||'https://www.kosmas.cz'}" target="_blank" rel="noopener">Kup na Kosmasu<span class="sr"> (otevře se v novém okně)</span></a>`;
+  return `<span class="na">Není skladem</span>`;
+};
+const price=b=>status(b)==='stock'?`<span class="pr">${fmt(priceOf(b))}</span>`:'';
+const titleLink=(b,extra='')=>`<h3 class="t"><a href="#">${b.title}</a>${extra}</h3>`;
+const claim=(b,mark=false)=>b.claim?`<p class="claim" title="${esc(b.claim)}">${b.claim}${mark?' <span class="pm" aria-hidden="true">¶</span>':''}</p>`:'';
+const img=(b,cls='cv')=>`<img class="${cls}" src="${b.cover}" alt="" width="${b.w}" height="${b.h}" loading="lazy">`;
+const catKick=b=>`${b.cat} · ${b.date}`;
+
+const LV=[50,100,200,300,400,500,600,700,800,900,950];
+const scale=b=>{const base=hex2(b.c5);return LV.map(l=>l===500?b.c5:l<500?toHex(mix(base,[255,255,255],(500-l)/450*.93)):toHex(mix(base,[0,0,0],(l-500)/450*.82)))};
+const act=b=>`<div class="act">${price(b)}${buy(b)}${more()}</div>`;
+const rowtx=b=>`<div class="rowtx"><p class="kick">${catKick(b)}</p>${titleLink(b)}<p class="aus">${authors(b)}</p>${claim(b)}`;
+
+const VARIANTS=[
+{id:'v3',rows:true,name:'Anatomie obálky',min:'22rem',note:'Každý údaj je spojen s obálkou kótou, jako ve výkresu. Rozměrová závorka nad obálkou udává rozsah.',
+ card:b=>`<div class="v3-g">
+  <div class="v3-fig"><div class="v3-dim" aria-hidden="true"><span>${b.pages?b.pages+' stran':'obálka'}</span></div><div class="v3-img">${img(b)}</div></div>
+  <div class="v3-data">
+    <div class="v3-row"><span class="kick">Název · ${catKick(b)}</span>${titleLink(b)}</div>
+    <div class="v3-row"><span class="kick">${b.authors.length>1?'Autoři':'Autor'}</span><p class="aus">${authors(b)}</p></div>
+    ${b.claim?`<div class="v3-row"><span class="kick">Anotace</span>${claim(b)}</div>`:''}
+    <div class="v3-row"><span class="kick">${status(b)==='stock'?'Cena':'Dostupnost'}</span><div class="v3-buy">${price(b)}${buy(b)}${more()}</div></div>
+  </div></div>`},
+{id:'v7',rows:true,name:'Titulní strana',min:'21rem',note:'Titul vysázený na šířku sloupce jako na titulní straně. Nevytištěné znaky ↵ a ¶ ukazují sazbu.',
+ card:b=>`<div class="v7-sheet">
+  <div class="v7-top"><span class="kick">${catKick(b)}</span><span class="kick">č. ${b.order}</span></div>
+  ${titleLink(b,'<span class="rt" aria-hidden="true">↵</span>')}
+  <div class="v7-mid"><div><p class="aus">${authors(b)}</p>${claim(b,true)}</div>${img(b)}</div>
+  <div class="v7-foot">${more()}<div class="buyrow">${price(b)}${buy(b)}</div></div></div>`},
+
+{id:'r2',rows:true,name:'Kontrolní lišta',note:'Nad každým řádkem je proužek barvy knihy ve stupních 50 až 950, jako stupnice na webu. Odstín 500 je ten, kterým je vysazen titul.',
+ card:b=>`<div class="r2">
+  <div class="r2-strip" aria-hidden="true">${scale(b).map((c,i)=>`<span><i style="--i:${i};background:${c}"></i><em>${LV[i]}</em></span>`).join('')}</div>
+  <div class="r2-cv">${img(b)}</div>
+  ${rowtx(b)}</div>${act(b)}</div>`},
+
+{id:'r6',rows:true,sheets:true,name:'Samostatný list',note:'Každá kniha má vlastní tiskový list s ořezovými značkami. Nahoře mezi značkami je pořadí, název a autor, vlevo rok a oddělení. Pruh je přechod z první do druhé barvy knihy v deseti krocích jako ColorBar.',
+ card:b=>`<div class="r6">
+  <div class="r6-cv">${img(b)}</div>
+  <div class="rowtx">${titleLink(b)}<p class="aus">${authors(b)}</p>${claim(b)}</div>${act(b)}
+  <div class="r6-bar" aria-hidden="true">${Array.from({length:10},(_,i)=>`<span style="--i:${i};background:color-mix(in srgb,var(--c2) ${Math.round(i*100/9)}%,var(--c1))"></span>`).join('')}</div></div>`}
+];
+
+const $=id=>document.getElementById(id);
+
+function drawBar(){
+  $('vnav').innerHTML=VARIANTS.map((v,i)=>`<button type="button" data-v="${i+1}" aria-pressed="${state.v===i+1}"><b>${i+1}</b>${v.name}</button>`).join('');
+  $('seg').innerHTML=AVAIL.map(([k,l])=>`<button type="button" data-a="${k}" aria-pressed="${state.avail===k}">${l}</button>`).join('');
+  $('chips').innerHTML=BOOKS.map(b=>`<button type="button" class="chip" data-b="${b.slug}" aria-pressed="${state.shown.has(b.slug)}"><img src="${b.cover}" alt=""><span>${b.shortTitle}</span></button>`).join('');
+}
+function fitTitles(){
+  const ctx=document.createElement('canvas').getContext('2d');
+  document.querySelectorAll('.v7 .t').forEach(t=>{
+    const a=t.querySelector('a');const W=t.parentElement.clientWidth;if(!W)return;
+    ctx.font='800 100px Alegreya, Georgia, serif';
+    const words=a.textContent.split(/\s+/);
+    const wide=Math.max(...words.map(w=>ctx.measureText(w).width));
+    const px=Math.min(88,Math.max(26,W/wide*100*.96));
+    t.style.setProperty('--fit',px/17+'rem');
+  });
+}
+function render(){
+  const v=VARIANTS[state.v-1];
+  const list=BOOKS.filter(b=>state.shown.has(b.slug));
+  const regs='<svg class="regm t" viewBox="0 0 4 4" aria-hidden="true"><circle cx="2" cy="2" r="0.95"/><circle cx="2" cy="2" r="0.38"/><path d="M0 2H4M2 0V4"/></svg><svg class="regm b" viewBox="0 0 4 4" aria-hidden="true"><circle cx="2" cy="2" r="0.95"/><circle cx="2" cy="2" r="0.38"/><path d="M0 2H4M2 0V4"/></svg>';
+  const single=`<div class="sheetw"><section class="sheet" id="sheet">
+   <i class="mkc tl" aria-hidden="true"></i><i class="mkc tr" aria-hidden="true"></i><i class="mkc bl" aria-hidden="true"></i><i class="mkc br" aria-hidden="true"></i>${regs}
+   <span class="slug" aria-hidden="true">Návrh ${state.v}/${VARIANTS.length} · ${v.name} · ${list.length} z ${BOOKS.length} knih</span>
+   <div class="sideslug" aria-hidden="true"><span>Karta knihy · varianta ${state.v} · ${v.name}</span></div>
+   <div class="sheet-in">${list.length?`<div class="grid ${v.id}${v.rows?' rows':''}" style="--min:${v.rows?'100%':v.min}">${list.map(b=>`<article class="bk" style="${b.style}">${v.card(b)}</article>`).join('')}</div>`:'<p class="lab" style="color:var(--muted)">Vyberte alespoň jednu knihu.</p>'}</div></section></div>`;
+  const CATN={'Pro děti':'pro děti','Filosofie':'pro filosofy'};
+  const regR='<svg class="regm r" viewBox="0 0 4 4" aria-hidden="true"><circle cx="2" cy="2" r="0.95"/><circle cx="2" cy="2" r="0.38"/><path d="M0 2H4M2 0V4"/></svg>';
+  const stack=list.length?list.map((b,i)=>{
+    const n=list.length,edge=n===1?'only':i===0?'first':i===n-1?'last':'middle';
+    const cor={first:['tl','tr'],middle:[],last:['bl','br'],only:['tl','tr','bl','br']}[edge];
+    const by=b.authors.map(a=>a.name).join(' a ');
+    return `<div class="sheetw st${i===0?' first':''}"><section class="sheet e-${edge}">${cor.map(c=>`<i class="mkc ${c}" aria-hidden="true"></i>`).join('')}${edge==='first'||edge==='middle'?'<i class="cut" aria-hidden="true"></i>':''}${regR}
+     <span class="slug" aria-hidden="true">${b.order}. ${b.title} · ${by}</span>
+     <div class="sideslug" aria-hidden="true"><span>${b.date} · ${CATN[b.cat]||b.cat}</span></div>
+     <div class="sheet-in"><article class="bk" style="${b.style}">${v.card(b)}</article></div></section></div>`}).join(''):'<div class="sheetw st first"><p class="lab" style="color:var(--muted)">Vyberte alespoň jednu knihu.</p></div>';
+  $('app').innerHTML=v.sheets?stack:single;
+  $('cartc').textContent=state.cart.size;
+  $('dockinfo').innerHTML=`<b>Varianta ${state.v} z ${VARIANTS.length} · ${v.name}.</b> ${v.note} Data, obálky a portréty jsou skutečné. U knih bez ceny v datech se při vynucené dostupnosti „Skladem“ ukáže ukázková cena 279 Kč. Mistr a Hluk nemají claim.`;
+  requestAnimationFrame(fitTitles);
+}
+function setHash(){try{history.replaceState(null,'','#v'+state.v)}catch(e){}}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a');if(!t)return;
+  if(t.matches('a[href="#"]')){e.preventDefault();return}
+  if(t.id==='dtg'){const d=$('dock');const m=d.classList.toggle('min');t.textContent=m?'Zobrazit panel':'Skrýt panel';t.setAttribute('aria-expanded',String(!m));return}
+  if(t.dataset.v){state.v=+t.dataset.v;drawBar();render();setHash();window.scrollTo({top:0});return}
+  if(t.dataset.a){state.avail=t.dataset.a;drawBar();render();return}
+  if(t.dataset.b){const s=state.shown;s.has(t.dataset.b)?s.delete(t.dataset.b):s.add(t.dataset.b);drawBar();render();return}
+  if(t.classList.contains('add')){
+    const s=t.dataset.slug;state.cart.has(s)?state.cart.delete(s):state.cart.add(s);
+    document.querySelectorAll(`.add[data-slug="${s}"]`).forEach(b=>{const on=state.cart.has(s);b.classList.toggle('in',on);b.querySelector('span').textContent=on?'V košíku':'Do košíku'});
+    $('cartc').textContent=state.cart.size;
+  }
+});
+const fl=$('float');
+document.addEventListener('mouseover',e=>{const a=e.target.closest&&e.target.closest('.au');if(a&&a.dataset.img){fl.src=a.dataset.img;fl.hidden=false}});
+document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.au'))fl.hidden=true});
+document.addEventListener('mousemove',e=>{if(!fl.hidden){fl.style.left=e.clientX+'px';fl.style.top=e.clientY+'px'}});
+window.addEventListener('resize',fitTitles);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTitles);
+
+const h=/^#v(\d+)$/.exec(location.hash);if(h&&VARIANTS[+h[1]-1])state.v=+h[1];
+window.addEventListener('hashchange',()=>{const m=/^#v(\d+)$/.exec(location.hash);if(m&&VARIANTS[+m[1]-1]){state.v=+m[1];drawBar();render()}});
+drawBar();render();
+</script>

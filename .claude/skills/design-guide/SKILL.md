@@ -164,6 +164,14 @@ Patterns:
   price and buy action stacked to the right. The whole row is the link
   (`after:absolute after:inset-0`), hover tints the row and the title with the
   book colour; secondary links sit above with `relative z-10`.
+- **Book sheet** (`BookSheet`): the one book list item, used on the book list,
+  the homepage and in "Připravujeme". Each book is its own `PrintSheet` with a
+  `slug` line above (`order. title · authors`), a vertical `sideSlug` (year ·
+  category) and a right registration mark. Inside: cover on the left, title in
+  `brand-first-500` (always `keepHue`, large, fitted with `cqw`), byline, claim
+  with the `Více o knize` arrow link, `BookBuy` on the right, and a full-width
+  `ColorBar variant="strip"` at the bottom whose ten steps grow downwards one
+  after another on hover. Do not build another book list item.
 - **Contact sheet** (`BooksContactSheet`): 12-column grid with faint column
   guides (`bg-brand-second-200/12`); on hover a cover gets a selection frame
   with eight handles, long crosshair guides and a `W × H mm` tag — the
