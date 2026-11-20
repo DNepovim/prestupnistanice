@@ -25,6 +25,12 @@ if (promotedBooks.length === 0) {
   return
 }
 
+const extraListBooks = books
+  .filter(
+    (b) => b.data.coverTop && !promotedBooks.some((p) => p.data.slug === b.data.slug),
+  )
+  .slice(0, 2)
+
 const upcomingBooks = books.filter((b) => b.data.isUpcoming)
 
 const now = new Date()
@@ -59,7 +65,7 @@ const philosophyBooks = remainingBooks
   <h1 class="sr-only">Přestupní stanice — rodinné knižní nakladatelství</h1>
 
   <Section isFull>
-    <PromotedCarousel books={promotedBooks} />
+    <PromotedCarousel books={[...promotedBooks, ...extraListBooks]} />
   </Section>
 
   <Upcoming books={upcomingBooks} events={upcomingEvents} />

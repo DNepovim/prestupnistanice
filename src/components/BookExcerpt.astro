@@ -1,8 +1,8 @@
 ---
-import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { getEntries, getEntry } from 'astro:content'
 
+import ArrowLink from '@/components/ArrowLink.astro'
 import BookBuy from '@/components/BookBuy.svelte'
 import { routes } from '@/routes'
 import { getExcerptText } from '@/utils/getExcerptText'
@@ -107,17 +107,13 @@ const authors = await getEntries(
         <p>
           {claim && tp(claim)}
           {' '}
-          <a
-            class="group text-brand-first-500 hover:text-brand-first-700 whitespace-nowrap transition-colors"
+          <ArrowLink
+            tone="first"
+            class="mr-7 whitespace-nowrap"
             href={routes.books.detail(slug)}
           >
-            více o knize
-            <Icon
-              name="ph:arrow-right"
-              aria-hidden="true"
-              class="inline size-[1em] align-[-0.12em] transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
-            />
-          </a>
+            Více o knize
+          </ArrowLink>
         </p>
       </div>
 

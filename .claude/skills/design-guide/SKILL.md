@@ -178,6 +178,13 @@ Patterns:
   Secondary actions are plain underlined links in `text-[0.7rem]`.
 - **Links** in prose: `font-alt`, `brand-first-500`, transparent bottom border
   that turns `brand-second-500` on hover.
+- **Arrow link** (`ArrowLink`): small uppercase `font-alt` label with an arrow
+  on its right; on hover the arrow's line stretches over the text, striking it
+  through. This is the one call-to-action link across the site ("Více o knize",
+  "všechny knihy", "Kup na Kosmasu"); do not invent another arrow or underline
+  hover. Leave room for the arrow (`mr-7`).
+- **Author names**: always an author link wrapped in `FloatingImage`, so the
+  portrait follows the cursor on hover — in listings, excerpts and credits alike.
 - **Tooltips / info icons**: Phosphor (`ph:*`) in `brand-first-700`, `size-4`.
 
 ## Motion
@@ -213,6 +220,9 @@ bouncing, no looping animation.
 
 **Do**
 
+- Reuse before building: check `src/components/` and the table in `code-guide`
+  ("Reuse and consistency"). A hover, link or mark that already exists must
+  look and behave identically everywhere; change it in the shared component.
 - Derive new sections from a print or editorial artefact (proof, imposition,
   colophon, index, errata) before inventing a new visual.
 - Reuse `PrintSheet`, `ColorBar`, `Theme`, `BooksIndex` etc. instead of
@@ -224,6 +234,8 @@ bouncing, no looping animation.
 
 **Don't**
 
+- Don't copy a component's markup into a new place or restyle it locally;
+  extend the component (new prop or tone) instead.
 - No rounded corners, cards with shadows, gradients over text, glassmorphism,
   emoji, or stock icons beyond Phosphor accents.
 - No pure white backgrounds; no hardcoded hex outside the CMYK strip and

@@ -10,6 +10,59 @@ reviewing any code.
 
 ---
 
+## Reuse and consistency
+
+The site's value is that every page feels like one publication. Before writing
+any markup, look for what already exists — and keep each pattern implemented
+exactly once.
+
+1. **Search first.** List `src/components/` and grep for the pattern you are
+   about to build (a link style, a bar, a mark, an author name, a thumbnail).
+   Check the table below, then `design-guide` for the visual rule.
+2. **Reuse as-is** when a component fits. Pass `class` for layout (margins,
+   grid placement), never to restyle its internals.
+3. **Extend, don't fork.** If a component almost fits, add a prop or a variant
+   to it (see `tone` on `ArrowLink`) so every call site benefits, instead of
+   copying its markup next to a new one.
+4. **One implementation per pattern.** If you find the same pattern built twice
+   (inline copy of an arrow link, a second crop-mark snippet, a hand-rolled
+   author hover), move it into the shared component and replace the copies in
+   the same change, or at least say so in your reply.
+5. **Changing a pattern means changing all of it.** When a hover, spacing or
+   link behaviour is adjusted, grep every usage and update them together; the
+   same interaction must behave the same on the homepage, listings and detail
+   pages.
+6. **Delete what you orphan.** A component left without callers fails `knip`;
+   remove it.
+
+| Need | Use |
+| :-- | :-- |
+| Call-to-action link with the arrow that stretches over the text on hover ("Více o knize", "všechny knihy") | `ArrowLink` (`tone="first" \| "second" \| "current"`) |
+| Author name with the floating portrait on hover | `FloatingImage` (Svelte, `client:visible`) wrapping the author link |
+| Crop marks around an image | `CropMarks` |
+| Colour bar / CMYK strip | `ColorBar`, `CmykBar` |
+| Per-book palette for a subtree | `Theme` |
+| Print sheet with marks and cut lines | `PrintSheet` |
+| Circular author portrait | `Portrait` |
+| Credits list with roles | `BookCrew`, `AuthorSmall` |
+| Index row of books (number, title, authors, price) | `BooksIndex` |
+| Markdown / typography | `Markdown`, `tp()` |
+
+When you add a component that other pages could reasonably want, add it to this
+table.
+
+### Interactive rows
+
+A row that is clickable as a whole while holding other links (authors, "more")
+uses one stretched primary action (`after:absolute after:inset-0` on the
+title's `<a>` / `<button>`, row `relative`) and lifts secondary links with
+`relative z-10`. A secondary container that is wider than its links gets
+`pointer-events-none`, with `pointer-events-auto` on the links, so the empty
+area still hits the stretched action. Never nest one interactive element inside
+another.
+
+---
+
 ## Comments
 
 **Write no comments, in any language.** No `//`, no `/* */`, no JSDoc, no
@@ -82,6 +135,11 @@ const { slug, class: className } = Astro.props
 ---
 
 ## Styling (Tailwind 4)
+
+- **Class names must be complete literals in the source.** Tailwind only
+  generates utilities it can read; `` `hover:${TINT}` `` or `bg-${name}-500`
+  produce no CSS. Write every variant out in full (for repeated long strings,
+  repeat them or move the variant logic into CSS variables).
 
 Tailwind utilities only — no ad-hoc CSS files, no inline `style` for anything
 Tailwind can express. Custom utilities, keyframes, and font tokens live in

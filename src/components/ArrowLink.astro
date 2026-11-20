@@ -9,6 +9,7 @@ type Props = {
 const TONES = {
   first: { text: 'text-brand-first-500', border: 'border-brand-first-500', bg: 'bg-brand-first-500' },
   second: { text: 'text-brand-second-500', border: 'border-brand-second-500', bg: 'bg-brand-second-500' },
+  current: { text: '', border: 'border-current', bg: 'bg-current' },
 } as const
 
 const { href, class: className, hasArrowLeft, tone = 'second' } = Astro.props

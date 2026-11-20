@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Corner = 'tl' | 'tr' | 'bl' | 'br'
+
+type Props = {
+  class?: HTMLAttributes<'span'>['class']
+}
+
+const CORNERS = {
+  tl: '-top-(--mk-s) -left-(--mk-s)',
+  tr: '-top-(--mk-s) -right-(--mk-s) -scale-x-100',
+  bl: '-bottom-(--mk-s) -left-(--mk-s) -scale-y-100',
+  br: '-right-(--mk-s) -bottom-(--mk-s) -scale-100',
+} as const satisfies Record<Corner, string>
+
+const { class: className } = Astro.props
+---
+
+<span
+  aria-hidden="true"
+  class:list={[
+    'pointer-events-none absolute inset-0 text-gray-400',
+    '[--mk-g:0.4rem] [--mk-l:0.9rem] [--mk-s:calc(var(--mk-g)+var(--mk-l))]',
+    className,
+  ]}
+>
+  {
+    Object.values(CORNERS).map((position) => (
+      <span
+        class:list={[
+          'absolute size-(--mk-s)',
+          'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+          'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+          position,
+        ]}
+      />
+    ))
+  }
+</span>

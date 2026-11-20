@@ -134,11 +134,6 @@
   animation: slide-on-load 0.8s ease-out forwards;
 }
 
-@utility text-stroke-* {
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: --value(--color-*);
-}
-
 @utility text-outline-* {
   filter: drop-shadow(2px 0 0 --value(--color-*)) drop-shadow(-2px 0 0 --value(--color-*));
 }

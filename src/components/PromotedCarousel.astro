@@ -1,8 +1,14 @@
 ---
 import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import { getEntry, type CollectionEntry } from 'astro:content'
 import { isDefined } from 'narrowland'
 
+import ArrowLink from '@/components/ArrowLink.astro'
+import CmykBar from '@/components/CmykBar.astro'
+import ColorBar from '@/components/ColorBar.astro'
+import CropMarks from '@/components/CropMarks.astro'
+import FloatingImage from '@/components/FloatingImage.svelte'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
 import { routes } from '@/routes'
 import { getColorScale } from '@/utils/geColorScale'
 import { tp } from '@/utils/tp'
@@ -19,6 +25,38 @@ const bookColorScales = books.map((book) => ({
   ...getColorScale(book.data.color ?? '#434991', 'color-first'),
   ...getColorScale(book.data.bgColor ?? '#e7d14c', 'color-second'),
 }))
+
+const bookAuthors = await Promise.all(
+  books.map(async (book) => {
+    const authors = await Promise.all(
+      book.data.authors
+        .filter((a) => a.isMain)
+        .map(async (a) => {
+          const entry = await getEntry('author', a.slug.id)
+          return entry
+            ? {
+                name: `${entry.data.firstname} ${entry.data.surname}`,
+                href: routes.authors.detail(a.slug.id),
+                image: entry.data.image?.src,
+              }
+            : undefined
+        }),
+    )
+    return authors.filter(isDefined)
+  }),
+)
+
+const SLUG_LINK =
+  'hover:text-black focus-visible:outline-2 focus-visible:outline-gray-500'
+const REGISTRATION_MARKS = [
+  'top-2 left-0 -translate-x-1/2 [clip-path:inset(0_0_0_50%)]',
+  'top-2 right-0 translate-x-1/2 [clip-path:inset(0_50%_0_0)]',
+  'bottom-2 left-0 -translate-x-1/2 [clip-path:inset(0_0_0_50%)]',
+  'bottom-2 right-0 translate-x-1/2 [clip-path:inset(0_50%_0_0)]',
+]
+
+const getRowStyle = (book: CollectionEntry<'book'>) =>
+  `--book-color:${book.data.color ?? FALLBACK_COLOR_FIRST}`
 ---
 
 <div
@@ -27,13 +65,13 @@ const bookColorScales = books.map((book) => ({
   data-color-scales={JSON.stringify(bookColorScales)}
 >
   <div
-    class="relative mt-8"
+    class="relative mt-8 "
     role="group"
     aria-roledescription="carousel"
     aria-label="Vybrané knihy"
   >
     <div class="overflow-hidden" data-carousel-viewport>
-      <div class="flex touch-pan-y touch-pinch-zoom items-start">
+      <div class="flex touch-pan-y touch-pinch-zoom items-stretch">
         {
           books.map((book, index) => {
             const cleanClaim = isDefined(book.data.claim)
@@ -41,45 +79,121 @@ const bookColorScales = books.map((book) => ({
               : null
             return (
               <div
-                class="relative min-w-0 flex-[0_0_var(--slide-size)] px-[calc(var(--slide-spacing)/2)] opacity-30 transition-opacity duration-500 [&.is-snapped]:opacity-100"
+                class="group relative min-w-0 flex-[0_0_var(--slide-size)] border-y border-gray-200 bg-white px-[calc(var(--slide-spacing)/2)] pt-[2.6rem] pb-5 before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:border-l before:border-dashed before:border-gray-300 max-sm:py-4"
                 data-carousel-slide
                 data-index={index}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`${String(index + 1)} z ${String(books.length)}: ${book.data.title}`}
               >
-                <a
-                  class="relative block"
-                  data-carousel-cover
-                  href={routes.books.detail(book.data.slug)}
+                {REGISTRATION_MARKS.map((position) => (
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 4 4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="0.12"
+                    class:list={[
+                      'pointer-events-none absolute size-[1.4rem] text-gray-400 max-sm:hidden',
+                      position,
+                    ]}
+                  >
+                    <circle cx="2" cy="2" r="0.95" />
+                    <circle cx="2" cy="2" r="0.38" />
+                    <path d="M0 2H4M2 0V4" />
+                  </svg>
+                ))}
+                <div
+                  class="relative opacity-30 transition-opacity duration-500 group-[.is-snapped]:opacity-100 motion-reduce:transition-none"
                 >
-                  <h2 class="sr-only">{book.data.title}</h2>
-                  {cleanClaim && (
-                    <div class="font-alt absolute right-0 bottom-0 z-10 m-4 hidden max-w-1/2 text-right text-xl text-white italic sm:block">
-                      <span class="rounded bg-black/50 box-decoration-clone px-2 py-0.5 leading-relaxed">
-                        {cleanClaim}
-                      </span>
-                    </div>
-                  )}
-                  <Image
-                    alt=""
-                    src={book.data.cover}
-                    width={300}
-                    height={300}
-                    class="aspect-square w-full rounded-md border border-gray-200 shadow-2xl sm:hidden"
-                    fit="cover"
-                  />
-                  {book.data.coverTop && (
+                  <div class="font-alt absolute inset-x-6 -top-[2.6rem] hidden h-[2.6rem] items-center justify-between gap-6 text-[0.64rem] leading-none font-semibold tracking-[0.1em] whitespace-nowrap text-gray-500 uppercase sm:flex">
+                    <span class="truncate">{book.data.title}</span>
+                    <span class="flex min-w-0 gap-x-3 truncate">
+                      {bookAuthors[index]?.map((author, authorIndex) => (
+                        <>
+                          {authorIndex > 0 && <span aria-hidden="true">·</span>}
+                          <a class={SLUG_LINK} href={author.href}>
+                            {author.name}
+                          </a>
+                        </>
+                      ))}
+                    </span>
+                  </div>
+                  <a
+                    class="relative block"
+                    data-carousel-cover
+                    href={routes.books.detail(book.data.slug)}
+                  >
+                    <h2 class="sr-only">{book.data.title}</h2>
+                    {cleanClaim && (
+                      <div class="font-alt absolute right-0 bottom-0 z-10 m-4 hidden max-w-1/2 text-right text-xl text-white italic sm:block">
+                        <span class="bg-black/50 box-decoration-clone px-2 py-0.5 leading-relaxed">
+                          {cleanClaim}
+                        </span>
+                      </div>
+                    )}
                     <Image
                       alt=""
-                      src={book.data.coverTop}
-                      widths={[1675, 1338]}
-                      width={1338}
-                      height={1420}
-                      class="hidden w-full rounded-md border border-gray-200 shadow-2xl sm:block"
+                      src={book.data.cover}
+                      width={300}
+                      height={300}
+                      class="aspect-square w-full border border-gray-200 shadow-2xl sm:hidden"
+                      fit="cover"
                     />
-                  )}
-                </a>
+                    {book.data.coverTop && (
+                      <Image
+                        alt=""
+                        src={book.data.coverTop}
+                        widths={[1675, 1338]}
+                        width={1338}
+                        height={535}
+                        class="hidden aspect-5/2 w-full border border-gray-200 object-cover shadow-2xl sm:block"
+                      />
+                    )}
+                    <CropMarks class="hidden sm:block" />
+                  </a>
+                  <div class="mt-[2.1rem] hidden flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 sm:flex">
+                    <ColorBar
+                      from={book.data.color ?? FALLBACK_COLOR_FIRST}
+                      to={book.data.bgColor ?? FALLBACK_COLOR_SECOND}
+                    />
+                    <div class="flex gap-0.5">
+                      {books.map((dot, dotIndex) => (
+                        <button
+                          type="button"
+                          class="group/dot cursor-pointer p-1 text-gray-400 transition-colors duration-300 hover:text-[color-mix(in_srgb,var(--book-color)_62%,black)] focus-visible:outline-2 focus-visible:outline-gray-500 [&.is-active]:text-gray-800"
+                          style={`--book-color:${dot.data.color ?? FALLBACK_COLOR_FIRST}`}
+                          data-carousel-step
+                          data-carousel-sync
+                          data-index={dotIndex}
+                          aria-label={dot.data.title}
+                        >
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 4 4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="0.14"
+                            class="block size-[1.2rem] overflow-visible transition-transform duration-300 group-hover/dot:scale-125 motion-reduce:transition-none"
+                          >
+                            <circle cx="2" cy="2" r="0.95" />
+                            <circle
+                              cx="2"
+                              cy="2"
+                              r="0.38"
+                              class="opacity-0 transition-opacity duration-300 group-[.is-active]/dot:opacity-100 group-hover/dot:opacity-100"
+                            />
+                            <path
+                              d="M0 2H4M2 0V4"
+                              class="opacity-0 transition-opacity duration-300 group-[.is-active]/dot:opacity-100 group-hover/dot:opacity-100"
+                            />
+                          </svg>
+                        </button>
+                      ))}
+                    </div>
+                    <CmykBar />
+                  </div>
+                </div>
               </div>
             )
           })
@@ -120,50 +234,111 @@ const bookColorScales = books.map((book) => ({
       })
     }
   </div>
-  <div
-    class="relative mt-4 mb-40 hidden items-start justify-between gap-4 px-[calc((100%-var(--slide-size))/2+var(--slide-spacing)/2)] sm:flex"
+  <section
+    class="mx-auto mt-16 w-[calc(var(--slide-size)-var(--slide-spacing))]"
+    aria-labelledby="newest-books"
   >
-    <div class="flex shrink-0 gap-2">
-      {
-        books.map((book, index) => (
-          <button
-            type="button"
-            class="size-10 cursor-pointer overflow-hidden rounded-md opacity-30 transition-opacity duration-500 [&.is-active]:opacity-100"
-            data-carousel-step
-            data-carousel-sync
-            data-index={index}
-            aria-label={book.data.title}
-          >
-            <Image
-              src={book.data.cover}
-              alt=""
-              width={40}
-              height={40}
-              class="size-full object-cover"
-            />
-          </button>
-        ))
-      }
+    <div class="grid items-start gap-x-10 gap-y-6 sm:grid-cols-[auto_minmax(0,1fr)]">
+      <div
+        class="relative hidden grid-cols-[repeat(3,4.6rem)] gap-6 p-6 sm:grid"
+        data-book-thumbs
+      >
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute top-0 left-0 data-ready:transition-[translate,width,height] data-ready:duration-500 motion-reduce:transition-none"
+          data-book-marks
+        >
+          <CropMarks class="[--mk-g:0.25rem] [--mk-l:0.5rem]" />
+        </span>
+        {
+          books.map((book, index) => (
+            <button
+              type="button"
+              class="group/cell relative block aspect-square cursor-pointer opacity-30 transition-[opacity,translate,box-shadow] duration-500 motion-reduce:transition-none [&.is-active]:opacity-100 [&.is-hovered]:-translate-y-0.5 [&.is-hovered]:opacity-100 [&.is-hovered]:shadow-[0_0.5rem_1.1rem_color-mix(in_srgb,var(--book-color)_45%,transparent)]"
+              data-book-item={index}
+              data-carousel-step
+              data-carousel-sync
+              data-index={index}
+              style={getRowStyle(book)}
+              aria-label={book.data.title}
+            >
+              <Image
+                src={book.data.cover}
+                alt=""
+                width={160}
+                height={160}
+                class="size-full object-cover"
+              />
+              <span
+                aria-hidden="true"
+                class="font-alt absolute top-0 left-0 -translate-y-full pb-0.5 text-[0.56rem] leading-none font-semibold tracking-[0.1em] text-gray-500"
+              >
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+      <div>
+        <h2
+          id="newest-books"
+          class="font-alt mb-3 text-[0.7rem] leading-none tracking-[0.1em] text-gray-500 uppercase"
+        >
+          Nejnovější knihy
+        </h2>
+        <div class="relative border-t border-dashed border-gray-300" data-book-list>
+          <span
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-x-0 top-0 h-0 bg-[color-mix(in_srgb,var(--highlight-color,transparent)_12%,transparent)] data-ready:transition-[translate,height,background-color] data-ready:duration-500 motion-reduce:transition-none"
+            data-book-highlight
+          ></span>
+          {
+            books.map((book, index) => (
+              <div
+                class="group/row relative grid grid-cols-[2.4rem_minmax(0,1fr)_auto] items-baseline gap-x-4 border-b border-dashed border-gray-300 px-2 py-3 transition-colors duration-300 max-sm:grid-cols-[1.8rem_minmax(0,1fr)] [&.is-hovered]:bg-[color-mix(in_srgb,var(--book-color)_12%,transparent)]"
+                data-book-item={index}
+                style={getRowStyle(book)}
+              >
+                <span class="font-head text-right text-base text-gray-500 oldstyle-nums">
+                  {index + 1}
+                </span>
+                <div class="min-w-0">
+                  <button
+                    type="button"
+                    class="font-head block cursor-pointer text-left text-xl leading-[1.15] font-extrabold text-gray-800 transition-colors duration-300 group-has-[[aria-current]]/row:text-[color-mix(in_srgb,var(--book-color)_62%,black)] group-[.is-hovered]/row:text-[color-mix(in_srgb,var(--book-color)_62%,black)] after:absolute after:inset-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-gray-500"
+                    data-carousel-step
+                    data-carousel-sync
+                    data-index={index}
+                  >
+                    {book.data.title}
+                  </button>
+                  <span class="font-alt pointer-events-none relative z-10 mt-1 block text-sm text-gray-700 italic">
+                    {bookAuthors[index]?.map((author, authorIndex) => (
+                      <>
+                        {authorIndex > 0 && ', '}
+                        <FloatingImage client:visible src={author.image} alt={author.name}>
+                          <a class="pointer-events-auto transition-colors hover:text-black" href={author.href}>
+                            {author.name}
+                          </a>
+                        </FloatingImage>
+                      </>
+                    ))}
+                  </span>
+                </div>
+                <ArrowLink
+                  tone="current"
+                  class="relative z-10 mr-7 text-gray-700 hover:text-[color-mix(in_srgb,var(--book-color)_62%,black)] max-sm:col-start-2 max-sm:mt-2"
+                  href={routes.books.detail(book.data.slug)}
+                >
+                  Více o knize
+                </ArrowLink>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
-    <div class="-mr-4 grid grow">
-      {
-        books.map((book, index) => (
-          <div
-            class="pointer-events-none flex flex-wrap gap-4 opacity-0 transition-opacity duration-500 [grid-area:1/1] min-sm:justify-end [&.is-active]:pointer-events-auto [&.is-active]:opacity-100"
-            data-carousel-sync
-            data-index={index}
-            inert={index !== 0}
-          >
-            {book.data.authors
-              .filter((a) => a.isMain)
-              .map((a) => (
-                <AuthorSmall slug={a.slug.id} roles={a.role} />
-              ))}
-          </div>
-        ))
-      }
-    </div>
-  </div>
+  </section>
 </div>
 
 <script>
@@ -190,6 +365,33 @@ const bookColorScales = books.map((book) => ({
     const synced = [...root.querySelectorAll<HTMLElement>('[data-carousel-sync]')]
     const covers = [...root.querySelectorAll<HTMLAnchorElement>('[data-carousel-cover]')]
 
+    const list = root.querySelector<HTMLElement>('[data-book-list]')
+    const highlight = list?.querySelector<HTMLElement>('[data-book-highlight]')
+    const thumbs = root.querySelector<HTMLElement>('[data-book-thumbs]')
+    const marks = thumbs?.querySelector<HTMLElement>('[data-book-marks]')
+
+    const moveTo = (mover: HTMLElement, target: HTMLElement | null | undefined) => {
+      if (!target) return
+      mover.style.translate = `${String(target.offsetLeft)}px ${String(target.offsetTop)}px`
+      mover.style.width = `${String(target.offsetWidth)}px`
+      mover.style.height = `${String(target.offsetHeight)}px`
+      requestAnimationFrame(() => mover.setAttribute('data-ready', ''))
+    }
+
+    const placeIndicators = () => {
+      const row = list?.querySelector('[aria-current]')?.closest<HTMLElement>('[data-book-item]')
+      if (highlight && row) {
+        highlight.style.setProperty(
+          '--highlight-color',
+          row.style.getPropertyValue('--book-color'),
+        )
+        moveTo(highlight, row)
+      }
+      if (marks) {
+        moveTo(marks, thumbs?.querySelector<HTMLElement>('.is-active'))
+      }
+    }
+
     const embla = EmblaCarousel(viewport, { loop: true, align: 'center' }, [ClassNames()])
     instances.set(viewport, embla)
 
@@ -215,10 +417,16 @@ const bookColorScales = books.map((book) => ({
       Object.entries(colorScales[selected] ?? {}).forEach(([key, value]) => {
         root.style.setProperty(`--${key}`, value)
       })
+
+      placeIndicators()
     }
 
     embla.on('select', onSelect).on('reInit', onSelect)
     onSelect()
+
+    const resizeObserver = new ResizeObserver(placeIndicators)
+    if (list) resizeObserver.observe(list)
+    if (thumbs) resizeObserver.observe(thumbs)
 
     covers.forEach((link, index) => {
       link.addEventListener('click', (event) => {
@@ -227,6 +435,19 @@ const bookColorScales = books.map((book) => ({
           embla.scrollTo(index)
         }
       })
+    })
+
+    const items = [...root.querySelectorAll<HTMLElement>('[data-book-item]')]
+    const setHovered = (item: HTMLElement, isHovered: boolean) => {
+      items
+        .filter((other) => other.dataset.bookItem === item.dataset.bookItem)
+        .forEach((other) => other.classList.toggle('is-hovered', isHovered))
+    }
+    items.forEach((item) => {
+      item.addEventListener('pointerenter', () => setHovered(item, true))
+      item.addEventListener('pointerleave', () => setHovered(item, false))
+      item.addEventListener('focus', () => setHovered(item, true))
+      item.addEventListener('blur', () => setHovered(item, false))
     })
 
     root.querySelectorAll<HTMLElement>('[data-carousel-step]').forEach((btn) => {
