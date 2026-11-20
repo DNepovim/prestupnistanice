@@ -1,0 +1,128 @@
+---
+import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
+import { routes } from '@/routes'
+import type { AuthorIndexGroup } from '@/utils/getAuthorIndex'
+import { pluralize } from '@/utils/pluralize'
+import { tp } from '@/utils/tp'
+
+type Props = {
+  groups: AuthorIndexGroup[]
+  class?: string
+}
+
+const ALPHABET = Array.from('ABCČDEFGHIJKLMNOPQRŘSŠTUVWXYZŽ')
+const TAB =
+  'block h-[1.8rem] pl-2 font-alt text-[0.72rem] leading-[1.8rem] font-bold bg-[radial-gradient(circle_at_100%_50%,white_0.68rem,transparent_0.7rem)]'
+
+const { groups, class: className } = Astro.props
+
+const presentLetters = new Set(groups.map((group) => group.letter))
+---
+
+<div
+  data-authors-index
+  class:list={[
+    'grid grid-cols-[minmax(0,1fr)_0.8rem] px-[0.9rem] py-[2.2rem] min-md:grid-cols-[minmax(0,1fr)_0] min-md:px-[2.6rem] min-md:py-[2.5rem]',
+    className,
+  ]}
+>
+  <div class="min-md:pr-6 min-lg:columns-2 min-lg:gap-12">
+    {
+      groups.map(({ letter, entries }) => (
+        <section id={`autori-${letter}`} class="mb-8 break-inside-avoid">
+          <h2 class="font-head border-brand-first-300/60 flex scroll-mt-24 items-baseline gap-3 border-b border-dashed pb-2 text-[3rem] leading-[0.95] font-extrabold text-gray-800 oldstyle-nums">
+            {letter}
+            <span class="font-alt text-[0.6rem] leading-none font-medium tracking-[0.1em] text-gray-500 uppercase [font-variant-numeric:lining-nums]">
+              {pluralize(entries.length, ['záznam', 'záznamy', 'záznamů'])}
+            </span>
+          </h2>
+          <ul>
+            {entries.map((entry) => (
+              <li
+                style={`--c1:${entry.color}`}
+                class="group/row border-brand-first-300/60 relative border-b border-dashed px-1 py-3 transition-colors hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)]"
+              >
+                <p class="flex items-baseline gap-2">
+                  <a
+                    href={routes.authors.detail(entry.slug)}
+                    data-preview={entry.preview}
+                    class="font-head text-[1.25rem] leading-[1.1] font-extrabold text-gray-800 transition-colors group-hover/row:text-(--c1) after:absolute after:inset-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--c1)"
+                  >
+                    {tp(entry.surname)},
+                    <span class="font-normal">{tp(entry.firstname)}</span>
+                  </a>
+                  {entry.life && (
+                    <span class="font-head text-[0.82rem] text-gray-500 [font-variant-numeric:lining-nums]">
+                      {entry.life}
+                    </span>
+                  )}
+                  <span
+                    aria-hidden="true"
+                    class="border-brand-first-300/60 min-w-4 flex-1 -translate-y-1 border-b-2 border-dotted"
+                  />
+                  <span class="font-alt text-brand-first-700 text-[0.6rem] tracking-[0.1em] whitespace-nowrap uppercase [font-variant-numeric:lining-nums]">
+                    {pluralize(entry.books.length, ['kniha', 'knihy', 'knih'])}
+                  </span>
+                </p>
+                <p class="font-alt pointer-events-none mt-1 text-[0.8rem] leading-[1.4] text-gray-700 italic">
+                  {entry.books.map((book, index) => (
+                    <>
+                      {index > 0 && ' · '}
+                      <a
+                        href={routes.books.detail(book.slug)}
+                        data-preview={book.preview}
+                        class="pointer-events-auto relative z-10 transition-colors hover:text-black focus-visible:outline-2 focus-visible:outline-(--c1)"
+                      >
+                        {tp(book.title)}
+                      </a>
+                    </>
+                  ))}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+  <nav
+    aria-label="Rejstřík podle písmen"
+    class="sticky top-24 w-[1.7rem] self-start min-md:w-[2.6rem]"
+  >
+    <ul class="grid gap-[3px]">
+      {
+        ALPHABET.map((letter) => (
+          <li>
+            {presentLetters.has(letter) ? (
+              <a
+                href={`#autori-${letter}`}
+                class:list={[
+                  TAB,
+                  'bg-brand-first-700 hover:bg-brand-first-900 text-white transition-[translate,background-color] duration-200 hover:translate-x-1.5 focus-visible:translate-x-1.5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white motion-reduce:transition-none',
+                ]}
+              >
+                {letter}
+              </a>
+            ) : (
+              <span
+                aria-hidden="true"
+                class:list={[TAB, 'bg-brand-first-300/40 text-brand-first-700/40']}
+              >
+                {letter}
+              </span>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+<LinkPreviewScript />
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    html:has([data-authors-index]) {
+      scroll-behavior: smooth;
+    }
+  }
+</style>

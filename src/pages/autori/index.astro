@@ -1,30 +1,30 @@
 ---
-import { getCollection } from 'astro:content'
-
-import AuthorSmall from '@/components/AuthorSmall.astro'
-import BooksGrid from '@/components/BooksGrid.astro'
+import AuthorsIndex from '@/components/AuthorsIndex.astro'
 import PageTitle from '@/components/PageTitle.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
 import Section from '@/components/Section.astro'
 import Layout from '@/layouts/Layout.astro'
-import { getSlugFromPath } from '@/utils/getSlugFromPath'
+import { getAuthorIndex } from '@/utils/getAuthorIndex'
+import { pluralize } from '@/utils/pluralize'
 
-const books = await getCollection('book')
-const authors = await getCollection('author')
+const groups = await getAuthorIndex()
 
-const mainAuthorIds = new Set(
-  books.flatMap((book) =>
-    book.data.authors.filter((a) => a.isMain).map((a) => getSlugFromPath(a.author)),
-  ),
-)
-
-const mainAuthors = authors.filter((a) => mainAuthorIds.has(a.data.slug))
+const entries = groups.flatMap((group) => group.entries)
+const booksCount = new Set(
+  entries.flatMap((entry) => entry.books.map((book) => book.slug)),
+).size
 ---
 
 <Layout siteTitle="Autoři" siteDescription="Naši autoři">
   <Section isWide>
     <PageTitle>Autoři</PageTitle>
-    <BooksGrid>
-      {mainAuthors.map(({ data }) => <AuthorSmall slug={data.slug} />)}
-    </BooksGrid>
   </Section>
+  <PrintSheet
+    edge="only"
+    regs={['t', 'b']}
+    slug="Autoři · jmenný rejstřík"
+    sideSlug={`Jmenný rejstřík · ${pluralize(entries.length, ['autor', 'autoři', 'autorů'])} · ${pluralize(booksCount, ['kniha', 'knihy', 'knih'])}`}
+  >
+    <AuthorsIndex groups={groups} />
+  </PrintSheet>
 </Layout>

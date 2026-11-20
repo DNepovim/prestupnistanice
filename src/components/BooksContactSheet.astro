@@ -1,13 +1,16 @@
 ---
 import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import { getEntries, type CollectionEntry } from 'astro:content'
+import { isNonEmptyArray } from 'narrowland'
 
+import FloatingImage from '@/components/FloatingImage.svelte'
 import { FALLBACK_COLOR_FIRST } from '@/consts'
 import { routes } from '@/routes'
 import { tp } from '@/utils/tp'
 
 type Props = {
   books: CollectionEntry<'book'>[]
+  authorSlug?: string
 }
 
 const HANDLES = [
@@ -25,9 +28,33 @@ const COLUMNS = Array.from({ length: 12 }, (_, index) => index)
 
 const COLUMN_GAP = 'gap-x-2 min-sm:gap-x-6'
 
-const { books: unsortedBooks } = Astro.props
+const { books: unsortedBooks, authorSlug } = Astro.props
 
-const books = unsortedBooks.toSorted((a, b) => b.data.order - a.data.order)
+const items = await Promise.all(
+  unsortedBooks
+    .toSorted((a, b) => b.data.order - a.data.order)
+    .map(async (book) => {
+      const coAuthors = authorSlug
+        ? await getEntries(
+            book.data.authors
+              .filter((a) => a.isMain && a.slug.id !== authorSlug)
+              .map((a) => a.slug),
+          )
+        : []
+      const coAuthorLinks = coAuthors.flatMap(({ data: a }) =>
+        a.firstnameSeventh && a.surnameSeventh
+          ? [
+              {
+                name: `${a.firstnameSeventh} ${a.surnameSeventh}`,
+                href: routes.authors.detail(a.slug),
+                image: a.image?.src,
+              },
+            ]
+          : [],
+      )
+      return { book, coAuthorLinks }
+    }),
+)
 ---
 
 <div class="-mx-3 overflow-clip px-3">
@@ -40,12 +67,11 @@ const books = unsortedBooks.toSorted((a, b) => b.data.order - a.data.order)
     </div>
     <ul class:list={['relative grid grid-cols-12 gap-y-9 py-6', COLUMN_GAP]}>
       {
-        books.map((book) => (
+        items.map(({ book, coAuthorLinks }) => (
           <li class="col-span-6 min-w-0 min-sm:col-span-4 min-md:col-span-3">
-            <a
-              href={routes.books.detail(book.data.slug)}
+            <div
               style={`--c1:${book.data.color ?? FALLBACK_COLOR_FIRST}`}
-              class="group/cell flex min-w-0 flex-col gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--c1)"
+              class="group/cell relative flex min-w-0 flex-col gap-3"
             >
               <span class="flex aspect-[3/5] items-end justify-start">
                 <span class="relative block w-full">
@@ -57,17 +83,12 @@ const books = unsortedBooks.toSorted((a, b) => b.data.order - a.data.order)
                   />
                   <span
                     aria-hidden="true"
-                    class="pointer-events-none absolute -inset-2 border border-(--c1) opacity-0 transition-opacity duration-200 group-hover/cell:opacity-100 group-focus-visible/cell:opacity-100"
+                    class="pointer-events-none absolute -inset-2 border border-(--c1) opacity-0 transition-opacity duration-200 group-hover/cell:opacity-100 group-has-[:focus-visible]/cell:opacity-100"
                   >
                     <span class="absolute top-0 left-[-100vw] h-px w-[200vw] bg-(--c1)/70" />
                     <span class="absolute bottom-0 left-[-100vw] h-px w-[200vw] bg-(--c1)/70" />
                     <span class="absolute top-[-100vh] left-0 h-[200vh] w-px bg-(--c1)/70" />
                     <span class="absolute top-[-100vh] right-0 h-[200vh] w-px bg-(--c1)/70" />
-                    {book.data.width && book.data.height && (
-                      <span class="font-alt border-brand-first-300 bg-paper text-brand-first-700 absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 border px-1.5 py-0.5 text-[0.55rem] leading-none whitespace-nowrap">
-                        {book.data.width} × {book.data.height} mm
-                      </span>
-                    )}
                     {HANDLES.map(([x, y]) => (
                       <span
                         style={`left:${String(x)}%;top:${String(y)}%`}
@@ -78,14 +99,46 @@ const books = unsortedBooks.toSorted((a, b) => b.data.order - a.data.order)
                 </span>
               </span>
               <b class="font-head text-[1.3rem] leading-[1.12] font-extrabold text-balance">
-                {tp(book.data.title)}
+                <a
+                  href={routes.books.detail(book.data.slug)}
+                  class="after:absolute after:inset-0 focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-(--c1)"
+                >
+                  {tp(book.data.title)}
+                </a>
               </b>
-              <small class="font-alt text-brand-first-700 text-[0.7rem] leading-[1.3] tracking-[0.06em] uppercase">
-                {book.data.isUpcoming
-                  ? (book.data.releaseNote ?? 'připravujeme')
-                  : book.data.date}
-              </small>
-            </a>
+              {isNonEmptyArray(coAuthorLinks) && (
+                <span class="font-alt pointer-events-none relative z-10 block text-[0.9rem] leading-[1.3] text-gray-800 italic">
+                  {coAuthorLinks.map((coAuthor, index) => (
+                    <>
+                      {index === 0
+                        ? 's '
+                        : index === coAuthorLinks.length - 1
+                          ? ' a '
+                          : ', '}
+                      <FloatingImage
+                        client:visible
+                        src={coAuthor.image}
+                        alt={coAuthor.name}
+                      >
+                        <a
+                          class="pointer-events-auto transition-colors hover:text-black"
+                          href={coAuthor.href}
+                        >
+                          {coAuthor.name}
+                        </a>
+                      </FloatingImage>
+                    </>
+                  ))}
+                </span>
+              )}
+              {(book.data.isUpcoming === true || !authorSlug) && (
+                <small class="font-alt text-brand-first-700 text-[0.7rem] leading-[1.3] tracking-[0.06em] uppercase">
+                  {book.data.isUpcoming
+                    ? (book.data.releaseNote ?? 'připravujeme')
+                    : book.data.date}
+                </small>
+              )}
+            </div>
           </li>
         ))
       }
