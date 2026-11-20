@@ -25,6 +25,7 @@ import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
+import { getSheetEdge } from '@/utils/getSheetEdge'
 import { joinWords } from '@/utils/joinWords'
 import { ROLE_ORDER, rolesMap } from '@/utils/rolesMap'
 import { getTitleFit } from '@/utils/titleFit'
@@ -174,16 +175,8 @@ const candidateSheetKeys: (SheetKey | undefined)[] = [
 
 const sheetKeys = candidateSheetKeys.filter(isDefined)
 
-const getEdge = (key: SheetKey) => {
-  const index = sheetKeys.indexOf(key)
-  if (sheetKeys.length === 1) {
-    return 'only'
-  }
-  if (index === 0) {
-    return 'first'
-  }
-  return index === sheetKeys.length - 1 ? 'last' : 'middle'
-}
+const getEdge = (key: SheetKey) =>
+  getSheetEdge(sheetKeys.indexOf(key), sheetKeys.length)
 
 const titleFit = getTitleFit(tp(book.title))
 
@@ -270,11 +263,12 @@ const sideSlug = [
             />
           </div>
           <ColorBar
+            variant="wave"
             from={book.color ?? FALLBACK_COLOR_FIRST}
             to={book.bgColor ?? FALLBACK_COLOR_SECOND}
             class="absolute top-[calc(100%+3mm+0.5rem)] left-0"
           />
-          <CmykBar class="absolute top-[calc(100%+3mm+0.5rem)] right-0" />
+          <CmykBar variant="wave" class="absolute top-[calc(100%+3mm+0.5rem)] right-0" />
           <HeroNeighbour side="prev" book={prevBook} slug={prevSlug} />
           <HeroNeighbour side="next" book={nextBook} slug={nextSlug} />
         </PrintSheet>
@@ -378,6 +372,7 @@ const sideSlug = [
                 {
                   !book.coverTop && (
                     <ColorBar
+                      variant="wave"
                       from={book.color ?? FALLBACK_COLOR_FIRST}
                       to={book.bgColor ?? FALLBACK_COLOR_SECOND}
                       class="mt-4"
@@ -517,6 +512,8 @@ const sideSlug = [
 </Layout>
 
 <script>
+  import '@/utils/colorTint'
+
   const STICK_OFFSET_PX = 24
 
   const observeStick = () => {

@@ -1,37 +1,60 @@
 ---
-type Props = {
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = Omit<HTMLAttributes<'a'>, 'href'> & {
   href: string
-  class?: string
   hasArrowLeft?: boolean
+  isUppercase?: boolean
   tone?: keyof typeof TONES
 }
 
 const TONES = {
-  first: { text: 'text-brand-first-500', border: 'border-brand-first-500', bg: 'bg-brand-first-500' },
-  second: { text: 'text-brand-second-500', border: 'border-brand-second-500', bg: 'bg-brand-second-500' },
+  first: {
+    text: 'text-brand-first-500',
+    border: 'border-brand-first-500',
+    bg: 'bg-brand-first-500',
+  },
+  second: {
+    text: 'text-brand-second-500',
+    border: 'border-brand-second-500',
+    bg: 'bg-brand-second-500',
+  },
   current: { text: '', border: 'border-current', bg: 'bg-current' },
 } as const
 
-const { href, class: className, hasArrowLeft, tone = 'second' } = Astro.props
+const {
+  href,
+  class: className,
+  hasArrowLeft,
+  isUppercase = true,
+  tone = 'second',
+  ...props
+} = Astro.props
 const colors = TONES[tone]
+const direction = hasArrowLeft ? 'left' : 'right'
 ---
 
 <a
   class:list={[
     className,
     colors.text,
-    'font-alt group relative text-sm tracking-wider uppercase',
+    'font-alt group relative',
+    isUppercase ? 'text-sm tracking-wider uppercase' : 'text-base',
   ]}
   href={href}
+  data-arrow-link
+  {...props}
 >
   <slot />
   <span
+    data-arrow={direction}
     class:list={[
       colors.border,
       'absolute bottom-1/2 block size-2 translate-y-1/2 rotate-45',
       hasArrowLeft ? '-left-7 border-b border-l' : '-right-7 border-t border-r',
     ]}></span>
   <span
+    data-arrow={direction}
     class:list={[
       colors.bg,
       'absolute bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]',

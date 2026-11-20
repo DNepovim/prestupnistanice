@@ -2,15 +2,13 @@
 import { getCollection } from 'astro:content'
 
 import ArrowLink from '@/components/ArrowLink.astro'
-import Book from '@/components/Book.astro'
-import BookExcerpt from '@/components/BookExcerpt.astro'
-import BooksGrid from '@/components/BooksGrid.astro'
+import BookSheet from '@/components/BookSheet.astro'
 import PromotedCarousel from '@/components/PromotedCarousel.astro'
 import Section from '@/components/Section.astro'
-import Theme from '@/components/Theme.astro'
 import Upcoming from '@/components/Upcoming.astro'
 import Layout from '@/layouts/Layout.astro'
 import { routes } from '@/routes'
+import { getSheetEdge } from '@/utils/getSheetEdge'
 
 const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
@@ -70,46 +68,34 @@ const philosophyBooks = remainingBooks
 
   <Upcoming books={upcomingBooks} events={upcomingEvents} />
 
+  {
+    recentBooks.map((book, index) => (
+      <BookSheet book={book} edge={getSheetEdge(index, recentBooks.length)} />
+    ))
+  }
   <Section>
-    <div class="flex flex-col gap-16">
-      {
-        recentBooks.map(({ data: book }, index) => (
-          <Theme
-            firstColor={book.color ?? undefined}
-            secondColor={book.bgColor ?? undefined}
-          >
-            <BookExcerpt
-              class={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
-              slug={book.slug}
-            />
-          </Theme>
-        ))
-      }
-    </div>
-    <div class="my-20 flex justify-center">
+    <div class="mb-20 flex justify-center">
       <ArrowLink href={routes.books.list()}>všechny knihy</ArrowLink>
     </div>
   </Section>
   {
     forKidsBooks.length > 0 && (
-      <Section title="Knihy pro děti" link={routes.books.category('forKids')}>
-        <BooksGrid>
-          {forKidsBooks.map((book) => (
-            <Book slug={book.data.slug} />
-          ))}
-        </BooksGrid>
-      </Section>
+      <>
+        <Section title="Knihy pro děti" link={routes.books.category('forKids')} />
+        {forKidsBooks.map((book, index) => (
+          <BookSheet book={book} edge={getSheetEdge(index, forKidsBooks.length)} />
+        ))}
+      </>
     )
   }
   {
     philosophyBooks.length > 0 && (
-      <Section title="Knihy pro filosofy" link={routes.books.category('philosophy')}>
-        <BooksGrid>
-          {philosophyBooks.map((book) => (
-            <Book slug={book.data.slug} />
-          ))}
-        </BooksGrid>
-      </Section>
+      <>
+        <Section title="Knihy pro filosofy" link={routes.books.category('philosophy')} />
+        {philosophyBooks.map((book, index) => (
+          <BookSheet book={book} edge={getSheetEdge(index, philosophyBooks.length)} />
+        ))}
+      </>
     )
   }
 </Layout>

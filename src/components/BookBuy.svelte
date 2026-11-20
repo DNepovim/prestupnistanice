@@ -61,40 +61,29 @@
     </p>
     {#if saving > 0 && kosmasPrice !== undefined}
       <p class="text-brand-first-700 text-[0.75rem] leading-snug">
-        O {priceFormat.format(saving)} levněji než na Kosmasu
-        <span class="text-gray-500">({priceFormat.format(kosmasPrice)})</span>
+        Od {priceFormat.format(saving)} levněji než v distribuci
       </p>
     {/if}
     <button
       type="button"
+      data-arrow-link
       class="group font-head text-brand-first-700 relative inline-block cursor-pointer pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
       on:click={addToCart}
     >
       Přidat do košíku
       <span
         aria-hidden="true"
+        data-arrow="right"
         class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
       ></span>
       <span
         aria-hidden="true"
+        data-arrow="right"
         class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
       ></span>
     </button>
-    {#if kosmasUrl && kosmasHasIt}
-      <a
-        href={kosmasUrl}
-        target="_blank"
-        rel="noopener"
-        class="text-[0.7rem] leading-none text-gray-600 hover:text-black"
-      >
-        Koupit na Kosmasu
-        <span class="sr-only">(otevře se v novém okně)</span>
-      </a>
-    {/if}
   {:else if kosmasUrl && kosmasHasIt}
-    <p class="text-[0.75rem] leading-snug text-gray-700">
-      U nás momentálně skladem nemáme.
-    </p>
+    <p class="text-[0.75rem] leading-snug text-gray-700">Není v našem skladě.</p>
     {#if kosmasPrice !== undefined}
       <p class="font-head text-[2.1rem] leading-none font-extrabold text-black">
         {priceFormat.format(kosmasPrice)}
@@ -105,15 +94,18 @@
       href={kosmasUrl}
       target="_blank"
       rel="noopener"
+      data-arrow-link
       class="group font-head text-brand-first-700 relative inline-block pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
     >
       Kup na Kosmasu
       <span
         aria-hidden="true"
+        data-arrow="right"
         class="border-current absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2"
       ></span>
       <span
         aria-hidden="true"
+        data-arrow="right"
         class="bg-current absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
       ></span>
       <span class="sr-only">(otevře se v novém okně)</span>

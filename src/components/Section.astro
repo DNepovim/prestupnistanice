@@ -27,10 +27,17 @@ const { title, link, isWide, isFull, className } = Astro.props
               'font-alt group text-md relative tracking-wider text-gray-800',
             ]}
             href={link}
+            data-arrow-link
           >
             {title}
-            <span class="border-brand-first-500 absolute -right-7 bottom-1/2 block size-2 translate-y-1/2 rotate-45 border-t border-r" />
-            <span class="bg-brand-first-500 absolute -right-[29px] bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]" />
+            <span
+              data-arrow="right"
+              class="border-brand-first-500 absolute -right-7 bottom-1/2 block size-2 translate-y-1/2 rotate-45 border-t border-r"
+            />
+            <span
+              data-arrow="right"
+              class="bg-brand-first-500 absolute -right-[29px] bottom-1/2 block h-[1px] w-4 translate-y-1/2 transition-all duration-500 group-hover:w-[calc(100%+2rem)]"
+            />
           </a>
         ) : (
           title

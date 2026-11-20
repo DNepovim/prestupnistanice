@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 
+import ArrowLink from '@/components/ArrowLink.astro'
 import HeaderLink from '@/components/HeaderLink.astro'
 import { tp } from '@/utils/tp'
 
@@ -10,129 +11,179 @@ const LINK = 'focus-visible:outline-2 focus-visible:outline-brand-second-200'
 const CREDIT_LINK =
   'text-white text-[1em]! focus-visible:outline-2 focus-visible:outline-brand-second-200'
 const NEW_WINDOW = '(otevře se v novém okně)'
+const WORDMARK_LETTERS = Array.from('Přestupní stanice').map((char) =>
+  char === ' ' ? '\u00a0' : char,
+)
 ---
 
 <footer
   data-footer
   class="font-alt bg-brand-first-700 relative order-last overflow-hidden text-white"
 >
-<div
+  <div
     data-footer-content
-    class="relative mx-auto w-full max-w-[68rem] [container-type:inline-size]"
+    class="[container-type:inline-size] relative mx-auto w-full max-w-[68rem] pb-4"
   >
-  <span aria-hidden="true" class="absolute top-4 left-4 size-5 border-t border-l border-brand-second-300/60"></span>
-  <span aria-hidden="true" class="absolute top-4 right-4 size-5 border-t border-r border-brand-second-300/60"></span>
-  <span aria-hidden="true" class="absolute bottom-4 left-4 size-5 border-b border-l border-brand-second-300/60"></span>
-  <span aria-hidden="true" class="absolute right-4 bottom-4 size-5 border-r border-b border-brand-second-300/60"></span>
+    <span
+      aria-hidden="true"
+      class="border-brand-second-300/60 absolute top-4 left-4 size-5 border-t border-l"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="border-brand-second-300/60 absolute top-4 right-4 size-5 border-t border-r"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="border-brand-second-300/60 absolute bottom-4 left-4 size-5 border-b border-l"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="border-brand-second-300/60 absolute right-4 bottom-4 size-5 border-r border-b"
+    ></span>
 
-  <div class="px-[0.9rem] pt-16 min-md:px-[2.6rem] min-md:pt-20 min-[1100px]:px-[5rem]">
-    <form class="max-w-[64rem]">
-      <label for="newsletter-email" class="sr-only">E-mail pro odběr novinek</label>
-      <p
-        class="font-head max-w-[21em] text-[clamp(1.9rem,6.2cqw,3.7rem)] leading-[1.15] font-extrabold tracking-[-0.01em] text-balance"
-      >
-        {tp('Posílejte mi novinky z nakladatelství na')}
-        <input
-          id="newsletter-email"
-          type="email"
-          name="email"
-          required
-          autocomplete="email"
-          placeholder={tp('váš e-mail')}
-          class="border-brand-second-300 w-[min(100%,8.5em)] border-b-2 border-dashed bg-transparent px-[0.1em] font-[inherit] text-white outline-none placeholder:text-white/50 focus:border-solid"
-        />
-        <button
-          type="submit"
-          aria-label="Odeslat"
-          class="bg-white text-brand-first-900 hover:bg-white/80 ml-[0.2em] inline-grid size-[1.1em] cursor-pointer place-items-center align-[-0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+    <div class="px-[0.9rem] pt-16 min-[1100px]:px-[5rem] min-md:px-[2.6rem] min-md:pt-20">
+      <form class="max-w-[64rem]">
+        <label for="newsletter-email" class="sr-only">E-mail pro odběr novinek</label>
+        <p
+          class="font-head max-w-[21em] text-[clamp(1.9rem,6.2cqw,3.7rem)] leading-[1.15] font-extrabold tracking-[-0.01em] text-balance"
         >
-          <Icon name="ph:arrow-right-bold" class="size-[55%]" aria-hidden="true" />
-        </button>
-      </p>
-      <p class="mt-5 text-[0.7rem] leading-none tracking-[0.1em] text-white/70 uppercase">
-        Dozvíte se o každé nové knize. Odhlásit se můžete kdykoli.
-      </p>
-    </form>
-
-    <div
-      class="mt-14 grid max-w-[64rem] gap-10 border-t border-dashed border-brand-second-300/60 pt-8 min-md:grid-cols-[2fr_3fr_3fr]"
-    >
-      <nav aria-label="Obsah webu">
-        <h2 class={EYEBROW}>Obsah</h2>
-        <menu class="flex flex-col gap-2 text-[1rem] leading-tight">
-          <li><HeaderLink class={LINK} href="/knihy">Naše knihy</HeaderLink></li>
-          <li><HeaderLink class={LINK} href="/autori">Autoři</HeaderLink></li>
-          <li><HeaderLink class={LINK} href="/o-nakladatelstvi">O nakladatelství</HeaderLink></li>
-        </menu>
-      </nav>
-
-      <div>
-        <h2 class={EYEBROW}>Kontakty</h2>
-        <p class="mb-3 flex items-center gap-3 text-[1rem] leading-tight">
-          <Icon
-            name="ph:envelope-light"
-            class="text-brand-second-200 size-5"
-            aria-hidden="true"
+          {tp('Posílejte mi novinky z nakladatelství na')}
+          <input
+            id="newsletter-email"
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder={tp('váš e-mail')}
+            class="border-brand-second-300 w-[min(100%,8.5em)] border-b-2 border-dashed bg-transparent px-[0.1em] font-[inherit] text-white outline-none placeholder:text-white/50 focus:border-solid"
           />
-          <HeaderLink class={LINK} href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</HeaderLink>
-        </p>
-        <p class="flex items-center gap-3 text-[1rem] leading-tight">
-          <Icon
-            name="ph:facebook-logo-light"
-            class="text-brand-second-200 size-5"
-            aria-hidden="true"
-          />
-          <HeaderLink
-            class={LINK}
-            href="https://www.facebook.com/knihyprestupnistanice"
-            target="_blank"
-            rel="noopener noreferrer"
-            >knihyprestupnistanice<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+          <button
+            type="submit"
+            aria-label="Odeslat"
+            class="text-brand-first-900 ml-[0.2em] inline-grid size-[1.1em] cursor-pointer place-items-center bg-white align-[-0.12em] transition-colors hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
           >
+            <Icon name="ph:arrow-right-bold" class="size-[55%]" aria-hidden="true" />
+          </button>
         </p>
-      </div>
+        <p
+          class="mt-5 text-[0.7rem] leading-none tracking-[0.1em] text-white/70 uppercase"
+        >
+          Dozvíte se o každé nové knize. Odhlásit se můžete kdykoli.
+        </p>
+      </form>
 
-      <div>
-        <h2 class={EYEBROW}>Tiráž</h2>
-        <p class="text-[0.8rem] leading-[1.6] text-white/80">
-          Naše knihy jsou dostupné v distribuci <HeaderLink
-            class={CREDIT_LINK}
-            href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
-            >Kosmas</HeaderLink
-          >.
-        </p>
-        <p class="mt-3 text-[0.8rem] leading-[1.6] text-white/80">
-          Web písmy <HeaderLink
-            class={CREDIT_LINK}
-            href="https://fonts.google.com/specimen/Alegreya"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Alegreya<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
-          > a <HeaderLink
-            class={CREDIT_LINK}
-            href="https://fonts.adobe.com/fonts/montserrat"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Montserrat<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
-          > vysázel <HeaderLink
-            class={CREDIT_LINK}
-            href="https://www.dominikblaha.cz"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Dominik Bláha<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
-          >.
-        </p>
+      <div
+        class="border-brand-second-300/60 mt-14 grid max-w-[64rem] gap-10 border-t border-dashed pt-8 min-md:grid-cols-[2fr_3fr_3fr]"
+      >
+        <nav aria-label="Obsah webu">
+          <h2 class={EYEBROW}>Obsah</h2>
+          <menu class="flex flex-col gap-2 text-[1rem] leading-tight">
+            <li>
+              <ArrowLink tone="current" isUppercase={false} class={LINK} href="/knihy"
+                >Naše knihy</ArrowLink
+              >
+            </li>
+            <li>
+              <ArrowLink tone="current" isUppercase={false} class={LINK} href="/autori"
+                >Autoři</ArrowLink
+              >
+            </li>
+            <li>
+              <ArrowLink
+                tone="current"
+                isUppercase={false}
+                class={LINK}
+                href="/o-nakladatelstvi">O nakladatelství</ArrowLink
+              >
+            </li>
+          </menu>
+        </nav>
+
+        <div>
+          <h2 class={EYEBROW}>Kontakty</h2>
+          <p class="mb-3 flex items-center gap-3 text-[1rem] leading-tight">
+            <Icon
+              name="ph:envelope-light"
+              class="text-brand-second-200 size-5"
+              aria-hidden="true"
+            />
+            <ArrowLink
+              tone="current"
+              isUppercase={false}
+              class={LINK}
+              href="mailto:skalak@knihyps.cz">skalak@knihyps.cz</ArrowLink
+            >
+          </p>
+          <p class="flex items-center gap-3 text-[1rem] leading-tight">
+            <Icon
+              name="ph:facebook-logo-light"
+              class="text-brand-second-200 size-5"
+              aria-hidden="true"
+            />
+            <ArrowLink
+              tone="current"
+              isUppercase={false}
+              class={LINK}
+              href="https://www.facebook.com/knihyprestupnistanice"
+              target="_blank"
+              rel="noopener noreferrer"
+              >knihyprestupnistanice<span class="sr-only">{NEW_WINDOW}</span></ArrowLink
+            >
+          </p>
+        </div>
+
+        <div>
+          <h2 class={EYEBROW}>Tiráž</h2>
+          <p class="text-[0.8rem] leading-[1.6] text-white/80">
+            Naše knihy jsou dostupné v distribuci <HeaderLink
+              class={CREDIT_LINK}
+              href="https://www.kosmas.cz/nakladatelstvi/877130/prestupni-stanice/"
+              >Kosmas</HeaderLink
+            >.
+          </p>
+          <p class="mt-3 text-[0.8rem] leading-[1.6] text-white/80">
+            Web písmy <HeaderLink
+              class={CREDIT_LINK}
+              href="https://fonts.google.com/specimen/Alegreya"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Alegreya<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+            > a <HeaderLink
+              class={CREDIT_LINK}
+              href="https://fonts.adobe.com/fonts/montserrat"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Montserrat<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+            ><br />vysázel <HeaderLink
+              class:list={[CREDIT_LINK, 'whitespace-nowrap']}
+              href="https://www.dominikblaha.cz"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Dominik Bláha<span class="sr-only">{NEW_WINDOW}</span></HeaderLink
+            >.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <span
-    aria-hidden="true"
-    class="font-display [-webkit-text-stroke:2px_var(--color-second-300)] pointer-events-none mt-14 block h-[0.76em] overflow-hidden px-[0.9rem] pt-[0.1em] text-[8.4cqw] leading-[0.8] font-extrabold tracking-[-0.02em] whitespace-nowrap text-transparent select-none min-md:px-[2.6rem] min-[1100px]:px-[5rem]"
-  >
-    Přestupní stanice
-  </span>
-</div>
+    <span
+      data-wordmark
+      aria-hidden="true"
+      class="font-display mt-14 block h-[1.02em] px-[0.9rem] pt-[0.1em] text-[8.4cqw] leading-[0.8] font-extrabold tracking-[-0.02em] whitespace-nowrap text-transparent select-none [-webkit-text-stroke:2px_var(--color-second-300)] min-[1100px]:px-[5rem] min-md:px-[2.6rem]"
+    >
+      {
+        WORDMARK_LETTERS.map((char, index) => (
+          <span
+            data-wordmark-letter={char.trim() ? '' : undefined}
+            class="wordmark-letter"
+            style={`--i:${String(index)}`}
+          >
+            {char}
+          </span>
+        ))
+      }
+    </span>
+  </div>
 </footer>
 
 <style is:global>
@@ -148,6 +199,85 @@ const NEW_WINDOW = '(otevře se v novém okně)'
 
   [data-footer-spacer] {
     height: 100svh;
+  }
+
+  .wordmark-letter {
+    display: inline-block;
+    translate: 0 calc(var(--lift, 0) * -0.09em);
+    transition: translate 200ms ease-out;
+    animation: wordmark-wave 10s ease-in-out calc(var(--i) * 0.14s) infinite;
+  }
+
+  [data-wordmark-letter] {
+    cursor: pointer;
+  }
+
+  [data-wordmark][data-hovered] .wordmark-letter:not([data-fallen], [data-returning]) {
+    animation: none;
+  }
+
+  .wordmark-letter[data-fallen] {
+    translate: none;
+    pointer-events: none;
+    animation: wordmark-fall 1100ms cubic-bezier(0.4, 0, 0.8, 1) forwards;
+  }
+
+  .wordmark-letter[data-returning] {
+    animation: wordmark-return 700ms ease-out var(--return-delay) both;
+  }
+
+  @keyframes wordmark-return {
+    0% {
+      transform: translateY(2.5em) rotate(12deg);
+      opacity: 0;
+    }
+    35% {
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(-0.14em) rotate(-3deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes wordmark-fall {
+    0% {
+      transform: translateY(0) rotate(0);
+      animation-timing-function: ease-out;
+    }
+    22% {
+      transform: translateY(-0.35em) rotate(-4deg);
+      animation-timing-function: ease-in;
+    }
+    100% {
+      transform: translateY(3em) rotate(14deg);
+      visibility: hidden;
+    }
+  }
+
+  @keyframes wordmark-wave {
+    0%,
+    8%,
+    100% {
+      transform: translateY(0);
+    }
+    4% {
+      transform: translateY(-0.05em);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark-letter {
+      animation: none;
+      transition: none;
+    }
+
+    .wordmark-letter[data-fallen] {
+      visibility: hidden;
+    }
   }
 
   html[data-footer-static] [data-footer] {
@@ -200,7 +330,13 @@ const NEW_WINDOW = '(otevře se v novém okně)'
     const remaining = root.scrollHeight - window.innerHeight - window.scrollY
     const progress = Math.min(1, Math.max(0, 1 - remaining / window.innerHeight))
     footer.style.opacity = isFixed ? String(progress) : ''
-    root.style.setProperty('--footer-progress', isFixed ? String(progress) : '0')
+    const headerBottom =
+      document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0
+    const staticProgress = footer.getBoundingClientRect().top <= headerBottom ? 1 : 0
+    root.style.setProperty(
+      '--footer-progress',
+      String(isFixed ? progress : staticProgress),
+    )
     footer.inert = isFixed && progress === 0
   }
 
@@ -214,6 +350,91 @@ const NEW_WINDOW = '(otevře se v novém okně)'
     }
     update()
   }
+
+  const RETURN_PAUSE_MS = 1000
+  const RETURN_STEP_MS = 110
+  const WORDMARK_REACH = 2
+  const WORDMARK_LETTER_WIDTH = 0.6
+
+  const getLetters = (wordmark: Element) =>
+    Array.from(wordmark.querySelectorAll<HTMLElement>('[data-wordmark-letter]'))
+
+  const resetWordmarks = () => {
+    document.querySelectorAll('[data-wordmark][data-hovered]').forEach((wordmark) => {
+      wordmark.removeAttribute('data-hovered')
+      getLetters(wordmark).forEach((letter) => {
+        letter.style.removeProperty('--lift')
+      })
+    })
+  }
+
+  const liftWordmark = (wordmark: HTMLElement, pointerX: number) => {
+    const unit = parseFloat(getComputedStyle(wordmark).fontSize) * WORDMARK_LETTER_WIDTH
+    wordmark.setAttribute('data-hovered', '')
+    getLetters(wordmark).forEach((letter) => {
+      if (letter.hasAttribute('data-fallen')) {
+        return
+      }
+      const rect = letter.getBoundingClientRect()
+      const distance = Math.abs(pointerX - (rect.left + rect.width / 2)) / unit
+      const lift = Math.max(0, 1 - distance / WORDMARK_REACH)
+      letter.style.setProperty('--lift', lift.toFixed(3))
+    })
+  }
+
+  document.addEventListener('pointermove', (event) => {
+    const wordmark =
+      event.target instanceof Element
+        ? event.target.closest<HTMLElement>('[data-wordmark]')
+        : null
+    if (wordmark) {
+      liftWordmark(wordmark, event.clientX)
+    } else {
+      resetWordmarks()
+    }
+  })
+  document.documentElement.addEventListener('pointerleave', resetWordmarks)
+
+  const returnLetters = (wordmark: Element) => {
+    getLetters(wordmark)
+      .map((letter) => ({ letter, order: Math.random() }))
+      .sort((a, b) => a.order - b.order)
+      .forEach(({ letter }, position) => {
+        letter.style.setProperty(
+          '--return-delay',
+          `${String(position * RETURN_STEP_MS)}ms`,
+        )
+        letter.setAttribute('data-returning', '')
+        letter.removeAttribute('data-fallen')
+        letter.addEventListener(
+          'animationend',
+          () => {
+            letter.removeAttribute('data-returning')
+          },
+          { once: true },
+        )
+      })
+  }
+
+  document.addEventListener('click', (event) => {
+    const letter =
+      event.target instanceof Element
+        ? event.target.closest('[data-wordmark-letter]')
+        : null
+    const wordmark = letter?.closest('[data-wordmark]')
+    if (!letter || !wordmark || letter.hasAttribute('data-returning')) {
+      return
+    }
+    letter.setAttribute('data-fallen', '')
+    const allFallen = getLetters(wordmark).every((candidate) =>
+      candidate.hasAttribute('data-fallen'),
+    )
+    if (allFallen) {
+      window.setTimeout(() => {
+        returnLetters(wordmark)
+      }, RETURN_PAUSE_MS)
+    }
+  })
 
   window.addEventListener('scroll', update, { passive: true })
   window.addEventListener('resize', update)

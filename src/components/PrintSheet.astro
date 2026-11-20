@@ -1,12 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-type Edge = 'first' | 'middle' | 'last' | 'only'
+import type { SheetEdge } from '@/utils/getSheetEdge'
+
 type Corner = 'tl' | 'tr' | 'bl' | 'br'
 type Registration = 't' | 'b' | 'l' | 'r'
 
 type Props = {
-  edge: Edge
+  edge: SheetEdge
   regs?: Registration[]
   slug?: string
   sideSlug?: string
@@ -35,28 +36,28 @@ const EDGE_CORNERS = {
   middle: [],
   last: ['bl', 'br'],
   only: ['tl', 'tr', 'bl', 'br'],
-} as const satisfies Record<Edge, readonly Corner[]>
+} as const satisfies Record<SheetEdge, readonly Corner[]>
 
 const EDGE_HAS_CUT = {
   first: true,
   middle: true,
   last: false,
   only: false,
-} as const satisfies Record<Edge, boolean>
+} as const satisfies Record<SheetEdge, boolean>
 
 const EDGE_MARGIN = {
   first: 'mb-16',
   middle: 'mb-16',
   last: 'mb-24',
   only: 'mb-24',
-} as const satisfies Record<Edge, string>
+} as const satisfies Record<SheetEdge, string>
 
 const EDGE_HAS_TOP = {
   first: true,
   middle: false,
   last: false,
   only: true,
-} as const satisfies Record<Edge, boolean>
+} as const satisfies Record<SheetEdge, boolean>
 
 const {
   edge,

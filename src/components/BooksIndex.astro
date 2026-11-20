@@ -87,17 +87,21 @@ const items = await Promise.all(
                 </FloatingImage>
               </>
             ))}
-            <span class="mx-1.5 not-italic" aria-hidden="true">
-              ·
-            </span>
-            <span class="font-alt text-[0.7rem] tracking-[0.06em] uppercase not-italic">
-              {book.data.isUpcoming
-                ? (book.data.releaseNote ?? 'připravujeme')
-                : book.data.date}
-            </span>
           </span>
         </span>
         <span class="font-alt flex flex-col items-end gap-2">
+          {book.data.isUpcoming && (
+            <>
+              <span class="font-head text-[1.2rem] leading-none font-extrabold text-black">
+                Připravujeme
+              </span>
+              {book.data.releaseNote && (
+                <span class="text-brand-first-700 text-right text-[0.75rem] leading-snug">
+                  {book.data.releaseNote}
+                </span>
+              )}
+            </>
+          )}
           {isOnSale(book) && book.data.price !== undefined && (
             <span class="font-head text-[1.6rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]">
               {priceFormat.format(book.data.price)}
@@ -115,15 +119,18 @@ const items = await Promise.all(
               href={book.data.kosmasUrl}
               target="_blank"
               rel="noopener"
+              data-arrow-link
               class="group font-head text-brand-first-700 relative z-10 inline-block pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
             >
               Kup na Kosmasu
               <span
                 aria-hidden="true"
+                data-arrow="right"
                 class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
               />
               <span
                 aria-hidden="true"
+                data-arrow="right"
                 class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
               />
               <span class="sr-only">(otevře se v novém okně)</span>

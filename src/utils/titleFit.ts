@@ -5,8 +5,8 @@ import { create, type Font } from 'fontkit'
 const FONT_WEIGHT = 800
 const TRACKING_EM = -0.02
 const MARK_WIDTH_EM = 0.55
-const MAX_FONT_REM = 8
-const REFERENCE_WIDTH_REM = 33
+const DEFAULT_MAX_FONT_REM = 8
+const DEFAULT_REFERENCE_WIDTH_REM = 33
 const FONT_DIR = 'node_modules/@fontsource-variable/alegreya/files'
 const FONT_FILES = [
   'alegreya-latin-wght-normal.woff2',
@@ -68,10 +68,21 @@ const getWidthEm = (lines: string[]) =>
     ),
   )
 
-const getReferenceSizeRem = (widthEm: number) =>
-  Math.min(MAX_FONT_REM, REFERENCE_WIDTH_REM / widthEm)
+type TitleFitOptions = {
+  maxFontRem?: number
+  referenceWidthRem?: number
+}
 
-export const getTitleFit = (title: string) => {
+export const getTitleFit = (
+  title: string,
+  {
+    maxFontRem = DEFAULT_MAX_FONT_REM,
+    referenceWidthRem = DEFAULT_REFERENCE_WIDTH_REM,
+  }: TitleFitOptions = {},
+) => {
+  const getReferenceSizeRem = (widthEm: number) =>
+    Math.min(maxFontRem, referenceWidthRem / widthEm)
+
   const [best] = getCandidates(title)
     .map((lines) => ({ lines, widthEm: getWidthEm(lines) }))
     .toSorted((a, b) => getReferenceSizeRem(b.widthEm) - getReferenceSizeRem(a.widthEm))

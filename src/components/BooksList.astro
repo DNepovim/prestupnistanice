@@ -1,13 +1,11 @@
 ---
-import { getCollection, getEntries, type CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
-import BookExcerpt from '@/components/BookExcerpt.astro'
+import BookSheet from '@/components/BookSheet.astro'
 import PageTitle from '@/components/PageTitle.astro'
-import PrintSheet from '@/components/PrintSheet.astro'
 import Section from '@/components/Section.astro'
-import Theme from '@/components/Theme.astro'
 import { CATEGORIES, categoriesSlugToKey, routes, type CategorySlug } from '@/routes'
-import { joinWords } from '@/utils/joinWords'
+import { getSheetEdge } from '@/utils/getSheetEdge'
 import { uppercaseFirstLetter } from '@/utils/uppercaseFirstLetter'
 
 type Props = {
@@ -30,30 +28,6 @@ const CORNER_CLASSES = {
 
 const allBooks = await getCollection('book')
 
-const sheetSlugs = await Promise.all(
-  books.map(async (book) => {
-    const authors = await getEntries(
-      book.data.authors
-        .filter((a) => a.isMain && a.role.includes('author'))
-        .map((a) => a.slug),
-    )
-    const authorsLine = joinWords(
-      authors.map(({ data: a }) => `${a.firstname} ${a.surname}`),
-    )
-    const orderedTitle = `${String(book.data.order)}. ${book.data.title}`
-    return authorsLine ? `${orderedTitle} · ${authorsLine}` : orderedTitle
-  }),
-)
-
-const getEdge = (index: number) => {
-  if (books.length === 1) {
-    return 'only'
-  }
-  if (index === 0) {
-    return 'first'
-  }
-  return index === books.length - 1 ? 'last' : 'middle'
-}
 ---
 
 <Section>
@@ -117,28 +91,7 @@ const getEdge = (index: number) => {
 <div data-swap="list">
   {
     books.map((book, index) => (
-      <div
-        class="animate-sheet-parallax"
-        style={`view-transition-name:book-${book.data.slug};view-transition-class:book`}
-      >
-        <PrintSheet
-          edge={getEdge(index)}
-          regs={index % 2 === 0 ? ['r'] : ['l']}
-          slug={sheetSlugs[index]}
-        >
-          <Theme
-            keepHue
-            firstColor={book.data.color ?? undefined}
-            secondColor={book.data.bgColor ?? undefined}
-          >
-            <div
-              class="px-(--sheet-px) py-(--sheet-py) [--sheet-px:0.9rem] [--sheet-py:2.2rem] min-md:[--sheet-px:2.6rem] min-md:[--sheet-py:2.5rem]"
-            >
-              <BookExcerpt bleed slug={book.data.slug} />
-            </div>
-          </Theme>
-        </PrintSheet>
-      </div>
+      <BookSheet book={book} edge={getSheetEdge(index, books.length)} viewTransition />
     ))
   }
 </div>

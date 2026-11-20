@@ -1,7 +1,11 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
+import { WAVE_ORIGIN_CLASSES, WAVE_STEP_CLASS } from '@/utils/waveStepClass'
+
 type Props = {
+  variant?: keyof typeof VARIANTS
+  grow?: keyof typeof WAVE_ORIGIN_CLASSES
   class?: HTMLAttributes<'div'>['class']
 }
 
@@ -19,13 +23,27 @@ const SWATCHES = [
   'bg-[#8c8c8c]',
 ] as const
 
-const { class: className } = Astro.props
+const VARIANTS = {
+  inline: { bar: 'pointer-events-none', step: '', isInteractive: false },
+  wave: { bar: 'group/bar', step: WAVE_STEP_CLASS, isInteractive: true },
+} as const satisfies Record<string, { bar: string; step: string; isInteractive: boolean }>
+
+const { variant = 'inline', grow = 'down', class: className } = Astro.props
+const { bar, step: variantStep, isInteractive } = VARIANTS[variant]
 ---
 
-<div aria-hidden="true" class:list={['pointer-events-none flex opacity-50', className]}>
+<div aria-hidden="true" class:list={['flex opacity-50', bar, className]}>
   {
     SWATCHES.map((swatch) => (
-      <span class:list={['block h-[1.1rem] w-[1.9rem]', swatch]} />
+      <span
+        data-color-step={isInteractive ? '' : undefined}
+        class:list={[
+          'block h-[1.1rem] w-[1.9rem]',
+          swatch,
+          variantStep,
+          variant === 'wave' && WAVE_ORIGIN_CLASSES[grow],
+        ]}
+      />
     ))
   }
 </div>

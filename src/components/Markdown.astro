@@ -31,21 +31,30 @@ marked.use({
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
     paragraph: ({ text }) =>
       showMarks
-        ? html`<p
-            class="mb-[0.7em] text-justify leading-[1.6] break-words hyphens-auto"
-          >
+        ? html`<p class="mb-[0.7em] text-justify leading-[1.6] break-words hyphens-auto">
             ${TAB_MARK}${parseInline(tp(text))}${PILCROW_MARK}
           </p>`
         : html`<p class="hyphenate mb-6 text-justify indent-12 break-words hyphens-auto">
             ${parseInline(tp(text))}
           </p>`,
+    list(token) {
+      const tag = token.ordered ? 'ol' : 'ul'
+      const marker = token.ordered ? 'list-decimal' : 'list-disc'
+      const items = token.items.map((item) => this.listitem(item)).join('')
+      return html`<${tag} class="${marker} marker:text-brand-first-500 mb-6 pl-8 text-left leading-[1.5]">${items}</${tag}>`
+    },
+    listitem(item) {
+      return html`<li class="mb-2 pl-1 break-words">
+        ${this.parser.parse(item.tokens, item.loose)}
+      </li>`
+    },
     link: ({ text, href }) =>
       html`<a
         href="${href}"
         ${linkPreviews.has(href) ? `data-preview="${linkPreviews.get(href) ?? ''}"` : ''}
         target="${isLinkExternal(href) ? '_blank' : '_self'}"
         class="font-alt text-brand-first-500 hover:border-brand-second-500 border-b border-transparent"
-        >${tp(text)}</a
+        >${parseInline(tp(text))}</a
       >`,
     blockquote: ({ text }) =>
       html`<blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">

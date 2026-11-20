@@ -3,9 +3,9 @@ import type { CollectionEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import { isNonEmptyArray } from 'narrowland'
 
-import BookExcerpt from '@/components/BookExcerpt.astro'
+import BookSheet from '@/components/BookSheet.astro'
 import EventCard from '@/components/EventCard.astro'
-import Theme from '@/components/Theme.astro'
+import { getSheetEdge } from '@/utils/getSheetEdge'
 
 type Props = {
   books: CollectionEntry<'book'>[]
@@ -37,27 +37,17 @@ if (!isNonEmptyArray(books) && !isNonEmptyArray(events)) {
         class="animate-width-expand from-brand-first-400 absolute bottom-0 left-0 h-[3px] w-[60%] bg-gradient-to-r to-transparent"
       ></span>
     </h2>
+  </div>
 
-    {
-      isNonEmptyArray(books) && (
-        <div class="flex flex-col gap-20">
-          {books.map(({ data: book }, index) => (
-            <Theme
-              firstColor={book.color ?? undefined}
-              secondColor={book.bgColor ?? undefined}
-            >
-              <BookExcerpt
-                class={index % 2 === 0 ? 'min-sm:pr-8' : 'min-sm:pl-8'}
-                slug={book.slug}
-              />
-            </Theme>
-          ))}
-        </div>
-      )
-    }
+  {
+    books.map((book, index) => (
+      <BookSheet book={book} edge={getSheetEdge(index, books.length)} />
+    ))
+  }
 
-    {
-      isNonEmptyArray(events) && (
+  {
+    isNonEmptyArray(events) && (
+      <div class="mx-auto max-w-[56rem] px-6">
         <div class="border-brand-first-200 mt-16 border-t pt-10">
           <h3 class="font-alt mb-6 flex items-center gap-2 text-xs tracking-[0.2em] text-gray-800 uppercase">
             <Icon name="ph:tilde-thin" class="size-4" aria-hidden="true" />
@@ -69,7 +59,7 @@ if (!isNonEmptyArray(books) && !isNonEmptyArray(events)) {
             ))}
           </div>
         </div>
-      )
-    }
-  </div>
+      </div>
+    )
+  }
 </section>

@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content'
 import { isDefined } from 'narrowland'
 
+import ArrowLink from '@/components/ArrowLink.astro'
 import Portrait from '@/components/Portrait.astro'
 import { routes } from '@/routes'
 import { joinWords } from '@/utils/joinWords'
@@ -62,12 +63,14 @@ const bio = author.claim ?? entry.body?.replace(/[*>#]/g, '').trim()
         </p>
       )
     }
-    <p
-      class="font-alt text-brand-first-700 mt-3 text-[0.7rem] leading-none tracking-[0.06em]"
-    >
-      <a href={routes.authors.detail(author.slug)}>
-        více o {author.gender === 'male' ? 'autorovi' : 'autorce'} →
-      </a>
-    </p>
+    <div class="mt-3">
+      <ArrowLink
+        tone="current"
+        class="text-brand-first-700 mr-7 whitespace-nowrap"
+        href={routes.authors.detail(author.slug)}
+      >
+        Více o {author.gender === 'male' ? 'autorovi' : 'autorce'}
+      </ArrowLink>
+    </div>
   </div>
 </div>

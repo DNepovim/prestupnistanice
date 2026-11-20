@@ -1,9 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
+import { WAVE_ORIGIN_CLASSES, WAVE_STEP_CLASS } from '@/utils/waveStepClass'
+
 type Props = {
   from: string
   to: string
+  variant?: keyof typeof VARIANTS
+  grow?: keyof typeof WAVE_ORIGIN_CLASSES
   class?: HTMLAttributes<'div'>['class']
 }
 
@@ -20,13 +24,64 @@ const STEPS = [
   'bg-[color-mix(in_srgb,var(--to)_100%,var(--from))]',
 ] as const
 
-const { from, to, class: className } = Astro.props
+const GROW_DELAYS = [
+  'delay-[0ms]',
+  'delay-[24ms]',
+  'delay-[48ms]',
+  'delay-[72ms]',
+  'delay-[96ms]',
+  'delay-[120ms]',
+  'delay-[144ms]',
+  'delay-[168ms]',
+  'delay-[192ms]',
+  'delay-[216ms]',
+] as const
+
+const VARIANTS = {
+  inline: {
+    bar: 'pointer-events-none w-76 max-w-full opacity-50',
+    step: 'h-[1.1rem]',
+    isGrowing: false,
+    isInteractive: false,
+  },
+  wave: {
+    bar: 'group/bar w-76 max-w-full opacity-50',
+    step: `h-[1.1rem] ${WAVE_STEP_CLASS}`,
+    isGrowing: false,
+    isInteractive: true,
+  },
+  strip: {
+    bar: 'group/bar h-[2px] w-full items-end opacity-75',
+    step: 'h-[1.4rem] origin-bottom scale-y-[0.05] transition-transform duration-[400ms] ease-out group-hover/book:scale-y-100 group-data-[tint-step]/book:scale-y-100 group-data-[tint-step]/book:data-[selected]:scale-y-[1.3] group-hover/book:hover:scale-y-[1.3] group-hover/book:[&:hover+*]:scale-y-[1.15] group-hover/book:[&:has(+*:hover)]:scale-y-[1.15] group-hover/book:[&:hover+*+*]:scale-y-[1.05] group-hover/book:[&:has(+*+*:hover)]:scale-y-[1.05] group-hover/bar:delay-0 group-hover/bar:duration-300 motion-reduce:transition-none',
+    isGrowing: true,
+    isInteractive: true,
+  },
+} as const satisfies Record<
+  string,
+  { bar: string; step: string; isGrowing: boolean; isInteractive: boolean }
+>
+
+const { from, to, variant = 'inline', grow = 'down', class: className } = Astro.props
+const { bar, step: variantStep, isGrowing, isInteractive } = VARIANTS[variant]
 ---
 
 <div
   aria-hidden="true"
   style={`--from:${from};--to:${to}`}
-  class:list={['pointer-events-none flex w-76 max-w-full opacity-50', className]}
+  class:list={['flex', bar, className]}
 >
-  {STEPS.map((step) => <span class:list={['block h-[1.1rem] flex-1', step]} />)}
+  {
+    STEPS.map((step, index) => (
+      <span
+        data-color-step={isInteractive ? '' : undefined}
+        class:list={[
+          'block flex-1',
+          step,
+          variantStep,
+          variant === 'wave' && WAVE_ORIGIN_CLASSES[grow],
+          isGrowing && ['cursor-pointer', GROW_DELAYS[index]],
+        ]}
+      />
+    ))
+  }
 </div>

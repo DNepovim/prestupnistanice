@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content'
 import { UMAMI_SITE_ID } from 'astro:env/client'
 import Analytics from '@vercel/analytics/astro'
 
+import ArrowLaunchScript from '@/components/ArrowLaunchScript.astro'
 import BaseHead from '@/components/BaseHead.astro'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
@@ -52,7 +53,7 @@ const config = {
 } as const
 ---
 
-<html lang="cs">
+<html lang="cs" data-tint-scope>
   <head>
     <BaseHead
       title={`${siteTitle ? siteTitle + ' | ' : ''}Přestupní stanice`}
@@ -94,7 +95,8 @@ const config = {
       'font-display flex min-h-screen min-w-full flex-col',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
       '[--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)] sm:[--slide-spacing:3rem]',
-      tintedBackground && 'bg-brand-first-500 bg-none',
+      tintedBackground &&
+        '[background-color:color-mix(in_srgb,var(--tint-bg,var(--color-brand-first-500))_70%,transparent)] bg-none',
       isDev && 'debug-screens',
     ]}
   >
@@ -116,6 +118,7 @@ const config = {
     </div>
     {!isBare && <div aria-hidden="true" data-footer-spacer />}
     <Analytics />
+    <ArrowLaunchScript />
     <script>
       window.Hyphenopoly = {
         require: { cs: 'FORCEHYPHENOPOLY' },

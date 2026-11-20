@@ -1,0 +1,55 @@
+---
+
+---
+
+<script>
+  const LAUNCHED_ATTRIBUTE = 'data-launched'
+  const RESET_DELAY_MS = 1500
+  const NAVIGATION_DELAY_MS = 300
+
+  const getLink = (target: EventTarget | null) =>
+    target instanceof Element ? target.closest<HTMLElement>('[data-arrow-link]') : null
+
+  const hasModifier = (event: MouseEvent) =>
+    event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+
+  const isSamePageNavigation = (link: HTMLAnchorElement) =>
+    link.pathname === window.location.pathname && link.hash !== ''
+
+  const shouldDelayNavigation = (event: MouseEvent, link: HTMLElement) =>
+    link instanceof HTMLAnchorElement &&
+    !event.defaultPrevented &&
+    event.button === 0 &&
+    !hasModifier(event) &&
+    (link.target === '' || link.target === '_self') &&
+    link.origin === window.location.origin &&
+    !link.hasAttribute('download') &&
+    !isSamePageNavigation(link)
+
+  document.addEventListener('click', (event) => {
+    const link = getLink(event.target)
+    if (!link || link.hasAttribute(LAUNCHED_ATTRIBUTE)) {
+      return
+    }
+    link.setAttribute(LAUNCHED_ATTRIBUTE, '')
+    window.setTimeout(() => {
+      link.removeAttribute(LAUNCHED_ATTRIBUTE)
+    }, RESET_DELAY_MS)
+    if (
+      link instanceof HTMLAnchorElement &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      shouldDelayNavigation(event, link)
+    ) {
+      event.preventDefault()
+      window.setTimeout(() => {
+        window.location.assign(link.href)
+      }, NAVIGATION_DELAY_MS)
+    }
+  })
+
+  window.addEventListener('pageshow', () => {
+    document.querySelectorAll(`[${LAUNCHED_ATTRIBUTE}]`).forEach((link) => {
+      link.removeAttribute(LAUNCHED_ATTRIBUTE)
+    })
+  })
+</script>
