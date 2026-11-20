@@ -5,6 +5,8 @@ firstname: Ingrid
 firstnameSecond: Ingrid
 surname: Mennen
 surnameSecond: Mennen
+firstnameSeventh: Ingrid
+surnameSeventh: Mennen
 gender: female
 image: ../images/authors/mennen.jpg
 claim: 'Jihoafrická autorka obrázkových knih z Kapského Města.'

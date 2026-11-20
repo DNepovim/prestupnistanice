@@ -58,6 +58,16 @@ export const AuthorsCollection: Collection = {
       label: 'Příjmení (2. pád)',
     },
     {
+      type: 'string',
+      name: 'firstnameSeventh',
+      label: 'Jméno (7. pád)',
+    },
+    {
+      type: 'string',
+      name: 'surnameSeventh',
+      label: 'Příjmení (7. pád)',
+    },
+    {
       type: 'datetime',
       name: 'birthDate',
       label: 'Datum narození',

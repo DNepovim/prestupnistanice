@@ -34,11 +34,11 @@ export const rolesMap: Record<
     imperfect: { male: 'sází', female: 'sází' },
   },
   reviewer: {
-    perfect: { male: 'recenzi napsal', female: 'recenzi napsala' },
+    perfect: { male: 'recenzoval', female: 'recenzovala' },
     imperfect: { male: 'píše recenze', female: 'píše recenze' },
   },
   corrector: {
-    perfect: { male: 'korekturu provedl', female: 'korekturu provedla' },
+    perfect: { male: 'korigoval', female: 'korigovala' },
     imperfect: { male: 'dělá korektury', female: 'dělá korektury' },
   },
   consultation: {

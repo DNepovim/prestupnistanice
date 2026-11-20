@@ -5,6 +5,8 @@ firstname: Philippe
 firstnameSecond: Philippa
 surname: Corentin
 surnameSecond: Corentina
+firstnameSeventh: Philippem
+surnameSeventh: Corentinem
 birthDate: 1936-02-16T00:00:00.000Z
 deathDate: 2022-11-07T00:00:00.000Z
 gender: male

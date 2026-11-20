@@ -5,6 +5,8 @@ firstname: Vilém
 firstnameSecond: Viléma
 surname: Flusser
 surnameSecond: Flussera
+firstnameSeventh: Vilémem
+surnameSeventh: Flusserem
 birthDate: 1920-12-04T23:00:00.000Z
 deathDate: 1991-11-26T23:00:00.000Z
 gender: male

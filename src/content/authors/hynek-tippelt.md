@@ -5,6 +5,8 @@ firstname: Hynek
 firstnameSecond: Hynka
 surname: Tippelt
 surnameSecond: Tippelta
+firstnameSeventh: Hynkem
+surnameSeventh: Tippeltem
 gender: male
 ---
 

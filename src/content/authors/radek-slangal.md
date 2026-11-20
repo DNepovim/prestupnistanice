@@ -5,6 +5,8 @@ firstname: Radek
 firstnameSecond: Radka
 surname: Šlangal
 surnameSecond: Šlangala
+firstnameSeventh: Radkem
+surnameSeventh: Šlangalem
 gender: male
 ---
 

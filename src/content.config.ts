@@ -11,6 +11,8 @@ const author = defineCollection({
       firstnameSecond: z.string().optional(),
       surname: z.string(),
       surnameSecond: z.string().optional(),
+      firstnameSeventh: z.string().optional(),
+      surnameSeventh: z.string().optional(),
       birthDate: z.date().optional(),
       deathDate: z.date().optional(),
       gender: z.enum(['male', 'female']),

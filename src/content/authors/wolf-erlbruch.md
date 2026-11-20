@@ -5,6 +5,8 @@ firstname: Wolf
 firstnameSecond: Wolfa
 surname: Erlbruch
 surnameSecond: Erlbrucha
+firstnameSeventh: Wolfem
+surnameSeventh: Erlbruchem
 birthDate: 1948-06-29T22:00:00.000Z
 deathDate: 2022-01-10T23:00:00.000Z
 gender: male

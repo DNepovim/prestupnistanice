@@ -5,6 +5,8 @@ firstname: Rudolf
 firstnameSecond: Rudolfa
 surname: Kassner
 surnameSecond: Kassnera
+firstnameSeventh: Rudolfem
+surnameSeventh: Kassnerem
 birthDate: 1873-11-10T23:02:16.000Z
 deathDate: 1959-03-31T23:00:00.000Z
 gender: male

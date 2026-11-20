@@ -5,6 +5,8 @@ firstname: Irene
 firstnameSecond: Irene
 surname: Berg
 surnameSecond: Berg
+firstnameSeventh: Irene
+surnameSeventh: Berg
 gender: female
 image: ../images/authors/berg.jpg
 claim: 'Jihoafrická ilustrátorka a hudebnice, pro niž je Ben a velryba prvotinou.'

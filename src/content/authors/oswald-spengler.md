@@ -5,6 +5,8 @@ firstname: Oswald
 firstnameSecond: Oswalda
 surname: Spengler
 surnameSecond: Spenglera
+firstnameSeventh: Oswaldem
+surnameSeventh: Spenglerem
 birthDate: 1880-05-29T00:00:00.000Z
 deathDate: 1936-05-08T00:00:00.000Z
 gender: male
