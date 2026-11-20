@@ -1,0 +1,45 @@
+---
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import InternalLayout from '@/layouts/InternalLayout.astro'
+import { routes } from '@/routes'
+
+const pages = [
+  {
+    href: routes.internal.books(),
+    title: 'Podklady knih',
+    description: 'Které obrázky a metadata u knih chybí nebo mají malé rozlišení.',
+  },
+  {
+    href: routes.internal.authors(),
+    title: 'Podklady autorů',
+    description: 'Fotky, medailony a další údaje autorů, které ještě chybí.',
+  },
+  {
+    href: routes.internal.imageSpecs(),
+    title: 'Požadované obrázky',
+    description: 'Seznam obrázků a jejich minimální rozměry podle použití na webu.',
+  },
+]
+---
+
+<InternalLayout siteTitle="Interní stránky" siteDescription="Rozcestník interních stránek">
+  <Section>
+    <PageTitle>Interní stránky</PageTitle>
+    <ul class="mt-8 grid gap-4 min-md:grid-cols-2">
+      {
+        pages.map(({ href, title, description }) => (
+          <li>
+            <a
+              href={href}
+              class="border-brand-first-100 hover:bg-brand-first-50/50 block h-full border p-5 transition-colors"
+            >
+              <h2 class="font-head text-xl text-gray-800">{title}</h2>
+              <p class="text-brand-first-700 mt-2 text-sm">{description}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+</InternalLayout>

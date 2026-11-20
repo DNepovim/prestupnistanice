@@ -1,0 +1,80 @@
+---
+import PageTitle from '@/components/PageTitle.astro'
+import Section from '@/components/Section.astro'
+import InternalLayout from '@/layouts/InternalLayout.astro'
+import { routes } from '@/routes'
+import { AUTHOR_IMAGE_SPEC, BOOK_IMAGE_SPECS, formatMinSize } from '@/utils/imageSpecs'
+
+const groups = [
+  { title: 'Autor', href: routes.internal.authors(), specs: [AUTHOR_IMAGE_SPEC] },
+  {
+    title: 'Kniha',
+    href: routes.internal.books(),
+    specs: Object.values(BOOK_IMAGE_SPECS),
+  },
+]
+
+const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
+const bodyCell = 'px-3 py-3 align-top'
+---
+
+<InternalLayout
+  siteTitle="Požadované obrázky"
+  siteDescription="Interní přehled obrázků a jejich minimálních rozměrů"
+>
+  <Section isWide>
+    <PageTitle>Požadované obrázky</PageTitle>
+    <p class="text-brand-first-700 mb-8 text-center">
+      Minimální rozměry vycházejí z největší velikosti, v jaké web obrázek žádá. Menší
+      soubory se zobrazí rozmazaně.
+    </p>
+    {
+      groups.map(({ title, href, specs }) => (
+        <div class="mb-12">
+          <h2 class="font-head mb-3 text-2xl text-gray-800">
+            {title}
+            <a href={href} class="text-brand-first-600 ml-3 text-sm underline">
+              přehled chybějících podkladů
+            </a>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-sm">
+              <thead class="bg-brand-first-50 text-brand-first-800">
+                <tr>
+                  <th class={headCell}>Podklad</th>
+                  <th class={headCell}>Minimum</th>
+                  <th class={headCell}>Poměr stran</th>
+                  <th class={headCell}>Kde se používá</th>
+                </tr>
+              </thead>
+              <tbody>
+                {specs.map((spec) => (
+                  <tr class="border-brand-first-100 border-b">
+                    <td class={bodyCell}>
+                      <div class="font-head">{spec.label}</div>
+                      <div class="text-brand-first-600 text-xs">{spec.cmsField}</div>
+                    </td>
+                    <td class:list={[bodyCell, 'font-head whitespace-nowrap']}>
+                      {formatMinSize(spec)}
+                    </td>
+                    <td class={bodyCell}>{spec.ratio}</td>
+                    <td class={bodyCell}>
+                      <ul class="space-y-1">
+                        {spec.usages.map((usage) => (
+                          <li>
+                            {usage.place}
+                            <span class="text-brand-first-600"> – {usage.size}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))
+    }
+  </Section>
+</InternalLayout>

@@ -1,4 +1,8 @@
+import type { ImageMetadata } from 'astro'
 import type { CollectionEntry } from 'astro:content'
+
+import { BOOK_IMAGE_SPECS, getCoverTopSpec, getSizeCheck } from '@/utils/imageSpecs'
+import { pluralize } from '@/utils/pluralize'
 
 export type GapGroup = 'images' | 'metadata'
 
@@ -9,17 +13,45 @@ export type Gap = {
   isPresent: boolean
   isApplicable: boolean
   detail?: string
+  isTooSmall?: boolean
+  hint?: string
 }
 
 type BookEntry = CollectionEntry<'book'>
 
-const countDetail = (count: number) => (count > 0 ? String(count) : undefined)
+const countDetail = (count: number, tooSmallCount: number) => {
+  if (count === 0) {
+    return undefined
+  }
+  return tooSmallCount > 0
+    ? `${String(count)} (${pluralize(tooSmallCount, ['malá', 'malé', 'malých'])})`
+    : String(count)
+}
 
-export const getBookGaps = (entry: BookEntry, galleryCount: number): Gap[] => {
+const singleDetail = (image: ImageMetadata | undefined, tooSmallCount: number) =>
+  image && tooSmallCount > 0
+    ? `${String(image.width)}×${String(image.height)}`
+    : undefined
+
+export const getBookGaps = (entry: BookEntry, galleryImages: ImageMetadata[]): Gap[] => {
   const { data, body } = entry
   const isReleased = data.isUpcoming !== true
   const hasSeparateThumb = data.coverImage ? data.cover.src !== data.coverImage.src : true
-  const samplePagesCount = data.samplePages?.length ?? 0
+  const samplePages = data.samplePages ?? []
+  const coverCheck = getSizeCheck(
+    BOOK_IMAGE_SPECS.coverImage,
+    data.coverImage ? [data.coverImage] : [],
+  )
+  const thumbCheck = getSizeCheck(
+    BOOK_IMAGE_SPECS.thumb,
+    hasSeparateThumb ? [data.cover] : [],
+  )
+  const topCheck = getSizeCheck(
+    getCoverTopSpec(data.isPromoted === true),
+    data.coverTop ? [data.coverTop] : [],
+  )
+  const sampleCheck = getSizeCheck(BOOK_IMAGE_SPECS.samplePage, samplePages)
+  const galleryCheck = getSizeCheck(BOOK_IMAGE_SPECS.gallery, galleryImages)
 
   return [
     {
@@ -28,6 +60,9 @@ export const getBookGaps = (entry: BookEntry, galleryCount: number): Gap[] => {
       group: 'images',
       isPresent: data.coverImage !== undefined,
       isApplicable: true,
+      detail: singleDetail(data.coverImage, coverCheck.tooSmallCount),
+      isTooSmall: coverCheck.tooSmallCount > 0,
+      hint: coverCheck.hint,
     },
     {
       key: 'thumb',
@@ -35,6 +70,9 @@ export const getBookGaps = (entry: BookEntry, galleryCount: number): Gap[] => {
       group: 'images',
       isPresent: hasSeparateThumb,
       isApplicable: data.coverImage === undefined || data.coverTop !== undefined,
+      detail: singleDetail(data.cover, thumbCheck.tooSmallCount),
+      isTooSmall: thumbCheck.tooSmallCount > 0,
+      hint: thumbCheck.hint,
     },
     {
       key: 'coverTop',
@@ -42,22 +80,29 @@ export const getBookGaps = (entry: BookEntry, galleryCount: number): Gap[] => {
       group: 'images',
       isPresent: data.coverTop !== undefined,
       isApplicable: true,
+      detail: singleDetail(data.coverTop, topCheck.tooSmallCount),
+      isTooSmall: topCheck.tooSmallCount > 0,
+      hint: topCheck.hint,
     },
     {
       key: 'samplePages',
       label: 'Ukázka',
       group: 'images',
-      isPresent: samplePagesCount > 0,
+      isPresent: samplePages.length > 0,
       isApplicable: true,
-      detail: countDetail(samplePagesCount),
+      detail: countDetail(samplePages.length, sampleCheck.tooSmallCount),
+      isTooSmall: sampleCheck.tooSmallCount > 0,
+      hint: sampleCheck.hint,
     },
     {
       key: 'gallery',
       label: 'Galerie',
       group: 'images',
-      isPresent: galleryCount > 0,
+      isPresent: galleryImages.length > 0,
       isApplicable: isReleased,
-      detail: countDetail(galleryCount),
+      detail: countDetail(galleryImages.length, galleryCheck.tooSmallCount),
+      isTooSmall: galleryCheck.tooSmallCount > 0,
+      hint: galleryCheck.hint,
     },
     {
       key: 'body',

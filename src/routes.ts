@@ -41,8 +41,10 @@ export const routes = {
     detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
   internal: {
-    books: () => '/interni/podklady',
+    index: () => '/interni',
+    books: () => '/interni/knihy',
     authors: () => '/interni/autori',
+    imageSpecs: () => '/interni/rozmery',
   },
   api: {
     kosmasStatus: (slug: string) => `/api/kosmas/${slug}`,

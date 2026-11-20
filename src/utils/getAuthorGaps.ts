@@ -1,11 +1,13 @@
 import type { CollectionEntry } from 'astro:content'
 
 import type { Gap } from '@/utils/getBookGaps'
+import { AUTHOR_IMAGE_SPEC, getSizeCheck } from '@/utils/imageSpecs'
 
 type AuthorEntry = CollectionEntry<'author'>
 
 export const getAuthorGaps = (entry: AuthorEntry): Gap[] => {
   const { data, body } = entry
+  const imageCheck = getSizeCheck(AUTHOR_IMAGE_SPEC, data.image ? [data.image] : [])
 
   return [
     {
@@ -14,6 +16,12 @@ export const getAuthorGaps = (entry: AuthorEntry): Gap[] => {
       group: 'images',
       isPresent: data.image !== undefined,
       isApplicable: true,
+      detail:
+        data.image && imageCheck.tooSmallCount > 0
+          ? `${String(data.image.width)}×${String(data.image.height)}`
+          : undefined,
+      isTooSmall: imageCheck.tooSmallCount > 0,
+      hint: imageCheck.hint,
     },
     {
       key: 'body',

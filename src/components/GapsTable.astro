@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components'
 
 import PageTitle from '@/components/PageTitle.astro'
 import Section from '@/components/Section.astro'
+import { routes } from '@/routes'
 import type { Gap } from '@/utils/getBookGaps'
 
 type Row = {
@@ -24,6 +25,7 @@ const { title, subject, rowLabel, rows } = Astro.props
 const rowsWithMissing = rows.map((row) => ({
   ...row,
   missing: row.gaps.filter((gap) => gap.isApplicable && !gap.isPresent),
+  tooSmall: row.gaps.filter((gap) => gap.isPresent && gap.isTooSmall === true),
 }))
 
 const columns = rows[0]?.gaps ?? []
@@ -32,6 +34,7 @@ const metadataColumnsCount = columns.length - imageColumnsCount
 
 const completeCount = rowsWithMissing.filter((row) => row.missing.length === 0).length
 const totalMissing = rowsWithMissing.reduce((sum, row) => sum + row.missing.length, 0)
+const totalTooSmall = rowsWithMissing.reduce((sum, row) => sum + row.tooSmall.length, 0)
 
 const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
 ---
@@ -40,7 +43,11 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
   <PageTitle>{title}</PageTitle>
   <p class="text-brand-first-700 mb-8 text-center">
     {completeCount} z {rows.length}
-    {subject} je kompletních, celkem chybí {totalMissing} podkladů.
+    {subject} je kompletních, celkem chybí {totalMissing} podkladů a {totalTooSmall} obrázků
+    je příliš malých.
+    <a href={routes.internal.imageSpecs()} class="underline underline-offset-2">
+      Požadované rozměry
+    </a>
   </p>
   <div class="overflow-x-auto">
     <table class="w-full border-collapse text-sm">
@@ -56,6 +63,7 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
           }
           <th class={headCell} colspan={metadataColumnsCount}>Metadata</th>
           <th class={headCell} rowspan="2">Chybí</th>
+          <th class={headCell} rowspan="2">Malé</th>
         </tr>
         <tr>
           {columns.map((gap) => <th class={headCell}>{gap.label}</th>)}
@@ -63,7 +71,7 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
       </thead>
       <tbody>
         {
-          rowsWithMissing.map(({ href, title, note, gaps, missing }) => (
+          rowsWithMissing.map(({ href, title, note, gaps, missing, tooSmall }) => (
             <tr class="border-brand-first-100 hover:bg-brand-first-50/50 border-b">
               <td class="px-3 py-2">
                 <a href={href} class="font-head underline-offset-2 hover:underline">
@@ -75,7 +83,12 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
                 <td
                   class:list={[
                     'px-3 py-2 text-center',
-                    gap.isApplicable && (gap.isPresent ? 'bg-emerald-100' : 'bg-red-100'),
+                    gap.isApplicable &&
+                      (!gap.isPresent
+                        ? 'bg-red-100'
+                        : gap.isTooSmall
+                          ? 'bg-amber-100'
+                          : 'bg-emerald-100'),
                   ]}
                 >
                   {!gap.isApplicable ? (
@@ -84,12 +97,22 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
                     <span
                       class:list={[
                         'inline-flex items-center gap-1',
-                        gap.isPresent ? 'text-emerald-800' : 'text-red-800',
+                        !gap.isPresent
+                          ? 'text-red-800'
+                          : gap.isTooSmall
+                            ? 'text-amber-800'
+                            : 'text-emerald-800',
                       ]}
-                      title={gap.label}
+                      title={gap.hint ?? gap.label}
                     >
                       <Icon
-                        name={gap.isPresent ? 'ph:check-circle' : 'ph:x-circle'}
+                        name={
+                          !gap.isPresent
+                            ? 'ph:x-circle'
+                            : gap.isTooSmall
+                              ? 'ph:warning'
+                              : 'ph:check-circle'
+                        }
                         class="size-5"
                       />
                       {gap.detail}
@@ -99,6 +122,9 @@ const headCell = 'px-3 py-2 text-left font-head text-xs uppercase tracking-wide'
               ))}
               <td class="font-head px-3 py-2 text-center">
                 {missing.length > 0 ? missing.length : '—'}
+              </td>
+              <td class="font-head px-3 py-2 text-center">
+                {tooSmall.length > 0 ? tooSmall.length : '—'}
               </td>
             </tr>
           ))

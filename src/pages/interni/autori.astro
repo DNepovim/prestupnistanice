@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content'
 
 import GapsTable from '@/components/GapsTable.astro'
-import Layout from '@/layouts/Layout.astro'
+import InternalLayout from '@/layouts/InternalLayout.astro'
 import { routes } from '@/routes'
 import { getAuthorGaps } from '@/utils/getAuthorGaps'
 
@@ -17,10 +17,9 @@ const rows = authors
   }))
 ---
 
-<Layout
+<InternalLayout
   siteTitle="Chybějící podklady autorů"
   siteDescription="Interní přehled podkladů autorů"
-  noindex
 >
   <GapsTable
     title="Chybějící podklady autorů"
@@ -28,4 +27,4 @@ const rows = authors
     rowLabel="Autor"
     rows={rows}
   />
-</Layout>
+</InternalLayout>

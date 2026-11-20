@@ -17,6 +17,7 @@ type Props = {
   keepHue?: boolean
   tintedHeader?: boolean
   tintedBackground?: boolean
+  isBare?: boolean
 }
 
 const books = (await getCollection('book')).toSorted(
@@ -34,6 +35,7 @@ const {
   keepHue = false,
   tintedHeader = false,
   tintedBackground = false,
+  isBare = false,
 } = Astro.props
 
 const colorBrandFirst = firstColor ?? promotedBook?.data.color ?? '#434991'
@@ -103,16 +105,16 @@ const config = {
       Přeskočit na obsah
     </a>
 
-    <Footer />
+    {!isBare && <Footer />}
 
     <div class="relative z-0 flex flex-1 flex-col">
-      <Header tinted={tintedHeader} />
+      {!isBare && <Header tinted={tintedHeader} />}
 
       <main id="obsah" class="flex-1 pb-16">
         <slot />
       </main>
     </div>
-    <div aria-hidden="true" data-footer-spacer></div>
+    {!isBare && <div aria-hidden="true" data-footer-spacer />}
     <Analytics />
     <script>
       window.Hyphenopoly = {

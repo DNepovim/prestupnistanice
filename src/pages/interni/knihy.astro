@@ -1,17 +1,21 @@
 ---
+import type { ImageMetadata } from 'astro'
 import { getCollection } from 'astro:content'
 
 import GapsTable from '@/components/GapsTable.astro'
-import Layout from '@/layouts/Layout.astro'
+import InternalLayout from '@/layouts/InternalLayout.astro'
 import { routes } from '@/routes'
 import { getBookGaps } from '@/utils/getBookGaps'
 
-const galleryPaths = Object.keys(
-  import.meta.glob('/src/content/images/books/*/gallery/*.{jpg,jpeg,png,webp,gif,GIF}'),
+const galleryModules = import.meta.glob<ImageMetadata>(
+  '/src/content/images/books/*/gallery/*.{jpg,jpeg,png,webp,gif,GIF}',
+  { eager: true, import: 'default' },
 )
 
-const countGalleryImages = (slug: string) =>
-  galleryPaths.filter((path) => path.includes(`/books/${slug}/gallery/`)).length
+const getGalleryImages = (slug: string) =>
+  Object.entries(galleryModules)
+    .filter(([path]) => path.includes(`/books/${slug}/gallery/`))
+    .map(([, image]) => image)
 
 const books = (await getCollection('book')).toSorted(
   (a, b) => b.data.order - a.data.order,
@@ -21,14 +25,13 @@ const rows = books.map((book) => ({
   href: routes.books.detail(book.data.slug),
   title: `${String(book.data.order)}.${book.data.title}`,
   note: book.data.isUpcoming ? 'připravujeme' : undefined,
-  gaps: getBookGaps(book, countGalleryImages(book.data.slug)),
+  gaps: getBookGaps(book, getGalleryImages(book.data.slug)),
 }))
 ---
 
-<Layout
+<InternalLayout
   siteTitle="Chybějící podklady knih"
   siteDescription="Interní přehled podkladů knih"
-  noindex
 >
   <GapsTable
     title="Chybějící podklady knih"
@@ -36,4 +39,4 @@ const rows = books.map((book) => ({
     rowLabel="Kniha"
     rows={rows}
   />
-</Layout>
+</InternalLayout>

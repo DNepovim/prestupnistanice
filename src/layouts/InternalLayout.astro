@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components'
+
+import Layout from '@/layouts/Layout.astro'
+import { routes } from '@/routes'
+
+type Props = {
+  siteTitle: string
+  siteDescription: string
+}
+
+const { siteTitle, siteDescription } = Astro.props
+
+const isIndex = Astro.url.pathname.replace(/\/$/, '') === routes.internal.index()
+const linkClass =
+  'font-head text-brand-first-700 inline-flex items-center gap-2 text-sm underline-offset-2 hover:underline'
+---
+
+<Layout siteTitle={siteTitle} siteDescription={siteDescription} noindex isBare>
+  <nav class="mx-auto flex max-w-[70rem] flex-wrap gap-x-6 gap-y-2 px-6 pt-6">
+    <a href={routes.homepage()} class={linkClass}>
+      <Icon name="ph:arrow-left" class="size-4" />
+      Přestupní stanice
+    </a>
+    {
+      !isIndex && (
+        <a href={routes.internal.index()} class={linkClass}>
+          <Icon name="ph:squares-four" class="size-4" />
+          Interní stránky
+        </a>
+      )
+    }
+  </nav>
+  <slot />
+</Layout>
