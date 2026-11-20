@@ -38,7 +38,7 @@
       ]
     },
     {
-      "source": "/interni/(.*)",
+      "source": "/interni/:path*",
       "headers": [
         {
           "key": "X-Robots-Tag",

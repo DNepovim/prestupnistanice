@@ -25,6 +25,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "@uiw/react-md-editor": "^4.0.11",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/functions": "^3.11.3",
     "astro": "^5.13.3",
     "astro-icon": "^1.1.5",
     "colord": "^2.9.3",

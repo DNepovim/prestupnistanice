@@ -12,7 +12,7 @@ export default {
     ],
     project: ['src/**/*'],
   },
-  entry: ['tina/config.ts'],
+  entry: ['tina/config.ts', 'middleware.ts'],
   project: ['src/**/*', 'tina/**/*.{ts,tsx}'],
   ignore: ['tina/__generated__/**'],
   ignoreDependencies: ['@iconify-json/ph', 'sharp', 'eslint-plugin-jsx-a11y'],
