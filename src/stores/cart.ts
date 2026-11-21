@@ -1,7 +1,7 @@
 import { persistentAtom } from '@nanostores/persistent'
 import { computed } from 'nanostores'
 
-export type CartItem = {
+type CartItem = {
   slug: string
   count: number
 }
@@ -38,7 +38,9 @@ export const addToCart = (slug: string) => {
   const items = cart.get()
   cart.set(
     items.some((item) => item.slug === slug)
-      ? items.map((item) => (item.slug === slug ? { ...item, count: item.count + 1 } : item))
+      ? items.map((item) =>
+          item.slug === slug ? { ...item, count: item.count + 1 } : item,
+        )
       : [...items, { slug, count: 1 }],
   )
 }

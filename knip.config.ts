@@ -15,5 +15,6 @@ export default {
   entry: ['tina/config.ts', 'middleware.ts'],
   project: ['src/**/*', 'tina/**/*.{ts,tsx}'],
   ignore: ['tina/__generated__/**'],
+  ignoreIssues: { 'src/stores/cart.ts': ['exports'] },
   ignoreDependencies: ['@iconify-json/ph', 'sharp', 'eslint-plugin-jsx-a11y'],
 } satisfies KnipConfig
