@@ -57,14 +57,6 @@ export default defineConfig(
       'no-restricted-imports': [
         'error',
         {
-          paths: [
-            {
-              name: 'react',
-              importNames: ['default'],
-              message:
-                "Default React import is not necessary for JSX to work. Use named imports (e.g. `import { useEffect } from 'react'`) (https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).",
-            },
-          ],
           patterns: [
             {
               group: ['..*'],
@@ -76,7 +68,6 @@ export default defineConfig(
       ],
     },
     settings: {
-      react: { version: '19.0' },
       'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
@@ -93,6 +84,9 @@ export default defineConfig(
       parserOptions: {
         parser: tseslint.parser,
       },
+    },
+    rules: {
+      '@typescript-eslint/no-unsafe-return': 'off',
     },
   },
   ...eslintSveltePlugin.configs.recommended,

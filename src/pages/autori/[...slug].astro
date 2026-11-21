@@ -19,9 +19,6 @@ import { ROLE_ORDER, rolesMap } from '@/utils/rolesMap'
 import { getTitleFit } from '@/utils/titleFit'
 import { tp } from '@/utils/tp'
 
-// eslint-disable-next-line no-restricted-imports
-import { client } from '../../../tina/__generated__/client.ts'
-
 type Gender = CollectionEntry<'author'>['data']['gender']
 
 const BORN_LABELS = {
@@ -48,16 +45,7 @@ const formatDate = (date: Date) =>
 export async function getStaticPaths() {
   const authors = await getCollection('author')
 
-  return authors.map((a) => ({
-    params: { slug: a.id },
-    props: {
-      post: a,
-      getTinaProps: async () =>
-        client.queries.authors({
-          relativePath: a.data.slug,
-        }),
-    },
-  }))
+  return authors.map((a) => ({ params: { slug: a.id } }))
 }
 
 const { slug } = Astro.params

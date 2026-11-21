@@ -8,7 +8,6 @@ import icon from 'astro-icon'
 import { defineConfig } from 'astro/config'
 import { loadEnv } from 'vite'
 
-import tinaDirective from './astro-tina-directive/register'
 import { envConfig } from './env.config.ts'
 
 const { SITE_URL } = loadEnv(process.env.SITE_URL ?? '', process.cwd(), '')
@@ -22,7 +21,6 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({ filter: (page) => !page.includes('/interni/') }),
-    tinaDirective(),
     ENV_NAME === 'production' &&
       sitemap({ lastmod: new Date(), filter: (page) => !page.includes('/interni/') }),
     icon(),
@@ -32,10 +30,6 @@ export default defineConfig({
   vite: {
     // @ts-expect-error vite versions incompatibility
     plugins: [...tailwindcss()],
-  },
-
-  redirects: {
-    '/admin': '/admin/index.html',
   },
 
   prefetch: {

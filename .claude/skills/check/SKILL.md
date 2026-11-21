@@ -24,8 +24,7 @@ Or all at once: `pnpm check`.
 
 `format:check` and `format:write` share a glob (`**/*.{ts,tsx,js,cjs,json,svg}`),
 so anything the check flags, the write fixes. Generated and vendored output is
-excluded via `.prettierignore` (`tina/__generated__`, `tina/tina-lock.json`,
-`public`, `dist`, `.astro`, `.vercel`).
+excluded via `.prettierignore` (`public`, `dist`, `.astro`, `.vercel`).
 
 `.astro` and `.svelte` files are **not** in the Prettier globs — they are linted
 but not format-checked. The plugins are installed, so if you want to format one
@@ -48,12 +47,12 @@ have drift, so don't run that repo-wide unless you intend that diff.
      fix the code, or prefix a genuinely-unused binding with `_`.
 3. **TypeScript** — `noUncheckedIndexedAccess` is on, so guard or `??` index
    accesses rather than asserting with `!` (non-null assertions are banned).
-   `pnpm typecheck` runs `tsc` over the whole repo including `tina/` and
+   `pnpm typecheck` runs `tsc` over the whole repo including
    `astro.config.ts`.
    - If types for content collections look stale, run `pnpm astro sync` to
      regenerate `.astro/types.d.ts`, then re-run typecheck.
 4. **Knip** — `knip.config.ts` sets Astro entries (`src/pages/**`) plus
-   `tina/config.ts`, and ignores only `tina/__generated__`. Resolve findings by
+   `middleware.ts`. Resolve findings by
    deleting unused files, un-`export`ing internal-only symbols, or removing
    unused deps. If a dep is used implicitly (not import-referenced, e.g.
    `sharp` for Astro's image service, `eslint-plugin-jsx-a11y` pulled in by
@@ -65,11 +64,6 @@ have drift, so don't run that repo-wide unless you intend that diff.
   option and prints one "does not support the `projectService` option" line per
   `.astro` file to stderr. It's harmless noise — the run still exits 0. Filter it
   with `| grep -v 'does not support the .projectService.'` if it's in the way.
-- `tina/collections/*.ts` carry `@ts-expect-error wrongly typed tina cms`
-  directives. These are load-bearing: TinaCMS's own packages contradict each
-  other (`wrapFieldsWithMeta` returns props requiring `form: FormApi`, while the
-  `Component` type that `ui.component` must satisfy never passes `form`). Don't
-  remove them expecting the code to still compile.
 
 Until this is cleaned up, the practical bar is **no *new* findings in files you
 touched**. Delete this section once `pnpm check` is green.

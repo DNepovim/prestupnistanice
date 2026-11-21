@@ -18,14 +18,6 @@ export const envConfig = {
       access: 'public',
       default: 'staging',
     }),
-    PUBLIC_TINA_CLIENT_ID: envField.string({
-      context: 'server',
-      access: 'public',
-    }),
-    TINA_TOKEN: envField.string({
-      context: 'server',
-      access: 'public',
-    }),
     UMAMI_SITE_ID: envField.string({
       context: 'client',
       access: 'public',

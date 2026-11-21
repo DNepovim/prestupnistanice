@@ -183,11 +183,10 @@ custom properties yourself.
 ## Content and routing
 
 - Content lives in `src/content/{books,authors,pages}` as markdown. Its shape is
-  defined **twice** — `tina/collections/*.ts` (editor) and
-  `src/content.config.ts` (Zod reader). Adding or renaming a field means editing
-  both.
+  defined by the Zod schemas in `src/content.config.ts`. Adding or renaming a
+  field means updating the schema.
 - Look entries up by the frontmatter `data.slug`, not by `entry.id` — the slug is
-  written by Tina's `beforeSubmit` hook and is what every route and cross-reference
+  `slugify(title)` and is what every route and cross-reference
   uses. `book.authors[].slug` is an Astro `reference('author')`; its `.id` is the
   author's filename.
 - Build every URL with the `routes` helpers in `src/routes.ts`. Never hardcode

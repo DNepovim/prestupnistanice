@@ -52,8 +52,7 @@ creating them.
 
 1. Ensure the commit(s) are on `main` (check it out before committing if not).
 2. `git push origin main`.
-3. **Note to the user:** `main` is the production branch on Vercel *and* the
-   branch TinaCMS writes to (`tina/config.ts` → `branch: 'main'`). Pushing
+3. **Note to the user:** `main` is the production branch on Vercel. Pushing
    `main` deploys to production.
 
 ## Notes
@@ -62,4 +61,4 @@ creating them.
 - Use `gh` for the PR; if `gh` isn't authenticated, tell the user to run
   `gh auth login` (as a `! gh auth login` prompt) rather than failing silently.
 - Don't touch unrelated files or amend history the user didn't ask about.
-- Never commit `.env` or Tina tokens.
+- Never commit `.env`.

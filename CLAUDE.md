@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Static marketing/catalogue site for the Czech book publisher **Přestupní stanice** (knihyps). Astro 5 + Svelte 5 islands + Tailwind 4, content edited through TinaCMS, deployed to Vercel. All UI copy is Czech.
+Static marketing/catalogue site for the Czech book publisher **Přestupní stanice** (knihyps). Astro 5 + Svelte 5 islands + Tailwind 4, content stored as Markdown, deployed to Vercel. All UI copy is Czech.
 
 ## Commands
 
@@ -12,8 +12,8 @@ Package manager is **pnpm**.
 
 | Command | Action |
 | :-- | :-- |
-| `pnpm dev` | `tinacms dev -c "astro dev"` — Astro on `localhost:4321`, Tina admin at `/admin`. Needs `PUBLIC_TINA_CLIENT_ID` + `TINA_TOKEN` in `.env`. |
-| `pnpm build` | `tinacms build && astro build` |
+| `pnpm dev` | `astro dev` — Astro on `localhost:4321`. |
+| `pnpm build` | `astro build` |
 | `pnpm preview` | Serve `./dist` |
 | `pnpm typecheck` | `tsc` (no emit config — whole repo, `astro/tsconfigs/strict`) |
 | `pnpm lint:fix` / `lint:check` | ESLint over `src/**` |
@@ -31,24 +31,19 @@ There is no test framework in this repo — don't assume one exists.
 
 ## Architecture
 
-### Content is defined twice — keep both in sync
+### Content
 
-Markdown files in `src/content/{books,authors,pages}` are the single data store, but two schemas describe them:
-
-- `tina/collections/*.ts` — the **editing** schema (field labels in Czech, TinaCloud UI).
-- `src/content.config.ts` — the **reading** schema (Zod, used by `getCollection`/`getEntry`).
-
-Adding or renaming a frontmatter field requires editing both, otherwise either the editor can't set it or the build fails validation.
+Markdown files in `src/content/{books,authors,reviews,events,pages}` are the single data store, described by the Zod schemas in `src/content.config.ts` (used by `getCollection`/`getEntry`). Adding or renaming a frontmatter field means updating the schema, otherwise the build fails validation.
 
 ### The `slug` frontmatter field, not the entry id
 
-Every book/author carries an explicit `slug` in frontmatter, written by Tina's `beforeSubmit` hook (`slugify(title)` for books; author references are flattened from a file path to a slug via `getSlugFromPath`). Application code looks entries up by `data.slug`, and `book.authors[].slug` is an Astro `reference('author')` whose `.id` is the author's filename. When adding lookups, follow the existing `data.slug` convention rather than `entry.id`.
+Every book/author carries an explicit `slug` in frontmatter (`slugify(title)` for books — keep it in sync with the filename when adding entries; author references are file paths flattened to a slug via `getSlugFromPath`). Application code looks entries up by `data.slug`, and `book.authors[].slug` is an Astro `reference('author')` whose `.id` is the author's filename. When adding lookups, follow the existing `data.slug` convention rather than `entry.id`.
 
 ### Routing
 
 `src/routes.ts` is the only place URL segments live (`knihy`, `autori`) plus the `CATEGORIES` map that pairs internal keys (`forKids`, `philosophy`, `novel`, `poetry`) with Czech slugs (`pro-deti`, …). Build URLs with `routes.*()` helpers; never hardcode segments.
 
-`src/pages/knihy/[...slug].astro` serves **both** category listings and book details from one route — it generates paths from book slugs plus `categoryKeys`, then branches with `isOneOf(slug, categoryKeys)` into `BooksCategory` vs `BookDetail`. Adding a category means adding it to `CATEGORIES`, `categoriesSlugToKey`, `categoryKeys`, and the Zod/Tina enums.
+`src/pages/knihy/[...slug].astro` serves **both** category listings and book details from one route — it generates paths from book slugs plus `categoryKeys`, then branches with `isOneOf(slug, categoryKeys)` into `BooksCategory` vs `BookDetail`. Adding a category means adding it to `CATEGORIES`, `categoriesSlugToKey`, `categoryKeys`, and the Zod enum.
 
 ### Per-book theming
 
@@ -66,11 +61,9 @@ Books optionally carry `color` / `bgColor`. `src/utils/geColorScale.ts` expands 
 
 Svelte 5 components are the interactive layer (`SearchButton`, `SearchModal`, `FloatingImage`, `FloatingPopup`). `Header.astro` calls `getSearchIndex()` (`src/utils/search/`) at build time — books, main authors with portraits, and a per-book brand-token style string — and hands the result to `SearchButton client:idle`. `SearchModal` orchestrates the overlay from small islands in `components/search/`; matching lives in `createSearcher` (Fuse.js for books and authors, plus category aliases such as "filosofie" → `philosophy`), the colour-bar geometry in `barLayout`. Books always outrank authors (the first book is preselected), and the selected book, author or category re-themes the overlay by applying its precomputed `--color-brand-*` tokens to the dialog root. Prefer `client:idle` / `client:visible`.
 
-`astro-tina-directive/` registers a custom `client:tina` directive that only hydrates when the page is inside an iframe (TinaCMS visual editing). No component currently uses it.
-
 ### Environment
 
-Env vars are declared in `env.config.ts` and consumed through `astro:env/client` / `astro:env/server` — do not use `process.env` in app code (`astro.config.ts` and `tina/config.ts` are the exceptions, since they run before the schema exists).
+Env vars are declared in `env.config.ts` and consumed through `astro:env/client` / `astro:env/server` — do not use `process.env` in app code (`astro.config.ts` is the exception, since it runs before the schema exists).
 
 `vercel.json` carries a strict CSP; any new external script/font/API host must be added there or it will be blocked in production.
 

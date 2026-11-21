@@ -2,7 +2,5 @@ dist
 .astro
 .vercel
 public
-tina/__generated__
-tina/tina-lock.json
 pnpm-lock.yaml
 src/content/images

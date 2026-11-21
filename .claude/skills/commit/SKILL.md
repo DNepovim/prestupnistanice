@@ -22,23 +22,18 @@ Then look at what will be committed: `git status --short` and `git diff` (staged
 
 ## Step 0b — Content check
 
-Check whether the working tree touches editable content or the CMS schema:
+Check whether the working tree touches content:
 
 ```bash
-git status --short src/content/ tina/
+git status --short src/content/
 ```
 
-If files under `src/content/` changed, note in the summary that these are
-TinaCMS-editable files — an editor working in TinaCloud on the `main` branch may
-have concurrent changes there. Confirm with the user before overwriting content
-that wasn't authored in this session.
+If files under `src/content/` changed, confirm with the user before committing
+content that wasn't authored in this session, and make sure any new or renamed
+frontmatter field is reflected in the Zod schema in `src/content.config.ts` — the
+build fails validation otherwise.
 
-If `tina/collections/*` changed, verify the matching Zod schema in
-`src/content.config.ts` was updated too (the two schemas describe the same
-files). If they've diverged, fix it before committing — the build will fail
-validation otherwise.
-
-If neither path changed, skip this step silently.
+If nothing there changed, skip this step silently.
 
 ## Step 1 — Propose Conventional Commit message(s)
 
@@ -81,11 +76,11 @@ for commits (for example `Co-Authored-By: Claude <noreply@anthropic.com>`).
 ## Step 2 — Commit
 
 1. Stage per commit (`git add <files>`), never `git add -A` blindly — don't pick
-   up unrelated files, `.env` or Tina tokens.
+   up unrelated files or `.env`.
 2. Create each confirmed commit, in order.
 3. Report the resulting commit hash(es) and subject line(s) (`git log --oneline`).
 
 ## Notes
 
 - Don't amend or rewrite history the user didn't ask about.
-- Never commit `.env` or Tina tokens.
+- Never commit `.env`.
