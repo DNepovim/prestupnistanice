@@ -142,6 +142,10 @@
   font-feature-settings: 'liga', 'onum';
 }
 
+@utility animate-cart-fall {
+  animation: cart-fall 0.7s ease-out forwards;
+}
+
 @theme {
   --color-paper: #fcf9f2;
   --font-head: 'Alegreya Variable', serif;
@@ -237,6 +241,20 @@
     }
     to {
       transform: translateY(0);
+    }
+  }
+
+  @keyframes cart-fall {
+    0% {
+      transform: translate(-50%, -24px) scale(0.95);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, 72px) scale(0.95);
+      opacity: 0;
     }
   }
 }

@@ -5,9 +5,11 @@ import Analytics from '@vercel/analytics/astro'
 
 import ArrowLaunchScript from '@/components/ArrowLaunchScript.astro'
 import BaseHead from '@/components/BaseHead.astro'
+import FloatingCartIcon from '@/components/FloatingCartIcon.svelte'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
 import { DEFAULT_PAGE_TINT_ALPHA } from '@/consts'
+import { getCartIndex } from '@/utils/cart/getCartIndex'
 import { getColorScale } from '@/utils/geColorScale'
 
 type Props = {
@@ -41,6 +43,8 @@ const {
   tintAlpha = DEFAULT_PAGE_TINT_ALPHA,
   isBare = false,
 } = Astro.props
+
+const cartIndex = isBare ? {} : await getCartIndex()
 
 const colorBrandFirst = firstColor ?? promotedBook?.data.color ?? '#434991'
 const colorBrandSecond = secondColor ?? promotedBook?.data.bgColor ?? '#e7d14c'
@@ -121,6 +125,11 @@ const config = {
       </main>
     </div>
     {!isBare && <div aria-hidden="true" data-footer-spacer />}
+    {
+      !isBare && (
+        <FloatingCartIcon client:idle books={cartIndex} pathname={Astro.url.pathname} />
+      )
+    }
     <Analytics />
     <ArrowLaunchScript />
     <script>
