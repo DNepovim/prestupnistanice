@@ -1,6 +1,7 @@
 const SLUGS = {
   books: 'knihy',
   auhtors: 'autori',
+  cart: 'kosik',
 }
 
 export const CATEGORIES = {
@@ -40,6 +41,7 @@ export const routes = {
   authors: {
     detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
+  cart: () => `/${SLUGS.cart}`,
   internal: {
     index: () => '/interni',
     books: () => '/interni/knihy',

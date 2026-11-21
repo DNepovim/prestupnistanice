@@ -8,6 +8,8 @@ import FloatingImage from '@/components/FloatingImage.svelte'
 import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
 import { FALLBACK_COLOR_FIRST } from '@/consts'
 import { routes } from '@/routes'
+import { formatPrice } from '@/utils/formatPrice'
+import { isOnSale } from '@/utils/isOnSale'
 import { tp } from '@/utils/tp'
 
 type Props = {
@@ -15,15 +17,6 @@ type Props = {
 }
 
 const PREVIEW_WIDTH = 336
-
-const isOnSale = (book: CollectionEntry<'book'>) =>
-  !book.data.isUpcoming && book.data.price !== undefined
-
-const priceFormat = new Intl.NumberFormat('cs-CZ', {
-  style: 'currency',
-  currency: 'CZK',
-  maximumFractionDigits: 0,
-})
 
 const getSeparator = (index: number, total: number) => {
   if (index === 0) {
@@ -104,7 +97,7 @@ const items = await Promise.all(
           )}
           {isOnSale(book) && book.data.price !== undefined && (
             <span class="font-head text-[1.6rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]">
-              {priceFormat.format(book.data.price)}
+              {formatPrice(book.data.price)}
             </span>
           )}
           {isOnSale(book) && (

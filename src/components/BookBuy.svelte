@@ -3,6 +3,7 @@
 
   import AddToCart from '@/components/AddToCart.svelte'
   import { routes } from '@/routes'
+  import { formatPrice } from '@/utils/formatPrice'
   import type { KosmasStatus } from '@/utils/kosmas'
 
   type Props = {
@@ -17,12 +18,6 @@
   const { slug, title, kosmasUrl, price, isUpcoming = false, releaseNote }: Props = $props()
 
   const KOSMAS_STATUSES = ['available', 'outOfStock', 'soldOut'] as const
-
-  const priceFormat = new Intl.NumberFormat('cs-CZ', {
-    style: 'currency',
-    currency: 'CZK',
-    maximumFractionDigits: 0,
-  })
 
   const isKosmasStatus = (value: unknown): value is KosmasStatus =>
     KOSMAS_STATUSES.some((status) => status === value)
@@ -59,11 +54,11 @@
     {/if}
   {:else if isOurs && price !== undefined}
     <p class="font-head text-[2.1rem] leading-none font-extrabold text-black">
-      {priceFormat.format(price)}
+      {formatPrice(price)}
     </p>
     {#if saving > 0 && kosmasPrice !== undefined}
       <p class="text-brand-first-700 text-[0.75rem] leading-snug">
-        Od {priceFormat.format(saving)} levněji než v distribuci
+        Od {formatPrice(saving)} levněji než v distribuci
       </p>
     {/if}
     <AddToCart {slug} {title} />
@@ -71,7 +66,7 @@
     <p class="text-[0.75rem] leading-snug text-gray-700">U nás není v prodeji.</p>
     {#if kosmasPrice !== undefined}
       <p class="font-head text-[2.1rem] leading-none font-extrabold text-black">
-        {priceFormat.format(kosmasPrice)}
+        {formatPrice(kosmasPrice)}
         <span class="font-alt text-[0.7rem] font-normal text-gray-500">na Kosmasu</span>
       </p>
     {/if}
