@@ -18,8 +18,8 @@ authors:
       - illustration
 coverImage: ../images/books/ben-a-velryba/cover.jpg
 category: forKids
-color: '#b39e73'
-bgColor: '#c9bda4'
+color: '#2f6a6a'
+bgColor: '#9fc7b9'
 releaseNote: vyjde v prosinci 2026
 claim: "Ben a jeho dědeček prostě milují společné pozorování velryb, když stojí na útesu u moře."
 ---

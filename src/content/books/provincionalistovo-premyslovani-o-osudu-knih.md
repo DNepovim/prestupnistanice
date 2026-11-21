@@ -62,8 +62,8 @@ samplePages:
     ../images/books/provincionalistovo-premyslovani-o-osudu-knih/preview/26Premyslovani_anotace_13.png
 isUpcoming: true
 category: philosophy
-color: '#562e2e'
-bgColor: '#c8b4ae'
+color: '#3d2619'
+bgColor: '#c4a784'
 claim: >-
   Kniha Provincionalistovo přemyšlování o osudu knih je již čtvrtým pokračováním
   cyklu volně na sebe navazujících úvah filosofa Petra Bláhy. Tentokrát se
