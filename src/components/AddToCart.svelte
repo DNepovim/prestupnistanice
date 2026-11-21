@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { MediaQuery } from 'svelte/reactivity'
   import { fly } from 'svelte/transition'
 
   import { addToCart, cart } from '@/stores/cart'
@@ -16,18 +17,17 @@
   const UNITS = ['kus', 'kusy', 'kusů'] as const
 
   let isMounted = $state(false)
-  let prefersReducedMotion = $state(false)
+  const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce')
 
   const count = $derived(
     isMounted ? ($cart.find((item) => item.slug === slug)?.count ?? 0) : 0,
   )
-  const [amount = '', unit = ''] = $derived(
-    count > 0 ? pluralize(count, UNITS).split(' ') : [],
-  )
-  const duration = (value: number) => (prefersReducedMotion ? 0 : value)
+  const amount = $derived(String(count))
+  const unit = $derived(pluralize(count, UNITS).slice(`${amount} `.length))
+  const countLabel = $derived(pluralize(count, UNITS))
+  const duration = (value: number) => (reducedMotion.current ? 0 : value)
 
   onMount(() => {
-    prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     isMounted = true
   })
 </script>
@@ -39,7 +39,9 @@
     'group font-head text-brand-first-700 relative z-10 inline-block cursor-pointer pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap',
     className,
   ]}
-  aria-label={`Přidat do košíku: ${title}`}
+  aria-label={count > 0
+    ? `${countLabel} v košíku, přidat další: ${title}`
+    : `Přidat do košíku: ${title}`}
   onclick={() => {
     addToCart(slug)
   }}
@@ -78,3 +80,6 @@
     class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
   ></span>
 </button>
+<span role="status" aria-live="polite" class="sr-only">
+  {count > 0 ? `${countLabel} v košíku` : ''}
+</span>
