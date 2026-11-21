@@ -22,8 +22,8 @@ authors:
       - typesetting
 cover: ../images/provincionalistovoaPremyslovaniOOsuduKnih.png
 category: philosophy
-color: '#562e2e'
-bgColor: '#c8b4ae'
+color: '#3d2619'
+bgColor: '#c4a784'
 releaseNote: vyjde v prosinci 2026
 claim: >-
   Kniha Provincionalistovo přemyšlování o osudu knih je již čtvrtým pokračováním
