@@ -37,83 +37,61 @@ const CORNER_CLASSES = {
 } as const satisfies Record<Corner, string>
 
 const { side, book, slug } = Astro.props
-
-const Tag = book ? 'a' : 'div'
 ---
 
-<Tag
-  href={book ? routes.books.detail(book.data.slug) : undefined}
-  aria-label={book?.data.title}
-  data-slide={book ? side : undefined}
-  class:list={[
-    'hero-neighbour group absolute top-0 hidden aspect-[5/2] w-full min-xl:block',
-    !book && 'pointer-events-none',
-    SIDE_CLASSES[side],
-  ]}
->
-  {
-    SIDE_CORNERS[side].map((corner) => (
-      <span
-        aria-hidden="true"
-        class:list={[
-          'text-brand-second-300/60 pointer-events-none absolute size-(--mk-s)',
-          'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
-          'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
-          CORNER_CLASSES[corner],
-        ]}
-      />
-    ))
-  }
-  {
-    slug && (
-      <div
-        aria-hidden="true"
-        class:list={[
-          'pointer-events-none absolute top-4 bottom-4 w-6',
-          SIDE_SLUG_CLASSES[side],
-        ]}
-      >
-        <span class="font-alt text-brand-second-200 block max-h-full w-6 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
-          {slug}
-        </span>
-      </div>
-    )
-  }
-  <Theme firstColor={book?.data.color} secondColor={book?.data.bgColor} keepHue>
-    <div
-      aria-hidden="true"
-      class="bg-brand-first-500 absolute inset-0 overflow-hidden opacity-50 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none"
+{
+  book && (
+    <a
+      href={routes.books.detail(book.data.slug)}
+      aria-label={book.data.title}
+      data-slide={side}
+      class:list={[
+        'hero-neighbour group absolute top-0 hidden aspect-[5/2] w-full min-xl:block',
+        SIDE_CLASSES[side],
+      ]}
     >
-      {
-        book?.data.coverTop && (
-          <Image
-            alt=""
-            src={book.data.coverTop}
-            width={1200}
-            widths={[800, 1200]}
-            sizes="30rem"
-            loading="lazy"
-            class="size-full max-w-none object-cover"
-          />
-        )
-      }
-    </div>
-  </Theme>
-</Tag>
-
-<style>
-  @supports (animation-timeline: scroll()) {
-    @keyframes hero-neighbour-fade-out {
-      to {
-        opacity: 0;
-        translate: 0 24rem;
-      }
-    }
-
-    .hero-neighbour {
-      animation: hero-neighbour-fade-out linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 24rem;
-    }
-  }
-</style>
+      {SIDE_CORNERS[side].map((corner) => (
+        <span
+          aria-hidden="true"
+          class:list={[
+            'text-brand-second-300/60 pointer-events-none absolute size-(--mk-s)',
+            'before:absolute before:bottom-0 before:left-0 before:w-(--mk-l) before:border-t',
+            'after:absolute after:top-0 after:right-0 after:h-(--mk-l) after:border-l',
+            CORNER_CLASSES[corner],
+          ]}
+        />
+      ))}
+      {slug && (
+        <div
+          aria-hidden="true"
+          class:list={[
+            'pointer-events-none absolute top-4 bottom-4 w-6',
+            SIDE_SLUG_CLASSES[side],
+          ]}
+        >
+          <span class="font-alt text-brand-second-200 block max-h-full w-6 overflow-hidden text-[0.62rem] tracking-[0.1em] text-ellipsis whitespace-nowrap uppercase [writing-mode:vertical-rl]">
+            {slug}
+          </span>
+        </div>
+      )}
+      <Theme firstColor={book.data.color} secondColor={book.data.bgColor} keepHue>
+        <div
+          aria-hidden="true"
+          class="bg-brand-first-500 absolute inset-0 overflow-hidden opacity-50 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none"
+        >
+          {book.data.coverTop && (
+            <Image
+              alt=""
+              src={book.data.coverTop}
+              width={1200}
+              widths={[800, 1200]}
+              sizes="30rem"
+              loading="lazy"
+              class="size-full max-w-none object-cover"
+            />
+          )}
+        </div>
+      </Theme>
+    </a>
+  )
+}
