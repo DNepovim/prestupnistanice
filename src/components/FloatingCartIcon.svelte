@@ -38,9 +38,11 @@
     items.reduce((total, { slug, count }) => total + (books[slug]?.price ?? 0) * count, 0),
   )
   const badge = $derived(totalCount > MAX_BADGE ? `${String(MAX_BADGE)}+` : String(totalCount))
-  const isCartPage = $derived(pathname.startsWith(routes.cart()))
+  const isCartPage = $derived(pathname.replace(/\/$/, '') === routes.cart())
   const isHidden = $derived(totalCount === 0 || isCartPage)
   const duration = (value: number) => (reducedMotion.current ? 0 : value)
+
+  let footerFrame = 0
 
   const readFooterProgress = () => {
     const progress = Number.parseFloat(
@@ -50,7 +52,8 @@
   }
 
   const scheduleFooterRead = () => {
-    window.requestAnimationFrame(readFooterProgress)
+    window.cancelAnimationFrame(footerFrame)
+    footerFrame = window.requestAnimationFrame(readFooterProgress)
   }
 
   const removeSprite = (id: number) => {
@@ -65,6 +68,7 @@
     return () => {
       window.removeEventListener('scroll', scheduleFooterRead)
       window.removeEventListener('resize', scheduleFooterRead)
+      window.cancelAnimationFrame(footerFrame)
     }
   })
 
@@ -75,7 +79,7 @@
     const current = items.map(({ slug }) => slug)
     const previous = knownSlugs
     knownSlugs = current
-    if (previous === undefined || reducedMotion.current) {
+    if (previous === undefined || reducedMotion.current || isCartPage) {
       return
     }
     const fresh = current
@@ -92,7 +96,7 @@
 {#if !isHidden}
   <div
     class={[
-      'fixed right-[max(1.5rem,env(safe-area-inset-right))] bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 transition-opacity duration-200',
+      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 transition-opacity duration-200 motion-reduce:transition-none',
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
@@ -106,7 +110,7 @@
           <img
             src={sprite.cover}
             alt=""
-            class="animate-cart-fall absolute top-0 left-1/2 h-10 w-8 rounded object-cover shadow-md"
+            class="animate-cart-fall absolute top-0 left-1/2 h-10 w-8 object-cover shadow-[0_0.2rem_0.5rem_rgba(0,0,0,0.18)]"
             onanimationend={() => {
               removeSprite(sprite.id)
             }}
@@ -115,109 +119,164 @@
       </div>
     {/if}
     <div
-      class="bg-brand-first-500 hover:border-brand-first-300 focus-within:border-brand-first-300 group relative h-14 w-14 overflow-hidden rounded-[1.75rem] border border-transparent shadow-lg transition-all duration-200 hover:h-100 hover:w-80 hover:bg-white focus-within:h-100 focus-within:w-80 focus-within:bg-white motion-reduce:transition-none"
+      class="bg-brand-first-700 border-brand-first-700 hover:border-brand-first-300/60 focus-within:border-brand-first-300/60 hover:bg-paper focus-within:bg-paper group relative h-14 w-14 overflow-hidden border shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] transition-[width,height,background-color,border-color] duration-300 ease-out [--w:min(20rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
-      <div
-        class="h-6 w-full group-hover:bg-gradient-to-b group-hover:from-white group-hover:to-transparent group-focus-within:bg-gradient-to-b group-focus-within:from-white group-focus-within:to-transparent"
-      ></div>
+      <span
+        aria-hidden="true"
+        class="border-brand-first-300/60 pointer-events-none absolute top-2 left-2 size-3 border-t border-l opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+      ></span>
+      <span
+        aria-hidden="true"
+        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+      ></span>
 
       <div
-        class="absolute inset-0 overflow-y-auto pb-9 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+        class="absolute inset-x-0 top-0 bottom-[4.5rem] overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
       >
-        <ul class="flex w-80 max-w-full flex-col gap-2 p-4 pb-12">
-          {#each items as { slug, count } (slug)}
-            {@const book = books[slug]}
-            <li
-              class="relative flex items-center gap-3 rounded border border-gray-100 p-2 hover:bg-gray-50"
-            >
-              <div class="h-14 w-10 shrink-0">
+        <div class="w-(--w) px-4 pt-6 pb-2">
+          <p
+            class="font-alt text-brand-first-700 mb-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
+          >
+            {tp('Košík')}
+          </p>
+          <ul class="flex flex-col">
+            {#each items as { slug, count } (slug)}
+              {@const book = books[slug]}
+              <li
+                class="border-brand-first-300/60 grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-t border-dashed py-3"
+              >
                 {#if book}
                   <img
                     src={book.cover}
                     alt=""
-                    class="h-full w-full rounded object-cover shadow-sm"
+                    class="row-span-2 h-14 w-10 object-cover shadow-[0_0.2rem_0.5rem_rgba(0,0,0,0.18)]"
                   />
                 {:else}
-                  <div class="h-full w-full rounded bg-gray-200" aria-hidden="true"></div>
+                  <div
+                    class="bg-brand-first-100 row-span-2 h-14 w-10"
+                    aria-hidden="true"
+                  ></div>
                 {/if}
-              </div>
 
-              <div class="min-w-0 flex-1">
-                <h4 class="line-clamp-2 text-xs leading-tight font-medium text-gray-900">
-                  {book ? tp(book.title) : tp('Kniha není v nabídce')}
-                </h4>
-                {#if book}
-                  <p class="truncate text-[10px] text-gray-500">{tp(book.author)}</p>
-                  <p class="text-xs font-semibold text-gray-700">
-                    {formatPrice(book.price)}
+                <div class="min-w-0">
+                  <p
+                    class="font-head text-brand-first-500 line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold"
+                  >
+                    {book ? tp(book.title) : tp('Kniha není v nabídce')}
                   </p>
-                {:else}
-                  <p class="text-[10px] text-gray-500">{tp('Nepočítá se do ceny')}</p>
-                {/if}
-              </div>
+                  {#if book}
+                    <p class="font-alt mt-1 truncate text-[0.7rem] text-gray-800 italic">
+                      {tp(book.author)}
+                    </p>
+                  {/if}
+                </div>
 
-              <div class="flex shrink-0 items-center gap-1">
-                <button
-                  type="button"
-                  onclick={() => {
-                    updateQuantity(slug, count - 1)
-                  }}
-                  class="flex size-5 cursor-pointer items-center justify-center rounded-full hover:bg-gray-300 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-transparent"
-                  disabled={count <= 1}
-                  aria-label="Snížit počet"
-                >
-                  <iconify-icon icon="ph:minus" class="size-2.5" noobserver
-                  ></iconify-icon>
-                </button>
-                <span class="w-4 text-center text-xs font-medium">{count}</span>
-                <button
-                  type="button"
-                  onclick={() => {
-                    updateQuantity(slug, count + 1)
-                  }}
-                  class="flex size-5 cursor-pointer items-center justify-center rounded-full hover:bg-gray-300"
-                  aria-label="Zvýšit počet"
-                >
-                  <iconify-icon icon="ph:plus" class="size-2.5" noobserver></iconify-icon>
-                </button>
                 <button
                   type="button"
                   onclick={() => {
                     removeFromCart(slug)
                   }}
-                  class="ml-1 flex size-5 cursor-pointer items-center justify-center text-red-500"
-                  aria-label="Odebrat z košíku"
+                  class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 -mt-2 -mr-2 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
+                  aria-label={`Odebrat z košíku: ${book?.title ?? slug}`}
                 >
-                  <iconify-icon icon="ph:trash" class="size-3" noobserver></iconify-icon>
+                  <iconify-icon
+                    icon="ph:trash"
+                    class="text-base"
+                    noobserver
+                    aria-hidden="true"
+                  ></iconify-icon>
                 </button>
-              </div>
-            </li>
-          {/each}
-        </ul>
+
+                <div class="col-span-2 flex items-center justify-between gap-3">
+                  {#if book}
+                    <p
+                      class="font-head text-base leading-none font-extrabold text-black [font-variant-numeric:lining-nums_tabular-nums]"
+                    >
+                      {formatPrice(book.price)}
+                    </p>
+                  {:else}
+                    <p
+                      class="font-alt text-brand-first-700 text-[0.62rem] leading-[1.2] tracking-[0.1em] uppercase"
+                    >
+                      {tp('Nepočítá se do ceny')}
+                    </p>
+                  {/if}
+                  <div class="flex shrink-0 items-center">
+                    <button
+                      type="button"
+                      onclick={() => {
+                        updateQuantity(slug, count - 1)
+                      }}
+                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-brand-first-700 motion-reduce:transition-none"
+                      disabled={count <= 1}
+                      aria-label={`Snížit počet: ${book?.title ?? slug}`}
+                    >
+                      <iconify-icon
+                        icon="ph:minus"
+                        class="text-base"
+                        noobserver
+                        aria-hidden="true"
+                      ></iconify-icon>
+                    </button>
+                    <span
+                      class="font-alt w-6 text-center text-sm font-semibold text-gray-900 [font-variant-numeric:lining-nums_tabular-nums]"
+                      >{count}</span
+                    >
+                    <button
+                      type="button"
+                      onclick={() => {
+                        updateQuantity(slug, count + 1)
+                      }}
+                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
+                      aria-label={`Zvýšit počet: ${book?.title ?? slug}`}
+                    >
+                      <iconify-icon
+                        icon="ph:plus"
+                        class="text-base"
+                        noobserver
+                        aria-hidden="true"
+                      ></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
       </div>
 
       <div
-        class="absolute right-0 bottom-0 flex h-14 w-80 items-center justify-between p-1.5 group-hover:bg-linear-to-t group-hover:from-white group-hover:from-80% group-hover:to-transparent group-focus-within:bg-linear-to-t group-focus-within:from-white group-focus-within:from-80% group-focus-within:to-transparent"
+        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between border-t border-transparent pr-2 pb-2 pl-4 transition-[height,padding] duration-300 group-hover:h-[4.5rem] group-hover:border-dashed group-hover:pr-4 group-hover:pb-4 group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-[4.5rem] group-focus-within:border-dashed group-focus-within:pr-4 group-focus-within:pb-4 motion-reduce:transition-none"
       >
-        <div class="pl-2 text-sm leading-tight font-semibold text-gray-800">
-          <p>{tp(`Celkem: ${formatPrice(totalPrice)}`)}</p>
-          <p class="text-[10px] font-normal text-gray-500">
-            {pluralize(totalCount, PIECE_UNITS)}
+        <div class="self-center">
+          <p
+            class="font-alt text-brand-first-700 text-[0.62rem] leading-none tracking-[0.1em] uppercase"
+          >
+            {tp(`Celkem · ${pluralize(totalCount, PIECE_UNITS)}`)}
+          </p>
+          <p
+            class="font-head mt-1.5 text-[1.4rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]"
+          >
+            {formatPrice(totalPrice)}
           </p>
         </div>
         <a
           href={routes.cart()}
-          class="font-alt bg-brand-first-500 hover:bg-brand-first-700 flex items-center gap-4 rounded-[1.75rem] border border-transparent p-1 pr-2 pl-3 text-sm text-white transition-colors group-hover:border-gray-700 group-hover:bg-white group-hover:text-black group-focus-within:border-gray-700 group-focus-within:bg-white group-focus-within:text-black"
+          class="font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 focus-visible:outline-brand-first-500 flex h-10 items-center gap-3 pr-2 pl-4 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
         >
           {tp('Dokončit nákup')}
-          <iconify-icon icon="ph:shopping-cart" class="text-2xl" noobserver
+          <iconify-icon
+            icon="ph:shopping-cart"
+            class="text-2xl"
+            noobserver
+            aria-hidden="true"
           ></iconify-icon>
         </a>
       </div>
     </div>
 
     <span
-      class="bg-brand-second-500 absolute -top-2 -right-2 flex size-6 items-center justify-center overflow-hidden rounded-full text-xs font-bold text-white"
+      class="bg-brand-second-500 absolute -top-2 -right-2 flex size-6 items-center justify-center overflow-hidden text-xs font-bold text-white [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
