@@ -7,7 +7,6 @@ pagesCount: 178
 isbn: 978-80-907627-3-2
 kosmasUrl: https://www.kosmas.cz/knihy/284803/cesty-do-utopie/
 price: 279
-stock: 5
 authors:
   - author: src/content/authors/martin-buber.md
     slug: martin-buber

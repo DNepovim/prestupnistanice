@@ -7,7 +7,6 @@ pagesCount: 108
 isbn: 978-80-909036-3-0
 kosmasUrl: https://www.kosmas.cz/knihy/552573/neviditelny-slon/
 price: 329
-stock: 3
 authors:
   - author: src/content/authors/anna-anisimova.md
     slug: anna-anisimova

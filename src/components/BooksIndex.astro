@@ -3,7 +3,7 @@ import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { getEntries } from 'astro:content'
 
-import AddToCartButton from '@/components/AddToCartButton.svelte'
+import AddToCart from '@/components/AddToCart.svelte'
 import FloatingImage from '@/components/FloatingImage.svelte'
 import LinkPreviewScript from '@/components/LinkPreviewScript.astro'
 import { FALLBACK_COLOR_FIRST } from '@/consts'
@@ -17,7 +17,7 @@ type Props = {
 const PREVIEW_WIDTH = 336
 
 const isOnSale = (book: CollectionEntry<'book'>) =>
-  !book.data.isUpcoming && book.data.price !== undefined && (book.data.stock ?? 0) > 0
+  !book.data.isUpcoming && book.data.price !== undefined
 
 const priceFormat = new Intl.NumberFormat('cs-CZ', {
   style: 'currency',
@@ -108,7 +108,7 @@ const items = await Promise.all(
             </span>
           )}
           {isOnSale(book) && (
-            <AddToCartButton
+            <AddToCart
               client:visible
               slug={book.data.slug}
               title={book.data.title}
@@ -137,7 +137,7 @@ const items = await Promise.all(
             </a>
           )}
           {!book.data.isUpcoming && !isOnSale(book) && !book.data.kosmasUrl && (
-            <span class="text-[0.75rem] leading-snug text-gray-700">Není skladem</span>
+            <span class="text-[0.75rem] leading-snug text-gray-700">Není v prodeji</span>
           )}
         </span>
       </li>

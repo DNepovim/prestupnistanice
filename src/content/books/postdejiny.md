@@ -7,7 +7,6 @@ pagesCount: 121
 isbn: 978-80-270-4476-4
 kosmasUrl: https://www.kosmas.cz/knihy/254429/postdejiny/
 price: 249
-stock: 4
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser

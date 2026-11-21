@@ -141,9 +141,9 @@ const sideSlug = `${String(b.date)} · ${CATEGORIES[b.category].name}`
           <BookBuy
             client:visible
             slug={b.slug}
+            title={b.title}
             kosmasUrl={b.kosmasUrl}
             price={b.price}
-            stock={b.stock}
             isUpcoming={b.isUpcoming}
             releaseNote={b.releaseNote}
           />

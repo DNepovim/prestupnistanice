@@ -7,7 +7,6 @@ pagesCount: 120
 isbn: 978-80-909036-1-6
 kosmasUrl: https://www.kosmas.cz/knihy/535463/lidska-geneze/
 price: 299
-stock: 8
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser

@@ -106,12 +106,6 @@ export const BooksCollection: Collection = {
       label: 'Cena v našem e-shopu (Kč)',
     },
     {
-      type: 'number',
-      name: 'stock',
-      label: 'Skladem u nás (ks)',
-      description: 'Při 0 nebo prázdném poli se kniha nabízí jen přes Kosmas.',
-    },
-    {
       name: 'authors',
       label: 'Autoři',
       type: 'object',

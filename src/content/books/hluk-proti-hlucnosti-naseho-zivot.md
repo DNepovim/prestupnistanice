@@ -7,7 +7,6 @@ pagesCount: 128
 isbn: 978-80-907627-9-4
 kosmasUrl: https://www.kosmas.cz/knihy/503162/hluk-proti-hlucnosti-naseho-zivota/
 price: 259
-stock: 11
 authors:
   - author: src/content/authors/theodor-lessing.md
     slug: theodor-lessing

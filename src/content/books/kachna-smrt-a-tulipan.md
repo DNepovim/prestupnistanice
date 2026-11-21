@@ -8,7 +8,6 @@ pagesCount: 38
 isbn: 978–80–909036–2–3
 kosmasUrl: https://www.kosmas.cz/knihy/548353/kachna-smrt-a-tulipan/
 price: 349
-stock: 2
 authors:
   - author: src/content/authors/wolf-erlbruch.md
     slug: wolf-erlbruch

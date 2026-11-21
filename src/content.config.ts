@@ -42,7 +42,6 @@ const book = defineCollection({
         isbn: z.string().optional(),
         kosmasUrl: z.string().url().optional(),
         price: z.number().positive().optional(),
-        stock: z.number().int().min(0).optional(),
         cover: image().optional(),
         coverImage: image().optional(),
         coverTop: image().optional(),

@@ -1,15 +1,20 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
+  import AddToCart from '@/components/AddToCart.svelte'
   import { routes } from '@/routes'
   import type { KosmasStatus } from '@/utils/kosmas'
 
-  export let slug: string
-  export let kosmasUrl: string | undefined = undefined
-  export let price: number | undefined = undefined
-  export let stock: number | undefined = undefined
-  export let isUpcoming = false
-  export let releaseNote: string | undefined = undefined
+  type Props = {
+    slug: string
+    title: string
+    kosmasUrl?: string
+    price?: number
+    isUpcoming?: boolean
+    releaseNote?: string
+  }
+
+  const { slug, title, kosmasUrl, price, isUpcoming = false, releaseNote }: Props = $props()
 
   const KOSMAS_STATUSES = ['available', 'outOfStock', 'soldOut'] as const
 
@@ -22,17 +27,14 @@
   const isKosmasStatus = (value: unknown): value is KosmasStatus =>
     KOSMAS_STATUSES.some((status) => status === value)
 
-  let kosmasStatus: KosmasStatus | undefined
-  let kosmasPrice: number | undefined
+  let kosmasStatus = $state<KosmasStatus | undefined>()
+  let kosmasPrice = $state<number | undefined>()
 
-  $: isOurs = stock !== undefined && stock > 0 && price !== undefined
-  $: kosmasHasIt = kosmasStatus === undefined || kosmasStatus === 'available'
-  $: saving =
-    isOurs && price !== undefined && kosmasPrice !== undefined ? kosmasPrice - price : 0
-
-  const addToCart = () => {
-    window.dispatchEvent(new CustomEvent('cart:add', { detail: { slug } }))
-  }
+  const isOurs = $derived(!isUpcoming && price !== undefined)
+  const kosmasHasIt = $derived(kosmasStatus === undefined || kosmasStatus === 'available')
+  const saving = $derived(
+    isOurs && price !== undefined && kosmasPrice !== undefined ? kosmasPrice - price : 0,
+  )
 
   onMount(async () => {
     if (!kosmasUrl) {
@@ -64,26 +66,9 @@
         Od {priceFormat.format(saving)} levněji než v distribuci
       </p>
     {/if}
-    <button
-      type="button"
-      data-arrow-link
-      class="group font-head text-brand-first-700 relative inline-block cursor-pointer pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap"
-      on:click={addToCart}
-    >
-      Přidat do košíku
-      <span
-        aria-hidden="true"
-        data-arrow="right"
-        class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
-      ></span>
-      <span
-        aria-hidden="true"
-        data-arrow="right"
-        class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
-      ></span>
-    </button>
+    <AddToCart {slug} {title} />
   {:else if kosmasUrl && kosmasHasIt}
-    <p class="text-[0.75rem] leading-snug text-gray-700">Není v našem skladě.</p>
+    <p class="text-[0.75rem] leading-snug text-gray-700">U nás není v prodeji.</p>
     {#if kosmasPrice !== undefined}
       <p class="font-head text-[2.1rem] leading-none font-extrabold text-black">
         {priceFormat.format(kosmasPrice)}
@@ -112,7 +97,7 @@
     </a>
   {:else}
     <p class="text-[0.75rem] leading-snug text-gray-700">
-      {kosmasUrl ? 'Kniha není skladem u nás ani na Kosmasu.' : 'Kniha není skladem.'}
+      {kosmasUrl ? 'Kniha není v prodeji u nás ani na Kosmasu.' : 'Kniha není v prodeji.'}
     </p>
     {#if kosmasUrl}
       <a

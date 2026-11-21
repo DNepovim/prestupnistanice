@@ -7,7 +7,6 @@ pagesCount: 305
 isbn: 978-80-270-5563-0
 kosmasUrl: https://www.kosmas.cz/knihy/261467/nevychovne-eseje-o-vychove/
 price: 239
-stock: 6
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha

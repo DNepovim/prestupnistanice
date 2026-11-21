@@ -7,7 +7,6 @@ pagesCount: 88
 isbn: 978-80-907627-6-3
 kosmasUrl: https://www.kosmas.cz/knihy/515372/pesimismus/
 price: 219
-stock: 1
 authors:
   - author: src/content/authors/oswald-spengler.md
     slug: oswald-spengler
