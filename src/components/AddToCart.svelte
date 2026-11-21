@@ -1,4 +1,5 @@
 <script lang="ts">
+  import 'iconify-icon'
   import { onMount } from 'svelte'
   import { MediaQuery } from 'svelte/reactivity'
   import { fly } from 'svelte/transition'
@@ -15,6 +16,13 @@
   const { slug, title, class: className }: Props = $props()
 
   const UNITS = ['kus', 'kusy', 'kusů'] as const
+
+  const MARKS = [
+    '-top-(--mk-s) -left-(--mk-s) border-r border-b',
+    '-top-(--mk-s) -right-(--mk-s) border-b border-l',
+    '-bottom-(--mk-s) -left-(--mk-s) border-t border-r',
+    '-right-(--mk-s) -bottom-(--mk-s) border-t border-l',
+  ] as const
 
   let isMounted = $state(false)
   const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce')
@@ -34,9 +42,8 @@
 
 <button
   type="button"
-  data-arrow-link
   class={[
-    'group font-head text-brand-first-700 relative z-10 inline-block cursor-pointer pr-9 text-[1.2rem] leading-none font-extrabold whitespace-nowrap',
+    'group font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:outline-brand-first-500 relative z-10 inline-flex cursor-pointer items-center justify-center gap-[0.3em] px-5 py-3 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 [--mk-g:0.35rem] [--mk-l:0.7rem] [--mk-s:calc(var(--mk-g)+var(--mk-l))] focus-visible:outline-2 focus-visible:outline-offset-3',
     className,
   ]}
   aria-label={count > 0
@@ -46,6 +53,18 @@
     addToCart(slug)
   }}
 >
+  {#each MARKS as mark (mark)}
+    <span
+      aria-hidden="true"
+      class={[
+        'border-brand-first-300/60 pointer-events-none absolute size-(--mk-l) transition-opacity duration-300 motion-reduce:transition-none',
+        count > 0
+          ? 'opacity-100'
+          : 'opacity-0 group-hover:opacity-50 group-focus-visible:opacity-50',
+        mark,
+      ]}
+    ></span>
+  {/each}
   {#if count > 0}
     <span class="relative inline-grid overflow-hidden align-bottom">
       {#key amount}
@@ -67,18 +86,10 @@
     </span>
     v košíku
   {:else}
+    <iconify-icon icon="ph:shopping-cart" class="text-base" noobserver aria-hidden="true"
+    ></iconify-icon>
     Přidat do košíku
   {/if}
-  <span
-    aria-hidden="true"
-    data-arrow="right"
-    class="absolute top-1/2 right-[2px] block size-2 -translate-y-1/2 rotate-45 border-t-2 border-r-2 border-current"
-  ></span>
-  <span
-    aria-hidden="true"
-    data-arrow="right"
-    class="absolute top-1/2 right-0 block h-[2px] w-5 -translate-y-1/2 bg-current transition-all duration-500 group-hover:w-full group-focus-visible:w-full"
-  ></span>
 </button>
 <span role="status" aria-live="polite" class="sr-only">
   {count > 0 ? `${countLabel} v košíku` : ''}
