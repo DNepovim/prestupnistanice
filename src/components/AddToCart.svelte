@@ -1,5 +1,6 @@
 <script lang="ts">
   import 'iconify-icon'
+
   import { onMount } from 'svelte'
   import { MediaQuery } from 'svelte/reactivity'
   import { fly } from 'svelte/transition'
@@ -16,6 +17,7 @@
   const { slug, title, class: className }: Props = $props()
 
   const UNITS = ['kniha', 'knihy', 'knih'] as const
+  const MAX_BOOKS = 3
 
   let isMounted = $state(false)
   const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce')
@@ -26,6 +28,9 @@
   const amount = $derived(String(count))
   const unit = $derived(pluralize(count, UNITS).slice(`${amount} `.length))
   const countLabel = $derived(pluralize(count, UNITS))
+  const books = $derived(
+    Array.from({ length: Math.min(count, MAX_BOOKS) }, (_, index) => index),
+  )
   const duration = (value: number) => (reducedMotion.current ? 0 : value)
 
   onMount(() => {
@@ -46,6 +51,17 @@
     addToCart(slug)
   }}
 >
+  <span class="relative inline-flex size-4 shrink-0" aria-hidden="true">
+    <iconify-icon icon="ph:shopping-cart" class="text-base" noobserver></iconify-icon>
+    <span class="absolute top-[6px] left-[4px] flex h-[4px] w-[8px] items-end gap-px">
+      {#each books as book (book)}
+        <span
+          class="bg-brand-first-200 block h-full w-[2px]"
+          in:fly={{ y: -6, duration: duration(150) }}
+        ></span>
+      {/each}
+    </span>
+  </span>
   {#if count > 0}
     <span class="relative inline-grid overflow-hidden align-bottom">
       {#key amount}
@@ -67,8 +83,6 @@
     </span>
     v košíku
   {:else}
-    <iconify-icon icon="ph:shopping-cart" class="text-base" noobserver aria-hidden="true"
-    ></iconify-icon>
     Přidat do košíku
   {/if}
 </button>
