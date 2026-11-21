@@ -53,10 +53,10 @@
 >
   <span class="relative inline-flex size-4 shrink-0" aria-hidden="true">
     <iconify-icon icon="ph:shopping-cart" class="text-base" noobserver></iconify-icon>
-    <span class="absolute top-[6px] left-[4px] flex h-[4px] w-[8px] items-end gap-px">
+    <span class="absolute top-[29%] left-[32%] flex h-[22%] w-[44%] items-end justify-center gap-[12.5%]">
       {#each books as book (book)}
         <span
-          class="bg-brand-first-200 block h-full w-[2px]"
+          class="bg-brand-first-200 block h-full w-1/4 shrink-0"
           in:fly={{ y: -6, duration: duration(150) }}
         ></span>
       {/each}
