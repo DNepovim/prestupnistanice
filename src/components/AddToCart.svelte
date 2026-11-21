@@ -43,7 +43,7 @@
 <button
   type="button"
   class={[
-    'group font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:outline-brand-first-500 relative z-10 inline-flex cursor-pointer items-center justify-center gap-[0.3em] px-5 py-3 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 [--mk-g:0.35rem] [--mk-l:0.7rem] [--mk-s:calc(var(--mk-g)+var(--mk-l))] focus-visible:outline-2 focus-visible:outline-offset-3',
+    'group font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:outline-brand-first-500 relative z-10 inline-flex min-h-10 cursor-pointer items-center justify-center gap-[0.3em] px-5 py-3 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 [--mk-g:0.35rem] [--mk-l:0.7rem] [--mk-s:calc(var(--mk-g)+var(--mk-l))] focus-visible:outline-2 focus-visible:outline-offset-3',
     className,
   ]}
   aria-label={count > 0
