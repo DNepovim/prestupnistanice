@@ -123,13 +123,13 @@ const config = {
       <main id="obsah" class="flex-1 pb-16">
         <slot />
       </main>
+      {
+        !isBare && (
+          <FloatingCartIcon client:idle books={cartIndex} pathname={Astro.url.pathname} />
+        )
+      }
     </div>
     {!isBare && <div aria-hidden="true" data-footer-spacer />}
-    {
-      !isBare && (
-        <FloatingCartIcon client:idle books={cartIndex} pathname={Astro.url.pathname} />
-      )
-    }
     <Analytics />
     <ArrowLaunchScript />
     <script>
