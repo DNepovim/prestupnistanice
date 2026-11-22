@@ -96,7 +96,7 @@
 {#if !isHidden}
   <div
     class={[
-      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 transition-opacity duration-200 motion-reduce:transition-none',
+      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
@@ -127,11 +127,11 @@
       ></span>
       <span
         aria-hidden="true"
-        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-9 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
       ></span>
 
       <div
-        class="absolute inset-x-0 top-0 bottom-[4.5rem] overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        class="absolute inset-x-0 top-0 bottom-20 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
       >
         <div class="w-(--w) px-4 pt-6 pb-2">
           <p
@@ -176,7 +176,7 @@
                   onclick={() => {
                     removeFromCart(slug)
                   }}
-                  class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 -mt-2 -mr-2 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
+                  class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 -mt-2 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
                   aria-label={`Odebrat z košíku: ${book?.title ?? slug}`}
                 >
                   <iconify-icon
@@ -246,13 +246,13 @@
       </div>
 
       <div
-        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between border-t border-transparent pr-2 pb-2 pl-4 transition-[height,padding] duration-300 group-hover:h-[4.5rem] group-hover:border-dashed group-hover:pr-4 group-hover:pb-4 group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-[4.5rem] group-focus-within:border-dashed group-focus-within:pr-4 group-focus-within:pb-4 motion-reduce:transition-none"
+        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between gap-3 border-t border-transparent pr-2 pb-2 pl-4 transition-[height,padding] duration-300 group-hover:h-20 group-hover:border-dashed group-hover:pr-4 group-hover:pb-4 group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-20 group-focus-within:border-dashed group-focus-within:pr-4 group-focus-within:pb-4 motion-reduce:transition-none"
       >
-        <div class="self-center">
+        <div class="shrink-0 self-center whitespace-nowrap">
           <p
             class="font-alt text-brand-first-700 text-[0.62rem] leading-none tracking-[0.1em] uppercase"
           >
-            {tp(`Celkem · ${pluralize(totalCount, PIECE_UNITS)}`)}
+            {tp(`Celkem · ${String(totalCount)} ks`)}
           </p>
           <p
             class="font-head mt-1.5 text-[1.4rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]"
@@ -276,13 +276,13 @@
     </div>
 
     <span
-      class="bg-brand-second-500 absolute -top-2 -right-2 flex size-6 items-center justify-center overflow-hidden text-xs font-bold text-white [font-variant-numeric:lining-nums]"
+      class="bg-brand-second-500 absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
       {#key badge}
         <span
-          class="absolute inset-0 flex items-center justify-center"
+          class="col-start-1 row-start-1"
           aria-hidden="true"
           in:fly={{ y: 6, duration: duration(160) }}
           out:fly={{ y: -6, duration: duration(160) }}
