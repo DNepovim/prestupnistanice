@@ -6,7 +6,7 @@
   import { fly } from 'svelte/transition'
 
   import { routes } from '@/routes'
-  import { cart, cartCount, removeFromCart, updateQuantity } from '@/stores/cart'
+  import { cart, cartCount, emptyCart, removeFromCart, updateQuantity } from '@/stores/cart'
   import type { CartIndex } from '@/utils/cart/types'
   import { formatPrice } from '@/utils/formatPrice'
   import { pluralize } from '@/utils/pluralize'
@@ -119,7 +119,7 @@
       </div>
     {/if}
     <div
-      class="bg-brand-first-700 border-brand-first-700 hover:border-brand-first-300/60 focus-within:border-brand-first-300/60 hover:bg-paper focus-within:bg-paper group relative h-14 w-14 overflow-hidden border shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] transition-[width,height,background-color,border-color] duration-300 ease-out [--w:min(20rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
+      class="bg-brand-first-700 border-brand-first-700 hover:border-brand-first-300/60 focus-within:border-brand-first-300/60 hover:bg-paper focus-within:bg-paper group relative h-14 w-14 overflow-hidden border shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,background-color,border-color,box-shadow] duration-300 ease-out [--w:min(20rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
       <span
         aria-hidden="true"
@@ -127,23 +127,33 @@
       ></span>
       <span
         aria-hidden="true"
-        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-9 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
       ></span>
 
       <div
         class="absolute inset-x-0 top-0 bottom-20 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
       >
         <div class="w-(--w) px-4 pt-6 pb-2">
-          <p
-            class="font-alt text-brand-first-700 mb-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
-          >
-            {tp('Košík')}
-          </p>
+          <div class="mb-1 flex items-center justify-between gap-3">
+            <p
+              class="font-alt text-brand-first-700 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
+            >
+              {tp('Košík')}
+            </p>
+            <button
+              type="button"
+              onclick={emptyCart}
+              class="font-alt text-brand-first-700 focus-visible:outline-brand-first-500 -mr-2 inline-flex min-h-[2.2rem] cursor-pointer items-center px-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase underline underline-offset-2 transition-colors hover:text-red-700 focus-visible:text-red-700 focus-visible:outline-2 motion-reduce:transition-none"
+              aria-label="Vyprázdnit košík"
+            >
+              {tp('Vyprázdnit košík')}
+            </button>
+          </div>
           <ul class="flex flex-col">
             {#each items as { slug, count } (slug)}
               {@const book = books[slug]}
               <li
-                class="border-brand-first-300/60 grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-t border-dashed py-3"
+                class="group/row border-brand-first-300/60 relative grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-t border-dashed px-1 py-3 transition-colors hover:bg-[color-mix(in_srgb,var(--color-brand-first-500)_9%,transparent)] motion-reduce:transition-none"
               >
                 {#if book}
                   <img
@@ -159,11 +169,20 @@
                 {/if}
 
                 <div class="min-w-0">
-                  <p
-                    class="font-head text-brand-first-500 line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold"
-                  >
-                    {book ? tp(book.title) : tp('Kniha není v nabídce')}
-                  </p>
+                  {#if book}
+                    <a
+                      href={routes.books.detail(slug)}
+                      class="font-head group-hover/row:text-brand-first-500 line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold text-gray-900 transition-colors after:absolute after:inset-0 focus-visible:after:-outline-offset-2 focus-visible:after:outline-2 focus-visible:after:outline-brand-first-500 motion-reduce:transition-none"
+                    >
+                      {tp(book.title)}
+                    </a>
+                  {:else}
+                    <p
+                      class="font-head line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold text-gray-900"
+                    >
+                      {tp('Kniha není v nabídce')}
+                    </p>
+                  {/if}
                   {#if book}
                     <p class="font-alt mt-1 truncate text-[0.7rem] text-gray-800 italic">
                       {tp(book.author)}
@@ -176,7 +195,7 @@
                   onclick={() => {
                     removeFromCart(slug)
                   }}
-                  class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 -mt-2 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
+                  class="text-brand-first-700 focus-visible:outline-brand-first-500 relative z-10 -mt-2 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:bg-red-700 hover:text-white focus-visible:bg-red-700 focus-visible:text-white focus-visible:outline-2 motion-reduce:transition-none"
                   aria-label={`Odebrat z košíku: ${book?.title ?? slug}`}
                 >
                   <iconify-icon
@@ -201,13 +220,13 @@
                       {tp('Nepočítá se do ceny')}
                     </p>
                   {/if}
-                  <div class="flex shrink-0 items-center">
+                  <div class="pointer-events-none relative z-10 flex shrink-0 items-center">
                     <button
                       type="button"
                       onclick={() => {
                         updateQuantity(slug, count - 1)
                       }}
-                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-brand-first-700 motion-reduce:transition-none"
+                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 pointer-events-auto flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-brand-first-700 motion-reduce:transition-none"
                       disabled={count <= 1}
                       aria-label={`Snížit počet: ${book?.title ?? slug}`}
                     >
@@ -227,7 +246,7 @@
                       onclick={() => {
                         updateQuantity(slug, count + 1)
                       }}
-                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
+                      class="text-brand-first-700 hover:bg-brand-first-700 focus-visible:outline-brand-first-500 pointer-events-auto flex size-[2.2rem] cursor-pointer items-center justify-center transition-colors hover:text-white focus-visible:outline-2 motion-reduce:transition-none"
                       aria-label={`Zvýšit počet: ${book?.title ?? slug}`}
                     >
                       <iconify-icon
@@ -246,9 +265,11 @@
       </div>
 
       <div
-        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between gap-3 border-t border-transparent pr-2 pb-2 pl-4 transition-[height,padding] duration-300 group-hover:h-20 group-hover:border-dashed group-hover:pr-4 group-hover:pb-4 group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-20 group-focus-within:border-dashed group-focus-within:pr-4 group-focus-within:pb-4 motion-reduce:transition-none"
+        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between gap-3 border-t border-transparent pr-[8px] pb-[8px] pl-4 transition-[height] duration-300 group-hover:h-20 group-hover:border-dashed group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-20 group-focus-within:border-dashed motion-reduce:transition-none"
       >
-        <div class="shrink-0 self-center whitespace-nowrap">
+        <div
+          class="shrink-0 self-center whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        >
           <p
             class="font-alt text-brand-first-700 text-[0.62rem] leading-none tracking-[0.1em] uppercase"
           >
@@ -264,10 +285,13 @@
           href={routes.cart()}
           class="font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 focus-visible:outline-brand-first-500 flex h-10 items-center gap-3 pr-2 pl-4 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
         >
-          {tp('Dokončit nákup')}
+          <span
+            class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            >{tp('Dokončit nákup')}</span
+          >
           <iconify-icon
             icon="ph:shopping-cart"
-            class="text-2xl"
+            class="text-2xl leading-none"
             noobserver
             aria-hidden="true"
           ></iconify-icon>
@@ -276,7 +300,7 @@
     </div>
 
     <span
-      class="bg-brand-second-500 absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white [font-variant-numeric:lining-nums]"
+      class="bg-black absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
