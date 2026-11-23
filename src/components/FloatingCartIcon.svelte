@@ -26,6 +26,7 @@
   const FOOTER_REVEAL_THRESHOLD = 0.05
 
   let isMounted = $state(false)
+  let contentHeight = $state(0)
   let isFooterRevealed = $state(false)
   let sprites = $state<Sprite[]>([])
   let knownSlugs: string[] | undefined
@@ -43,34 +44,6 @@
   const duration = (value: number) => (reducedMotion.current ? 0 : value)
 
   let footerFrame = 0
-  let isHovering = false
-  let isFocused = false
-  let expandTimer: ReturnType<typeof setTimeout> | undefined
-  let isExpanded = $state(false)
-
-  const HOVER_EXPAND_MS = 1000
-  const FOCUS_EXPAND_MS = 850
-
-  const syncExpanded = () => {
-    if (!isHovering && !isFocused) {
-      clearTimeout(expandTimer)
-      expandTimer = undefined
-      isExpanded = false
-      return
-    }
-    if (isExpanded || expandTimer !== undefined) {
-      return
-    }
-    const delay = isHovering ? HOVER_EXPAND_MS : FOCUS_EXPAND_MS
-    expandTimer = setTimeout(
-      () => {
-        expandTimer = undefined
-        isExpanded = true
-      },
-      reducedMotion.current ? 0 : delay,
-    )
-  }
-
   const readFooterProgress = () => {
     const progress = Number.parseFloat(
       window.getComputedStyle(document.documentElement).getPropertyValue('--footer-progress'),
@@ -96,7 +69,6 @@
       window.removeEventListener('scroll', scheduleFooterRead)
       window.removeEventListener('resize', scheduleFooterRead)
       window.cancelAnimationFrame(footerFrame)
-      clearTimeout(expandTimer)
     }
   })
 
@@ -128,24 +100,6 @@
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
-    onpointerenter={() => {
-      isHovering = true
-      syncExpanded()
-    }}
-    onpointerleave={() => {
-      isHovering = false
-      syncExpanded()
-    }}
-    onfocusin={() => {
-      isFocused = true
-      syncExpanded()
-    }}
-    onfocusout={(event) => {
-      isFocused =
-        event.relatedTarget instanceof Node &&
-        event.currentTarget.contains(event.relatedTarget)
-      syncExpanded()
-    }}
   >
     {#if sprites.length > 0}
       <div
@@ -165,15 +119,16 @@
       </div>
     {/if}
     <div
-      class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
+      style:--panel-h="{contentHeight}px"
+      class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
       <div
         class="bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none"
       >
         <div
-          class="absolute inset-x-0 top-0 bottom-11 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+          class="absolute inset-0 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         >
-        <div class="w-(--w) px-4 pt-6 pb-2">
+        <div class="w-(--w) px-4 pt-6 pb-3" bind:clientHeight={contentHeight}>
           <p
             class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
           >
@@ -291,16 +246,13 @@
               </li>
             {/each}
           </ul>
-        </div>
-        </div>
-        <div
-          class="border-brand-first-300/60 absolute inset-x-0 bottom-0 h-11 border-t border-dashed opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
-        >
-          <div class="flex h-full w-(--w) items-center px-4">
+          <div
+            class="border-brand-first-300/60 flex justify-center border-t border-dashed pt-1"
+          >
             <button
               type="button"
               onclick={emptyCart}
-              class="font-alt focus-visible:outline-red-700 -ml-2 inline-flex min-h-[2.2rem] cursor-pointer items-center gap-2 px-2 text-[0.7rem] leading-none tracking-[0.1em] whitespace-nowrap text-red-700 uppercase transition-colors hover:bg-red-700 hover:text-white focus-visible:bg-red-700 focus-visible:text-white focus-visible:outline-2 motion-reduce:transition-none"
+              class="font-alt focus-visible:outline-red-700 inline-flex min-h-[2.2rem] cursor-pointer items-center gap-2 px-2 text-[0.7rem] leading-none tracking-[0.1em] whitespace-nowrap text-red-700 uppercase transition-colors hover:bg-red-700 hover:text-white focus-visible:bg-red-700 focus-visible:text-white focus-visible:outline-2 motion-reduce:transition-none"
               aria-label="Vyprázdnit košík"
             >
               <iconify-icon
@@ -312,6 +264,7 @@
               {tp('Vyprázdnit košík')}
             </button>
           </div>
+        </div>
         </div>
       </div>
 
@@ -332,13 +285,12 @@
         </div>
         <a
           href={routes.cart()}
-          class={[
-            'group/btn font-alt relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-[background-color,outline-color] duration-250 focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-white max-xs:pl-2 motion-reduce:transition-none',
-            isExpanded
-              ? 'bg-brand-second-500 hover:bg-brand-second-700 focus-visible:bg-brand-second-700 focus-visible:outline-transparent'
-              : 'bg-brand-first-700',
-          ]}
+          class="group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-white max-xs:pl-2"
         >
+          <span
+            aria-hidden="true"
+            class="bg-brand-second-500 group-hover/btn:bg-brand-second-700 group-focus-visible/btn:bg-brand-second-700 pointer-events-none absolute inset-0 opacity-0 transition-[opacity,background-color] duration-250 group-hover:opacity-100 group-hover:[transition-delay:1000ms,0ms] group-focus-within:opacity-100 group-focus-within:[transition-delay:850ms,0ms] motion-reduce:transition-none"
+          ></span>
           <svg
             aria-hidden="true"
             class="pointer-events-none absolute inset-0 size-full"
@@ -351,10 +303,10 @@
             />
           </svg>
           <span
-            class="text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            class="relative text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
             >{tp('Dokončit nákup')}</span
           >
-          <span class="flex w-10 shrink-0 items-center justify-center">
+          <span class="relative flex w-10 shrink-0 items-center justify-center">
             <iconify-icon
               icon="ph:shopping-cart"
               class="text-2xl leading-none"
