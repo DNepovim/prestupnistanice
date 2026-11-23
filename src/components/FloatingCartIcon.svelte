@@ -43,6 +43,33 @@
   const duration = (value: number) => (reducedMotion.current ? 0 : value)
 
   let footerFrame = 0
+  let isHovering = false
+  let isFocused = false
+  let expandTimer: ReturnType<typeof setTimeout> | undefined
+  let isExpanded = $state(false)
+
+  const HOVER_EXPAND_MS = 750
+  const FOCUS_EXPAND_MS = 600
+
+  const syncExpanded = () => {
+    if (!isHovering && !isFocused) {
+      clearTimeout(expandTimer)
+      expandTimer = undefined
+      isExpanded = false
+      return
+    }
+    if (isExpanded || expandTimer !== undefined) {
+      return
+    }
+    const delay = isHovering ? HOVER_EXPAND_MS : FOCUS_EXPAND_MS
+    expandTimer = setTimeout(
+      () => {
+        expandTimer = undefined
+        isExpanded = true
+      },
+      reducedMotion.current ? 0 : delay,
+    )
+  }
 
   const readFooterProgress = () => {
     const progress = Number.parseFloat(
@@ -69,6 +96,7 @@
       window.removeEventListener('scroll', scheduleFooterRead)
       window.removeEventListener('resize', scheduleFooterRead)
       window.cancelAnimationFrame(footerFrame)
+      clearTimeout(expandTimer)
     }
   })
 
@@ -100,6 +128,24 @@
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
+    onpointerenter={() => {
+      isHovering = true
+      syncExpanded()
+    }}
+    onpointerleave={() => {
+      isHovering = false
+      syncExpanded()
+    }}
+    onfocusin={() => {
+      isFocused = true
+      syncExpanded()
+    }}
+    onfocusout={(event) => {
+      isFocused =
+        event.relatedTarget instanceof Node &&
+        event.currentTarget.contains(event.relatedTarget)
+      syncExpanded()
+    }}
   >
     {#if sprites.length > 0}
       <div
@@ -285,7 +331,10 @@
         </div>
         <a
           href={routes.cart()}
-          class="group/btn font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 max-xs:pl-2 text-white transition-colors duration-200 hover:delay-[700ms] focus-visible:delay-[600ms] motion-reduce:transition-none"
+          class={[
+            'group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 max-xs:pl-2 motion-reduce:transition-none',
+            isExpanded && 'hover:bg-brand-first-800 focus-visible:bg-brand-first-800',
+          ]}
         >
           <span
             aria-hidden="true"
