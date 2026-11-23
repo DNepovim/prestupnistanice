@@ -170,19 +170,10 @@
       <div
         class="bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none"
       >
-        <span
-          aria-hidden="true"
-          class="border-brand-first-300/60 pointer-events-none absolute top-4 left-4 size-3 border-t border-l opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
-        ></span>
-        <span
-          aria-hidden="true"
-          class="border-brand-first-300/60 pointer-events-none absolute top-4 right-4 size-3 border-t border-r opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
-        ></span>
-
         <div
           class="absolute inset-x-0 top-0 bottom-11 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         >
-        <div class="w-(--w) px-4 pt-10 pb-2">
+        <div class="w-(--w) px-4 pt-6 pb-2">
           <p
             class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
           >
