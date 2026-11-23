@@ -122,7 +122,7 @@
       class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
       <div
-        class="bg-paper absolute inset-x-0 top-0 bottom-14 border border-transparent group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60"
+        class="bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none"
       >
         <span
           aria-hidden="true"
@@ -269,7 +269,7 @@
       </div>
 
       <div
-        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-2 pl-4"
+        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-2 pr-0 pl-4"
       >
         <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
           <p
@@ -285,13 +285,17 @@
         </div>
         <a
           href={routes.cart()}
-          class="group/btn font-alt focus-visible:outline-white flex h-full shrink-0 items-center text-white focus-visible:outline-2 focus-visible:-outline-offset-4"
+          class="group/btn font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
         >
           <span
-            class="hover:bg-brand-first-800 group-hover/btn:bg-brand-first-800 group-focus-visible/btn:bg-brand-first-800 flex h-9 items-center border border-white px-2.5 text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 border border-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-[550ms] group-hover:duration-[350ms] group-focus-within:opacity-100 group-focus-within:delay-[400ms] group-focus-within:duration-[350ms] motion-reduce:transition-none"
+          ></span>
+          <span
+            class="text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
             >{tp('Dokončit nákup')}</span
           >
-          <span class="flex size-14 shrink-0 items-center justify-center">
+          <span class="flex w-10 shrink-0 items-center justify-center">
             <iconify-icon
               icon="ph:shopping-cart"
               class="text-2xl leading-none"
