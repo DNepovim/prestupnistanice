@@ -124,7 +124,7 @@
 {#if !isHidden}
   <div
     class={[
-      'group/cart fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
+      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
@@ -333,9 +333,9 @@
         <a
           href={routes.cart()}
           class={[
-            'group/btn font-alt relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-250 outline-none max-xs:pl-2 motion-reduce:transition-none',
+            'group/btn font-alt relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-[background-color,outline-color] duration-250 focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-white max-xs:pl-2 motion-reduce:transition-none',
             isExpanded
-              ? 'bg-brand-second-500 hover:bg-brand-second-700 focus-visible:bg-brand-second-700'
+              ? 'bg-brand-second-500 hover:bg-brand-second-700 focus-visible:bg-brand-second-700 focus-visible:outline-transparent'
               : 'bg-brand-first-700',
           ]}
         >
@@ -344,10 +344,10 @@
             class="pointer-events-none absolute inset-0 size-full"
           >
             <rect
-              width="100%"
-              height="100%"
+              x="0.5"
+              y="0.5"
               pathLength="1"
-              class="fill-none stroke-white [stroke-dasharray:1] [stroke-dashoffset:1] [stroke-width:2] transition-[stroke-dashoffset] duration-150 group-hover:[stroke-dashoffset:0] group-hover:delay-[550ms] group-hover:duration-[450ms] group-focus-within:[stroke-dashoffset:0] group-focus-within:delay-[400ms] group-focus-within:duration-[450ms] group-focus-visible/btn:[stroke-width:4] motion-reduce:transition-none"
+              class="fill-none stroke-white [stroke-dasharray:1] [stroke-dashoffset:1] [x:0.5px] [y:0.5px] [width:calc(100%_-_1px)] [height:calc(100%_-_1px)] [stroke-width:1] transition-[stroke-dashoffset] duration-150 group-hover:[stroke-dashoffset:0] group-hover:delay-[550ms] group-hover:duration-[450ms] group-focus-within:[stroke-dashoffset:0] group-focus-within:delay-[400ms] group-focus-within:duration-[450ms] group-focus-visible/btn:[x:1px] group-focus-visible/btn:[y:1px] group-focus-visible/btn:[width:calc(100%_-_2px)] group-focus-visible/btn:[height:calc(100%_-_2px)] group-focus-visible/btn:[stroke-width:2] motion-reduce:transition-none"
             />
           </svg>
           <span
