@@ -300,7 +300,7 @@
     </div>
 
     <span
-      class="bg-paper border-black absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden border px-1 text-xs font-bold text-black transition-opacity group-hover/cart:opacity-0 group-focus-within/cart:opacity-0 motion-reduce:transition-none [font-variant-numeric:lining-nums]"
+      class="bg-paper border-black pointer-events-none absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden border px-1 text-xs font-bold text-black transition-opacity group-hover/cart:opacity-0 group-focus-within/cart:opacity-0 motion-reduce:transition-none [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
