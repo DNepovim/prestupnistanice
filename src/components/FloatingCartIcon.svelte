@@ -96,7 +96,7 @@
 {#if !isHidden}
   <div
     class={[
-      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
+      'group/cart fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
       isFooterRevealed && 'pointer-events-none opacity-0',
     ]}
     inert={isFooterRevealed}
@@ -172,7 +172,7 @@
                   {#if book}
                     <a
                       href={routes.books.detail(slug)}
-                      class="font-head group-hover/row:text-brand-first-500 line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold text-gray-900 transition-colors after:absolute after:inset-0 focus-visible:after:-outline-offset-2 focus-visible:after:outline-2 focus-visible:after:outline-brand-first-500 motion-reduce:transition-none"
+                      class="font-head group-hover/row:text-brand-first-700 line-clamp-2 text-[1.05rem] leading-[1.1] font-extrabold text-gray-900 transition-colors after:absolute after:inset-0 focus-visible:after:-outline-offset-2 focus-visible:after:outline-2 focus-visible:after:outline-brand-first-500 motion-reduce:transition-none"
                     >
                       {tp(book.title)}
                     </a>
@@ -300,7 +300,7 @@
     </div>
 
     <span
-      class="bg-black absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white [font-variant-numeric:lining-nums]"
+      class="bg-paper border-black absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden border px-1 text-xs font-bold text-black transition-opacity group-hover/cart:opacity-0 group-focus-within/cart:opacity-0 motion-reduce:transition-none [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
