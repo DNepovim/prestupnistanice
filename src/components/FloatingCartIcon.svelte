@@ -48,8 +48,8 @@
   let expandTimer: ReturnType<typeof setTimeout> | undefined
   let isExpanded = $state(false)
 
-  const HOVER_EXPAND_MS = 750
-  const FOCUS_EXPAND_MS = 600
+  const HOVER_EXPAND_MS = 1000
+  const FOCUS_EXPAND_MS = 850
 
   const syncExpanded = () => {
     if (!isHovering && !isFocused) {
@@ -172,32 +172,22 @@
       >
         <span
           aria-hidden="true"
-          class="border-brand-first-300/60 pointer-events-none absolute top-2 left-2 size-3 border-t border-l opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+          class="border-brand-first-300/60 pointer-events-none absolute top-4 left-4 size-3 border-t border-l opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         ></span>
         <span
           aria-hidden="true"
-          class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+          class="border-brand-first-300/60 pointer-events-none absolute top-4 right-4 size-3 border-t border-r opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         ></span>
 
         <div
-          class="absolute inset-0 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+          class="absolute inset-x-0 top-0 bottom-11 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         >
-        <div class="w-(--w) px-4 pt-6 pb-2">
-          <div class="mb-1 flex items-center justify-between gap-3 pr-[4rem]">
-            <p
-              class="font-alt text-brand-first-700 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
-            >
-              {tp('Košík')}
-            </p>
-            <button
-              type="button"
-              onclick={emptyCart}
-              class="font-alt text-brand-first-700 focus-visible:outline-brand-first-500 -mr-2 inline-flex min-h-[2.2rem] whitespace-nowrap cursor-pointer items-center px-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase underline underline-offset-2 transition-colors hover:text-red-700 focus-visible:text-red-700 focus-visible:outline-2 motion-reduce:transition-none"
-              aria-label="Vyprázdnit košík"
-            >
-              {tp('Vyprázdnit')}<span class="max-xs:hidden">&nbsp;{tp('košík')}</span>
-            </button>
-          </div>
+        <div class="w-(--w) px-4 pt-10 pb-2">
+          <p
+            class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
+          >
+            {tp('Košík')}
+          </p>
           <ul class="flex flex-col">
             {#each items as { slug, count } (slug)}
               {@const book = books[slug]}
@@ -312,6 +302,26 @@
           </ul>
         </div>
         </div>
+        <div
+          class="border-brand-first-300/60 absolute inset-x-0 bottom-0 h-11 border-t border-dashed opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        >
+          <div class="flex h-full w-(--w) items-center px-4">
+            <button
+              type="button"
+              onclick={emptyCart}
+              class="font-alt focus-visible:outline-red-700 -ml-2 inline-flex min-h-[2.2rem] cursor-pointer items-center gap-2 px-2 text-[0.7rem] leading-none tracking-[0.1em] whitespace-nowrap text-red-700 uppercase transition-colors hover:bg-red-700 hover:text-white focus-visible:bg-red-700 focus-visible:text-white focus-visible:outline-2 motion-reduce:transition-none"
+              aria-label="Vyprázdnit košík"
+            >
+              <iconify-icon
+                icon="ph:trash"
+                class="text-base"
+                noobserver
+                aria-hidden="true"
+              ></iconify-icon>
+              {tp('Vyprázdnit košík')}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div
@@ -332,14 +342,23 @@
         <a
           href={routes.cart()}
           class={[
-            'group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 outline-none max-xs:pl-2 motion-reduce:transition-none',
-            isExpanded && 'hover:bg-brand-first-800 focus-visible:bg-brand-first-800',
+            'group/btn font-alt relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-250 outline-none max-xs:pl-2 motion-reduce:transition-none',
+            isExpanded
+              ? 'bg-brand-second-500 hover:bg-brand-second-700 focus-visible:bg-brand-second-700'
+              : 'bg-brand-first-700',
           ]}
         >
-          <span
+          <svg
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 border border-white group-focus-visible/btn:border-2 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-[550ms] group-hover:duration-[350ms] group-focus-within:opacity-100 group-focus-within:delay-[400ms] group-focus-within:duration-[350ms] motion-reduce:transition-none"
-          ></span>
+            class="pointer-events-none absolute inset-0 size-full"
+          >
+            <rect
+              width="100%"
+              height="100%"
+              pathLength="1"
+              class="fill-none stroke-white [stroke-dasharray:1] [stroke-dashoffset:1] [stroke-width:2] transition-[stroke-dashoffset] duration-150 group-hover:[stroke-dashoffset:0] group-hover:delay-[550ms] group-hover:duration-[450ms] group-focus-within:[stroke-dashoffset:0] group-focus-within:delay-[400ms] group-focus-within:duration-[450ms] group-focus-visible/btn:[stroke-width:4] motion-reduce:transition-none"
+            />
+          </svg>
           <span
             class="text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
             >{tp('Dokončit nákup')}</span
@@ -357,7 +376,7 @@
     </div>
 
     <span
-      class="bg-brand-second-500 ring-paper pointer-events-none absolute top-[-9px] right-[-9px] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white ring-2 transition-[top,right] duration-300 ease-out group-hover/cart:top-2 group-hover/cart:right-[1.8rem] group-hover/cart:delay-150 group-hover/cart:duration-[600ms] group-focus-within/cart:top-2 group-focus-within/cart:right-[1.8rem] group-focus-within/cart:delay-0 group-focus-within/cart:duration-[600ms] motion-reduce:transition-none [font-variant-numeric:lining-nums]"
+      class="bg-brand-second-500 ring-paper pointer-events-none absolute top-[-9px] right-[-9px] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white ring-2 [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
