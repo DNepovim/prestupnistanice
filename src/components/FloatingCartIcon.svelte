@@ -119,22 +119,25 @@
       </div>
     {/if}
     <div
-      class="bg-brand-first-700 border-brand-first-700 hover:border-brand-first-300/60 focus-within:border-brand-first-300/60 hover:bg-paper focus-within:bg-paper group relative h-14 w-14 overflow-hidden border shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,background-color,border-color,box-shadow] duration-300 ease-out [--w:min(20rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
+      class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
-      <span
-        aria-hidden="true"
-        class="border-brand-first-300/60 pointer-events-none absolute top-2 left-2 size-3 border-t border-l opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
-      ></span>
-      <span
-        aria-hidden="true"
-        class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
-      ></span>
-
       <div
-        class="absolute inset-x-0 top-0 bottom-20 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        class="bg-paper absolute inset-x-0 top-0 bottom-14 border border-transparent group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60"
       >
+        <span
+          aria-hidden="true"
+          class="border-brand-first-300/60 pointer-events-none absolute top-2 left-2 size-3 border-t border-l opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        ></span>
+        <span
+          aria-hidden="true"
+          class="border-brand-first-300/60 pointer-events-none absolute top-2 right-2 size-3 border-t border-r opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        ></span>
+
+        <div
+          class="absolute inset-0 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+        >
         <div class="w-(--w) px-4 pt-6 pb-2">
-          <div class="mb-1 flex items-center justify-between gap-3">
+          <div class="mb-1 flex items-center justify-between gap-3 pr-[3rem]">
             <p
               class="font-alt text-brand-first-700 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
             >
@@ -262,45 +265,46 @@
             {/each}
           </ul>
         </div>
+        </div>
       </div>
 
       <div
-        class="group-hover:border-brand-first-300/60 group-focus-within:border-brand-first-300/60 group-hover:bg-paper group-focus-within:bg-paper absolute right-0 bottom-0 flex h-14 w-(--w) items-end justify-between gap-3 border-t border-transparent pr-[8px] pb-[8px] pl-4 transition-[height] duration-300 group-hover:h-20 group-hover:border-dashed group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:h-20 group-focus-within:border-dashed motion-reduce:transition-none"
+        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-2 pl-4"
       >
-        <div
-          class="shrink-0 self-center whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
-        >
+        <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
           <p
-            class="font-alt text-brand-first-700 text-[0.62rem] leading-none tracking-[0.1em] uppercase"
+            class="font-alt text-[0.62rem] leading-none tracking-[0.1em] uppercase"
           >
             {tp(`Celkem · ${String(totalCount)} ks`)}
           </p>
           <p
-            class="font-head mt-1.5 text-[1.4rem] leading-none font-extrabold text-black [font-variant-numeric:lining-nums]"
+            class="font-head mt-1.5 text-[1.2rem] leading-none font-extrabold [font-variant-numeric:lining-nums]"
           >
             {formatPrice(totalPrice)}
           </p>
         </div>
         <a
           href={routes.cart()}
-          class="font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 focus-visible:outline-brand-first-500 flex h-10 items-center gap-3 pr-2 pl-4 text-sm leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors duration-200 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
+          class="group/btn font-alt focus-visible:outline-white flex h-full shrink-0 items-center text-white focus-visible:outline-2 focus-visible:-outline-offset-4"
         >
           <span
-            class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            class="hover:bg-brand-first-800 group-hover/btn:bg-brand-first-800 group-focus-visible/btn:bg-brand-first-800 flex h-9 items-center border border-white px-2.5 text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap text-white transition-colors opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
             >{tp('Dokončit nákup')}</span
           >
-          <iconify-icon
-            icon="ph:shopping-cart"
-            class="text-2xl leading-none"
-            noobserver
-            aria-hidden="true"
-          ></iconify-icon>
+          <span class="flex size-14 shrink-0 items-center justify-center">
+            <iconify-icon
+              icon="ph:shopping-cart"
+              class="text-2xl leading-none"
+              noobserver
+              aria-hidden="true"
+            ></iconify-icon>
+          </span>
         </a>
       </div>
     </div>
 
     <span
-      class="bg-brand-second-500 ring-paper pointer-events-none ring-2 absolute -right-2 bottom-[2.5rem] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white transition-opacity group-hover/cart:opacity-0 group-focus-within/cart:opacity-0 motion-reduce:transition-none [font-variant-numeric:lining-nums]"
+      class="bg-brand-second-500 ring-paper pointer-events-none absolute top-[-9px] right-[-9px] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white ring-2 transition-[top,right] duration-300 ease-out group-hover/cart:top-2 group-hover/cart:right-[1.8rem] group-hover/cart:delay-150 group-hover/cart:duration-[600ms] group-focus-within/cart:top-2 group-focus-within/cart:right-[1.8rem] group-focus-within/cart:delay-0 group-focus-within/cart:duration-[600ms] motion-reduce:transition-none [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
