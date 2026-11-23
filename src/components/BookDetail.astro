@@ -7,6 +7,7 @@ import { isDefined, isNonEmptyArray } from 'narrowland'
 
 import ArrowLink from '@/components/ArrowLink.astro'
 import BookAuthor from '@/components/BookAuthor.astro'
+import BookBgAlphaControl from '@/components/BookBgAlphaControl.svelte'
 import BookBuy from '@/components/BookBuy.svelte'
 import BookCrew from '@/components/BookCrew.astro'
 import BookGallery from '@/components/BookGallery.astro'
@@ -509,6 +510,7 @@ const sideSlug = [
       )
     }
   </div>
+  <BookBgAlphaControl client:load />
 </Layout>
 
 <script>
