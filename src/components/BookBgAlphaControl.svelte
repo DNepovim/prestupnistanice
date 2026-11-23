@@ -7,13 +7,10 @@
   const readStored = () => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY)
-      const parsed = Number(stored)
-      return stored !== null &&
-        Number.isInteger(parsed) &&
-        parsed >= 0 &&
-        parsed <= 100
-        ? parsed
-        : DEFAULT_PERCENT
+      if (stored === null || !/^\d{1,3}$/.test(stored)) {
+        return DEFAULT_PERCENT
+      }
+      return Math.min(100, Number(stored))
     } catch {
       return DEFAULT_PERCENT
     }
@@ -78,6 +75,19 @@
     background-color: color-mix(
       in srgb,
       var(--tint-bg, var(--color-brand-first-500)) calc(var(--book-bg-alpha) * 100%),
+      transparent
+    );
+  }
+
+  :global(body[data-book-bg-alpha] header.site-header) {
+    background-color: color-mix(
+      in srgb,
+      color-mix(
+          in srgb,
+          var(--tint-bg, var(--color-brand-first-500)) calc(var(--book-bg-alpha) * 100%),
+          white
+        )
+        calc(100% * (1 - min(1, var(--footer-progress, 0) * 10))),
       transparent
     );
   }
