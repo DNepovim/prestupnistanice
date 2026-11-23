@@ -56,3 +56,7 @@ export const updateQuantity = (slug: string, count: number) => {
 export const removeFromCart = (slug: string) => {
   cart.set(cart.get().filter((item) => item.slug !== slug))
 }
+
+export const emptyCart = () => {
+  cart.set([])
+}
