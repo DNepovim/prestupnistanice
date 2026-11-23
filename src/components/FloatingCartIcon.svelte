@@ -192,10 +192,10 @@
             <button
               type="button"
               onclick={emptyCart}
-              class="font-alt text-brand-first-700 focus-visible:outline-brand-first-500 -mr-2 inline-flex min-h-[2.2rem] cursor-pointer items-center px-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase underline underline-offset-2 transition-colors hover:text-red-700 focus-visible:text-red-700 focus-visible:outline-2 motion-reduce:transition-none"
+              class="font-alt text-brand-first-700 focus-visible:outline-brand-first-500 -mr-2 inline-flex min-h-[2.2rem] whitespace-nowrap cursor-pointer items-center px-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase underline underline-offset-2 transition-colors hover:text-red-700 focus-visible:text-red-700 focus-visible:outline-2 motion-reduce:transition-none"
               aria-label="Vyprázdnit košík"
             >
-              {tp('Vyprázdnit košík')}
+              {tp('Vyprázdnit')}<span class="max-xs:hidden">&nbsp;{tp('košík')}</span>
             </button>
           </div>
           <ul class="flex flex-col">
@@ -332,7 +332,7 @@
         <a
           href={routes.cart()}
           class={[
-            'group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 max-xs:pl-2 motion-reduce:transition-none',
+            'group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 outline-none max-xs:pl-2 motion-reduce:transition-none',
             isExpanded && 'hover:bg-brand-first-800 focus-visible:bg-brand-first-800',
           ]}
         >
