@@ -137,7 +137,7 @@
           class="absolute inset-0 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         >
         <div class="w-(--w) px-4 pt-6 pb-2">
-          <div class="mb-1 flex items-center justify-between gap-3 pr-[3rem]">
+          <div class="mb-1 flex items-center justify-between gap-3 pr-[4rem]">
             <p
               class="font-alt text-brand-first-700 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
             >
@@ -269,7 +269,7 @@
       </div>
 
       <div
-        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-2 pr-0 pl-4"
+        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-3 pr-0 pl-4"
       >
         <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
           <p
@@ -278,18 +278,18 @@
             {tp(`Celkem · ${String(totalCount)} ks`)}
           </p>
           <p
-            class="font-head mt-1.5 text-[1.2rem] leading-none font-extrabold [font-variant-numeric:lining-nums]"
+            class="font-head mt-1.5 text-[1.2rem] max-xs:text-[1.05rem] leading-none font-extrabold [font-variant-numeric:lining-nums]"
           >
             {formatPrice(totalPrice)}
           </p>
         </div>
         <a
           href={routes.cart()}
-          class="group/btn font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+          class="group/btn font-alt bg-brand-first-700 hover:bg-brand-first-800 focus-visible:bg-brand-first-800 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 max-xs:pl-2 text-white transition-colors duration-200 hover:delay-[700ms] focus-visible:delay-[600ms] motion-reduce:transition-none"
         >
           <span
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 border border-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-[550ms] group-hover:duration-[350ms] group-focus-within:opacity-100 group-focus-within:delay-[400ms] group-focus-within:duration-[350ms] motion-reduce:transition-none"
+            class="pointer-events-none absolute inset-0 border border-white group-focus-visible/btn:border-2 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-[550ms] group-hover:duration-[350ms] group-focus-within:opacity-100 group-focus-within:delay-[400ms] group-focus-within:duration-[350ms] motion-reduce:transition-none"
           ></span>
           <span
             class="text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
