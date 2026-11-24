@@ -172,3 +172,11 @@ Agenti (`.claude/agents/`): `ticket-builder`, `ticket-product-reviewer`, `ticket
 ### Hotová schválená práce
 
 Žádné MR: schválená práce jde rovnou do hlavní větev projektu (viz výše; po ukončení dočasného pravidla do `main`). Podrobnosti v `ticket-ship`.
+
+### Panel cairn a plugin ticket-pane
+
+Tickety zobrazuje panel cairn (`/cairn` v Claude Code, nebo `~/projects/cairn/bin/cairn` v tmux; konfigurace `.claude/cairn.json`, bridge `~/.claude/cairn-knihyps`). Aby panel věděl, na kterém ticketu se pracuje a kteří agenti běží, musí být v relaci načtený mod `ticket-pane` z repa cairn. Aktualizace cairnu se do relace propisují jen tehdy, když se mod čte přímo z repa, **nikdy ho nekopíruj**:
+
+1. **Na začátku relace** zkontroluj, jestli je mod načtený (existuje příkaz `/cairn`). Pokud ne, zapoj ho **symlinkem** do složky modů této relace: `ln -s /Users/dominik/projects/cairn/claude-plugin/ticket-pane <složka modů relace>/ticket-pane` (složka modů je `~/.claude/dev-mods/<id relace>/` nebo `~/.claude-personal/dev-mods/<id relace>/`, podle toho, kde Claude Code hlásí načítání modů; na dotaz „Zapnout mody, které Claude píše v této relaci?“ odpověz ano). Po zapojení ověř, že `/cairn` existuje a že vzniká `~/.claude/cairn-knihyps/state.json`.
+2. **Když symlink nefunguje** (mod se nenačte), spusť Claude Code s příznakem `--plugin-dir /Users/dominik/projects/cairn/claude-plugin/ticket-pane`, případně přes alias `claude-knihyps` (uživatel si ho přidá do shell profilu; profil sám neměň).
+3. Změny v repu cairn commituje a nepushuje jen uživatelovým pokynem. Pokud plugin dostane úpravu, uživatel ji v nové relaci uvidí díky odkazu bez dalšího kroku.
