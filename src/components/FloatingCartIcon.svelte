@@ -123,12 +123,63 @@
       class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
     >
       <div
+        class="absolute right-0 bottom-0 z-10 flex h-14 w-(--w) items-center justify-between gap-3 pr-0 pl-4"
+      >
+        <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
+          <p
+            class="font-alt text-[0.62rem] leading-none tracking-[0.1em] uppercase"
+          >
+            {tp(`Celkem · ${String(totalCount)} ks`)}
+          </p>
+          <p
+            class="font-head mt-1.5 text-[1.2rem] max-xs:text-[1.05rem] leading-none font-extrabold [font-variant-numeric:lining-nums]"
+          >
+            {formatPrice(totalPrice)}
+          </p>
+        </div>
+        <a
+          href={routes.cart()}
+          class="group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-white max-xs:pl-2"
+        >
+          <span
+            aria-hidden="true"
+            class="bg-brand-second-500 group-hover/btn:bg-brand-second-700 group-focus-visible/btn:bg-brand-second-700 pointer-events-none absolute inset-0 opacity-0 transition-[opacity,background-color] duration-250 group-hover:opacity-100 group-hover:[transition-delay:1000ms,0ms] group-focus-within:opacity-100 group-focus-within:[transition-delay:850ms,0ms] motion-reduce:transition-none"
+          ></span>
+          <svg
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 size-full"
+          >
+            <rect
+              x="0.5"
+              y="0.5"
+              width="100%"
+              height="100%"
+              pathLength="1"
+              class="fill-none stroke-white [stroke-dasharray:1] [stroke-dashoffset:1] [x:0.5px] [y:0.5px] [width:calc(100%_-_1px)] [height:calc(100%_-_1px)] [stroke-width:1] transition-[stroke-dashoffset] duration-150 group-hover:[stroke-dashoffset:0] group-hover:delay-[550ms] group-hover:duration-[450ms] group-focus-within:[stroke-dashoffset:0] group-focus-within:delay-[400ms] group-focus-within:duration-[450ms] group-focus-visible/btn:[x:1px] group-focus-visible/btn:[y:1px] group-focus-visible/btn:[width:calc(100%_-_2px)] group-focus-visible/btn:[height:calc(100%_-_2px)] group-focus-visible/btn:[stroke-width:2] motion-reduce:transition-none"
+            />
+          </svg>
+          <span
+            class="relative text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            >{tp('Dokončit nákup')}</span
+          >
+          <span class="relative flex w-10 shrink-0 items-center justify-center">
+            <iconify-icon
+              icon="ph:shopping-cart"
+              class="text-2xl leading-none"
+              noobserver
+              aria-hidden="true"
+            ></iconify-icon>
+          </span>
+        </a>
+      </div>
+
+      <div
         class="bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none"
       >
         <div
-          class="absolute inset-0 overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+          class="absolute inset-0 overflow-x-hidden overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
         >
-        <div class="w-(--w) px-4 pt-6 pb-3" bind:clientHeight={contentHeight}>
+        <div class="w-full px-4 pt-6 pb-3" bind:clientHeight={contentHeight}>
           <p
             class="font-alt text-brand-first-700 mb-1 text-[0.7rem] leading-none tracking-[0.1em] uppercase"
           >
@@ -253,7 +304,6 @@
               type="button"
               onclick={emptyCart}
               class="font-alt focus-visible:outline-red-700 inline-flex min-h-[2.2rem] cursor-pointer items-center gap-2 px-2 text-[0.7rem] leading-none tracking-[0.1em] whitespace-nowrap text-red-700 uppercase transition-colors hover:bg-red-700 hover:text-white focus-visible:bg-red-700 focus-visible:text-white focus-visible:outline-2 motion-reduce:transition-none"
-              aria-label="Vyprázdnit košík"
             >
               <iconify-icon
                 icon="ph:trash"
@@ -266,55 +316,6 @@
           </div>
         </div>
         </div>
-      </div>
-
-      <div
-        class="absolute right-0 bottom-0 flex h-14 w-(--w) items-center justify-between gap-3 pr-0 pl-4"
-      >
-        <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
-          <p
-            class="font-alt text-[0.62rem] leading-none tracking-[0.1em] uppercase"
-          >
-            {tp(`Celkem · ${String(totalCount)} ks`)}
-          </p>
-          <p
-            class="font-head mt-1.5 text-[1.2rem] max-xs:text-[1.05rem] leading-none font-extrabold [font-variant-numeric:lining-nums]"
-          >
-            {formatPrice(totalPrice)}
-          </p>
-        </div>
-        <a
-          href={routes.cart()}
-          class="group/btn font-alt bg-brand-first-700 relative mr-[9px] flex h-10 shrink-0 items-center pl-3 text-white focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-white max-xs:pl-2"
-        >
-          <span
-            aria-hidden="true"
-            class="bg-brand-second-500 group-hover/btn:bg-brand-second-700 group-focus-visible/btn:bg-brand-second-700 pointer-events-none absolute inset-0 opacity-0 transition-[opacity,background-color] duration-250 group-hover:opacity-100 group-hover:[transition-delay:1000ms,0ms] group-focus-within:opacity-100 group-focus-within:[transition-delay:850ms,0ms] motion-reduce:transition-none"
-          ></span>
-          <svg
-            aria-hidden="true"
-            class="pointer-events-none absolute inset-0 size-full"
-          >
-            <rect
-              x="0.5"
-              y="0.5"
-              pathLength="1"
-              class="fill-none stroke-white [stroke-dasharray:1] [stroke-dashoffset:1] [x:0.5px] [y:0.5px] [width:calc(100%_-_1px)] [height:calc(100%_-_1px)] [stroke-width:1] transition-[stroke-dashoffset] duration-150 group-hover:[stroke-dashoffset:0] group-hover:delay-[550ms] group-hover:duration-[450ms] group-focus-within:[stroke-dashoffset:0] group-focus-within:delay-[400ms] group-focus-within:duration-[450ms] group-focus-visible/btn:[x:1px] group-focus-visible/btn:[y:1px] group-focus-visible/btn:[width:calc(100%_-_2px)] group-focus-visible/btn:[height:calc(100%_-_2px)] group-focus-visible/btn:[stroke-width:2] motion-reduce:transition-none"
-            />
-          </svg>
-          <span
-            class="relative text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
-            >{tp('Dokončit nákup')}</span
-          >
-          <span class="relative flex w-10 shrink-0 items-center justify-center">
-            <iconify-icon
-              icon="ph:shopping-cart"
-              class="text-2xl leading-none"
-              noobserver
-              aria-hidden="true"
-            ></iconify-icon>
-          </span>
-        </a>
       </div>
     </div>
 
