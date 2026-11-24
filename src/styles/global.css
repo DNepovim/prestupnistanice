@@ -142,6 +142,13 @@
   font-feature-settings: 'liga', 'onum';
 }
 
+@utility cursor-highlighter {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M3 29 L9 29 L10 23 L4 23 Z' fill='%23ffe94d' stroke='%23333' stroke-width='1'/%3E%3Cpath d='M10 23 L4 23 L16 5 L23 9 Z' fill='%23f2c200' stroke='%23333' stroke-width='1'/%3E%3C/svg%3E")
+      4 28,
+    pointer;
+}
+
 @utility animate-cart-fall {
   animation: cart-fall 0.7s ease-out forwards;
 }

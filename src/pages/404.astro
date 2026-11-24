@@ -1,10 +1,14 @@
 ---
 import { getCollection } from 'astro:content'
+import { isOneOf } from 'narrowland'
 
 import Book from '@/components/Book.astro'
 import BooksGrid from '@/components/BooksGrid.astro'
+import ProofGame from '@/components/ProofGame.svelte'
 import Section from '@/components/Section.astro'
+import Theme from '@/components/Theme.astro'
 import Layout from '@/layouts/Layout.astro'
+import { tp } from '@/utils/tp'
 import {
   uppercaseEveryFirstLetters,
   uppercaseFirstLetter,
@@ -19,35 +23,58 @@ const recentBooks = books.toReversed().slice(0, 9)
 
 const category = segments[0]
 const slug = segments[1]
+
+const isBookOrAuthor = slug !== undefined && isOneOf(category, ['knihy', 'autori'])
+const proofBook = books.find((book) => book.data.slug === 'balkovsky-pegas')?.data
 ---
 
 <Layout siteDescription="Zde nic není...">
-  <Section
-    ><h1 class="font-alt mb-40 pt-20 text-4xl text-gray-800">
-      {
-        slug && category === 'knihy' ? (
-          <>
-            Knihu{' '}
-            <span class="font-liga font-head my-4 block text-7xl text-gray-800">
-              {uppercaseFirstLetter(slug.replace(/-/g, ' '))}
-            </span>{' '}
-            jsme zatím nevydali.
-          </>
-        ) : slug && category === 'autori' ? (
-          <>
-            Od autora{' '}
-            <span class="font-liga font-head my-4 block text-7xl text-gray-800">
-              {uppercaseEveryFirstLetters(slug.replace(/-/g, ' '))}
-            </span>{' '}
-            jsme zatím nic nevydali
-          </>
-        ) : (
-          'Tuto knihu jsme ještě nevydali'
-        )
-      }
-    </h1>
-    <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
-  </Section>
+  {
+    isBookOrAuthor ? (
+      <Section>
+        <h1 class="font-alt mb-40 pt-20 text-4xl text-gray-800">
+          {category === 'knihy' ? (
+            <>
+              Knihu{' '}
+              <span class="font-liga font-head my-4 block text-7xl text-gray-800">
+                {uppercaseFirstLetter(slug.replace(/-/g, ' '))}
+              </span>{' '}
+              jsme zatím nevydali.
+            </>
+          ) : (
+            <>
+              Od autora{' '}
+              <span class="font-liga font-head my-4 block text-7xl text-gray-800">
+                {uppercaseEveryFirstLetters(slug.replace(/-/g, ' '))}
+              </span>{' '}
+              jsme zatím nic nevydali
+            </>
+          )}
+        </h1>
+        <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
+      </Section>
+    ) : (
+      <>
+        <Section isWide>
+          <h1 class="font-head mt-12 mb-2 text-[2rem] leading-[1.1] font-extrabold tracking-[-0.015em] text-balance text-gray-800">
+            {tp('Tuto knihu jsme ještě nevydali')}
+          </h1>
+        </Section>
+        <Section isFull>
+          <Theme
+            firstColor={proofBook?.color ?? undefined}
+            secondColor={proofBook?.bgColor ?? undefined}
+            keepHue
+          >
+            <ProofGame client:visible />
+          </Theme>
+        </Section>
+        <Section>
+          <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
+        </Section>
+      </>
+    )
+  }
   <Section isWide>
     <BooksGrid>
       {recentBooks.map((book) => <Book slug={book.data.slug} />)}
