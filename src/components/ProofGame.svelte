@@ -4,7 +4,6 @@
   import ProofCropMarks from '@/components/ProofCropMarks.svelte'
   import ProofResult from '@/components/ProofResult.svelte'
   import { evaluate } from '@/utils/proofGame/evaluate'
-  import { PROOF_INTRO } from '@/utils/proofGame/source'
   import {
     getLine,
     PROOF_PAGES,
@@ -51,6 +50,8 @@
   const OPEN_CLASS =
     'cursor-highlighter hover:shadow-[inset_0_-0.1em_0_color-mix(in_srgb,var(--color-gray-600)_40%,transparent)]'
 
+  const HANG_SHARE = 0.5
+
   const HANGING = new Set(['.', ',', ';', ':', '!', '?', '“', '”', '’', ')', '-', '…'])
 
   const BUTTON_CLASS =
@@ -81,7 +82,8 @@
     pagesElement?.querySelectorAll<HTMLElement>('[data-hang]').forEach((element) => {
       const width = element.getBoundingClientRect().width
       const size = parseFloat(window.getComputedStyle(element).fontSize)
-      if (width > 0 && size > 0) element.style.marginRight = `${String(-width / size)}em`
+      if (width > 0 && size > 0)
+        element.style.marginRight = `${String((-width * HANG_SHARE) / size)}em`
     })
   }
 
@@ -212,17 +214,11 @@
 
 <div class="@container overflow-x-clip">
   <div
-    class="mx-auto grid max-w-[80rem] gap-4 px-[0.6rem] pt-[0.4rem] pb-[1.2rem] @min-[40rem]:px-4"
+    class="mx-auto grid max-w-[84rem] gap-4 px-[0.6rem] pt-[0.4rem] pb-[1.2rem] @min-[40rem]:px-4"
   >
-    <p
-      class="font-alt max-w-[42rem] px-[0.4rem] text-[0.98rem] leading-[1.45] font-medium text-gray-700 @min-[30rem]:text-[1.05rem]"
-    >
-      {tp(PROOF_INTRO)}
-    </p>
-
     <div
       bind:this={pagesElement}
-      class="relative mx-auto mt-[1.6rem] mb-4 grid w-[calc(100%-2.2rem)] max-w-[32rem] grid-cols-[minmax(0,1fr)] gap-8 @min-[40rem]:mt-8 @min-[40rem]:w-[calc(100%-3rem)] @min-[40rem]:max-w-[68rem] @min-[40rem]:grid-cols-2 @min-[40rem]:gap-0"
+      class="relative mx-auto mt-[1.6rem] mb-4 grid w-[calc(100%-2.2rem)] max-w-[32rem] grid-cols-[minmax(0,1fr)] gap-8 @min-[40rem]:mt-8 @min-[40rem]:w-[calc(100%-3rem)] @min-[40rem]:max-w-[76rem] @min-[40rem]:grid-cols-2 @min-[40rem]:gap-0"
     >
       {#each PROOF_PAGES as page, pageIndex (page.number)}
         {@const side = PAGE_SIDES[pageIndex] ?? 'right'}
@@ -230,14 +226,14 @@
           role="group"
           aria-label={tp(`Strana ${String(page.number)}`)}
           class={[
-            '@container relative flex flex-col bg-white [--cm-l:0.6rem] [--cm-s:1.1rem] [--pad:13] [--text:74] shadow-[0_0.25rem_1.1rem_rgba(0,0,0,0.18)] @min-[40rem]:[--cm-l:0.8rem] @min-[40rem]:[--cm-s:1.4rem] @min-[40rem]:[--pad:16] @min-[40rem]:[--text:68]',
+            '@container relative flex flex-col bg-white [--cm-l:0.6rem] [--cm-s:1.1rem] [--pad:8] [--text:84] shadow-[0_0.25rem_1.1rem_rgba(0,0,0,0.18)] @min-[40rem]:[--cm-l:0.8rem] @min-[40rem]:[--cm-s:1.4rem] @min-[40rem]:[--pad:12] @min-[40rem]:[--text:76]',
             '@min-[40rem]:after:pointer-events-none @min-[40rem]:after:absolute @min-[40rem]:after:inset-y-0 @min-[40rem]:after:w-[6%] @min-[40rem]:after:from-transparent @min-[40rem]:after:to-gray-900/10',
             PAGE_SIDE_CLASSES[side],
           ]}
         >
           <ProofCropMarks {side} />
           <div
-            class="font-head flex flex-1 touch-pan-y flex-col px-[calc(var(--pad)*1cqw)] pt-[7cqw] pb-[5cqw] text-[length:calc(var(--text)*1cqw/21.6)] leading-[1.34] text-gray-900 select-none [-webkit-touch-callout:none]"
+            class="font-head flex flex-1 touch-pan-y flex-col px-[calc(var(--pad)*1cqw)] pt-[7cqw] pb-[5cqw] text-[length:calc(var(--text)*1cqw/26.2)] leading-[1.34] text-gray-900 select-none [-webkit-touch-callout:none]"
           >
             <div>
               {#each page.lines as line (line.number)}
@@ -308,14 +304,8 @@
       {/each}
     </div>
 
-    <p
-      class="font-alt text-center text-[0.62rem] leading-[1.2] font-medium tracking-[0.1em] text-gray-600 uppercase"
-    >
-      {tp('Z klávesnice: Tab a šipky mezi slovy, Enter nebo mezerník označí.')}
-    </p>
-
     <div class="mx-auto mt-[0.4rem] grid w-full max-w-[44rem] gap-4 px-[0.4rem]">
-      <div class="flex flex-wrap items-center gap-x-[1.2rem] gap-y-[0.7rem]">
+      <div class="flex justify-center">
         {#if isSubmitted}
           <button
             bind:this={againButton}
@@ -335,12 +325,6 @@
             {tp('Odeslat korekturu')}
           </button>
         {/if}
-        <p
-          class="font-alt text-[0.8rem] leading-[1.2] font-semibold tracking-[0.04em] text-gray-700"
-        >
-          {tp('Označených míst:')}
-          {evaluation.places}
-        </p>
       </div>
       <div aria-live="polite" class="grid min-h-px gap-[0.7rem]">
         {#if result}

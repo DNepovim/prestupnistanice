@@ -9,7 +9,6 @@ export type Evaluation = {
   decoys: readonly ProofRecord[]
   hasLooseWords: boolean
   falsePositives: number
-  places: number
 }
 
 export const evaluate = (selected: ReadonlySet<number>): Evaluation => {
@@ -33,7 +32,6 @@ export const evaluate = (selected: ReadonlySet<number>): Evaluation => {
     decoys,
     hasLooseWords: looseRuns > 0,
     falsePositives: decoys.length + looseRuns,
-    places: found.length + decoys.length + looseRuns,
   }
 }
 
