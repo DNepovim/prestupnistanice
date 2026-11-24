@@ -31,13 +31,13 @@ const validFrom = page.validFrom?.toLocaleDateString('cs-CZ', {
   <PrintSheet edge="only" regs={['r']}>
     <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
       <h1
-        class="font-head text-brand-first-800 text-[clamp(1.1rem,5vw,2.6rem)] leading-[1.1] font-extrabold tracking-[-0.02em] whitespace-nowrap"
+        class="font-head text-[clamp(1.1rem,5vw,2.6rem)] leading-[1.1] font-extrabold tracking-[-0.02em] whitespace-nowrap text-black"
       >
         {tp(page.title)}
       </h1>
       {
         validFrom && (
-          <p class="font-alt text-brand-first-700 mt-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
+          <p class="font-alt mt-2 text-[0.7rem] leading-none tracking-[0.1em] text-black uppercase">
             {`Platné od ${validFrom}`}
           </p>
         )
