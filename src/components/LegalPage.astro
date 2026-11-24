@@ -1,0 +1,47 @@
+---
+import { getEntry } from 'astro:content'
+
+import Markdown from '@/components/Markdown.astro'
+import PageTitle from '@/components/PageTitle.astro'
+import PrintSheet from '@/components/PrintSheet.astro'
+import Layout from '@/layouts/Layout.astro'
+import { tp } from '@/utils/tp'
+
+type Props = {
+  slug: string
+}
+
+const { slug } = Astro.props
+
+const entry = await getEntry('page', slug)
+
+if (!entry) {
+  return
+}
+
+const { data: page, body } = entry
+
+const validFrom = page.validFrom?.toLocaleDateString('cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+---
+
+<Layout siteTitle={page.title} siteDescription={tp(page.title)}>
+  <PrintSheet edge="only" regs={['r']} slug={`${page.slug}.pdf`}>
+    <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+      <PageTitle>{tp(page.title)}</PageTitle>
+      {
+        validFrom && (
+          <p class="font-alt text-brand-first-700 mt-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
+            {`Platné od ${validFrom}`}
+          </p>
+        )
+      }
+      <div class="mt-8 max-w-2xl">
+        {body && <Markdown class="text-[1rem]" text={body} />}
+      </div>
+    </div>
+  </PrintSheet>
+</Layout>

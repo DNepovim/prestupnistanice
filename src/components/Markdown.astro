@@ -20,13 +20,23 @@ const linkPreviews = await getLinkPreviews(text)
 
 const NP_BASE = 'font-alt text-brand-first-700/45 text-[0.6em] select-none'
 
+const LITERAL_LINK = /^(https?:\/\/\S+|\S+@\S+)$/
+
+const HEADINGS = {
+  2: { tag: 'h2', classes: 'font-liga font-head mt-10 mb-4 text-5xl text-gray-800' },
+  3: { tag: 'h3', classes: 'font-liga font-head mt-4 text-4xl text-gray-800' },
+  4: { tag: 'h4', classes: 'font-liga font-head mt-4 text-2xl text-gray-800' },
+} as const
+
 const TAB_MARK = html`<span aria-hidden="true" class="${NP_BASE} mr-2">⇥</span>`
 const PILCROW_MARK = html`<span aria-hidden="true" class="${NP_BASE} ml-1.5">¶</span>`
 
 marked.use({
   renderer: {
-    heading: ({ text }) =>
-      html`<h3 class="font-liga font-head mt-4 text-4xl text-gray-800">${tp(text)}</h3>`,
+    heading: ({ text, depth }) => {
+      const { tag, classes } = HEADINGS[depth === 2 || depth === 4 ? depth : 3]
+      return html`<${tag} class="${classes}">${tp(text)}</${tag}>`
+    },
     strong: ({ text }) => html`<strong class="font-alt">${tp(text)}</strong>`,
     em: ({ text }) => html`<em class="font-alt">${tp(text)}</em>`,
     paragraph: ({ text }) =>
@@ -54,7 +64,7 @@ marked.use({
         ${linkPreviews.has(href) ? `data-preview="${linkPreviews.get(href) ?? ''}"` : ''}
         target="${isLinkExternal(href) ? '_blank' : '_self'}"
         class="font-alt text-brand-first-500 hover:border-brand-second-500 border-b border-transparent"
-        >${parseInline(tp(text))}</a
+        >${LITERAL_LINK.test(text) ? text : parseInline(tp(text))}</a
       >`,
     blockquote: ({ text }) =>
       html`<blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">

@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components'
 
 import ArrowLink from '@/components/ArrowLink.astro'
 import HeaderLink from '@/components/HeaderLink.astro'
+import { routes } from '@/routes'
 import { tp } from '@/utils/tp'
 
 const EYEBROW =
@@ -73,7 +74,7 @@ const WORDMARK_LETTERS = Array.from('Přestupní stanice').map((char) =>
       </form>
 
       <div
-        class="border-brand-second-300/60 mt-14 grid max-w-[64rem] gap-10 border-t border-dashed pt-8 min-md:grid-cols-[2fr_3fr_3fr]"
+        class="border-brand-second-300/60 mt-14 grid max-w-[64rem] gap-10 border-t border-dashed pt-8 min-md:grid-cols-[2fr_3fr_2fr_3fr]"
       >
         <nav aria-label="Obsah webu">
           <h2 class={EYEBROW}>Obsah</h2>
@@ -131,6 +132,20 @@ const WORDMARK_LETTERS = Array.from('Přestupní stanice').map((char) =>
             >
           </p>
         </div>
+
+        <nav aria-label="Podmínky">
+          <h2 class={EYEBROW}>Podmínky</h2>
+          <menu class="flex flex-col gap-2 text-[1rem] leading-tight">
+            <li>
+              <ArrowLink
+                tone="current"
+                isUppercase={false}
+                class={LINK}
+                href={routes.terms()}>Obchodní podmínky</ArrowLink
+              >
+            </li>
+          </menu>
+        </nav>
 
         <div>
           <h2 class={EYEBROW}>Tiráž</h2>

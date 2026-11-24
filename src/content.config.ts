@@ -121,6 +121,7 @@ const page = defineCollection({
     title: z.string(),
     slug: z.string(),
     content: z.string().optional(),
+    validFrom: z.coerce.date().optional(),
   }),
 })
 export const collections = { book, author, event, page, review }
