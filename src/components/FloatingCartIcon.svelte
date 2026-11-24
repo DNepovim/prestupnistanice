@@ -3,7 +3,7 @@
 
   import { onMount, untrack } from 'svelte'
   import { MediaQuery } from 'svelte/reactivity'
-  import { fly } from 'svelte/transition'
+  import { fade, fly } from 'svelte/transition'
 
   import { routes } from '@/routes'
   import { cart, cartCount, emptyCart, removeFromCart, updateQuantity } from '@/stores/cart'
@@ -24,8 +24,12 @@
   const PIECE_UNITS = ['kus', 'kusy', 'kusů'] as const
   const MAX_BADGE = 99
   const FOOTER_REVEAL_THRESHOLD = 0.05
+  const LEAVE_MS = 650
 
   let isMounted = $state(false)
+  let isRendered = $state(false)
+  let isLeaving = $state(false)
+  let leaveTimer: ReturnType<typeof setTimeout> | undefined
   let contentHeight = $state(0)
   let isFooterRevealed = $state(false)
   let sprites = $state<Sprite[]>([])
@@ -33,14 +37,17 @@
   let lastSpriteId = 0
   const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce')
 
-  const items = $derived(isMounted ? $cart : [])
-  const totalCount = $derived(isMounted ? $cartCount : 0)
+  const liveItems = $derived(isMounted ? $cart : [])
+  const liveCount = $derived(isMounted ? $cartCount : 0)
+  let lastItems = $state<typeof liveItems>([])
+  const items = $derived(liveItems.length > 0 ? liveItems : lastItems)
+  const totalCount = $derived(items.reduce((total, { count }) => total + count, 0))
   const totalPrice = $derived(
     items.reduce((total, { slug, count }) => total + (books[slug]?.price ?? 0) * count, 0),
   )
   const badge = $derived(totalCount > MAX_BADGE ? `${String(MAX_BADGE)}+` : String(totalCount))
   const isCartPage = $derived(pathname.replace(/\/$/, '') === routes.cart())
-  const isHidden = $derived(totalCount === 0 || isCartPage)
+  const isHidden = $derived(!isRendered || isCartPage)
   const duration = (value: number) => (reducedMotion.current ? 0 : value)
 
   let footerFrame = 0
@@ -69,6 +76,38 @@
       window.removeEventListener('scroll', scheduleFooterRead)
       window.removeEventListener('resize', scheduleFooterRead)
       window.cancelAnimationFrame(footerFrame)
+      clearTimeout(leaveTimer)
+    }
+  })
+
+  $effect(() => {
+    const hasItems = liveCount > 0
+    untrack(() => {
+      clearTimeout(leaveTimer)
+      if (hasItems) {
+        isRendered = true
+        isLeaving = false
+        return
+      }
+      if (!isRendered) {
+        return
+      }
+      if (reducedMotion.current) {
+        isRendered = false
+        isLeaving = false
+        return
+      }
+      isLeaving = true
+      leaveTimer = setTimeout(() => {
+        isRendered = false
+        isLeaving = false
+      }, LEAVE_MS)
+    })
+  })
+
+  $effect(() => {
+    if (liveItems.length > 0) {
+      lastItems = liveItems
     }
   })
 
@@ -76,7 +115,7 @@
     if (!isMounted) {
       return
     }
-    const current = items.map(({ slug }) => slug)
+    const current = liveItems.map(({ slug }) => slug)
     const previous = knownSlugs
     knownSlugs = current
     if (previous === undefined || reducedMotion.current || isCartPage) {
@@ -96,10 +135,12 @@
 {#if !isHidden}
   <div
     class={[
-      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 transition-opacity duration-200 motion-reduce:transition-none',
+      'fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 origin-bottom-right transition-[opacity,scale] duration-200 motion-reduce:transition-none',
       isFooterRevealed && 'pointer-events-none opacity-0',
+      isLeaving && 'pointer-events-none scale-90 opacity-0 delay-300 duration-300',
     ]}
-    inert={isFooterRevealed}
+    inert={isFooterRevealed || isLeaving}
+    in:fade={{ duration: duration(200) }}
   >
     {#if sprites.length > 0}
       <div
@@ -120,12 +161,19 @@
     {/if}
     <div
       style:--panel-h="{contentHeight}px"
-      class="bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] hover:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms] motion-reduce:transition-none"
+      class={[
+        'bg-brand-first-700 group relative h-14 w-14 overflow-hidden shadow-[0_0.3rem_1rem_rgba(0,0,0,0.35)] transition-[width,height,box-shadow] duration-300 ease-out [--w:min(22rem,calc(100vw-2rem))] motion-reduce:transition-none',
+        !isLeaving &&
+          'hover:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] hover:w-(--w) hover:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] hover:delay-150 hover:duration-[600ms] focus-within:h-[min(calc(var(--panel-h)+3.5rem+2px),26rem,calc(100svh-6rem))] focus-within:w-(--w) focus-within:shadow-[0_0.3rem_1.4rem_rgba(0,0,0,0.18)] focus-within:delay-0 focus-within:duration-[600ms]',
+      ]}
     >
       <div
         class="absolute right-0 bottom-0 z-10 flex h-14 w-(--w) items-center justify-between gap-3 pr-0 pl-4"
       >
-        <div class="min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none">
+        <div class={[
+            'min-w-0 shrink whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none',
+            isLeaving && 'opacity-0!',
+          ]}>
           <p
             class="font-alt text-[0.62rem] leading-none tracking-[0.1em] uppercase"
           >
@@ -159,7 +207,10 @@
             />
           </svg>
           <span
-            class="relative text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
+            class={[
+            'relative text-[0.75rem] leading-none font-semibold tracking-[0.03em] whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none',
+            isLeaving && 'opacity-0!',
+          ]}
             >{tp('Dokončit nákup')}</span
           >
           <span class="relative flex w-10 shrink-0 items-center justify-center">
@@ -174,7 +225,10 @@
       </div>
 
       <div
-        class="bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none"
+        class={[
+            'bg-paper border-brand-first-300/60 invisible absolute inset-x-0 top-0 bottom-14 border transition-[visibility,opacity] duration-300 group-hover:visible group-hover:delay-150 group-hover:duration-[600ms] group-focus-within:visible group-focus-within:delay-0 group-focus-within:duration-[600ms] motion-reduce:transition-none',
+            isLeaving && 'opacity-0!',
+          ]}
       >
         <div
           class="absolute inset-0 overflow-x-hidden overflow-y-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-300 group-hover:duration-500 group-focus-within:opacity-100 group-focus-within:delay-300 group-focus-within:duration-500 motion-reduce:transition-none"
@@ -320,7 +374,7 @@
     </div>
 
     <span
-      class="bg-brand-second-500 ring-paper pointer-events-none absolute top-[-9px] right-[-9px] grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white ring-2 [font-variant-numeric:lining-nums]"
+      class="bg-brand-second-500 ring-paper pointer-events-none absolute top-[-9px] right-[-9px] z-20 grid h-6 min-w-6 place-items-center overflow-hidden px-1 text-xs font-bold text-white ring-2 [font-variant-numeric:lining-nums]"
       role="status"
       aria-label={pluralize(totalCount, PIECE_UNITS) + ' v košíku'}
     >
