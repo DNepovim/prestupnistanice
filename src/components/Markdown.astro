@@ -20,7 +20,8 @@ const linkPreviews = await getLinkPreviews(text)
 
 const NP_BASE = 'font-alt text-brand-first-700/45 text-[0.6em] select-none'
 
-const LITERAL_LINK = /^(https?:\/\/\S+|\S+@\S+)$/
+const isLiteralLink = (text: string) =>
+  text.startsWith('http') || (text.includes('@') && !text.includes(' '))
 
 const HEADINGS = {
   2: { tag: 'h2', classes: 'font-liga font-head mt-10 mb-4 text-5xl text-gray-800' },
@@ -64,7 +65,7 @@ marked.use({
         ${linkPreviews.has(href) ? `data-preview="${linkPreviews.get(href) ?? ''}"` : ''}
         target="${isLinkExternal(href) ? '_blank' : '_self'}"
         class="font-alt text-brand-first-500 hover:border-brand-second-500 border-b border-transparent"
-        >${LITERAL_LINK.test(text) ? text : parseInline(tp(text))}</a
+        >${isLiteralLink(text) ? text : parseInline(tp(text))}</a
       >`,
     blockquote: ({ text }) =>
       html`<blockquote class="font-alt text-brand-first-500 mb-4 pl-2 text-2xl italic">
