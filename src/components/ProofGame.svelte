@@ -42,7 +42,7 @@
   } as const satisfies Record<Outcome, string>
 
   const WORD_CLASS =
-    'relative focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-700 before:pointer-events-none before:absolute before:inset-[0.1em_-0.1em_0.02em_-0.1em] before:origin-left before:scale-x-0 before:bg-brand-second-300 before:mix-blend-multiply before:[clip-path:polygon(0_14%,3%_0,100%_8%,96%_100%,2%_90%)] after:pointer-events-none after:absolute after:bottom-[90%] after:left-0 after:z-[2] after:origin-bottom-left after:-rotate-3 after:font-alt after:text-[0.85em] after:leading-none after:font-semibold after:whitespace-nowrap after:italic after:content-[attr(data-tag)]'
+    'group/word relative hover:z-20 focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-700 before:pointer-events-none before:absolute before:inset-[0.1em_-0.1em_0.02em_-0.1em] before:origin-left before:scale-x-0 before:bg-brand-second-300 before:mix-blend-multiply before:[clip-path:polygon(0_14%,3%_0,100%_8%,96%_100%,2%_90%)] after:pointer-events-none after:absolute after:bottom-[90%] after:left-0 after:z-[2] after:origin-bottom-left after:-rotate-3 after:font-alt after:text-[0.85em] after:leading-none after:font-semibold after:whitespace-nowrap after:italic after:content-[attr(data-tag)]'
 
   const SELECTED_CLASS =
     'before:scale-x-100 before:transition-transform before:duration-300 before:ease-out motion-reduce:before:transition-none'
@@ -125,7 +125,13 @@
     return `${result.found.includes(record) ? '✓ ' : ''}${record.tag}`
   }
 
-  const hasTag = (line: Line) => line.words.some((word) => getTag(word) !== undefined)
+  const getNote = (word: Word) => {
+    const record = word.recordId ? PROOF_RECORDS.get(word.recordId) : undefined
+    if (!result || !record) return undefined
+    return record.kind === 'error' || selected.has(word.index)
+      ? record.description
+      : undefined
+  }
 
   const getCenterX = (word: Word) => {
     const rect = wordElements[word.index]?.getBoundingClientRect()
@@ -242,12 +248,12 @@
                   class={[
                     'block [font-feature-settings:"liga"] leading-[1.34] whitespace-nowrap hyphens-none',
                     LINE_KIND_CLASSES[line.kind],
-                    hasTag(line) && 'pt-[0.85em]',
                   ]}
                 >
                   {#each line.words as word (word.index)}
                     {@const glyph = splitOddGlyph(word.text)}
                     {@const hang = glyph.glyph ? undefined : getHang(line, word)}
+                    {@const note = getNote(word)}
                     <span
                       bind:this={wordElements[word.index]}
                       role="button"
@@ -287,7 +293,13 @@
                       >{#if hang}{hang.body}<span data-hang>{hang.mark}</span
                         >{:else if glyph.glyph}{glyph.before}<span
                           class="font-display text-[0.92em] font-bold">{glyph.glyph}</span
-                        >{glyph.after}{:else}{word.text}{/if}</span
+                        >{glyph.after}{:else}{word.text}{/if}{#if note}<span
+                          role="tooltip"
+                          class={[
+                            'font-alt pointer-events-none invisible absolute top-full z-30 mt-[0.35rem] w-max max-w-[14rem] bg-gray-900 px-[0.6rem] py-[0.4rem] text-left text-[0.8rem] leading-[1.35] font-medium whitespace-normal text-white opacity-0 shadow-[0_0.2rem_0.7rem_rgba(0,0,0,0.25)] [text-align-last:left] [text-decoration:none] not-italic transition-opacity duration-150 group-hover/word:visible group-hover/word:opacity-100 group-focus/word:visible group-focus/word:opacity-100 motion-reduce:transition-none',
+                            word.isOnRight ? 'right-0' : 'left-0',
+                          ]}>{note}</span
+                        >{/if}</span
                     >{word.separator}
                   {/each}
                 </div>

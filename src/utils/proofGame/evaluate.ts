@@ -1,6 +1,6 @@
 import { tp } from '@/utils/tp'
 
-import { PROOF_FALLBACK_VERDICT, PROOF_VERDICTS } from './source'
+import { PROOF_VERDICTS } from './source'
 import { PROOF_DECOYS, PROOF_ERRORS, PROOF_WORDS, type ProofRecord } from './text'
 
 export type Evaluation = {
@@ -35,17 +35,15 @@ export const evaluate = (selected: ReadonlySet<number>): Evaluation => {
   }
 }
 
-export const getVerdict = (found: number, total: number) =>
-  tp(
-    PROOF_VERDICTS.find(([minimum]) => found / total >= minimum)?.[1] ??
-      PROOF_FALLBACK_VERDICT,
-  )
-
-export const pluralize = (
-  count: number,
-  [one, few, many]: readonly [string, string, string],
-) => {
-  if (count === 1) return one
-  if (count >= 2 && count <= 4) return few
-  return many
+const pickVerdict = ({ found, falsePositives }: Evaluation, total: number) => {
+  const ratio = found.length / total
+  if (ratio === 1)
+    return falsePositives === 0 ? PROOF_VERDICTS.perfect : PROOF_VERDICTS.thorough
+  if (falsePositives > found.length) return PROOF_VERDICTS.overeager
+  if (ratio >= 0.75) return PROOF_VERDICTS.good
+  if (ratio >= 0.5) return PROOF_VERDICTS.half
+  return found.length > 0 ? PROOF_VERDICTS.weak : PROOF_VERDICTS.none
 }
+
+export const getVerdict = (result: Evaluation, total: number) =>
+  tp(pickVerdict(result, total))

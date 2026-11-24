@@ -185,15 +185,14 @@ export const PROOF_DECOY_DEFINITIONS = [
 
 export const PROOF_FIRST_PAGE_NUMBER = 14
 
-export const PROOF_VERDICTS = [
-  [1, 'Sazeč vás může pustit k pultu. Žádná chyba mu neunikla.'],
-  [0.75, 'Do tisku by to šlo. Redakce by se potila jen mírně.'],
-  [
-    0.5,
-    'Polovina chyb by tisk přežila. Čtenáři by ji nenašli, ale dozvěděli by se o ní.',
-  ],
-  [0.01, 'Zbytek si čtenáři najdou sami. A rádi se o tom zmíní v recenzích.'],
-] as const
-
-export const PROOF_FALLBACK_VERDICT =
-  'Čtenáři by to také nepoznali. Zkuste to znovu, strany počkají.'
+export const PROOF_VERDICTS = {
+  perfect: 'Bezchybná korektura. Sazeč se vám raději omlouvá předem.',
+  thorough:
+    'Všechny chyby jste našli, jen jste při tom podezřívali i nevinné čárky. Korektor by tomu říkal důkladnost.',
+  overeager:
+    'Označili jste víc bezvadných míst než chyb. Autoři by se vás báli a sazeč by si zamykal.',
+  good: 'Do tisku by to šlo. Redakce by se potila jen mírně.',
+  half: 'Polovina chyb by tisk přežila. Čtenáři by je našli a rádi by o nich napsali.',
+  weak: 'Zbytek si čtenáři najdou sami. A rádi se o tom zmíní v recenzích.',
+  none: 'Žádnou chybu jste nenašli. Čtenáři by to také nepoznali. Zkuste to znovu, strany počkají.',
+} as const
