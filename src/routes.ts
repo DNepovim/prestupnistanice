@@ -3,6 +3,7 @@ const SLUGS = {
   auhtors: 'autori',
   cart: 'kosik',
   terms: 'obchodni-podminky',
+  privacy: 'ochrana-osobnich-udaju',
 }
 
 export const CATEGORIES = {
@@ -44,6 +45,7 @@ export const routes = {
   },
   cart: () => `/${SLUGS.cart}`,
   terms: () => `/${SLUGS.terms}`,
+  privacy: () => `/${SLUGS.privacy}`,
   internal: {
     index: () => '/interni',
     books: () => '/interni/knihy',
