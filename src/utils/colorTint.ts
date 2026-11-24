@@ -5,7 +5,8 @@ const STEP_SELECTOR = '[data-color-step]'
 const INTERACTIVE_SELECTOR = 'a, button, input, select, textarea'
 const BOOK_COLOR_PROPERTY = '--color-brand-first-500'
 const PAPER_CHANNELS = [252, 249, 242] as const
-const PAGE_TINT_ALPHA = 0.7
+const TINT_ALPHA_PROPERTY = '--page-tint-alpha'
+const FALLBACK_PAGE_TINT_ALPHA = 0.7
 const PAGE_CONTENT_SELECTOR = 'section, header, footer, nav, aside, article'
 const FOREGROUND_ON_LIGHT = { color: '#101828', bookHuePercent: 28 }
 const FOREGROUND_ON_DARK = { color: '#ffffff', bookHuePercent: 12 }
@@ -74,10 +75,19 @@ const parseChannels = (color: string) => {
 const getForeground = (channels: readonly number[]) =>
   isDarkColor(channels) ? FOREGROUND_ON_DARK : FOREGROUND_ON_LIGHT
 
-const blendWithPaper = (channels: readonly number[]) =>
-  PAPER_CHANNELS.map(
-    (paper, index) => paper + ((channels[index] ?? paper) - paper) * PAGE_TINT_ALPHA,
+const getPageTintAlpha = () => {
+  const percent = Number.parseFloat(
+    getComputedStyle(document.body).getPropertyValue(TINT_ALPHA_PROPERTY),
   )
+  return Number.isNaN(percent) ? FALLBACK_PAGE_TINT_ALPHA : percent / 100
+}
+
+const blendWithPaper = (channels: readonly number[]) => {
+  const alpha = getPageTintAlpha()
+  return PAPER_CHANNELS.map(
+    (paper, index) => paper + ((channels[index] ?? paper) - paper) * alpha,
+  )
+}
 
 const clearSelectedSteps = (scope: HTMLElement) => {
   scope.querySelectorAll<HTMLElement>('[data-selected]').forEach((step) => {

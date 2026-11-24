@@ -7,6 +7,7 @@ import ArrowLaunchScript from '@/components/ArrowLaunchScript.astro'
 import BaseHead from '@/components/BaseHead.astro'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
+import { DEFAULT_PAGE_TINT_ALPHA } from '@/consts'
 import { getColorScale } from '@/utils/geColorScale'
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
   keepHue?: boolean
   tintedHeader?: boolean
   tintedBackground?: boolean
+  tintAlpha?: number
   isBare?: boolean
 }
 
@@ -36,6 +38,7 @@ const {
   keepHue = false,
   tintedHeader = false,
   tintedBackground = false,
+  tintAlpha = DEFAULT_PAGE_TINT_ALPHA,
   isBare = false,
 } = Astro.props
 
@@ -91,12 +94,13 @@ const config = {
     <script is:inline defer src={config.url} data-website-id={config.websiteId}></script>
   </head>
   <body
+    style={`--page-tint-alpha:${String(tintAlpha)}%`}
     class:list={[
       'font-display flex min-h-screen min-w-full flex-col',
       'selection:bg-brand-second-100 selection:decoration-brand-second-400 selection:underline',
       '[--slide-size:min(calc(100%-2rem),70rem)] [--slide-spacing:1rem] sm:[--slide-size:min(calc(100%-5rem),70rem)] sm:[--slide-spacing:3rem]',
       tintedBackground &&
-        '[background-color:color-mix(in_srgb,var(--tint-bg,var(--color-brand-first-500))_70%,transparent)] bg-none',
+        '[background-color:color-mix(in_srgb,var(--tint-bg,var(--color-brand-first-500))_var(--page-tint-alpha),transparent)] bg-none',
       isDev && 'debug-screens',
     ]}
   >

@@ -7,7 +7,6 @@ import { isDefined, isNonEmptyArray } from 'narrowland'
 
 import ArrowLink from '@/components/ArrowLink.astro'
 import BookAuthor from '@/components/BookAuthor.astro'
-import BookBgAlphaControl from '@/components/BookBgAlphaControl.svelte'
 import BookBuy from '@/components/BookBuy.svelte'
 import BookCrew from '@/components/BookCrew.astro'
 import BookGallery from '@/components/BookGallery.astro'
@@ -22,7 +21,11 @@ import FloatingImage from '@/components/FloatingImage.svelte'
 import HeroNeighbour from '@/components/HeroNeighbour.astro'
 import Markdown from '@/components/Markdown.astro'
 import PrintSheet from '@/components/PrintSheet.astro'
-import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
+import {
+  BOOK_DETAIL_PAGE_TINT_ALPHA,
+  FALLBACK_COLOR_FIRST,
+  FALLBACK_COLOR_SECOND,
+} from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
@@ -243,6 +246,7 @@ const sideSlug = [
   keepHue
   tintedHeader
   tintedBackground
+  tintAlpha={BOOK_DETAIL_PAGE_TINT_ALPHA}
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
   firstColor={book.color}
@@ -510,7 +514,6 @@ const sideSlug = [
       )
     }
   </div>
-  <BookBgAlphaControl client:load />
 </Layout>
 
 <script>

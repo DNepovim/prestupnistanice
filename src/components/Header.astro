@@ -30,7 +30,7 @@ const navigations = [
   class:list={[
     'site-header sticky top-0 z-0 min-w-full pt-2 has-[[aria-expanded=true]]:z-20 has-[[role=dialog]]:z-20',
     tinted &&
-      'bg-[color-mix(in_srgb,color-mix(in_srgb,var(--tint-bg,var(--color-brand-first-500))_70%,white)_calc(100%_*_(1_-_min(1,_var(--footer-progress,0)_*_10))),transparent)] [color:var(--tint-fg,var(--color-brand-first-500))]',
+      'bg-[color-mix(in_srgb,color-mix(in_srgb,var(--tint-bg,var(--color-brand-first-500))_var(--page-tint-alpha,70%),white)_calc(100%_*_(1_-_min(1,_var(--footer-progress,0)_*_10))),transparent)] [color:var(--tint-fg,var(--color-brand-first-500))]',
   ]}
 >
   <div
