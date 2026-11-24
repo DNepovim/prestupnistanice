@@ -39,7 +39,7 @@
 
 <aside
   aria-labelledby="h-calculation"
-  class="border-brand-first-500 flex flex-col gap-5 max-md:border-t-2 max-md:pt-6 min-md:sticky min-md:top-6 min-md:border-l min-md:pl-6"
+  class="border-brand-first-500 flex flex-col gap-5 border-t-2 pt-6 min-lg:sticky min-lg:top-6 min-lg:self-start min-lg:border-t-0 min-lg:border-l min-lg:pt-0 min-lg:pl-6"
 >
   <div>
     <p

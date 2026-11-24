@@ -5,54 +5,67 @@
   import { STEP_TITLES } from './fieldLabels'
 
   type Props = {
-    current: OrderStep
-    reachable: OrderStep
+    active: OrderStep
     onselect: (step: OrderStep) => void
   }
 
-  const { current, reachable, onselect }: Props = $props()
+  const { active, onselect }: Props = $props()
+
+  const STEP_COLORS = {
+    1: 'bg-brand-first-400',
+    2: 'bg-brand-second-500',
+    3: 'bg-brand-first-700',
+    4: 'bg-brand-second-700',
+  } as const satisfies Record<OrderStep, string>
+
+  const RULER =
+    'min-md:[background-image:linear-gradient(to_bottom,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] min-md:[background-size:0.9rem_100%,0.6rem_50%,0.35rem_10%] min-md:[background-repeat:no-repeat,repeat-y,repeat-y] min-md:[background-position:0.5rem_0,0.5rem_0,0.5rem_0]'
 </script>
 
-<nav aria-label={tp('Kroky objednávky')}>
+<nav
+  aria-label={tp('Kroky objednávky')}
+  class="bg-white max-md:sticky max-md:top-0 max-md:z-20 max-md:border-b max-md:border-brand-first-300/60 min-md:sticky min-md:top-6 min-md:self-start"
+>
   <ol
-    class="border-brand-first-500 text-brand-first-300 relative flex flex-col border-l bg-[repeating-linear-gradient(to_bottom,currentColor_0_1px,transparent_1px_0.45rem)] bg-size-[0.4rem_100%] bg-no-repeat"
+    class="text-brand-first-500 grid grid-cols-4 min-md:h-[min(36rem,calc(100svh-3rem))] min-md:grid-cols-1 min-md:grid-rows-4"
   >
     {#each ORDER_STEPS as step (step)}
-      <li
-        class={[
-          'text-brand-first-500 relative before:absolute before:top-6 before:left-0 before:block before:h-px before:bg-current',
-          step === current ? 'before:w-6' : 'before:w-3',
-        ]}
-      >
+      <li class={['relative min-h-0', RULER]}>
         <button
           type="button"
-          class={[
-            'flex w-full items-baseline gap-3 py-2 pr-1 pl-8 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand-first-500',
-            step > reachable ? 'cursor-not-allowed text-gray-600' : 'text-gray-900',
-          ]}
-          disabled={step > reachable}
-          aria-current={step === current ? 'step' : undefined}
+          class="flex size-full min-h-0 items-center gap-2 py-2 text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand-first-500 max-md:justify-center min-md:flex-col min-md:items-start min-md:py-1 min-md:pl-6"
+          aria-current={step === active ? 'step' : undefined}
           onclick={() => {
             onselect(step)
           }}
         >
           <span
             class={[
-              'font-head text-[1.8rem] leading-none font-extrabold oldstyle-nums',
-              step > reachable ? 'text-brand-first-300' : 'text-brand-first-500',
+              'font-head text-[1.3rem] leading-none font-extrabold oldstyle-nums',
+              step === active ? 'text-black' : 'text-gray-600',
             ]}
           >
             {step}
           </span>
           <span
             class={[
-              'font-alt text-[0.7rem] leading-[1.25] tracking-[0.08em] uppercase',
-              step === current && 'font-bold',
+              'font-alt min-h-0 overflow-hidden text-[0.62rem] leading-none tracking-[0.06em] text-ellipsis whitespace-nowrap uppercase max-md:sr-only min-md:rotate-180 min-md:[writing-mode:vertical-rl]',
+              step === active ? 'font-bold text-black' : 'text-gray-700',
             ]}
           >
             {tp(STEP_TITLES[step])}
           </span>
         </button>
+        <span
+          aria-hidden="true"
+          class={[
+            'pointer-events-none absolute transition-[width,height] duration-300 motion-reduce:transition-none',
+            'max-md:inset-x-0 max-md:bottom-0',
+            'min-md:top-0 min-md:bottom-0 min-md:left-0',
+            step === active ? 'max-md:h-1.5 min-md:w-1.5' : 'max-md:h-0.5 min-md:w-0.5',
+            STEP_COLORS[step],
+          ]}
+        ></span>
       </li>
     {/each}
   </ol>

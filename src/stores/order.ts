@@ -39,7 +39,6 @@ export type Customer = {
 }
 
 export type OrderState = {
-  step: OrderStep
   delivery: DeliveryId | null
   pickupLocation: PickupId | null
   balikovnaPoint: BalikovnaPoint | null
@@ -68,7 +67,6 @@ const FLAG_FIELDS = [
 ] as const satisfies readonly (keyof Customer)[]
 
 const initialState: OrderState = {
-  step: 1,
   delivery: null,
   pickupLocation: null,
   balikovnaPoint: null,
@@ -97,9 +95,6 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isNullableOf = <T>(value: unknown, guard: (candidate: unknown) => candidate is T) =>
   value === null || guard(value)
 
-const isOrderStep = (value: unknown): value is OrderStep =>
-  ORDER_STEPS.some((step) => step === value)
-
 const isDeliveryId = (value: unknown): value is DeliveryId => isOneOf(value, DELIVERY_IDS)
 
 const isPaymentId = (value: unknown): value is PaymentId => isOneOf(value, PAYMENT_IDS)
@@ -116,7 +111,6 @@ const isCustomer = (value: unknown): value is Customer =>
 
 const isOrderState = (value: unknown): value is OrderState =>
   isRecord(value) &&
-  isOrderStep(value.step) &&
   isNullableOf(value.delivery, isDeliveryId) &&
   isNullableOf(value.pickupLocation, isPickupId) &&
   isNullableOf(value.balikovnaPoint, isBalikovnaPoint) &&
@@ -136,10 +130,6 @@ export const order = persistentAtom<OrderState>('order:v1', initialState, {
   encode: JSON.stringify,
   decode: decodeOrder,
 })
-
-export const setStep = (step: OrderStep) => {
-  order.set({ ...order.get(), step })
-}
 
 export const setDelivery = (delivery: DeliveryId) => {
   const current = order.get()

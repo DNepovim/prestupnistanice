@@ -186,8 +186,3 @@ export const validateOrder = (state: OrderState, lineCount: number): FieldErrors
   ...validateShipping(state),
   ...validateCustomer(state.customer, requiresAddress(state)),
 })
-
-export const getFirstErrorStep = (errors: FieldErrors) =>
-  FIELD_ORDER.filter((key) => errors[key] !== undefined)
-    .map((key) => FIELD_STEPS[key])
-    .at(0)

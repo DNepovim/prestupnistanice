@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { DELIVERY_OPTIONS, PICKUP_LOCATIONS } from '@/configs/shipping'
   import { order, updateCustomer, type Customer } from '@/stores/order'
   import { requiresAddress, type FieldKey } from '@/utils/order/validation'
   import { tp } from '@/utils/tp'
 
+  import Reveal from './Reveal.svelte'
   import { FIELD_ERROR, FIELD_INPUT, FIELD_LABEL } from './styles'
   import TextField from './TextField.svelte'
 
@@ -21,17 +21,6 @@
     'text-brand-first-700 hover:text-black underline underline-offset-2 transition-colors'
 
   const needsAddress = $derived(requiresAddress($order))
-  const deliveryOption = $derived(
-    $order.delivery === null ? undefined : DELIVERY_OPTIONS[$order.delivery],
-  )
-  const handoverNote = $derived(
-    $order.delivery === 'osobni-prevzeti' && $order.pickupLocation !== null
-      ? `Osobní převzetí: ${PICKUP_LOCATIONS[$order.pickupLocation]}`
-      : $order.balikovnaPoint
-        ? `Výdejna Balíkovny: ${$order.balikovnaPoint.name}`
-        : undefined,
-  )
-
   const textProps = (
     key: Exclude<
       keyof Customer,
@@ -51,7 +40,7 @@
   })
 </script>
 
-<div class="flex flex-col gap-8">
+<div class="flex flex-col">
   <div class="grid gap-x-4 gap-y-5 min-sm:grid-cols-2">
     <TextField {...textProps('firstname')} label="Jméno" autocomplete="given-name" />
     <TextField {...textProps('surname')} label="Příjmení" autocomplete="family-name" />
@@ -71,8 +60,8 @@
     />
   </div>
 
-  {#if needsAddress}
-    <fieldset class="grid gap-x-4 gap-y-5 min-sm:grid-cols-2">
+  <Reveal open={needsAddress}>
+    <fieldset class="grid pt-8 gap-x-4 gap-y-5 min-sm:grid-cols-2">
       <legend class={[FIELD_LABEL, 'mb-4']}>{tp('Adresa')}</legend>
       <TextField
         {...textProps('street')}
@@ -88,15 +77,9 @@
         inputmode="numeric"
       />
     </fieldset>
-  {:else if handoverNote !== undefined && deliveryOption !== undefined}
-    <p
-      class="font-alt border-brand-first-300/60 border-t border-dashed pt-4 text-[0.9rem] leading-snug text-gray-800"
-    >
-      {tp(handoverNote)}. {tp('Adresu k doručení nepotřebujeme.')}
-    </p>
-  {/if}
+  </Reveal>
 
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col pt-8">
     <label class={CHECKBOX_ROW}>
       <input
         type="checkbox"
@@ -108,8 +91,8 @@
       />
       {tp('Nakupuji na firmu')}
     </label>
-    {#if $order.customer.isCompany}
-      <div class="grid gap-x-4 gap-y-5 min-sm:grid-cols-2">
+    <Reveal open={$order.customer.isCompany}>
+      <div class="grid pt-5 gap-x-4 gap-y-5 min-sm:grid-cols-2">
         <TextField
           {...textProps('companyName')}
           label="Název firmy"
@@ -119,10 +102,10 @@
         <TextField {...textProps('ico')} label="IČO" inputmode="numeric" />
         <TextField {...textProps('dic')} label="DIČ" optional />
       </div>
-    {/if}
+    </Reveal>
   </div>
 
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 pt-8">
     <label class={FIELD_LABEL} for="f-note">
       {tp('Poznámka k objednávce')}
       <span class="text-gray-600 normal-case">({tp('nepovinné')})</span>
@@ -139,7 +122,9 @@
     ></textarea>
   </div>
 
-  <div class="border-brand-first-300/60 flex flex-col gap-4 border-t border-dashed pt-6">
+  <div
+    class="border-brand-first-300/60 flex flex-col gap-4 border-t border-dashed mt-8 pt-6"
+  >
     <div class="flex flex-col gap-1">
       <label class={CHECKBOX_ROW}>
         <input
