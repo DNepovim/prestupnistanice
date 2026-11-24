@@ -4,7 +4,7 @@
   import ProofCropMarks from '@/components/ProofCropMarks.svelte'
   import ProofResult from '@/components/ProofResult.svelte'
   import { evaluate } from '@/utils/proofGame/evaluate'
-  import { PROOF_INTRO, PROOF_RUNNING_HEADS } from '@/utils/proofGame/source'
+  import { PROOF_INTRO } from '@/utils/proofGame/source'
   import {
     getLine,
     PROOF_PAGES,
@@ -51,6 +51,8 @@
   const OPEN_CLASS =
     'cursor-highlighter hover:shadow-[inset_0_-0.1em_0_color-mix(in_srgb,var(--color-gray-600)_40%,transparent)]'
 
+  const HANGING = new Set(['.', ',', ';', ':', '!', '?', '“', '”', '’', ')', '-', '…'])
+
   const BUTTON_CLASS =
     'bg-brand-first-700 hover:bg-brand-first-800 px-[1.6rem] py-[0.8rem] text-sm font-semibold tracking-[0.03em] text-white transition-colors motion-reduce:transition-none'
 
@@ -60,9 +62,38 @@
   let submitButton = $state<HTMLButtonElement>()
   let againButton = $state<HTMLButtonElement>()
 
+  let pagesElement = $state<HTMLElement>()
+
   let drag: { isOn: boolean } | null = null
   let touchTap: number | null = null
   const wordElements: (HTMLElement | undefined)[] = []
+
+  const getHang = (line: Line, word: Word) => {
+    const isJustified = line.kind === 'f' || line.kind === 'm' || line.kind === 'u'
+    const isLast = line.words.at(-1)?.index === word.index
+    const mark = word.text.slice(-1)
+    if (!isJustified || !isLast || word.text.length < 2 || !HANGING.has(mark))
+      return undefined
+    return { body: word.text.slice(0, -1), mark }
+  }
+
+  const measureHangs = () => {
+    pagesElement?.querySelectorAll<HTMLElement>('[data-hang]').forEach((element) => {
+      const width = element.getBoundingClientRect().width
+      const size = parseFloat(window.getComputedStyle(element).fontSize)
+      if (width > 0 && size > 0) element.style.marginRight = `${String(-width / size)}em`
+    })
+  }
+
+  $effect(() => {
+    if (!pagesElement) return
+    const observer = new ResizeObserver(measureHangs)
+    observer.observe(pagesElement)
+    void document.fonts.ready.then(measureHangs)
+    return () => {
+      observer.disconnect()
+    }
+  })
 
   const evaluation = $derived(evaluate(selected))
   const result = $derived(isSubmitted ? evaluation : null)
@@ -181,7 +212,7 @@
 
 <div class="@container overflow-x-clip">
   <div
-    class="mx-auto grid max-w-[72rem] gap-4 px-[0.6rem] pt-[0.4rem] pb-[1.2rem] @min-[40rem]:px-4"
+    class="mx-auto grid max-w-[80rem] gap-4 px-[0.6rem] pt-[0.4rem] pb-[1.2rem] @min-[40rem]:px-4"
   >
     <p
       class="font-alt max-w-[42rem] px-[0.4rem] text-[0.98rem] leading-[1.45] font-medium text-gray-700 @min-[30rem]:text-[1.05rem]"
@@ -190,31 +221,24 @@
     </p>
 
     <div
-      class="relative mx-auto mt-[1.6rem] mb-4 grid w-[calc(100%-2.2rem)] max-w-[27rem] grid-cols-[minmax(0,1fr)] gap-8 @min-[40rem]:mt-8 @min-[40rem]:w-[calc(100%-3rem)] @min-[40rem]:max-w-[54rem] @min-[40rem]:grid-cols-2 @min-[40rem]:gap-0"
+      bind:this={pagesElement}
+      class="relative mx-auto mt-[1.6rem] mb-4 grid w-[calc(100%-2.2rem)] max-w-[32rem] grid-cols-[minmax(0,1fr)] gap-8 @min-[40rem]:mt-8 @min-[40rem]:w-[calc(100%-3rem)] @min-[40rem]:max-w-[68rem] @min-[40rem]:grid-cols-2 @min-[40rem]:gap-0"
     >
       {#each PROOF_PAGES as page, pageIndex (page.number)}
         {@const side = PAGE_SIDES[pageIndex] ?? 'right'}
-        {@const heads = PROOF_RUNNING_HEADS[pageIndex]}
         <div
           role="group"
-          aria-label={`Strana ${String(page.number)}`}
+          aria-label={tp(`Strana ${String(page.number)}`)}
           class={[
-            '@container bg-paper relative [--cm-l:0.6rem] [--cm-s:1.1rem] [background-image:var(--paper-image)] shadow-[0_0.25rem_1.1rem_rgba(0,0,0,0.18)] @min-[40rem]:[--cm-l:0.8rem] @min-[40rem]:[--cm-s:1.4rem]',
+            '@container relative flex flex-col bg-white [--cm-l:0.6rem] [--cm-s:1.1rem] [--pad:13] [--text:74] shadow-[0_0.25rem_1.1rem_rgba(0,0,0,0.18)] @min-[40rem]:[--cm-l:0.8rem] @min-[40rem]:[--cm-s:1.4rem] @min-[40rem]:[--pad:16] @min-[40rem]:[--text:68]',
             '@min-[40rem]:after:pointer-events-none @min-[40rem]:after:absolute @min-[40rem]:after:inset-y-0 @min-[40rem]:after:w-[6%] @min-[40rem]:after:from-transparent @min-[40rem]:after:to-gray-900/10',
             PAGE_SIDE_CLASSES[side],
           ]}
         >
           <ProofCropMarks {side} />
           <div
-            class="font-head touch-pan-y pt-[6.5cqw] pr-[10cqw] pb-[5cqw] pl-[10cqw] text-[length:calc(80cqw/21)] leading-[1.34] text-gray-900 select-none [-webkit-touch-callout:none]"
+            class="font-head flex flex-1 touch-pan-y flex-col px-[calc(var(--pad)*1cqw)] pt-[7cqw] pb-[5cqw] text-[length:calc(var(--text)*1cqw/21.6)] leading-[1.34] text-gray-900 select-none [-webkit-touch-callout:none]"
           >
-            <div
-              aria-hidden="true"
-              class="font-alt mb-[1.2em] flex justify-between gap-[1em] border-b border-dashed border-gray-300 pb-[0.8em] text-[length:max(0.6em,0.56rem)] leading-none font-medium tracking-[0.1em] whitespace-nowrap text-gray-600 uppercase"
-            >
-              <span>{heads?.[0]}</span>
-              <span>{heads?.[1]}</span>
-            </div>
             <div>
               {#each page.lines as line (line.number)}
                 <div
@@ -227,13 +251,14 @@
                 >
                   {#each line.words as word (word.index)}
                     {@const glyph = splitOddGlyph(word.text)}
+                    {@const hang = glyph.glyph ? undefined : getHang(line, word)}
                     <span
                       bind:this={wordElements[word.index]}
                       role="button"
                       tabindex={word.index === focusIndex ? 0 : -1}
                       aria-pressed={selected.has(word.index)}
                       aria-disabled={isSubmitted}
-                      aria-label={word.isGap ? 'mezera navíc' : undefined}
+                      aria-label={word.isGap ? tp('mezera navíc') : undefined}
                       data-tag={getTag(word)}
                       class={[
                         WORD_CLASS,
@@ -263,7 +288,8 @@
                       onkeydown={(event) => {
                         handleKeyDown(event, word)
                       }}
-                      >{#if glyph.glyph}{glyph.before}<span
+                      >{#if hang}{hang.body}<span data-hang>{hang.mark}</span
+                        >{:else if glyph.glyph}{glyph.before}<span
                           class="font-display text-[0.92em] font-bold">{glyph.glyph}</span
                         >{glyph.after}{:else}{word.text}{/if}</span
                     >{word.separator}
@@ -273,7 +299,7 @@
             </div>
             <div
               aria-hidden="true"
-              class="font-head mt-[1.3em] text-center text-[0.95em] leading-none font-semibold text-gray-700 [font-feature-settings:'lnum']"
+              class="font-head mt-auto pt-[1.3em] text-center text-[0.95em] leading-none font-semibold text-gray-700 [font-feature-settings:'lnum']"
             >
               {page.number}
             </div>
@@ -285,7 +311,7 @@
     <p
       class="font-alt text-center text-[0.62rem] leading-[1.2] font-medium tracking-[0.1em] text-gray-600 uppercase"
     >
-      Klávesnice: Tab, šipky, Enter
+      {tp('Z klávesnice: Tab a šipky mezi slovy, Enter nebo mezerník označí.')}
     </p>
 
     <div class="mx-auto mt-[0.4rem] grid w-full max-w-[44rem] gap-4 px-[0.4rem]">
@@ -297,7 +323,7 @@
             class={BUTTON_CLASS}
             onclick={restart}
           >
-            Znovu
+            {tp('Zkusit znovu')}
           </button>
         {:else}
           <button
@@ -306,13 +332,14 @@
             class={BUTTON_CLASS}
             onclick={submit}
           >
-            Odeslat
+            {tp('Odeslat korekturu')}
           </button>
         {/if}
         <p
           class="font-alt text-[0.8rem] leading-[1.2] font-semibold tracking-[0.04em] text-gray-700"
         >
-          Označeno: {evaluation.places}
+          {tp('Označených míst:')}
+          {evaluation.places}
         </p>
       </div>
       <div aria-live="polite" class="grid min-h-px gap-[0.7rem]">

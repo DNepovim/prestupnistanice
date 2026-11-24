@@ -23,16 +23,18 @@
 </script>
 
 <p class={[SUMMARY_CLASS, '[overflow-wrap:anywhere]']}>
-  {tp(`Našli jste ${String(result.found.length)} z ${String(total)} chyb.`)}
+  {tp(`Odhalili jste ${String(result.found.length)} z ${String(total)} chyb.`)}
   <span class={NOTE_CLASS}>{getVerdict(result.found.length, total)}</span>
 </p>
 
 {#if result.missed.length > 0}
   <p class={[GROUP_CLASS, '[overflow-wrap:anywhere]']}>
     {tp(
-      `Přehlédli jste ${String(result.missed.length)} ${pluralize(result.missed.length, ['chybu', 'chyby', 'chyb'])}.`,
+      `Uniklo vám ${String(result.missed.length)} ${pluralize(result.missed.length, ['chyba', 'chyby', 'chyb'])}.`,
     )}
-    <span class={NOTE_CLASS}>{tp('V textu jsou označené korektorským inkoustem.')}</span>
+    <span class={NOTE_CLASS}
+      >{tp('V textu je vidíte podtržené korektorským inkoustem.')}</span
+    >
   </p>
   <ul class={LIST_CLASS}>
     {#each missedGroups as [tag, records] (tag)}
@@ -45,13 +47,13 @@
     {/each}
   </ul>
 {:else}
-  <p class={GROUP_CLASS}>{tp('Nic jste nepřehlédli.')}</p>
+  <p class={GROUP_CLASS}>{tp('Žádná chyba vám neunikla.')}</p>
 {/if}
 
 {#if result.falsePositives > 0}
   <p class={[GROUP_CLASS, '[overflow-wrap:anywhere]']}>
     {tp(
-      `Označili jste ${String(result.falsePositives)} ${pluralize(result.falsePositives, ['místo', 'místa', 'míst'])}, kde chyba nebyla.`,
+      `Zbytečně jste označili ${String(result.falsePositives)} ${pluralize(result.falsePositives, ['místo', 'místa', 'míst'])}, kde byla sazba v pořádku.`,
     )}
     <span class={NOTE_CLASS}>{tp('Jsou přeškrtnutá.')}</span>
   </p>
@@ -65,10 +67,10 @@
     {#if result.hasLooseWords}
       <li class={[ITEM_CLASS, 'border-gray-300']}>
         <b class={[TAG_CLASS, 'text-gray-700']}>{tp('běžný text')}</b>
-        {tp('Zbytek označených míst byla bezvadná sazba.')}
+        {tp('Ostatní označená místa byla bezvadná sazba.')}
       </li>
     {/if}
   </ul>
 {:else}
-  <p class={GROUP_CLASS}>{tp('Nic navíc jste neoznačili.')}</p>
+  <p class={GROUP_CLASS}>{tp('Nic zbytečně jste neoznačili.')}</p>
 {/if}

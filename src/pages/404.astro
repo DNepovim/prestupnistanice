@@ -25,6 +25,7 @@ const category = segments[0]
 const slug = segments[1]
 
 const isBookOrAuthor = slug !== undefined && isOneOf(category, ['knihy', 'autori'])
+const otherBooksLabel = tp('Ale vydali jsme řadu jiných knih:')
 const proofBook = books.find((book) => book.data.slug === 'balkovsky-pegas')?.data
 ---
 
@@ -51,13 +52,13 @@ const proofBook = books.find((book) => book.data.slug === 'balkovsky-pegas')?.da
             </>
           )}
         </h1>
-        <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
+        <p class="font-alt text-xl">{otherBooksLabel}</p>
       </Section>
     ) : (
       <>
         <Section isWide>
           <h1 class="font-head mt-12 mb-2 text-[2rem] leading-[1.1] font-extrabold tracking-[-0.015em] text-balance text-gray-800">
-            {tp('Tuto knihu jsme ještě nevydali')}
+            {tp('Tuhle stránku jsme nevydali')}
           </h1>
         </Section>
         <Section isFull>
@@ -70,7 +71,7 @@ const proofBook = books.find((book) => book.data.slug === 'balkovsky-pegas')?.da
           </Theme>
         </Section>
         <Section>
-          <p class="font-alt text-xl">Ale vydali jsme řadu jiných knih:</p>
+          <p class="font-alt text-xl">{otherBooksLabel}</p>
         </Section>
       </>
     )

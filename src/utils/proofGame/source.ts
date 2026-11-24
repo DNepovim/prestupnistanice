@@ -192,19 +192,18 @@ export const PROOF_DECOY_DEFINITIONS = [
 
 export const PROOF_FIRST_PAGE_NUMBER = 14
 
-export const PROOF_RUNNING_HEADS = [
-  ['O sazbě dlouhého textu', 'Zrcadlo strany'],
-  ['Zrcadlo strany', 'Korektura prvního čtení'],
-] as const
-
 export const PROOF_INTRO =
-  'Knihu tu nemáme, ale máme dvě strany k opravě. Najděte v nich chyby sazby, kliknutím je označte a nakonec stiskněte Odeslat. Kolik jich je, neprozradíme, korektorovi to také nikdo neřekne.'
+  'Hledaná stránka v knize není, ale do tiskárny se nám připletly dvě strany plné chyb sazby. Projděte je jako korektor: kliknutím označte, co je špatně, a pak stiskněte Odeslat korekturu. Kolik chyb se v textu skrývá, neprozradíme. Korektorovi to také nikdo neřekne.'
 
 export const PROOF_VERDICTS = [
-  [1, 'Sazeč vám zítra nezvedne telefon.'],
-  [0.75, 'Tisk by prošel. Redakce by se potila jen mírně.'],
-  [0.5, 'Zbytek přežije do tisku.'],
-  [0.01, 'Zbytek si čtenáři najdou sami. Rádi.'],
+  [1, 'Sazeč vás může pustit k pultu. Žádná chyba mu neunikla.'],
+  [0.75, 'Do tisku by to šlo. Redakce by se potila jen mírně.'],
+  [
+    0.5,
+    'Polovina chyb by tisk přežila. Čtenáři by ji nenašli, ale dozvěděli by se o ní.',
+  ],
+  [0.01, 'Zbytek si čtenáři najdou sami. A rádi se o tom zmíní v recenzích.'],
 ] as const
 
-export const PROOF_FALLBACK_VERDICT = 'Čtenáři to také nepoznají.'
+export const PROOF_FALLBACK_VERDICT =
+  'Čtenáři by to také nepoznali. Zkuste to znovu, strany počkají.'
