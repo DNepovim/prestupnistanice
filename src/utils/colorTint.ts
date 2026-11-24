@@ -5,6 +5,8 @@ const STEP_SELECTOR = '[data-color-step]'
 const INTERACTIVE_SELECTOR = 'a, button, input, select, textarea'
 const BOOK_COLOR_PROPERTY = '--color-brand-first-500'
 const PAPER_CHANNELS = [252, 249, 242] as const
+const WHITE_CHANNELS = [255, 255, 255] as const
+const SCOPE_TINT_ALPHA_PROPERTY = '--scope-tint-alpha'
 const TINT_ALPHA_PROPERTY = '--page-tint-alpha'
 const FALLBACK_PAGE_TINT_ALPHA = 0.7
 const PAGE_CONTENT_SELECTOR = 'section, header, footer, nav, aside, article'
@@ -75,16 +77,23 @@ const parseChannels = (color: string) => {
 const getForeground = (channels: readonly number[]) =>
   isDarkColor(channels) ? FOREGROUND_ON_DARK : FOREGROUND_ON_LIGHT
 
-const getPageTintAlpha = () => {
+const getTintAlpha = (scope: HTMLElement, isPage: boolean) => {
   const percent = Number.parseFloat(
-    getComputedStyle(document.body).getPropertyValue(TINT_ALPHA_PROPERTY),
+    getComputedStyle(isPage ? document.body : scope).getPropertyValue(
+      isPage ? TINT_ALPHA_PROPERTY : SCOPE_TINT_ALPHA_PROPERTY,
+    ),
   )
   return Number.isNaN(percent) ? FALLBACK_PAGE_TINT_ALPHA : percent / 100
 }
 
-const blendWithPaper = (channels: readonly number[]) => {
-  const alpha = getPageTintAlpha()
-  return PAPER_CHANNELS.map(
+const blendWithPaper = (
+  scope: HTMLElement,
+  channels: readonly number[],
+  isPage: boolean,
+) => {
+  const alpha = getTintAlpha(scope, isPage)
+  const paperChannels = isPage ? PAPER_CHANNELS : WHITE_CHANNELS
+  return paperChannels.map(
     (paper, index) => paper + ((channels[index] ?? paper) - paper) * alpha,
   )
 }
@@ -122,7 +131,7 @@ const tintScope = (scope: HTMLElement, step: HTMLElement, stepIndex: number) => 
   clearTintProperties(scope)
   const background = getComputedStyle(step).backgroundColor
   const channels = parseChannels(background)
-  const base = getForeground(isPage ? blendWithPaper(channels) : channels)
+  const base = getForeground(blendWithPaper(scope, channels, isPage))
   const foreground = getForegroundWithBookHue(scope, base)
   Object.entries(getTintStyles(background, foreground, isPage)).forEach(
     ([property, value]) => {

@@ -8,7 +8,7 @@ import CmykBar from '@/components/CmykBar.astro'
 import ColorBar from '@/components/ColorBar.astro'
 import CropMarks from '@/components/CropMarks.astro'
 import FloatingImage from '@/components/FloatingImage.svelte'
-import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND, SOFT_TINT_ALPHA } from '@/consts'
 import { routes } from '@/routes'
 import { getColorScale } from '@/utils/geColorScale'
 import { tp } from '@/utils/tp'
@@ -65,12 +65,17 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
   data-color-scales={JSON.stringify(bookColorScales)}
 >
   <div
-    class="relative mt-8 "
+    class="relative mt-8"
     role="group"
     aria-roledescription="carousel"
     aria-label="Vybrané knihy"
   >
-    <div class="overflow-hidden" data-carousel-viewport data-tint-scope>
+    <div
+      class="overflow-hidden"
+      style={`--scope-tint-alpha:${String(SOFT_TINT_ALPHA)}%`}
+      data-carousel-viewport
+      data-tint-scope
+    >
       <div class="flex touch-pan-y touch-pinch-zoom items-stretch">
         {
           books.map((book, index) => {
@@ -79,7 +84,7 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
               : null
             return (
               <div
-                class="group relative min-w-0 flex-[0_0_var(--slide-size)] border-y border-gray-200 [background-color:var(--tint-bg,white)] px-[calc(var(--slide-spacing)/2)] pt-[2.6rem] pb-5 before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:border-l before:border-dashed before:border-gray-300 max-sm:py-4"
+                class="group relative min-w-0 flex-[0_0_var(--slide-size)] border-y border-gray-200 [background-color:color-mix(in_srgb,var(--tint-bg,white)_var(--scope-tint-alpha),white)] px-[calc(var(--slide-spacing)/2)] pt-[2.6rem] pb-5 before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:border-l before:border-dashed before:border-gray-300 max-sm:py-4"
                 data-carousel-slide
                 data-index={index}
                 role="group"
@@ -103,9 +108,7 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
                     <path d="M0 2H4M2 0V4" />
                   </svg>
                 ))}
-                <div
-                  class="relative opacity-30 transition-opacity duration-500 group-[.is-snapped]:opacity-100 motion-reduce:transition-none"
-                >
+                <div class="relative opacity-30 transition-opacity duration-500 group-[.is-snapped]:opacity-100 motion-reduce:transition-none">
                   <div class="font-alt absolute inset-x-6 -top-[2.6rem] hidden h-[2.6rem] items-center justify-between gap-6 text-[0.64rem] leading-none font-semibold tracking-[0.1em] whitespace-nowrap text-gray-500 uppercase sm:flex">
                     <span class="truncate">{book.data.title}</span>
                     <span class="flex min-w-0 gap-x-3 truncate">
@@ -182,11 +185,11 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
                               cx="2"
                               cy="2"
                               r="0.38"
-                              class="opacity-0 transition-opacity duration-300 group-[.is-active]/dot:opacity-100 group-hover/dot:opacity-100"
+                              class="opacity-0 transition-opacity duration-300 group-hover/dot:opacity-100 group-[.is-active]/dot:opacity-100"
                             />
                             <path
                               d="M0 2H4M2 0V4"
-                              class="opacity-0 transition-opacity duration-300 group-[.is-active]/dot:opacity-100 group-hover/dot:opacity-100"
+                              class="opacity-0 transition-opacity duration-300 group-hover/dot:opacity-100 group-[.is-active]/dot:opacity-100"
                             />
                           </svg>
                         </button>
@@ -291,8 +294,7 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
           <span
             aria-hidden="true"
             class="pointer-events-none absolute inset-x-0 top-0 h-0 bg-[color-mix(in_srgb,var(--highlight-color,transparent)_12%,transparent)] data-ready:transition-[translate,height,background-color] data-ready:duration-500 motion-reduce:transition-none"
-            data-book-highlight
-          ></span>
+            data-book-highlight></span>
           {
             books.map((book, index) => (
               <div
@@ -317,8 +319,15 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
                     {bookAuthors[index]?.map((author, authorIndex) => (
                       <>
                         {authorIndex > 0 && ', '}
-                        <FloatingImage client:visible src={author.image} alt={author.name}>
-                          <a class="pointer-events-auto transition-colors hover:text-black" href={author.href}>
+                        <FloatingImage
+                          client:visible
+                          src={author.image}
+                          alt={author.name}
+                        >
+                          <a
+                            class="pointer-events-auto transition-colors hover:text-black"
+                            href={author.href}
+                          >
                             {author.name}
                           </a>
                         </FloatingImage>
@@ -382,7 +391,9 @@ const getRowStyle = (book: CollectionEntry<'book'>) =>
     }
 
     const placeIndicators = () => {
-      const row = list?.querySelector('[aria-current]')?.closest<HTMLElement>('[data-book-item]')
+      const row = list
+        ?.querySelector('[aria-current]')
+        ?.closest<HTMLElement>('[data-book-item]')
       if (highlight && row) {
         highlight.style.setProperty(
           '--highlight-color',

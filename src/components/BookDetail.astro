@@ -21,11 +21,7 @@ import FloatingImage from '@/components/FloatingImage.svelte'
 import HeroNeighbour from '@/components/HeroNeighbour.astro'
 import Markdown from '@/components/Markdown.astro'
 import PrintSheet from '@/components/PrintSheet.astro'
-import {
-  BOOK_DETAIL_PAGE_TINT_ALPHA,
-  FALLBACK_COLOR_FIRST,
-  FALLBACK_COLOR_SECOND,
-} from '@/consts'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND, SOFT_TINT_ALPHA } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
@@ -179,8 +175,7 @@ const candidateSheetKeys: (SheetKey | undefined)[] = [
 
 const sheetKeys = candidateSheetKeys.filter(isDefined)
 
-const getEdge = (key: SheetKey) =>
-  getSheetEdge(sheetKeys.indexOf(key), sheetKeys.length)
+const getEdge = (key: SheetKey) => getSheetEdge(sheetKeys.indexOf(key), sheetKeys.length)
 
 const titleFit = getTitleFit(tp(book.title))
 
@@ -246,7 +241,7 @@ const sideSlug = [
   keepHue
   tintedHeader
   tintedBackground
-  tintAlpha={BOOK_DETAIL_PAGE_TINT_ALPHA}
+  tintAlpha={SOFT_TINT_ALPHA}
   siteTitle={book.title}
   siteDescription={book.claim ?? ''}
   firstColor={book.color}

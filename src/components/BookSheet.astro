@@ -8,7 +8,7 @@ import ColorBar from '@/components/ColorBar.astro'
 import FloatingImage from '@/components/FloatingImage.svelte'
 import PrintSheet from '@/components/PrintSheet.astro'
 import Theme from '@/components/Theme.astro'
-import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND, SOFT_TINT_ALPHA } from '@/consts'
 import { CATEGORIES, routes } from '@/routes'
 import { getExcerptText } from '@/utils/getExcerptText'
 import type { SheetEdge } from '@/utils/getSheetEdge'
@@ -58,7 +58,8 @@ const sideSlug = `${String(b.date)} · ${CATEGORIES[b.category].name}`
     <Theme keepHue firstColor={b.color ?? undefined} secondColor={b.bgColor ?? undefined}>
       <article
         data-tint-scope
-        class="group/book relative grid grid-cols-1 gap-x-[1.8rem] gap-y-[1.4rem] [background-color:var(--tint-bg,white)] px-(--sheet-px) py-(--sheet-py) [--sheet-px:0.9rem] [--sheet-py:2.2rem] min-sm:grid-cols-[auto_minmax(0,1fr)] min-md:grid-cols-[auto_minmax(0,1fr)_12rem] min-md:[--sheet-px:2.6rem] min-md:[--sheet-py:2.5rem]"
+        style={`--scope-tint-alpha:${String(SOFT_TINT_ALPHA)}%`}
+        class="group/book relative grid grid-cols-1 gap-x-[1.8rem] gap-y-[1.4rem] [background-color:color-mix(in_srgb,var(--tint-bg,white)_var(--scope-tint-alpha),white)] px-(--sheet-px) py-(--sheet-py) [--sheet-px:0.9rem] [--sheet-py:2.2rem] min-sm:grid-cols-[auto_minmax(0,1fr)] min-md:grid-cols-[auto_minmax(0,1fr)_12rem] min-md:[--sheet-px:2.6rem] min-md:[--sheet-py:2.5rem]"
       >
         <a
           href={link}

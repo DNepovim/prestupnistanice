@@ -10,7 +10,7 @@ import Colophon from '@/components/Colophon.astro'
 import ColorBar from '@/components/ColorBar.astro'
 import Markdown from '@/components/Markdown.astro'
 import PrintSheet from '@/components/PrintSheet.astro'
-import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND } from '@/consts'
+import { FALLBACK_COLOR_FIRST, FALLBACK_COLOR_SECOND, SOFT_TINT_ALPHA } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getAuthorsSecondName } from '@/utils/getAuthorSecondName'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
@@ -146,6 +146,7 @@ const sideSlug = [
   keepHue
   tintedHeader
   tintedBackground
+  tintAlpha={SOFT_TINT_ALPHA}
   siteTitle={fullName}
   siteDescription={author.claim ?? ''}
   firstColor={books[0]?.data.color ?? undefined}
