@@ -3,7 +3,7 @@ title: Všeobecné obchodní podmínky
 slug: obchodni-podminky
 ---
 
-Tyto všeobecné obchodní podmínky fyzické osoby podnikající Jakuba Skaláka, se sídlem Slovany 2754/5, 276 01 Mělník (dále jen „adresa prodejce“) a identifikačním číslem 04569555, zapsané v živnostenském rejstříku (dále jen „prodávající“) upravují v souladu s ustanovením § 1751 odst. 1 zákona č. 89/2012 Sb., občanský zákoník, ve znění pozdějších předpisů (dále jen „občanský zákoník“) vzájemná práva a povinnosti smluvních stran vzniklé v souvislosti nebo na základě kupní smlouvy (dále jen „kupní smlouva“) uzavírané mezi prodávajícím a jinou fyzickou osobou (dále jen „kupující“) prostřednictvím internetového obchodu prodávajícího. Internetový obchod je prodávajícím provozován na webové stránce umístěné na internetové adrese http://www.knihyprestupnistanice.cz (dále jen „webová stránka“).
+Tyto všeobecné obchodní podmínky fyzické osoby podnikající Jakuba Skaláka, se sídlem Slovany 2754/5, 276 01 Mělník (dále jen „adresa prodejce“) a identifikačním číslem 04569555, zapsané v živnostenském rejstříku (dále jen „prodávající“) upravují v souladu s ustanovením § 1751 odst. 1 zákona č. 89/2012 Sb., občanský zákoník, ve znění pozdějších předpisů (dále jen „občanský zákoník“) vzájemná práva a povinnosti smluvních stran vzniklé v souvislosti nebo na základě kupní smlouvy (dále jen „kupní smlouva“) uzavírané mezi prodávajícím a jinou fyzickou osobou (dále jen „kupující“) prostřednictvím internetového obchodu prodávajícího. Internetový obchod je prodávajícím provozován na webové stránce umístěné na internetové adrese https://www.knihyps.cz (dále jen „webová stránka“).
 
 Ke komunikaci s prodávajícím slouží e-mailová adresa skalak@knihyps.cz (dále jen „e-mailová adresa prodávajícího“).
 

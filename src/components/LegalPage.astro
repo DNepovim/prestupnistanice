@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content'
 
 import Markdown from '@/components/Markdown.astro'
-import PageTitle from '@/components/PageTitle.astro'
 import PrintSheet from '@/components/PrintSheet.astro'
 import Layout from '@/layouts/Layout.astro'
 import { tp } from '@/utils/tp'
@@ -29,9 +28,13 @@ const validFrom = page.validFrom?.toLocaleDateString('cs-CZ', {
 ---
 
 <Layout siteTitle={page.title} siteDescription={tp(page.title)}>
-  <PrintSheet edge="only" regs={['r']} slug={`${page.slug}.pdf`}>
+  <PrintSheet edge="only" regs={['r']}>
     <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
-      <PageTitle>{tp(page.title)}</PageTitle>
+      <h1
+        class="font-head text-brand-first-800 text-[clamp(1.1rem,5vw,2.6rem)] leading-[1.1] font-extrabold tracking-[-0.02em] whitespace-nowrap"
+      >
+        {tp(page.title)}
+      </h1>
       {
         validFrom && (
           <p class="font-alt text-brand-first-700 mt-2 text-[0.7rem] leading-none tracking-[0.1em] uppercase">
@@ -40,7 +43,14 @@ const validFrom = page.validFrom?.toLocaleDateString('cs-CZ', {
         )
       }
       <div class="mt-8 max-w-2xl">
-        {body && <Markdown class="text-[1rem]" text={body} />}
+        {
+          body && (
+            <Markdown
+              class="[&_a]:text-brand-first-800 [&_li::marker]:text-brand-first-800 text-[1rem] text-gray-900 [&_a]:underline"
+              text={body}
+            />
+          )
+        }
       </div>
     </div>
   </PrintSheet>
