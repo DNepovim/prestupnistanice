@@ -1,0 +1,18 @@
+{
+  "tracker": { "type": "files", "dir": ".claude/tickets" },
+  "workflow": {
+    "boardLabels": ["queued", "shaping", "spec", "ready", "building", "review", "accept", "shipping", "done"],
+    "devTestStages": [],
+    "priorityLabels": [],
+    "bugLabel": "",
+    "epicLabelPrefix": "epic-",
+    "hiddenLabelPrefixes": [],
+    "needsMeLabels": ["spec", "accept", "blocked"],
+    "localTestPort": 0,
+    "deployRef": "",
+    "deployJob": "",
+    "repoPath": "~/projects/knihyps"
+  },
+  "refresh": { "boardSeconds": 5, "detailSeconds": 10 },
+  "bridgeDir": "~/.claude/cairn-knihyps"
+}

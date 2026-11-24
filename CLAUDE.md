@@ -27,7 +27,7 @@ There is no test framework in this repo — don't assume one exists.
 
 ## Skills
 
-`.claude/skills/` holds six project skills: **`check`** (the static-check suite and how to fix each failure), **`code-guide`** (style and pattern reference — consult before writing or reviewing code), **`design-guide`** (the site's visual language), **`design-variants`** (design a new feature as an Artifact with ten original, configurable variants in the site design), **`commit`** (gate on checks, then Conventional Commit(s) on the current branch), and **`ship`** (`commit`, then branch + PR or push to `main`).
+`.claude/skills/` holds eleven project skills: **`check`** (the static-check suite and how to fix each failure), **`code-guide`** (style and pattern reference — consult before writing or reviewing code), **`design-guide`** (the site's visual language), **`design-variants`** (design a new feature as an Artifact with ten original, configurable variants in the site design), **`commit`** (gate on checks, then Conventional Commit(s) on the current branch), **`ship`** (`commit`, then branch + PR or push to `main`), and five ticket-workflow skills (`ticket-shape`, `ticket-build`, `ticket-review`, `ticket-ship`, `ticket-standup`; see "Pracovní postup s tickety").
 
 ## Architecture
 
@@ -80,3 +80,95 @@ Summary below; the full reference is the **`code-guide`** skill. From `.cursorru
 - Styling is Tailwind-only; custom utilities and font tokens (`font-head`, `font-display`, `font-alt`, `font-liga`, `text-outline-*`, `animate-*`) live in `src/styles/global.css`. Use brand tokens, not raw hex.
 - Prettier: no semicolons, single quotes, `printWidth: 90`.
 - Icons come from `astro-icon` with the `ph` (Phosphor) set in `.astro`, and the `iconify-icon` web component in Svelte.
+
+## Pracovní postup s tickety
+
+Práce se řídí tickety, které jsou **soubory** `.claude/tickets/<id>.md` (gitignorované; epicy `.claude/tickets/epics/<id>.md`). Cairn panel je jen zobrazuje, žádné nástroje ani dialogy nejsou: schvalování a kontrola přechodů jsou **konvence v chatu** a skilly `ticket-*`. Stav ticketu zapisuje jen hlavní chat (Read/Edit), subagenti soubory ticketů nečtou ani nemění.
+
+### Formát ticketu
+
+```
+---
+id: 6
+title: Název
+status: building
+epic: 1
+blocked: false
+branch: ticket/6-nazev
+worktree: /Users/dominik/projects/knihyps/.claude/worktrees/ticket-6
+round: 2
+---
+## Kontext
+(zadání; u queued původní slova uživatele)
+## Poznámka
+## Náhled
+(kde to najít a jak to otestovat, číslované kroky)
+## Review
+### Kolo 1 · produkt · changes
+### Kolo 1 · kód · pass
+### Kolo 2 · uživatel · changes
+```
+
+Frontmatter jsou jen řádky `klíč: hodnota` (bez uvozovek, prázdná hodnota = klíč vynech). Povinné `id`, `title`, `status`; volitelné `epic`, `blocked`, `branch`, `worktree`, `round`. Nový ticket: `id` = nejvyšší existující + 1, `status: queued`, uživatelova slova do `## Kontext`. `round` je číslo kola buildu: při `ready → building` se nastaví na 0, při každém `building → review` se zvýší o 1.
+
+### Manažerská role hlavního chatu
+
+V hlavním chatu jen řídíš práci, nedělíš ji. Nic, co zabere víc než pár krátkých volání nástrojů (úpravy kódu a obsahu, build, průzkum repa, tvorba návrhů, ověřování, ship), nedělej sám: deleguj to subagentům na pozadí, rozsáhlou práci rozděl mezi víc souběžných agentů, každý s vlastními soubory a společným briefem v souboru. Díky tomu zůstáváš dostupný. Když uživatel napíše během práce agentů, hned mu odpověz a zapiš to; nečekej na agenty, jejich výsledky přijdou jako oznámení. Změny stavu zapisuj do souboru hned, jak nastanou.
+
+### Nové požadavky jdou do backlogu
+
+Každý požadavek od uživatele, i drobný a napsaný mimochodem, zapiš hned jako nový ticket ve stavu `queued` na konec backlogu a **nezačínej na něm pracovat**, dokud uživatel výslovně neřekne, že se do něj máš pustit (např. „pusť se do toho“, „udělej to teď“, „začni“). Po zapsání jen stručně potvrď číslo ticketu. Výjimka: věci zadané výslovně jako akce „teď“.
+
+**Volná kapacita:** když neběží nic, na co se čeká, nebo se jen čeká na subagenty, **vezmi rovnou další ticket z backlogu** v pořadí (epicy mají přednost) a pusť ho do životního cyklu (shaping s průzkumem agentem), bez ptaní. Schvalování zadání a hotové práce zůstává vždy na uživateli.
+
+### Životní cyklus a povolené přechody
+
+`queued → shaping → spec → ready → building → review → accept → shipping → done`
+
+| Z | Smí do | Skill / podmínka |
+| :-- | :-- | :-- |
+| `queued` | `shaping` | `ticket-shape`, uživatel ticket spustil nebo je volná kapacita |
+| `shaping` | `spec`, `queued` | zadání zapsané v `## Kontext` |
+| `spec` | `ready`, `shaping` | `ready` jen po odpovědi „schvaluji“ na zadání; jinak zpět s komentářem |
+| `ready` | `building`, `shaping` | `ticket-build` (nastaví `round: 0`) |
+| `building` | `review`, `shaping` | `review` jen po úspěšném buildu a kontrolách; zvýší `round` |
+| `review` | `accept`, `building` | `accept` jen když jsou v `## Review` pro aktuální `round` oba bloky (produkt i kód) `pass`; jinak `building` |
+| `accept` | `shipping`, `building` | `shipping` jen s vyplněným `## Náhled` a po odpovědi „schvaluji“ na hotovou implementaci; jinak `building` + blok `· uživatel · changes` |
+| `shipping` | `done`, `building` | `ticket-ship`; konflikt nebo selhání kontrol vrací do `building` |
+| `done` | nic | |
+
+Před každou změnou `status:` ověř, že přechod v tabulce je (nic se to nevynucuje automaticky, hlídáš to ty). `blocked: true` nastav, když práce stojí na rozhodnutí uživatele (důvod do `## Poznámka`); stav se tím nemění.
+
+Skilly: `ticket-shape` (queued → spec → ready), `ticket-build` (ready/building → review), `ticket-review` (review → accept/building, příprava schválení), `ticket-ship` (shipping → done), `ticket-standup` (přehled). Nejsou to skilly `commit` a `ship` projektu; ty slouží k ručnímu commitu a PR.
+
+### Schvalování
+
+Uživatel schvaluje třikrát a vždy **dotazem v chatu** (`AskUserQuestion` s volbami „Schvaluji“ / „Upravit“, nebo prostý text). Ticket se posune až po jeho jednoznačné odpovědi „schvaluji“; mlčení, mezitímní zpráva ani nejasná odpověď schválením není a za uživatele nikdy neschvaluj.
+
+1. **Zadání** (`spec → ready`): ukaž celé zadání přehledně naformátované (nadpisy, číslovaný seznam kritérií), ne surový text souboru.
+2. **Design** (výběr varianty při shapování): nejdřív publikuj návrhy jako artefakt a dej odkaz, nikdy je nepopisuj jen slovy.
+3. **Hotová implementace** (`accept → shipping`): nejdřív věc rozjeď (u vizuální změny `pnpm exec astro dev` ve worktree ticketu na volném portu na pozadí, ověř `curl`em) a zapiš do ticketu `## Náhled`. Bez vyplněného `## Náhled` se do `shipping` nejde.
+
+U každé žádosti o schválení **nejdřív výslovně napiš, co se schvaluje**: zadání ticketu, design (výběr varianty), nebo hotová implementace; tyto tři věci nikdy nemíchej. Vždy uveď **kde to uživatel najde** (konkrétní adresy, soubory, `.claude/tickets/<id>.md`) a **jak to otestovat** (číslované kroky, co má vidět). Práci neověřuj v prohlížeči, pokud o to uživatel výslovně nepožádá (výjimka: příprava náhledu ke schválení výše).
+
+Vrácení: u zadání `shaping` + komentář do `## Poznámka`; u implementace `building` + komentář doslova jako blok `### Kolo N · uživatel · changes` v `## Review`.
+
+### Hlavní větev projektu (dočasné pravidlo)
+
+**Dočasně je hlavní větev projektu lokální větev `feat/book-detail-print-design`, ne `main`** (print redesign, nemá remote, na kterém stojí košík a další práce). Dokud pravidlo platí, je tato větev **základem i cílem všeho**: builder zakládá větev ticketu a worktree z ní, reviewer porovnává diff proti ní, `ticket-ship` ji posune fast-forwardem v hlavním checkoutu, je-li čistý (jinak to ohlásí), bez pushe. **Nikdy nepushuj do `main` ani `origin/main` a nezakládej z nich větve**, pokud uživatel výslovně neřekne jinak.
+
+Jak pravidlo změnit: uživatel řekne „hlavní větev je zase main“ (nebo jinou větev). Pak v této sekci nahraď název větve `feat/book-detail-print-design` novým (u `main`: odstraň celý oddíl a skilly se vrátí k defaultu `origin/main` + push do `main`) a řekni to v chatu. Pravidlo se mění jen na výslovný pokyn uživatele.
+
+### Předávání do subagentů
+
+Subagenti o pravidlech nevědí. **Do každého promptu** buildera, reviewerů a shippera výslovně dej **základní větev a cíl** (včetně zákazu `origin/main`, platí-li dočasné pravidlo).
+
+**Izolace kontextu:** každý subagent dostane jen zadání, odkaz na práci (větev, worktree, základ) a případně připomínky; nikdy ne úvahy nebo shrnutí jiného agenta. Reviewerům nepředávej výstup buildera ani druhého reviewera (ve druhém kole jen jejich vlastní předchozí připomínky), builderovi jen číslovaný seznam připomínek.
+
+**Přiřazení agenta k ticketu:** `description` každého subagenta začíná `#<id> ` (např. `#5 Build: Přidat do košíku`), aby ho cairn panel přiřadil k ticketu.
+
+Agenti (`.claude/agents/`): `ticket-builder`, `ticket-product-reviewer`, `ticket-code-reviewer`, `ticket-designer`, `ticket-shipper`.
+
+### Hotová schválená práce
+
+Žádné MR: schválená práce jde rovnou do hlavní větev projektu (viz výše; po ukončení dočasného pravidla do `main`). Podrobnosti v `ticket-ship`.
