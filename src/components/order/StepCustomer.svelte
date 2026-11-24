@@ -16,9 +16,9 @@
 
   const CHECKBOX_ROW =
     'font-alt flex cursor-pointer items-start gap-3 text-[0.95rem] leading-snug text-gray-900'
-  const CHECKBOX = 'accent-brand-first-700 mt-0.5 size-4 shrink-0'
+  const CHECKBOX = 'accent-(--step) mt-0.5 size-4 shrink-0'
   const CONSENT_LINK =
-    'text-brand-first-700 hover:text-black underline underline-offset-2 transition-colors'
+    'text-(--step-ink) hover:text-black underline underline-offset-2 transition-colors'
 
   const needsAddress = $derived(requiresAddress($order))
   const textProps = (
@@ -122,9 +122,7 @@
     ></textarea>
   </div>
 
-  <div
-    class="border-brand-first-300/60 flex flex-col gap-4 border-t border-dashed mt-8 pt-6"
-  >
+  <div class="border-(--step)/40 flex flex-col gap-4 border-t border-dashed mt-8 pt-6">
     <div class="flex flex-col gap-1">
       <label class={CHECKBOX_ROW}>
         <input

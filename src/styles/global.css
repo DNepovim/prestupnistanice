@@ -156,6 +156,9 @@
 @theme {
   --color-paper: #fcf9f2;
   --color-error: #b42318;
+  --color-ink-blue: #2b2c80;
+  --color-ink-magenta: #c8317e;
+  --color-ink-green: #009a4e;
   --font-head: 'Alegreya Variable', serif;
   --font-display: 'montserrat', sans-serif;
   --font-alt: 'montserrat-alternates', sans-serif;

@@ -24,5 +24,4 @@ export const STEP_TITLES = {
   1: 'Obsah košíku',
   2: 'Doprava a platba',
   3: 'Osobní údaje',
-  4: 'Shrnutí',
 } as const

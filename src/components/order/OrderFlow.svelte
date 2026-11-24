@@ -12,16 +12,14 @@
     validateOrder,
     type FieldKey,
   } from '@/utils/order/validation'
-  import { tp } from '@/utils/tp'
-
-  import OrderCalculation from './OrderCalculation.svelte'
+  
+import OrderCalculation from './OrderCalculation.svelte'
   import OrderEmpty from './OrderEmpty.svelte'
   import OrderStepper from './OrderStepper.svelte'
   import StepCart from './StepCart.svelte'
   import StepCustomer from './StepCustomer.svelte'
   import StepDelivery from './StepDelivery.svelte'
   import StepSection from './StepSection.svelte'
-  import StepSummary from './StepSummary.svelte'
 
   type Props = {
     books: CartIndex
@@ -32,8 +30,6 @@
   const NEXT_LABELS = {
     1: 'Pokračovat k dopravě',
     2: 'Pokračovat k údajům',
-    3: 'Ke shrnutí',
-    4: '',
   } as const satisfies Record<OrderStep, string>
 
   const ACTIVE_LINE_RATIO = 0.35
@@ -121,7 +117,7 @@
     const reached = ORDER_STEPS.filter(
       (step) => (sectionOf(step)?.getBoundingClientRect().top ?? Infinity) <= threshold,
     )
-    activeStep = isAtBottom ? 4 : (reached.at(-1) ?? 1)
+    activeStep = isAtBottom ? 3 : (reached.at(-1) ?? 1)
   }
 
   onMount(() => {
@@ -173,25 +169,8 @@
       >
         <StepDelivery {errorOf} />
       </StepSection>
-      <StepSection
-        step={3}
-        continueLabel={NEXT_LABELS[3]}
-        oncontinue={() => {
-          void next(3)
-        }}
-      >
+      <StepSection step={3}>
         <StepCustomer {errorOf} {touch} />
-      </StepSection>
-      <StepSection step={4}>
-        <StepSummary
-          {errors}
-          ongoto={(step: OrderStep) => {
-            void scrollToStep(step)
-          }}
-        />
-        <p class="font-alt mt-6 text-[0.85rem] leading-snug text-gray-700 italic">
-          {tp('Objednávku odešlete tlačítkem v kalkulaci.')}
-        </p>
       </StepSection>
     </div>
 
@@ -201,6 +180,7 @@
         {totals}
         {issues}
         {isReady}
+        step={activeStep}
         onsubmit={submit}
         onfix={fix}
       />

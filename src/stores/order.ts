@@ -12,7 +12,7 @@ import {
   type PickupId,
 } from '@/configs/shipping'
 
-export const ORDER_STEPS = [1, 2, 3, 4] as const
+export const ORDER_STEPS = [1, 2, 3] as const
 
 export type OrderStep = (typeof ORDER_STEPS)[number]
 

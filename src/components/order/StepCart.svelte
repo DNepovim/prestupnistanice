@@ -15,13 +15,13 @@
   const MAX_COUNT = 99
 
   const QUANTITY_BUTTON =
-    'border-brand-first-500 text-brand-first-700 hover:bg-brand-first-50 flex size-9 items-center justify-center border text-lg leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-first-500 disabled:cursor-not-allowed disabled:border-brand-first-300 disabled:text-gray-500 disabled:hover:bg-transparent motion-reduce:transition-none'
+    'border-(--step) text-(--step-ink) hover:bg-[color-mix(in_srgb,var(--step),white_90%)] flex size-9 items-center justify-center border text-lg leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) disabled:cursor-not-allowed disabled:border-(--step)/40 disabled:text-gray-500 disabled:hover:bg-transparent motion-reduce:transition-none'
 </script>
 
 <ul class="flex flex-col">
   {#each lines as { book, count, total } (book.slug)}
     <li
-      class="border-brand-first-300/60 grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4 gap-y-3 border-t border-dashed py-5 first:border-t-0 min-sm:grid-cols-[4rem_minmax(0,1fr)_auto]"
+      class="border-(--step)/40 grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4 gap-y-3 border-t border-dashed py-5 first:border-t-0 min-sm:grid-cols-[4rem_minmax(0,1fr)_auto]"
     >
       <img
         src={book.cover}

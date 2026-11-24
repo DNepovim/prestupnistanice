@@ -32,10 +32,10 @@
   const { errorOf }: Props = $props()
 
   const OPTION_ROW =
-    'border-brand-first-300/60 has-checked:bg-brand-first-50 has-focus-visible:outline-2 has-focus-visible:outline-brand-first-500 grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-x-3 border-t border-dashed px-2 py-3 transition-colors first:border-t-0 has-disabled:cursor-not-allowed has-disabled:text-gray-600 motion-reduce:transition-none'
+    'border-(--step)/40 has-checked:bg-[color-mix(in_srgb,var(--step),white_90%)] has-focus-visible:outline-2 has-focus-visible:outline-(--step) grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-x-3 border-t border-dashed px-2 py-3 transition-colors first:border-t-0 has-disabled:cursor-not-allowed has-disabled:text-gray-600 motion-reduce:transition-none'
 
   const PICKUP_TILE =
-    'font-alt border-brand-first-500 has-checked:bg-brand-first-100 has-checked:outline-brand-first-500 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-checked:outline-1 flex cursor-pointer items-center gap-3 border bg-white px-4 py-3 text-base text-gray-900 transition-colors motion-reduce:transition-none'
+    'font-alt border-(--step) has-checked:bg-[color-mix(in_srgb,var(--step),white_85%)] has-checked:outline-(--step) has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-checked:outline-1 flex cursor-pointer items-center gap-3 border bg-white px-4 py-3 text-base text-gray-900 transition-colors motion-reduce:transition-none'
 
   let dialogEl = $state<HTMLDialogElement>()
   let isWidgetOpen = $state(false)
@@ -78,7 +78,7 @@
           name="delivery"
           value={id}
           checked={$order.delivery === id}
-          class="accent-brand-first-700 size-4 translate-y-0.5"
+          class="accent-(--step) size-4 translate-y-0.5"
           onchange={() => {
             setDelivery(id)
           }}
@@ -136,7 +136,7 @@
                     name="pickupLocation"
                     value={pickupId}
                     checked={$order.pickupLocation === pickupId}
-                    class="accent-brand-first-700 size-4"
+                    class="accent-(--step) size-4"
                     onchange={() => {
                       setPickupLocation(pickupId)
                     }}
@@ -182,7 +182,7 @@
           value={id}
           checked={$order.payment === id}
           disabled={!isAvailable}
-          class="accent-brand-first-700 size-4 translate-y-0.5"
+          class="accent-(--step) size-4 translate-y-0.5"
           onchange={() => {
             setPayment(id)
           }}
@@ -211,16 +211,13 @@
 <dialog
   bind:this={dialogEl}
   aria-labelledby="balikovna-title"
-  class="border-brand-first-500 m-auto w-[min(56rem,calc(100vw-2rem))] max-w-none border bg-white p-0 text-gray-900 backdrop:bg-black/50"
+  class="border-(--step) m-auto w-[min(56rem,calc(100vw-2rem))] max-w-none border bg-white p-0 text-gray-900 backdrop:bg-black/50"
   onclose={() => {
     isWidgetOpen = false
   }}
 >
   <div class="flex items-center justify-between gap-4 px-4 py-3">
-    <h2
-      id="balikovna-title"
-      class="font-head text-brand-first-500 text-xl font-extrabold"
-    >
+    <h2 id="balikovna-title" class="font-head text-(--step) text-xl font-extrabold">
       {tp('Výběr výdejního místa Balíkovny')}
     </h2>
     <button
@@ -237,7 +234,7 @@
     <iframe
       src={BALIKOVNA_WIDGET_URL}
       title={tp('Mapa výdejních míst Balíkovny')}
-      class="border-brand-first-300/60 block h-[min(36rem,calc(100svh-8rem))] w-full border-t bg-white"
+      class="border-(--step)/40 block h-[min(36rem,calc(100svh-8rem))] w-full border-t bg-white"
     ></iframe>
   {/if}
 </dialog>

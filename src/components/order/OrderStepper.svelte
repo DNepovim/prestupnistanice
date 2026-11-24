@@ -12,10 +12,9 @@
   const { active, onselect }: Props = $props()
 
   const STEP_COLORS = {
-    1: 'bg-brand-first-400',
-    2: 'bg-brand-second-500',
-    3: 'bg-brand-first-700',
-    4: 'bg-brand-second-700',
+    1: 'bg-ink-blue',
+    2: 'bg-ink-magenta',
+    3: 'bg-ink-green',
   } as const satisfies Record<OrderStep, string>
 
   const RULER =
@@ -27,13 +26,13 @@
   class="bg-white max-md:sticky max-md:top-0 max-md:z-20 max-md:border-b max-md:border-brand-first-300/60 min-md:sticky min-md:top-6 min-md:self-start"
 >
   <ol
-    class="text-brand-first-500 grid grid-cols-4 min-md:h-[min(36rem,calc(100svh-3rem))] min-md:grid-cols-1 min-md:grid-rows-4"
+    class="text-brand-first-500 grid grid-cols-3 min-md:h-[min(27rem,calc(100svh-3rem))] min-md:grid-cols-1 min-md:grid-rows-3"
   >
     {#each ORDER_STEPS as step (step)}
       <li class={['relative min-h-0', RULER]}>
         <button
           type="button"
-          class="flex size-full min-h-0 items-center gap-2 py-2 text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand-first-500 max-md:justify-center min-md:flex-col min-md:items-start min-md:py-1 min-md:pl-6"
+          class="flex size-full min-h-0 items-center gap-2 py-2 text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-black max-md:justify-center min-md:flex-col min-md:items-start min-md:py-1 min-md:pl-6"
           aria-current={step === active ? 'step' : undefined}
           onclick={() => {
             onselect(step)
