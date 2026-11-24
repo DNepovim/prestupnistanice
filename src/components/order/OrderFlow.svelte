@@ -12,8 +12,8 @@
     validateOrder,
     type FieldKey,
   } from '@/utils/order/validation'
-  
-import OrderCalculation from './OrderCalculation.svelte'
+
+  import OrderCalculation from './OrderCalculation.svelte'
   import OrderEmpty from './OrderEmpty.svelte'
   import OrderStepper from './OrderStepper.svelte'
   import StepCart from './StepCart.svelte'

@@ -2,6 +2,7 @@ import { getImage } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import { isDefined } from 'narrowland'
 
+import { FALLBACK_COLOR_FIRST } from '@/consts'
 import { isOnSale } from '@/utils/isOnSale'
 import { joinWords } from '@/utils/joinWords'
 
@@ -34,6 +35,7 @@ export const getCartIndex = async (): Promise<CartIndex> => {
         author: joinWords(authors),
         price: data.price,
         cover: cover.src,
+        color: data.color ?? FALLBACK_COLOR_FIRST,
       }
     }),
   )

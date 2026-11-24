@@ -4,6 +4,7 @@ export type CartBook = {
   author: string
   price: number
   cover: string
+  color: string
 }
 
 export type CartIndex = Record<string, CartBook>
