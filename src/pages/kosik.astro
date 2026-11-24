@@ -1,0 +1,24 @@
+---
+import OrderFlow from '@/components/order/OrderFlow.svelte'
+import PrintSheet from '@/components/PrintSheet.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getCartIndex } from '@/utils/cart/getCartIndex'
+import { tp } from '@/utils/tp'
+
+const books = await getCartIndex()
+---
+
+<Layout siteTitle="Košík" siteDescription="Objednávka knih od nakladatelství" noindex>
+  <PrintSheet edge="only" slug="Objednávka · kalkulace zakázky" regs={['r']}>
+    <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+      <h1
+        class="font-head text-brand-first-500 mb-8 text-[2.6rem] leading-[1.04] font-extrabold tracking-[-0.02em] min-md:text-[3.4rem]"
+      >
+        {tp('Objednávka')}
+      </h1>
+      <OrderFlow client:only="svelte" books={books}>
+        <p slot="fallback" class="font-alt text-gray-700">{tp('Načítám košík…')}</p>
+      </OrderFlow>
+    </div>
+  </PrintSheet>
+</Layout>

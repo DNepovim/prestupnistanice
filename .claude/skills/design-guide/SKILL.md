@@ -88,6 +88,7 @@ never compete with it.
 | Selection, secondary highlights | `brand-second-*` |
 | Body text | `text-gray-900` (sheet), headings/bylines `text-gray-800` |
 | Prices, strongest figures | `text-black` |
+| Error state (messages, invalid field border) | `text-error`, `border-error` (`--color-error`, 6.5:1 on white; not book-themed) |
 | Hover tint on rows | `color-mix(in srgb, var(--c1) 9%, transparent)` from the book's colour |
 
 Raw hex is allowed only where it is the literal subject: the CMYK swatches and

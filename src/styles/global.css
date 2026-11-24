@@ -155,6 +155,7 @@
 
 @theme {
   --color-paper: #fcf9f2;
+  --color-error: #b42318;
   --font-head: 'Alegreya Variable', serif;
   --font-display: 'montserrat', sans-serif;
   --font-alt: 'montserrat-alternates', sans-serif;
