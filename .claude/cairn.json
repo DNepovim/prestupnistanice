@@ -1,7 +1,17 @@
 {
   "tracker": { "type": "files", "dir": ".claude/tickets" },
   "workflow": {
-    "boardLabels": ["queued", "shaping", "spec", "ready", "building", "review", "accept", "shipping", "done"],
+    "boardLabels": [
+      "queued",
+      "shaping",
+      "spec",
+      "ready",
+      "building",
+      "review",
+      "accept",
+      "shipping",
+      "done"
+    ],
     "devTestStages": [],
     "priorityLabels": [],
     "bugLabel": "",
