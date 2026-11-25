@@ -4,9 +4,11 @@ title: Lidská geneze
 date: 2023
 order: 16
 pagesCount: 120
+width: 130
+height: 200
 isbn: 978-80-909036-1-6
 kosmasUrl: https://www.kosmas.cz/knihy/535463/lidska-geneze/
-price: 299
+price: 139
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser
@@ -59,11 +61,8 @@ claim: >-
   dosáhl zralosti, jež ho opravňuje k tomu, aby sepsal to, co sám nazývá sumou.
 ---
 
-
-
-
 Tehdy ještě netušil, že tato suma se podivnou souhrou okolností stane i jeho nedokončenou filosofickou závětí.
 
 Kdo se však začte do díla Lidská geneze, byť by se jednalo o svátečního návštěvníka Flusserových textů, po chvíli zjistí, že se ocitl v myšlenkové krajině, které vévodí svěžest a originalita výpovědi. Dílo Lidská geneze sice zůstalo nedokončeno, ale i z toho, co se zachovalo, je zřejmé, že se rozhodně nejedná o žádný souhrn Flusserova myšlení. Snaha dostat se až za slova, která mnohdy matou a odvádějí od toho podstatného, získává nový myšlenkový terén. Flusserův svérázný smysl pro ironii a nadsázku obléká slova do překvapivých kostýmů tak, aby vyhovovala jeho odhalování jednotlivých kroků geneze člověka. Slova, jakými jsou například upřímnost a povstání, se tak ocitají v kontextu, v jakém bychom je stěží očekávali.
 
-Přestože jsme dle Flussera uprostřed kulturní krize, je text, jenž hodlá poodhalovat pozapomenuté kořeny lidské existence, zároveň výzvou ke smíchu, protože ochota brát některé skutečnosti vážně může být příčinou čehosi tak překvapivého, že čtenáři nic jiného než úsměv nezbyde. Že se mnohdy bude jednat o smích, který až zamrazí, není třeba ani svátečnímu čtenáři Flusserových textů připomínat. 
+Přestože jsme dle Flussera uprostřed kulturní krize, je text, jenž hodlá poodhalovat pozapomenuté kořeny lidské existence, zároveň výzvou ke smíchu, protože ochota brát některé skutečnosti vážně může být příčinou čehosi tak překvapivého, že čtenáři nic jiného než úsměv nezbyde. Že se mnohdy bude jednat o smích, který až zamrazí, není třeba ani svátečnímu čtenáři Flusserových textů připomínat.

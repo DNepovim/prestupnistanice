@@ -3,10 +3,12 @@ slug: eseje-o-stesku-upadku-a-filosofii
 title: "Eseje o\_stesku, úpadku a\_filosofii"
 date: 2022
 order: 14
-pagesCount: 219
+pagesCount: 228
+width: 130
+height: 200
 isbn: 978-80-907627-8-7
 kosmasUrl: https://www.kosmas.cz/knihy/521417/eseje-o-stesku-upadku-a-filosofii/
-price: 269
+price: 158
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha
@@ -27,9 +29,6 @@ category: philosophy
 color: '#2a5365'
 bgColor: '#417a97'
 ---
-
-
-
 
 V pořadí již druhý soubor esejů filosofa Petra Bláhy opět představuje pestrou skladbu témat, nad nimiž tento autor dlouhodobě uvažuje. Předmětem jeho výprav do dějin myšlení jsou některé aspekty politické filosofie, mezi nimiž lze objevit například problémy moci, revoluce či utopie. Do některých esejů proniká autorova fundovaná orientace ve filosofii dějin či v otázkách filosofie výchovy. Vedle významných postav evropského myšlenkového dědictví, jakými jsou například Luther, Erasmus, Fichte či Tocqueville, se řada esejů vědomě zaměřuje na tradici českého myšlení.
 Před čtenářem se tak objevují úvahy o myšlenkovém odkazu Husa, Komenského, Kafky, Rádla, Masaryka, Pittra, Šafaříka či Hejdánka. Autor si z jejich díla vybírá momenty, na nichž ilustruje východiska jejich uvažování. Přitom však nezapírá své vlastní hodnotové předpoklady, jež mu umožňují vstupovat do vzájemné konfrontace s jednotlivými mysliteli.

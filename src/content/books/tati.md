@@ -3,10 +3,12 @@ slug: tati
 title: Tati!
 date: 2022
 order: 13
-pagesCount: 29
+pagesCount: 32
+width: 303
+height: 216
 isbn: 978-80-907627-7-0
 kosmasUrl: https://www.kosmas.cz/knihy/521707/tati/
-price: 259
+price: 202
 authors:
   - author: src/content/authors/philippe-corentin.md
     slug: philippe-corentin
@@ -27,9 +29,6 @@ color: '#775c4b'
 bgColor: '#81937c'
 claim: "Dílo nedávno zesnulého francouzského autora a\_ilustrátora dětských knížek Philippa Corentina je českému čtenáři dosud neznámé."
 ---
-
-
-
 
 Půvabná knížka Tati! hodlá tuto mezeru zaplnit a nabídnout nezaměnitelný humor a nadsázku, které jsou Corentinovi vlastní a jejichž podmanivostí získal během svého života řadu ocenění a uznání.
 

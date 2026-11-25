@@ -4,10 +4,12 @@ title: 'Kachna, smrt a tulipán'
 originalName: 'Ente, Tod und Tulpe'
 date: 2025
 order: 17
-pagesCount: 38
-isbn: 978–80–909036–2–3
+pagesCount: 44
+width: 235
+height: 291
+isbn: 978-80-909036-2-3
 kosmasUrl: https://www.kosmas.cz/knihy/548353/kachna-smrt-a-tulipan/
-price: 349
+price: 158
 authors:
   - author: src/content/authors/wolf-erlbruch.md
     slug: wolf-erlbruch
@@ -51,7 +53,6 @@ claim: >-
   Je to příběh života, umírání a smrti. Pozoruhodná a do řady světových jazyků
   přeložená kniha Kachna, smrt a tulipán začíná setkáním kachny se smrtí.
 ---
-
 
 Zpočátku je kachna podezřívavá a vystrašená, ale smrt ji uklidní a dokonce začne působit vlídně a mile.
 

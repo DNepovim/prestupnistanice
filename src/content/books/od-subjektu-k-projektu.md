@@ -4,8 +4,11 @@ title: Od subjektu k projektu
 date: 2020
 order: 6
 pagesCount: 176
+width: 130
+height: 200
 isbn: 978-80-907627-1-8
 kosmasUrl: https://www.kosmas.cz/knihy/275411/od-subjektu-k-projektu/
+price: 114
 authors:
   - author: src/content/authors/vilem-flusser.md
     slug: vilem-flusser
@@ -34,7 +37,5 @@ claim: >-
   jeho tvorby. Také z tohoto důvodu se jedná o vrcholné formulování jeho
   celoživotního tématu, kterým je hledání východiska z civilizační krize.
 ---
-
-
 
 Autor z rozličných hledisek sleduje jednotlivé kroky novověkého rozpouštění subjektu i objektu. Moderní člověk ztrácí jakoukoliv oporu v něčem uchopitelném, což dle Flussera může ospravedlňovat pocit dějinné katastrofy. Proti tomuto pochopitelnému stanovisku však vykřesává jiskru naděje, kterou spojuje s projektováním. Tato naděje však nemůže zapřít svou křehkost, kterou doprovází nejednoznačnost Flusserova smyslu pro ironii.

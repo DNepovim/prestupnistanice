@@ -4,8 +4,11 @@ title: Balkovský Pegas
 date: 2025
 order: 19
 pagesCount: 216
+width: 154
+height: 222
 isbn: 978-80-909036-4-7
 kosmasUrl: https://www.kosmas.cz/knihy/563179/balkovsky-pegas/
+price: 180
 authors:
   - author: src/content/authors/jaromir-sebek.md
     slug: jaromir-sebek
@@ -65,12 +68,6 @@ claim: >-
   byla tato ves čímsi neobyčejná. Místním venkovanům byl udělen dar – či snad
   prokletí? – nahlížet v hlubiny a brodit se temnotami země.
 ---
-
-
-
-
-
-
 
 A právě tady se kdysi udál zázrak, jenž propojil nebe a zemi. O těchto bělostných křídlech, o smrti i pokušení, o daru i zatracení vypráví náš příběh…“
 

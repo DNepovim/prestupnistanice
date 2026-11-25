@@ -4,9 +4,12 @@ title: Neviditelný slon
 date: 2025
 order: 18
 pagesCount: 108
+width: 200
+height: 240
+font: Clara Serif
 isbn: 978-80-909036-3-0
 kosmasUrl: https://www.kosmas.cz/knihy/552573/neviditelny-slon/
-price: 329
+price: 177
 authors:
   - author: src/content/authors/anna-anisimova.md
     slug: anna-anisimova
@@ -58,12 +61,19 @@ category: forKids
 color: '#434991'
 bgColor: '#e7d14c'
 claim: "Kniha vypráví o\_velmi vážných tématech tak, jak to umí jen Anna Anisimova: s\_neuvěřitelnou lehkostí a\_optimismem."
+samplePages:
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_7.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_8.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_9.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_10.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_11.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_12.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_13.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_14.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_15.png
+  - ../images/books/neviditelny-slon/preview/neviditelny-slon_16.png
 ---
-
-
-
-
 
 Je možné být šťastný, i když nám osud zapomněl dát do vínku jeden ze smyslů – třeba zrak nebo sluch? Je to pro rodinu trest, anebo naopak dar? Malá hrdinka této knížky se učí psát tajným písmem, spřátelí se s dědečkovou hůlkou, hraje si s neviditelným slonem, spolu s velrybou se noří do oceánu za kamarády a miluje jablka, protože tak krásně křupají. A i když snad na vlastní oči nevidí okolní svět, nic nebrání jejímu vnitřnímu světu překypovat fantazií a radostí.
 
-Nádherné příběhy [Anny Anisimové](/autori/anna-anisimova) a něžné ilustrace [Julie Sidněvy](/autori/julia-sidneva) se budou líbit každému začínajícímu čtenáři. Stojí za to si knížku přečíst také nahlas v rodinnému kruhu. Něco je veselé, něco trochu smutné, rozhodně ale je o čem si povídat. A na konci najdete také rady Jak pomoci nevidomému. 
+Nádherné příběhy [Anny Anisimové](/autori/anna-anisimova) a něžné ilustrace [Julie Sidněvy](/autori/julia-sidneva) se budou líbit každému začínajícímu čtenáři. Stojí za to si knížku přečíst také nahlas v rodinnému kruhu. Něco je veselé, něco trochu smutné, rozhodně ale je o čem si povídat. A na konci najdete také rady Jak pomoci nevidomému.

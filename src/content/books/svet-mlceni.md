@@ -4,12 +4,13 @@ title: Svět mlčení
 originalName: Die Welt des Schweigens
 date: 2025
 order: 20
-pagesCount: 173
+pagesCount: 176
 width: 130
-height: 196
+height: 200
 paper: ''
-isbn: 978–80–909036–5–4
+isbn: 978-80-909036-5-4
 kosmasUrl: https://www.kosmas.cz/knihy/563481/svet-mlceni/
+price: 177
 authors:
   - author: src/content/authors/max-picard.md
     slug: max-picard
@@ -47,7 +48,6 @@ claim: >-
   řečí a ubývajícího smyslu.
 ---
 
-
-V době, kdy slovo zní stále hlasitěji a mlčení se stává vzácností, přichází Max Picard se svou nadčasovou úvahou o pravé povaze ticha. Ve sbírce krátkých kapitol se nezabývá módními frázemi ani povrchní kritikou – naopak se ponořuje do jádra slova a mlčení, odhaluje jejich vzájemný vztah a ukazuje, že právě tam, kde slovo začíná, mlčení nekončí. 
-Picard ukazuje, že mlčení není jen nepřítomnost slov, ale přirozený stav, z něhož slovo získává svou sílu. Jak sám píše: „Mlčení nespočívá jen v tom, že člověk přestane mluvit. Mlčení je víc než pouhé zřeknutí se slova.“ Slovo totiž ztrácí smysl, pokud není propojeno s mlčením – a právě toto propojení je klíčem k pochopení sebe sama a světa kolem nás. 
+V době, kdy slovo zní stále hlasitěji a mlčení se stává vzácností, přichází Max Picard se svou nadčasovou úvahou o pravé povaze ticha. Ve sbírce krátkých kapitol se nezabývá módními frázemi ani povrchní kritikou – naopak se ponořuje do jádra slova a mlčení, odhaluje jejich vzájemný vztah a ukazuje, že právě tam, kde slovo začíná, mlčení nekončí.
+Picard ukazuje, že mlčení není jen nepřítomnost slov, ale přirozený stav, z něhož slovo získává svou sílu. Jak sám píše: „Mlčení nespočívá jen v tom, že člověk přestane mluvit. Mlčení je víc než pouhé zřeknutí se slova.“ Slovo totiž ztrácí smysl, pokud není propojeno s mlčením – a právě toto propojení je klíčem k pochopení sebe sama a světa kolem nás.
 V časech, kdy se hranice mezi hlasitým projevem a šumem ztrácí, tato kniha volá po návratu k hloubce, k naslouchání a k nevyřčenému – k tichu, které je víc než absencí slov. Svět mlčení otevírá cestu k zamyšlení, zklidnění mysli a pochopení, že slovo i mlčení patří k sobě. Picard zde vrací slovo k tomu, z čeho vychází – k mlčení.

@@ -7,7 +7,10 @@ order: 22
 pagesCount: 128
 width: 120
 height: 200
+font: Baskerville
 isbn: 978-80-909036-7-8
+kosmasUrl: https://www.kosmas.cz/knihy/576801/provincionalistovo-premyslovani-o-osudu-knih/
+price: 158
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha
@@ -70,10 +73,6 @@ claim: >-
   jejich předmětem stává osud kultury, kterou symbolizuje kniha, nebo obecněji
   text.
 ---
-
-
-
-
 
 Autor ve třiceti krátkých, ale hutných kapitolách nabízí řadu postřehů, jež souvisejí se symbolickou rolí knihy. Jeho tázání se přitom dotýká samotných základů písemné kultury, když se pokouší postihnout nejen zisk vynálezu písma, ale také méně patrné a akcentované ztráty. Písmo otevřelo kontrast mezi bezprostředně prožívanou skutečností a jakousi náhražkou za všechno, čeho se člověku v této skutečnosti nedostávalo. Tak se písmo stalo součástí různých mocenských manipulací, jakož i pozvánkou k útěku do vysnívaných iluzí.
 Autor neopomíjí důležitou roli knihtisku, s jehož vynálezem bylo spojováno zefektivnění vzdělávacího procesu a kultivace lidstva. Také v tomto případě se ovšem pozastavuje u ztrát a negativ, které knihtisk přinesl. Dle autora se poněkud paradoxně stal významnou předzvěstí současné krize textové kultury. Knihtisk totiž nejen nenaplnil optimistické prognózy, ale také posílil vliv veřejného mínění, v němž autor spatřuje zárodek následné banalizace textů a celkového civilizačního úpadku.

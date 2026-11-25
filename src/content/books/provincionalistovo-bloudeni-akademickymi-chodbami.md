@@ -4,8 +4,11 @@ title: Provincionalistovo bloudění akademickými chodbami
 date: 2021
 order: 9
 pagesCount: 122
+width: 117
+height: 200
 isbn: 978-80-907627-5-6
 kosmasUrl: https://www.kosmas.cz/knihy/292736/provincionalistovo-bloudeni-akademickymi-chodbami/
+price: 152
 authors:
   - author: src/content/authors/petr-blaha.md
     slug: petr-blaha
@@ -28,10 +31,15 @@ bgColor: '#c8b4ae'
 claim: >-
   Kniha Provincionalistovo bloudění akademickými chodbami žánrově navazuje na
   východiska dřívější charakteristiky filosofa provincionalismu.
+samplePages:
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_1.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_2.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_3.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_4.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_5.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_6.png
+  - ../images/books/provincionalistovo-bloudeni-akademickymi-chodbami/preview/bloudeni_7.png
 ---
-
-
-
 
 Tentokrát se jedná o aplikaci těchto východisek na autorovu dlouhodobou zkušenost s univerzitním prostředím. Své úvahy podrobuje pátrání po dějinných podmíněnostech toho, co bývá nazýváno ideou univerzity, a svá zjištění konfrontuje s tím, jak se mu jeví základní rysy současné situace.
 Závažnou tezí knihy je, že stále intenzivnějším průnikem technologicky ovládaného myšlení značně ubývá na svéprávnosti zástupců akademické sféry. Ti jsou nároky univerzitního provozu stále více vtahováni do řešení administrativně technických záležitostí, čímž se ocitají pod tlaky, jež omezují možnost myslitelské aktivity. S těmito tendencemi souvisí posilování kvantifikativních metod při hodnocení jejich výkonu. Taková kritéria ovšem přestávají respektovat specifičnost určitých tradičních akademických zaměření. Dochází ke zvláštní standardizaci, jež se projevuje i ve vytváření akademické hierarchie. Vzniká osobitý typ úspěšného akademika, jenž je schopen požadované přizpůsobivosti.
