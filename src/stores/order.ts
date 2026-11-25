@@ -109,7 +109,9 @@ const isPickupId = (value: unknown): value is PickupId => isOneOf(value, PICKUP_
 
 const isDetailUrl = (value: unknown) =>
   typeof value === 'string' &&
-  (value.startsWith(BALIKOVNA_DETAIL_URL) || value.startsWith(POSTA_DETAIL_URL))
+  [BALIKOVNA_DETAIL_URL, POSTA_DETAIL_URL].some(
+    (prefix) => value.startsWith(prefix) && /^\d{5}$/.test(value.slice(prefix.length)),
+  )
 
 const isBalikovnaPoint = (value: unknown): value is BalikovnaPoint =>
   isRecord(value) &&

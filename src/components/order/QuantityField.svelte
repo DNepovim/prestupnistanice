@@ -28,7 +28,7 @@
     'border-(--step) text-(--step-ink) hover:bg-[color-mix(in_srgb,var(--step),white_90%)] flex size-6 items-center justify-center border bg-white text-sm leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) disabled:cursor-not-allowed disabled:border-(--step)/40 disabled:text-gray-500 disabled:hover:bg-white motion-reduce:transition-none'
 </script>
 
-<div role="group" aria-label={`${tp('Počet kusů')}: ${title}`} class="flex items-center">
+<div role="group" aria-label={tp('Počet kusů')} class="flex items-center">
   <button
     type="button"
     class={BUTTON}
@@ -53,6 +53,9 @@
     onkeydown={(event) => {
       if (event.key === 'Enter') {
         commit()
+      }
+      if (event.key === 'Escape') {
+        draft = String(count)
       }
     }}
   />

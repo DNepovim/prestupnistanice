@@ -117,7 +117,7 @@
     </div>
     <div
       class={[
-        'mt-2 flex items-baseline gap-2 border-t border-(--step) pt-3 text-[0.95rem] font-bold',
+        'mt-4 flex items-baseline gap-2 text-[0.95rem] font-bold',
         COLOR_TRANSITION,
       ]}
     >
@@ -133,9 +133,7 @@
   </dl>
 
   {#if contactLines.length > 0}
-    <p
-      class="font-display border-t border-dashed border-(--step)/60 pt-4 text-[0.78rem] leading-[1.5] text-gray-800"
-    >
+    <p class="font-display text-[0.78rem] leading-[1.5] text-gray-800">
       {#each contactLines as line (line)}
         {tp(line)}<br />
       {/each}
