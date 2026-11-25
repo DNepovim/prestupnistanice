@@ -123,9 +123,20 @@ const isOrderState = (value: unknown): value is OrderState =>
   isNullableOf(value.payment, isPaymentId) &&
   isCustomer(value.customer)
 
+const withDefaultFlags = (value: unknown): unknown =>
+  isRecord(value) && isRecord(value.customer)
+    ? {
+        ...value,
+        customer: {
+          needsInvoice: false,
+          ...value.customer,
+        },
+      }
+    : value
+
 const decodeOrder = (raw: string): OrderState => {
   try {
-    const parsed: unknown = JSON.parse(raw)
+    const parsed = withDefaultFlags(JSON.parse(raw))
     return isOrderState(parsed) ? parsed : initialState
   } catch {
     return initialState

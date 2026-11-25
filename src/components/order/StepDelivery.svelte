@@ -52,6 +52,7 @@
   } as const satisfies Record<PickupId, string>
 
   let dialogEl = $state<HTMLDialogElement>()
+  let iframeEl = $state<HTMLIFrameElement>()
   let isWidgetOpen = $state(false)
   let isWidgetLoaded = $state(false)
 
@@ -62,7 +63,11 @@
   }
 
   const handleMessage = (event: MessageEvent) => {
-    if (event.origin !== BALIKOVNA_WIDGET_ORIGIN) {
+    if (
+      !isWidgetOpen ||
+      event.origin !== BALIKOVNA_WIDGET_ORIGIN ||
+      event.source !== (iframeEl?.contentWindow ?? null)
+    ) {
       return
     }
     const point = parseBalikovnaMessage(event.data)
@@ -91,7 +96,9 @@
   >
     <legend class={[FIELD_LABEL, 'mb-3']}>{tp('Způsob doručení')}</legend>
     <Reveal open={deliveryError !== undefined}>
-      <p id="e-delivery" class={[ERROR_BOX, 'mb-3']}>{tp(deliveryError ?? '')}</p>
+      <p id="e-delivery" role="alert" class={[ERROR_BOX, 'mb-3']}>
+        {tp(deliveryError ?? '')}
+      </p>
     </Reveal>
     {#each DELIVERY_IDS as id (id)}
       {@const option = DELIVERY_OPTIONS[id]}
@@ -214,7 +221,9 @@
   >
     <legend class={[FIELD_LABEL, 'mb-3']}>{tp('Způsob platby')}</legend>
     <Reveal open={errorOf('payment') !== undefined}>
-      <p id="e-payment" class={[ERROR_BOX, 'mb-3']}>{tp(errorOf('payment') ?? '')}</p>
+      <p id="e-payment" role="alert" class={[ERROR_BOX, 'mb-3']}>
+        {tp(errorOf('payment') ?? '')}
+      </p>
     </Reveal>
     {#if $order.delivery === null}
       <p class="font-alt mb-3 text-[0.8rem] leading-snug text-gray-700">
@@ -293,6 +302,7 @@
       class="border-(--step)/40 relative h-[min(36rem,calc(100svh-8rem))] w-full border-t bg-white"
     >
       <iframe
+        bind:this={iframeEl}
         src={BALIKOVNA_WIDGET_URL}
         title={tp('Mapa výdejních míst Balíkovny')}
         class={[

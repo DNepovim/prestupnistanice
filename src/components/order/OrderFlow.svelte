@@ -30,7 +30,7 @@
   const NEXT_LABELS = {
     1: 'Pokračovat k dopravě',
     2: 'Pokračovat k údajům',
-  } as const satisfies Record<OrderStep, string>
+  } as const satisfies Record<Exclude<OrderStep, 3>, string>
 
   const ACTIVE_LINE_RATIO = 0.35
 
@@ -96,17 +96,13 @@
     }
   }
 
-  const fix = async (key: FieldKey) => {
-    await focusField(key)
-  }
-
   const submit = async () => {
     attempted = [...ORDER_STEPS]
     isSubmitAttempted = true
     const firstError = FIELD_ORDER.find((key) => errors[key] !== undefined)
     isReady = firstError === undefined
     if (firstError !== undefined) {
-      await fix(firstError)
+      await focusField(firstError)
     }
   }
 
@@ -182,7 +178,7 @@
         {isReady}
         step={activeStep}
         onsubmit={submit}
-        onfix={fix}
+        onfix={focusField}
       />
     </div>
   </div>

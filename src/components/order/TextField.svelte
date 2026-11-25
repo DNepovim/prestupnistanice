@@ -64,12 +64,12 @@
     }}
     {onblur}
   />
-  <div class="relative h-[2.2rem] overflow-hidden">
+  <div class="relative min-h-[2.2rem] overflow-hidden">
     <p
       id={`e-${name}`}
       class={[
         FIELD_ERROR,
-        'absolute inset-x-0 top-0 transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none',
+        'transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none',
         error === undefined ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100',
       ]}
       aria-hidden={error === undefined ? 'true' : undefined}

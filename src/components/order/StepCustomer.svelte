@@ -96,7 +96,7 @@
   </div>
 
   <Reveal open={needsAddress}>
-    <fieldset class="grid pt-8 gap-x-4 gap-y-5 min-sm:grid-cols-2">
+    <fieldset class="grid gap-x-4 gap-y-5 pt-8 min-sm:grid-cols-2">
       <legend class={[FIELD_LABEL, 'mb-4']}>{tp('Adresa')}</legend>
       <TextField
         {...textProps('street')}
@@ -144,7 +144,7 @@
     ></textarea>
   </div>
 
-  <div class="border-(--step)/40 flex flex-col gap-4 border-t border-dashed mt-8 pt-6">
+  <div class="border-(--step)/40 flex flex-col gap-4 mt-8 border-t border-dashed pt-6">
     <div class="flex flex-col gap-1">
       <label class={CHECKBOX_ROW}>
         <input
