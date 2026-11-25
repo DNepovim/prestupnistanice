@@ -100,7 +100,7 @@ The scaffold provides:
 - the **page frame**, reproduced from the real components: sticky header
   (brand in Alegreya, nav with hairline separators, search, fades out on
   scroll), `PageTitle`-style `h1` with gradient underline, category navigation
-  with the real counts, and the **real footer** (grey brand block, corner marks,
+  with the real counts, and the **real footer** (dark brand block, corner marks,
   newsletter sentence with inline input, Obsah / Kontakty / Tiráž columns,
   outlined wordmark). Layout is a flex column with `min-height:100vh`, so the
   footer sits at the bottom of the screen. Links go nowhere (`href="#"`).
@@ -141,8 +141,17 @@ Variant card CSS is namespaced `.v1-…`, `.v2-…` and so on. Cards get
 - **Fonts**: Alegreya (`--head`, extrabold titles, prices), Montserrat Alternates
   (`--alt`, labels, authors, claims, links), Montserrat (`--body`). Handwriting
   (Caveat) is allowed only for deliberate proof-reader annotations.
-- **Colour** only from the book's own tokens plus paper, white, grey. No raw
+- **Colour** only from the book's own tokens plus paper, white and black. No raw
   extra hex, apart from physical subjects (film base, swatch values).
+- **Text is black on white or paper; all headings are black.** No shades of grey
+  for text (no `--muted`-style greys, no alpha or `opacity` on informative text).
+  Grey only for decoration without information (hairlines, crop marks, frames).
+  Book colours go on backgrounds and accents where contrast holds; text on them
+  is black or white, whichever contrasts more (`--on2`).
+- **Accessibility is mandatory**: WCAG AA (4.5:1 for text, 3:1 for large text and
+  UI parts), visible `:focus-visible`, keyboard operation, `prefers-reduced-motion`
+  for every animation, semantic HTML with meaningful ARIA, touch targets of at
+  least 24 px (44 px preferred on mobile), meaning never by colour alone.
 - **Shape**: squared corners. Circles only for registration targets, punched
   holes, stickers and similar physical objects.
 - **Print marks stay quiet and `aria-hidden`.** They never carry information.
@@ -157,6 +166,11 @@ Variant card CSS is namespaced `.v1-…`, `.v2-…` and so on. Cards get
 ### 6. Check once, publish
 
 - Syntax-check the script (`node --check`) after extracting it from the HTML.
+- **Check contrast and accessibility of every variant**: text against its
+  background (including text on book colours across the whole cast, light, dark
+  and saturated), focus visibility, keyboard reachability, reduced motion, touch
+  targets, headings black, no grey informative text. Fix what fails; list any
+  unresolved spots per variant in the reply.
 - Take one look at the rendered page if a browser is available (chrome-devtools
   MCP, desktop and a 400 px viewport). If none is available, say that the page
   was not visually checked.
@@ -165,7 +179,7 @@ Variant card CSS is namespaced `.v1-…`, `.v2-…` and so on. Cards get
 - Do not commit scaffold output or images to the repo.
 
 Then in the reply: link, the ten names in one line each, what to look at first,
-and anything unverified. Do not describe hex values or font names.
+anything unverified, and the unresolved contrast or accessibility spots per variant. Do not describe hex values or font names.
 
 ## Pitfalls already met
 

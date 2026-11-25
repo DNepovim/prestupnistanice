@@ -80,13 +80,14 @@ never compete with it.
 
 | Role | Token |
 | :-- | :-- |
-| Title, drop caps, links, accents | `brand-first-500` |
-| Small labels, metadata, quiet text | `brand-first-700` |
+| Drop caps, links, accents (not headings) | `brand-first-500` |
+| Small labels, metadata (only where 4.5:1 holds on the surface) | `brand-first-700` |
 | Buttons | `bg-brand-first-700` → `hover:bg-brand-first-800`, `text-white` |
 | Crop/registration/hairlines | `brand-first-300` at 60 % |
 | Dimension lines, connectors | `brand-first-500` |
 | Selection, secondary highlights | `brand-second-*` |
-| Body text | `text-gray-900` (sheet), headings/bylines `text-gray-800` |
+| Body text, bylines, metadata | `text-black` on the white/paper sheet |
+| All headings (`h1`–`h6`, including pages such as O nakladatelství) | `text-black` |
 | Prices, strongest figures | `text-black` |
 | Error state (messages, invalid field border) | `text-error`, `border-error` (`--color-error`, 6.5:1 on white; not book-themed) |
 | Hover tint on rows | `color-mix(in srgb, var(--c1) 9%, transparent)` from the book's colour |
@@ -106,16 +107,16 @@ Three families, each with a fixed job (tokens in `global.css`):
 
 Patterns:
 
-- **Title** (`h1`): `font-head`, `brand-first-500`, `font-extrabold`,
+- **Title** (`h1`): `font-head`, `text-black` (all headings are black), `font-extrabold`,
   `tracking-[-0.02em]`, size fitted to the container with
   `getTitleFit` → `font-size: min(8rem, 100cqw / title-width)`; lines are
   `block whitespace-nowrap`, header is a `[container-type:inline-size]`. The
   title ends with a `↵` non-printing mark.
 - **Section label / kicker**: `font-alt`, `text-[0.7rem]` (or `0.62rem` for
   micro-labels), `leading-none`/`1.2`, `tracking-[0.1em]`, `uppercase`,
-  `brand-first-700`. Used for category, "Recenze", "Ukázka z knihy", `dt`s.
+  `text-black` (or `brand-first-700` where 4.5:1 holds). Used for category, "Recenze", "Ukázka z knihy", `dt`s.
 - **Byline / authors**: `font-alt italic`, `1.2rem` → `1.4rem` → `1.6rem` by
-  breakpoint, `text-gray-800`, hover to black.
+  breakpoint, `text-black`; hover is an underline or the brand colour, not a shade change.
 - **Claim**: `font-alt italic`, `1rem`/`1.15rem`, `leading-[1.45]`, with a
   floated **drop cap** (`first-letter`: `3.1em`, `brand-first-500`, bold,
   not italic, `leading-[0.82]`), followed by `¶`.
@@ -214,7 +215,28 @@ bouncing, no looping animation.
 - Layouts must stay readable at 320 px; marks live in the page margin
   (`px-9` minimum) so nothing is clipped by the viewport.
 
-## Accessibility
+## Accessibility and contrast (mandatory)
+
+- **Text is black on white/paper.** All headings are black (`text-black`), body,
+  bylines, labels and metadata too. Avoid shades of grey for text: no
+  `text-gray-*`, no `opacity` or alpha on informative text. Grey is allowed only
+  for decoration that carries no information (hairlines, crop marks, frames,
+  dividers).
+- **Book colours** go on backgrounds and accents only where contrast holds.
+  Text on a book colour is black or white, whichever has the higher contrast
+  (at least 4.5:1). Coloured text on paper only with `brand-first-500` or darker.
+- **WCAG AA**: at least 4.5:1 for body text, 3:1 for large text (from 24 px, or
+  18.66 px bold) and for UI parts (borders of inputs, icons, focus ring).
+- **Meaning is never colour alone**: errors, availability and selected state
+  also get text, an icon or an underline.
+- **Focus and keyboard**: every interactive element has a visible
+  `focus-visible` ring (3:1 against its surroundings) and works by keyboard in a
+  logical order.
+- **Touch targets**: at least 24x24 px, ideally 44x44 px on mobile.
+- **Semantics**: real `h1`-`h6` in order, `button` for actions, `a` for
+  navigation, landmarks, labelled form fields; ARIA only where HTML cannot
+  express it.
+- **Motion**: every animation honours `prefers-reduced-motion`.
 
 - All print marks and non-printing characters are `aria-hidden="true"`.
 - Brand scale guarantees ≥ 4.6:1 for `*-500` and darker on paper; never put
@@ -236,8 +258,8 @@ bouncing, no looping animation.
   colophon, index, errata) before inventing a new visual.
 - Reuse `PrintSheet`, `ColorBar`, `Theme`, `BooksIndex` etc. instead of
   re-implementing marks.
-- Let the book's colours do the work; keep everything else paper, black and
-  grey.
+- Let the book's colours do the work (backgrounds, accents, marks); keep text
+  black on paper/white. Grey only for decoration without information.
 - Keep micro-typography tidy: caps labels with tracking, lining numerals for
   data, `tp()` on all copy.
 
@@ -247,7 +269,7 @@ bouncing, no looping animation.
   extend the component (new prop or tone) instead.
 - No rounded corners, cards with shadows, gradients over text, glassmorphism,
   emoji, or stock icons beyond Phosphor accents.
-- No pure white backgrounds; no hardcoded hex outside the CMYK strip and
+- No flat grey page ground; no hardcoded hex outside the CMYK strip and
   `consts.ts` fallbacks.
 - No decorative marks that carry meaning or are focusable.
 - Don't mix the roles of the three typefaces (serif only for display/headings,

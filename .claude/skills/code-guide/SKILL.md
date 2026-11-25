@@ -159,7 +159,8 @@ Tailwind can express. Custom utilities, keyframes, and font tokens live in
 Colours are derived per book. `getColorScale` (`src/utils/geColorScale.ts`)
 expands one hex into a 50–950 scale; `Layout.astro` maps it onto
 `--color-brand-first-*` / `--color-brand-second-*`. Always use the token
-utilities — `text-brand-first-500`, `bg-brand-second-50`, etc.
+utilities — `bg-brand-first-500`, `bg-brand-second-50`, etc. Text stays black
+(see "Accessibility"); brand colours as text only at 4.5:1 or better.
 
 To render a subtree in a *different* book's palette, wrap it in
 `components/Theme.astro` with that book's `color` / `bgColor`. Do not inline
@@ -170,7 +171,7 @@ custom properties yourself.
 <div class="bg-[#434991]">
 
 <!-- ✅ brand token -->
-<div class="bg-brand-first-500">
+<div class="bg-brand-first-500 text-white">
 
 <!-- ✅ per-book palette for a subtree -->
 <Theme firstColor={book.color ?? undefined} secondColor={book.bgColor ?? undefined}>
@@ -282,6 +283,15 @@ check or adds semantic clarity.
 - Use appropriate `aria-*` attributes on interactive UI (tooltips, modals, menus)
 - Ensure keyboard interaction for dialogs and menus; manage focus deliberately
   (see `SearchModal.svelte` for the established pattern)
+- Accessibility is mandatory: WCAG AA contrast (4.5:1 for text, 3:1 for large
+  text and UI parts), visible `focus-visible`, keyboard operation,
+  `motion-reduce:` on every animation, semantic HTML with meaningful ARIA,
+  adequate touch targets, meaning never by colour alone
+- Text is black (`text-black`) on white/paper and **all headings are black**.
+  Do not use shades of grey for text (no `text-gray-*`, no opacity or alpha on
+  informative text); grey only for decoration without information (lines, crop
+  marks, borders). Book colours go on backgrounds and accents only where
+  contrast holds, with black or white text chosen by contrast
 
 ---
 
