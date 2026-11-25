@@ -2,6 +2,7 @@ const SLUGS = {
   books: 'knihy',
   auhtors: 'autori',
   cart: 'kosik',
+  thanks: 'dekujeme',
   terms: 'obchodni-podminky',
   privacy: 'ochrana-osobnich-udaju',
 }
@@ -44,6 +45,7 @@ export const routes = {
     detail: (slug: string) => `/${SLUGS.auhtors}/${slug}`,
   },
   cart: () => `/${SLUGS.cart}`,
+  thanks: () => `/${SLUGS.thanks}`,
   terms: () => `/${SLUGS.terms}`,
   privacy: () => `/${SLUGS.privacy}`,
   internal: {
@@ -54,5 +56,6 @@ export const routes = {
   },
   api: {
     kosmasStatus: (slug: string) => `/api/kosmas/${slug}`,
+    order: () => '/api/objednavka',
   },
 }

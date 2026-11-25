@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { MAX_ITEM_COUNT } from '@/configs/order'
   import { updateQuantity } from '@/stores/cart'
   import { tp } from '@/utils/tp'
 
@@ -11,11 +12,10 @@
   const { slug, title, count }: Props = $props()
 
   const MIN_COUNT = 1
-  const MAX_COUNT = 99
 
   let draft = $derived(String(count))
 
-  const clamp = (value: number) => Math.min(MAX_COUNT, Math.max(MIN_COUNT, value))
+  const clamp = (value: number) => Math.min(MAX_ITEM_COUNT, Math.max(MIN_COUNT, value))
 
   const commit = () => {
     const parsed = Number.parseInt(draft, 10)
@@ -64,7 +64,7 @@
     type="button"
     class={BUTTON}
     aria-label={tp('Přidat kus')}
-    disabled={count >= MAX_COUNT}
+    disabled={count >= MAX_ITEM_COUNT}
     onclick={() => {
       updateQuantity(slug, count + 1)
     }}>+</button

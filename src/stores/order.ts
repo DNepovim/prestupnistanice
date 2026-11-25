@@ -186,3 +186,7 @@ export const updateCustomer = (patch: Partial<Customer>) => {
   const current = order.get()
   order.set({ ...current, customer: { ...current.customer, ...patch } })
 }
+
+export const resetOrder = () => {
+  order.set(initialState)
+}

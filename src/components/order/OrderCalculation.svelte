@@ -9,7 +9,7 @@
 
   import { FIELD_LABELS } from './fieldLabels'
   import { STEP_VARS } from './stepVars'
-  import { PRIMARY_BUTTON, TEXT_BUTTON } from './styles'
+  import { ERROR_BOX, PRIMARY_BUTTON, TEXT_BUTTON } from './styles'
 
   type Issue = {
     key: FieldKey
@@ -19,13 +19,15 @@
   type Props = {
     totals: OrderTotals
     issues: Issue[]
-    isReady: boolean
+    isSubmitting: boolean
+    submitError: string
     step: OrderStep
     onsubmit: () => void
     onfix: (key: FieldKey) => void
   }
 
-  const { totals, issues, isReady, step, onsubmit, onfix }: Props = $props()
+  const { totals, issues, isSubmitting, submitError, step, onsubmit, onfix }: Props =
+    $props()
 
   const BOOK_UNITS = ['kniha', 'knihy', 'knih'] as const
 
@@ -167,14 +169,19 @@
 
   <button
     type="button"
-    class={[PRIMARY_BUTTON, COLOR_TRANSITION, 'w-full']}
+    class={[PRIMARY_BUTTON, COLOR_TRANSITION, 'w-full disabled:opacity-60']}
+    disabled={isSubmitting}
+    aria-busy={isSubmitting}
     onclick={onsubmit}
   >
-    {tp('Odeslat objednávku')}
+    {tp(isSubmitting ? 'Odesílám…' : 'Odeslat objednávku')}
   </button>
-  {#if isReady}
+  {#if isSubmitting}
     <p role="status" class="font-alt text-(--step-ink) text-[0.8rem] leading-snug">
-      {tp('Objednávka je kompletně vyplněná a připravená k odeslání.')}
+      {tp('Odesíláme objednávku, chvilku strpení.')}
     </p>
+  {/if}
+  {#if submitError !== ''}
+    <p role="alert" class={ERROR_BOX}>{tp(submitError)}</p>
   {/if}
 </aside>

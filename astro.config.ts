@@ -20,9 +20,14 @@ export default defineConfig({
 
   integrations: [
     mdx(),
-    sitemap({ filter: (page) => !page.includes('/interni/') }),
+    sitemap({
+      filter: (page) => !page.includes('/interni/') && !page.includes('/dekujeme'),
+    }),
     ENV_NAME === 'production' &&
-      sitemap({ lastmod: new Date(), filter: (page) => !page.includes('/interni/') }),
+      sitemap({
+        lastmod: new Date(),
+        filter: (page) => !page.includes('/interni/') && !page.includes('/dekujeme'),
+      }),
     icon(),
     svelte(),
   ],

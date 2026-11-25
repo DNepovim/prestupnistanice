@@ -1,0 +1,25 @@
+---
+import OrderThanks from '@/components/order/OrderThanks.svelte'
+import PrintSheet from '@/components/PrintSheet.astro'
+import Layout from '@/layouts/Layout.astro'
+import { tp } from '@/utils/tp'
+
+export const prerender = false
+
+Astro.response.headers.set('Cache-Control', 'no-store')
+---
+
+<Layout siteTitle="Děkujeme" siteDescription="Potvrzení objednávky knih" noindex>
+  <PrintSheet edge="only" wide slug="Objednávka · potvrzení" regs={['r']}>
+    <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
+      <h1
+        class="font-head text-brand-first-500 mb-8 text-[2.6rem] leading-[1.04] font-extrabold tracking-[-0.02em] min-md:text-[3.4rem]"
+      >
+        {tp('Děkujeme')}
+      </h1>
+      <OrderThanks client:only="svelte">
+        <p slot="fallback" class="font-alt text-gray-700">{tp('Načítám objednávku…')}</p>
+      </OrderThanks>
+    </div>
+  </PrintSheet>
+</Layout>

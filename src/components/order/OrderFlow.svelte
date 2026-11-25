@@ -5,6 +5,7 @@
   import { cart } from '@/stores/cart'
   import { order, ORDER_STEPS, type OrderStep } from '@/stores/order'
   import type { CartIndex } from '@/utils/cart/types'
+  import { buildOrderRequest, completeOrder, sendOrder } from '@/utils/order/sendOrder'
   import { getOrderLines, getOrderTotals } from '@/utils/order/totals'
   import {
     FIELD_ORDER,
@@ -39,7 +40,9 @@
   let touched = $state<FieldKey[]>([])
   let attempted = $state<number[]>([])
   let isSubmitAttempted = $state(false)
-  let isReady = $state(false)
+  let isSubmitting = $state(false)
+  let submitError = $state('')
+  let website = $state('')
   let activeStep = $state<OrderStep>(1)
 
   const lines = $derived(getOrderLines($cart, books))
@@ -99,11 +102,28 @@
   const submit = async () => {
     attempted = [...ORDER_STEPS]
     isSubmitAttempted = true
+    submitError = ''
     const firstError = FIELD_ORDER.find((key) => errors[key] !== undefined)
-    isReady = firstError === undefined
     if (firstError !== undefined) {
       await focusField(firstError)
+      return
     }
+    const request = buildOrderRequest(
+      lines.map(({ book, count }) => ({ slug: book.slug, count })),
+      $order,
+      website,
+    )
+    if (request === undefined) {
+      return
+    }
+    isSubmitting = true
+    const response = await sendOrder(request)
+    if (response.ok) {
+      completeOrder(response.result)
+      return
+    }
+    submitError = response.message
+    isSubmitting = false
   }
 
   const updateActiveStep = () => {
@@ -170,11 +190,22 @@
       </StepSection>
     </div>
 
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="absolute -left-[9999px] size-px opacity-0"
+      bind:value={website}
+    />
+
     <div class="min-md:col-span-2 min-lg:col-span-1">
       <OrderCalculation
         {totals}
         {issues}
-        {isReady}
+        {isSubmitting}
+        {submitError}
         step={activeStep}
         onsubmit={submit}
         onfix={focusField}
