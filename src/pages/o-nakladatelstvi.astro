@@ -8,10 +8,10 @@ import PrintSheet from '@/components/PrintSheet.astro'
 import SponsorTile from '@/components/SponsorTile.astro'
 import Timeline from '@/components/Timeline.astro'
 import LogoFondBudoucnosti from '@/content/images/sponsors/fondBudoucnosti.png'
-import LogoFondKultury from '@/content/images/sponsors/sfk.svg'
 import LogoGi from '@/content/images/sponsors/gi.png'
 import LogoKima from '@/content/images/sponsors/kima.png'
 import LogoMk from '@/content/images/sponsors/mk.svg'
+import LogoFondKultury from '@/content/images/sponsors/sfk.svg'
 import Layout from '@/layouts/Layout.astro'
 import { CATEGORIES, routes } from '@/routes'
 import { getSlugFromPath } from '@/utils/getSlugFromPath'
@@ -29,12 +29,14 @@ const NON_PRINTING_MARK =
 const SHEET_PADDING = 'px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]'
 
 const SECTION_LABEL =
-  'font-alt text-brand-first-700 mb-7 text-[0.7rem] leading-none tracking-[0.1em] uppercase'
+  'font-alt mb-7 text-[0.7rem] text-black leading-none tracking-[0.1em] uppercase'
 
 const FOUNDING_YEAR = 2005
 
 const sponsors = [
-  { title: 'Ministerstvo kultury ČR', link: 'https://www.mk.gov.cz/',
+  {
+    title: 'Ministerstvo kultury ČR',
+    link: 'https://www.mk.gov.cz/',
     logo: LogoMk,
     plain: true,
     color: '#D70C0F',
@@ -127,8 +129,7 @@ const authorRolesMap = books
 
 const boardMemberSlugs = ['jakub-skalak', 'petr-blaha', 'dominik-blaha']
 
-const getFullName = (a: (typeof authors)[number]['data']) =>
-  `${a.firstname} ${a.surname}`
+const getFullName = (a: (typeof authors)[number]['data']) => `${a.firstname} ${a.surname}`
 
 const boardMembers = boardMemberSlugs
   .map((slug) => authors.find((a) => a.data.slug === slug))
@@ -189,7 +190,11 @@ const sideSlug = [
   pluralize(yearsCount, ['rok', 'roky', 'let']),
   pluralize(books.length, ['kniha', 'knihy', 'knih']),
   pluralize(mainAuthorsCount, ['autor', 'autoři', 'autorů']),
-  pluralize(collaborators.length, ['spolupracovník', 'spolupracovníci', 'spolupracovníků']),
+  pluralize(collaborators.length, [
+    'spolupracovník',
+    'spolupracovníci',
+    'spolupracovníků',
+  ]),
 ].join(' · ')
 ---
 
@@ -210,7 +215,7 @@ const sideSlug = [
       <header class="[container-type:inline-size] min-md:col-start-1">
         <h1
           style={`--title-w:${titleFit.widthEm.toFixed(3)}`}
-          class="font-head text-brand-first-500 [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em]"
+          class="font-head [font-size:min(8rem,calc(100cqw/var(--title-w)))] leading-[1.04] font-extrabold tracking-[-0.02em] text-black"
         >
           {
             titleFit.lines.map((line, index) => (
@@ -234,13 +239,25 @@ const sideSlug = [
         class="max-md:order-last max-md:mt-12 min-md:sticky min-md:top-6 min-md:col-start-2 min-md:row-span-3 min-md:row-start-1 min-md:self-start min-md:pt-[1.7rem]"
       />
       <div class="mt-[1.4rem] min-md:col-start-1">
-        {entry.body && <Markdown showMarks class="text-[1rem]" text={entry.body} />}
+        {
+          entry.body && (
+            <Markdown
+              showMarks
+              class="text-[1rem] [&_h2]:text-black! [&_h3]:text-black!"
+              text={entry.body}
+            />
+          )
+        }
       </div>
     </div>
   </PrintSheet>
   {
     sheetKeys.includes('people') && (
-      <PrintSheet edge={getEdge('people')} regs={['l']} slug="redakce_a_spolupracovnici.pdf">
+      <PrintSheet
+        edge={getEdge('people')}
+        regs={['l']}
+        slug="redakce_a_spolupracovnici.pdf"
+      >
         <div class:list={[SHEET_PADDING, 'flex flex-col gap-10']}>
           {isNonEmptyArray(boardMembers) && (
             <div>

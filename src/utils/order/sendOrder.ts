@@ -71,8 +71,16 @@ export const sendOrder = async (request: OrderRequest): Promise<SendResult> => {
   return parsed.success ? { ok: true, result: parsed.data } : fail(SERVER_MESSAGE)
 }
 
+const storeResult = (result: OrderResult) => {
+  try {
+    window.sessionStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(result))
+  } catch {
+    return
+  }
+}
+
 export const completeOrder = (result: OrderResult) => {
-  sessionStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(result))
+  storeResult(result)
   emptyCart()
   resetOrder()
   window.location.assign(routes.thanks())

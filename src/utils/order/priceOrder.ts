@@ -1,13 +1,10 @@
-import { getCollection } from 'astro:content'
-import { isDefined } from 'narrowland'
-
 import {
   DELIVERY_OPTIONS,
   isPaymentAvailable,
   PAYMENT_OPTIONS,
   PICKUP_LOCATIONS,
 } from '@/configs/shipping'
-import { isOnSale } from '@/utils/isOnSale'
+import { getCartIndex } from '@/utils/cart/getCartIndex'
 import type { OrderRequest, OrderSummary } from '@/utils/order/orderSchema'
 import { validateOrder } from '@/utils/order/validation'
 
@@ -37,25 +34,20 @@ export const priceOrder = async (request: OrderRequest): Promise<PricingResult> 
     return fail('Objednávka není správně vyplněná.')
   }
 
-  const catalog = (await getCollection('book')).filter(isOnSale)
-  const authorEntries = await getCollection('author')
+  const books = await getCartIndex()
 
   const lines = items.map(({ slug, count }) => {
-    const entry = catalog.find((book) => book.data.slug === slug)
-    return entry?.data.price === undefined
+    const book = books[slug]
+    return book === undefined
       ? undefined
       : {
           slug,
-          title: entry.data.title,
-          author: entry.data.authors
-            .filter((author) => author.isMain)
-            .map((author) => authorEntries.find((entry) => entry.id === author.slug.id))
-            .filter(isDefined)
-            .map((author) => `${author.data.firstname} ${author.data.surname}`)
-            .join(', '),
+          title: book.title,
+          author: book.author,
+          cover: book.cover,
           count,
-          unitPrice: entry.data.price,
-          total: entry.data.price * count,
+          unitPrice: book.price,
+          total: book.price * count,
         }
   })
 

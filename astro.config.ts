@@ -14,6 +14,11 @@ const { SITE_URL } = loadEnv(process.env.SITE_URL ?? '', process.cwd(), '')
 const { VERCEL_URL } = loadEnv(process.env.VERCEL_URL ?? '', process.cwd(), '')
 const { ENV_NAME } = loadEnv(process.env.ENV_NAME ?? '', process.cwd(), '')
 
+const EXCLUDED_FROM_SITEMAP = ['/interni/', '/dekujeme']
+
+const isPublicPage = (page: string) =>
+  !EXCLUDED_FROM_SITEMAP.some((path) => page.includes(path))
+
 export default defineConfig({
   env: envConfig,
   site: SITE_URL ?? (VERCEL_URL ? `https://${VERCEL_URL}` : 'http://localhost:4321/'),
@@ -21,12 +26,12 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => !page.includes('/interni/') && !page.includes('/dekujeme'),
+      filter: (page) => isPublicPage(page),
     }),
     ENV_NAME === 'production' &&
       sitemap({
         lastmod: new Date(),
-        filter: (page) => !page.includes('/interni/') && !page.includes('/dekujeme'),
+        filter: (page) => isPublicPage(page),
       }),
     icon(),
     svelte(),

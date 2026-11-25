@@ -58,6 +58,7 @@ const summaryItemSchema = z.object({
   slug: text(),
   title: text(),
   author: text(),
+  cover: z.string(),
   count: z.number().int(),
   unitPrice: z.number(),
   total: z.number(),

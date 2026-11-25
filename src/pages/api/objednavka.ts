@@ -16,10 +16,35 @@ const json = (body: object, status: number) =>
     },
   })
 
-const readBody = async (request: Request): Promise<unknown> =>
-  request.json().catch(() => undefined)
+const MAX_BODY_LENGTH = 20_000
+
+const isTooLarge = (request: Request) =>
+  Number(request.headers.get('content-length') ?? 0) > MAX_BODY_LENGTH
+
+const readBody = async (request: Request): Promise<unknown> => {
+  const text = await request.text().catch(() => '')
+  if (text.length > MAX_BODY_LENGTH) {
+    return undefined
+  }
+  try {
+    return JSON.parse(text)
+  } catch {
+    return undefined
+  }
+}
 
 export const POST: APIRoute = async ({ request }) => {
+  if (!(request.headers.get('content-type') ?? '').startsWith('application/json')) {
+    return json(
+      { error: 'unsupported-media-type', message: 'Nepodporovaný formát.' },
+      415,
+    )
+  }
+
+  if (isTooLarge(request)) {
+    return json({ error: 'too-large', message: 'Objednávka je příliš velká.' }, 413)
+  }
+
   const parsed = orderRequestSchema.safeParse(await readBody(request))
 
   if (!parsed.success) {
