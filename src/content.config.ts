@@ -46,6 +46,7 @@ const book = defineCollection({
         coverImage: image().optional(),
         coverTop: image().optional(),
         samplePages: z.array(image()).optional(),
+        sampleStartsWithSpread: z.boolean().optional(),
         authors: z.array(
           z.object({
             author: z.string(),

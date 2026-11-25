@@ -23,7 +23,6 @@ bgColor: '#98bcae'
 releaseNote: vyjde v prosinci 2026
 claim: "Ben a jeho dědeček prostě milují společné pozorování velryb, když stojí na útesu u moře."
 samplePages:
-  - ../images/books/ben-a-velryby/preview/Ben_K2_03_blank.png
   - ../images/books/ben-a-velryby/preview/Ben_K2_04.png
   - ../images/books/ben-a-velryby/preview/Ben_K2_05.png
   - ../images/books/ben-a-velryby/preview/Ben_K2_06.png
@@ -36,6 +35,7 @@ samplePages:
   - ../images/books/ben-a-velryby/preview/Ben_K2_13.png
   - ../images/books/ben-a-velryby/preview/Ben_K2_14.png
   - ../images/books/ben-a-velryby/preview/Ben_K2_15.png
+sampleStartsWithSpread: true
 ---
 
 

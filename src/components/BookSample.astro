@@ -7,11 +7,12 @@ import BookFlip from '@/components/BookFlip.svelte'
 type Props = {
   pages: ImageMetadata[]
   title: string
+  startsWithSpread?: boolean
 }
 
 const SAMPLE_PAGE_WIDTH = 1100
 
-const { pages, title } = Astro.props
+const { pages, title, startsWithSpread = false } = Astro.props
 
 const optimizedPages = await Promise.all(
   pages.map(async (page) => {
@@ -26,4 +27,9 @@ const optimizedPages = await Promise.all(
 )
 ---
 
-<BookFlip client:visible pages={optimizedPages} title={title} />
+<BookFlip
+  client:visible
+  pages={optimizedPages}
+  title={title}
+  startsWithSpread={startsWithSpread}
+/>

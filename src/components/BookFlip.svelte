@@ -6,6 +6,7 @@
 
   export let pages: Page[]
   export let title: string
+  export let startsWithSpread = false
 
   const TURN_MS = 700
   const SWIPE_THRESHOLD_PX = 40
@@ -19,12 +20,13 @@
   let dragStartX: number | undefined
   let root: HTMLDivElement | undefined
 
-  const leftOf = (spread: number) => pages[spread * 2 - 1]
-  const rightOf = (spread: number) => pages[spread * 2]
+  $: shift = startsWithSpread ? 1 : 0
+  $: leftOf = (spread: number) => pages[spread * 2 - 1 + shift]
+  $: rightOf = (spread: number) => pages[spread * 2 + shift]
   const pageNumber = (page: Page) => pages.indexOf(page) + 1
 
   $: ratio = pages[0] ? pages[0].width / pages[0].height : 2 / 3
-  $: maxPosition = single ? pages.length - 1 : Math.floor(pages.length / 2)
+  $: maxPosition = single ? pages.length - 1 : Math.floor((pages.length - shift) / 2)
   $: target = turning ? position + TURN_DELTA[turning] : position
   $: baseLeft = leftOf(turning === 'prev' ? target : position)
   $: baseRight = rightOf(turning === 'next' ? target : position)
@@ -33,9 +35,9 @@
   $: angle = flipped === (turning === 'next') ? -180 : 0
   $: label = single
     ? `strana ${String(position + 1)} z ${String(pages.length)}`
-    : position === 0
+    : position === 0 && !startsWithSpread
       ? `strana 1 z ${String(pages.length)}`
-      : `strany ${String(position * 2)}–${String(Math.min(position * 2 + 1, pages.length))} z ${String(pages.length)}`
+      : `strany ${String(position * 2 + shift)}–${String(Math.min(position * 2 + shift + 1, pages.length))} z ${String(pages.length)}`
 
   const turn = async (direction: Direction) => {
     const next = position + TURN_DELTA[direction]

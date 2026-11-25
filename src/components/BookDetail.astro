@@ -433,7 +433,11 @@ const sideSlug = [
       isNonEmptyArray(samplePages) && (
         <PrintSheet edge={getEdge('sample')} regs={['r']} bare>
           <div class="px-[0.9rem] py-[2.2rem] min-md:px-[2.6rem] min-md:py-[2.5rem]">
-            <BookSample pages={samplePages} title={book.title} />
+            <BookSample
+              pages={samplePages}
+              title={book.title}
+              startsWithSpread={book.sampleStartsWithSpread}
+            />
           </div>
         </PrintSheet>
       )
