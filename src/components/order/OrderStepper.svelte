@@ -14,7 +14,7 @@
   const STEP_COLORS = {
     1: 'bg-ink-blue',
     2: 'bg-ink-magenta',
-    3: 'bg-ink-green',
+    3: 'bg-[color-mix(in_srgb,var(--color-ink-green),black_30%)]',
   } as const satisfies Record<OrderStep, string>
 
   const RULER =

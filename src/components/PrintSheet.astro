@@ -14,6 +14,7 @@ type Props = {
   revealSideSlugOnScroll?: boolean
   cutAtBottom?: boolean
   bare?: boolean
+  wide?: boolean
   class?: HTMLAttributes<'section'>['class']
 }
 
@@ -67,11 +68,19 @@ const {
   revealSideSlugOnScroll = false,
   cutAtBottom = false,
   bare = false,
+  wide = false,
   class: className,
 } = Astro.props
 ---
 
-<div class="mx-auto w-full max-w-[64rem] px-[5rem] max-md:px-9">
+<div
+  class:list={[
+    'mx-auto',
+    wide
+      ? 'w-[calc(var(--slide-size)-var(--slide-spacing))]'
+      : 'w-full max-w-[64rem] px-[5rem] max-md:px-9',
+  ]}
+>
   <section
     class:list={[
       'text-brand-second-300/60 relative',

@@ -82,7 +82,7 @@ const validateEmail = (value: string) =>
 
 const validatePhone = (value: string) =>
   value.trim() === ''
-    ? 'Vyplňte telefon.'
+    ? undefined
     : value.replace(/\D/g, '').length >= MIN_PHONE_DIGITS
       ? undefined
       : 'Telefon má mít alespoň devět číslic.'
@@ -107,7 +107,7 @@ const validateDic = (value: string) =>
     : 'DIČ zadejte ve tvaru CZ12345678.'
 
 export const requiresAddress = (state: Pick<OrderState, 'delivery' | 'customer'>) =>
-  state.customer.isCompany ||
+  state.customer.needsInvoice ||
   (state.delivery !== null && DELIVERY_OPTIONS[state.delivery].needsAddress)
 
 const toErrors = (checks: readonly FieldCheck[]): FieldErrors =>
@@ -161,12 +161,18 @@ const validateCustomer = (customer: Customer, needsAddress: boolean): FieldError
     ['postcode', needsAddress ? validatePostcode(customer.postcode) : undefined],
     [
       'companyName',
-      customer.isCompany
+      customer.needsInvoice && customer.isCompany
         ? validateRequired(customer.companyName, 'Vyplňte název firmy.')
         : undefined,
     ],
-    ['ico', customer.isCompany ? validateIco(customer.ico) : undefined],
-    ['dic', customer.isCompany ? validateDic(customer.dic) : undefined],
+    [
+      'ico',
+      customer.needsInvoice && customer.isCompany ? validateIco(customer.ico) : undefined,
+    ],
+    [
+      'dic',
+      customer.needsInvoice && customer.isCompany ? validateDic(customer.dic) : undefined,
+    ],
     [
       'consentTerms',
       customer.consentTerms

@@ -3,7 +3,6 @@ import { isOneOf } from 'narrowland'
 
 import {
   DELIVERY_IDS,
-  DELIVERY_OPTIONS,
   isPaymentAvailable,
   PAYMENT_IDS,
   PICKUP_IDS,
@@ -19,6 +18,7 @@ export type OrderStep = (typeof ORDER_STEPS)[number]
 export type BalikovnaPoint = {
   id: string
   name: string
+  address?: string
 }
 
 export type Customer = {
@@ -29,6 +29,7 @@ export type Customer = {
   street: string
   city: string
   postcode: string
+  needsInvoice: boolean
   isCompany: boolean
   companyName: string
   ico: string
@@ -61,6 +62,7 @@ const TEXT_FIELDS = [
 ] as const satisfies readonly (keyof Customer)[]
 
 const FLAG_FIELDS = [
+  'needsInvoice',
   'isCompany',
   'consentTerms',
   'consentPrivacy',
@@ -79,6 +81,7 @@ const initialState: OrderState = {
     street: '',
     city: '',
     postcode: '',
+    needsInvoice: false,
     isCompany: false,
     companyName: '',
     ico: '',
@@ -102,7 +105,10 @@ const isPaymentId = (value: unknown): value is PaymentId => isOneOf(value, PAYME
 const isPickupId = (value: unknown): value is PickupId => isOneOf(value, PICKUP_IDS)
 
 const isBalikovnaPoint = (value: unknown): value is BalikovnaPoint =>
-  isRecord(value) && typeof value.id === 'string' && typeof value.name === 'string'
+  isRecord(value) &&
+  typeof value.id === 'string' &&
+  typeof value.name === 'string' &&
+  (value.address === undefined || typeof value.address === 'string')
 
 const isCustomer = (value: unknown): value is Customer =>
   isRecord(value) &&
@@ -133,12 +139,9 @@ export const order = persistentAtom<OrderState>('order:v1', initialState, {
 
 export const setDelivery = (delivery: DeliveryId) => {
   const current = order.get()
-  const option = DELIVERY_OPTIONS[delivery]
   order.set({
     ...current,
     delivery,
-    pickupLocation: option.needsPickupLocation ? current.pickupLocation : null,
-    balikovnaPoint: option.needsPoint ? current.balikovnaPoint : null,
     payment:
       current.payment !== null && isPaymentAvailable(current.payment, delivery)
         ? current.payment

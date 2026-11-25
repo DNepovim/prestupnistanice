@@ -15,7 +15,7 @@
   const MAX_COUNT = 99
 
   const QUANTITY_BUTTON =
-    'border-(--step) text-(--step-ink) hover:bg-[color-mix(in_srgb,var(--step),white_90%)] flex size-9 items-center justify-center border bg-white text-lg leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) disabled:cursor-not-allowed disabled:border-(--step)/40 disabled:text-gray-500 disabled:hover:bg-white motion-reduce:transition-none'
+    'border-(--step) text-(--step-ink) hover:bg-[color-mix(in_srgb,var(--step),white_90%)] flex size-7 items-center justify-center border bg-white text-base leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) disabled:cursor-not-allowed disabled:border-(--step)/40 disabled:text-gray-500 disabled:hover:bg-white motion-reduce:transition-none'
 </script>
 
 <ul class="flex flex-col gap-8 px-2 pt-3">
@@ -57,7 +57,7 @@
             }}>−</button
           >
           <output
-            class="w-10 text-center text-base text-black lining-nums"
+            class="w-8 text-center text-base text-black lining-nums"
             aria-live="polite"
           >
             {count}
@@ -86,7 +86,7 @@
       </div>
       <button
         type="button"
-        class="border-(--step) text-(--step-ink) hover:bg-(--step-ink) focus-visible:bg-(--step-ink) absolute top-0 right-0 z-10 flex size-8 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border bg-white transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) motion-reduce:transition-none"
+        class="border-(--step) text-(--step-ink) hover:bg-(--step-ink) focus-visible:bg-(--step-ink) absolute top-0 right-0 z-10 flex size-6 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border bg-white transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--step) motion-reduce:transition-none"
         aria-label={`${tp('Odebrat')}: ${book.title}`}
         onclick={() => {
           removeFromCart(book.slug)
@@ -94,7 +94,7 @@
       >
         <svg
           viewBox="0 0 16 16"
-          class="size-3.5"
+          class="size-3"
           fill="none"
           stroke="currentColor"
           stroke-width="1.6"

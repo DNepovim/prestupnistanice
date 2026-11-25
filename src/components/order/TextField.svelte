@@ -32,9 +32,17 @@
     oninput,
     onblur,
   }: Props = $props()
+
+  let lastError = $state('')
+
+  $effect(() => {
+    if (error !== undefined) {
+      lastError = error
+    }
+  })
 </script>
 
-<div class={['flex flex-col gap-2', className]}>
+<div class={['flex flex-col gap-1.5', className]}>
   <label class={FIELD_LABEL} for={`f-${name}`}>
     {tp(label)}
     {#if optional}
@@ -56,7 +64,17 @@
     }}
     {onblur}
   />
-  {#if error !== undefined}
-    <p id={`e-${name}`} class={FIELD_ERROR}>{tp(error)}</p>
-  {/if}
+  <div class="relative h-[2.2rem] overflow-hidden">
+    <p
+      id={`e-${name}`}
+      class={[
+        FIELD_ERROR,
+        'absolute inset-x-0 top-0 transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none',
+        error === undefined ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100',
+      ]}
+      aria-hidden={error === undefined ? 'true' : undefined}
+    >
+      {tp(error ?? lastError)}
+    </p>
+  </div>
 </div>

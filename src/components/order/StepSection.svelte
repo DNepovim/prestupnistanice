@@ -6,7 +6,7 @@
 
   import { STEP_TITLES } from './fieldLabels'
   import { STEP_VARS } from './stepVars'
-  import { PRIMARY_BUTTON, STEP_HEADING } from './styles'
+  import { OUTLINE_BUTTON, STEP_HEADING } from './styles'
 
   type Props = {
     step: OrderStep
@@ -38,7 +38,7 @@
   {@render children()}
   {#if continueLabel !== undefined && oncontinue !== undefined}
     <div class="mt-8 flex justify-center">
-      <button type="button" class={PRIMARY_BUTTON} onclick={oncontinue}>
+      <button type="button" class={OUTLINE_BUTTON} onclick={oncontinue}>
         {tp(continueLabel)}
       </button>
     </div>

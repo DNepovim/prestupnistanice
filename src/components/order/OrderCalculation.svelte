@@ -38,9 +38,11 @@
     $order.payment === null ? 'Platba nevybrána' : PAYMENT_OPTIONS[$order.payment].name,
   )
   const handover = $derived(
-    $order.pickupLocation === null
-      ? $order.balikovnaPoint?.name
-      : PICKUP_LOCATIONS[$order.pickupLocation],
+    $order.delivery === 'osobni-prevzeti' && $order.pickupLocation !== null
+      ? PICKUP_LOCATIONS[$order.pickupLocation]
+      : $order.delivery === 'balikovna'
+        ? $order.balikovnaPoint?.name
+        : undefined,
   )
   const customer = $derived($order.customer)
   const contactLines = $derived(
@@ -51,7 +53,7 @@
       [customer.street, `${customer.postcode} ${customer.city}`.trim()]
         .filter((part) => part.trim() !== '')
         .join(', '),
-      customer.isCompany
+      customer.needsInvoice && customer.isCompany
         ? [customer.companyName, customer.ico === '' ? '' : `IČO ${customer.ico}`]
             .filter((part) => part !== '')
             .join(', ')

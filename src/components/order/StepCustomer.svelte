@@ -24,7 +24,7 @@
   const textProps = (
     key: Exclude<
       keyof Customer,
-      'isCompany' | 'consentTerms' | 'consentPrivacy' | 'note'
+      'needsInvoice' | 'isCompany' | 'consentTerms' | 'consentPrivacy' | 'note'
     > &
       FieldKey,
   ) => ({
@@ -54,10 +54,45 @@
     <TextField
       {...textProps('phone')}
       label="Telefon"
+      optional
       type="tel"
       autocomplete="tel"
       inputmode="tel"
     />
+  </div>
+
+  <div class="flex flex-wrap gap-x-8 gap-y-3 pt-8">
+    <label class={CHECKBOX_ROW}>
+      <input
+        type="checkbox"
+        class={CHECKBOX}
+        checked={$order.customer.needsInvoice}
+        onchange={(event) => {
+          updateCustomer({
+            needsInvoice: event.currentTarget.checked,
+            isCompany: event.currentTarget.checked && $order.customer.isCompany,
+          })
+        }}
+      />
+      {tp('Potřebuji fakturu')}
+    </label>
+    <label
+      class={[
+        CHECKBOX_ROW,
+        !$order.customer.needsInvoice && 'cursor-not-allowed opacity-50',
+      ]}
+    >
+      <input
+        type="checkbox"
+        class={CHECKBOX}
+        checked={$order.customer.isCompany}
+        disabled={!$order.customer.needsInvoice}
+        onchange={(event) => {
+          updateCustomer({ isCompany: event.currentTarget.checked })
+        }}
+      />
+      {tp('Nakupuji na firmu')}
+    </label>
   </div>
 
   <Reveal open={needsAddress}>
@@ -79,31 +114,18 @@
     </fieldset>
   </Reveal>
 
-  <div class="flex flex-col pt-8">
-    <label class={CHECKBOX_ROW}>
-      <input
-        type="checkbox"
-        class={CHECKBOX}
-        checked={$order.customer.isCompany}
-        onchange={(event) => {
-          updateCustomer({ isCompany: event.currentTarget.checked })
-        }}
+  <Reveal open={$order.customer.needsInvoice && $order.customer.isCompany}>
+    <div class="grid gap-x-4 gap-y-5 pt-8 min-sm:grid-cols-2">
+      <TextField
+        {...textProps('companyName')}
+        label="Název firmy"
+        autocomplete="organization"
+        class="min-sm:col-span-2"
       />
-      {tp('Nakupuji na firmu')}
-    </label>
-    <Reveal open={$order.customer.isCompany}>
-      <div class="grid pt-5 gap-x-4 gap-y-5 min-sm:grid-cols-2">
-        <TextField
-          {...textProps('companyName')}
-          label="Název firmy"
-          autocomplete="organization"
-          class="min-sm:col-span-2"
-        />
-        <TextField {...textProps('ico')} label="IČO" inputmode="numeric" />
-        <TextField {...textProps('dic')} label="DIČ" optional />
-      </div>
-    </Reveal>
-  </div>
+      <TextField {...textProps('ico')} label="IČO" inputmode="numeric" />
+      <TextField {...textProps('dic')} label="DIČ" optional />
+    </div>
+  </Reveal>
 
   <div class="flex flex-col gap-2 pt-8">
     <label class={FIELD_LABEL} for="f-note">
