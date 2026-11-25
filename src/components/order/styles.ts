@@ -26,3 +26,6 @@ export const SMALL_OUTLINE_BUTTON =
 
 export const ERROR_BOX =
   'font-alt border-error text-error border bg-[color-mix(in_srgb,var(--color-error),white_94%)] px-3 py-2 text-center text-[0.8rem] leading-snug'
+
+export const SMALL_BLUE_OUTLINE_BUTTON =
+  'font-alt inline-block border border-ink-blue text-ink-blue hover:bg-[color-mix(in_srgb,var(--color-ink-blue),white_90%)] bg-transparent px-3 py-1.5 text-xs font-semibold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-blue motion-reduce:transition-none'

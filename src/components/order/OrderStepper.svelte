@@ -3,6 +3,7 @@
   import { tp } from '@/utils/tp'
 
   import { STEP_TITLES } from './fieldLabels'
+  import { STEP_VARS } from './stepVars'
 
   type Props = {
     active: OrderStep
@@ -26,13 +27,13 @@
   class="bg-white max-md:sticky max-md:top-0 max-md:z-20 max-md:border-b max-md:border-brand-first-300/60 min-md:sticky min-md:top-6 min-md:self-start"
 >
   <ol
-    class="text-brand-first-500 grid grid-cols-3 min-md:h-[min(27rem,calc(100svh-3rem))] min-md:grid-cols-1 min-md:grid-rows-3"
+    class="text-brand-first-500 grid grid-cols-3 min-md:h-[min(36rem,calc(100svh-3rem))] min-md:grid-cols-1 min-md:grid-rows-3"
   >
     {#each ORDER_STEPS as step (step)}
-      <li class={['relative min-h-0', RULER]}>
+      <li class={['relative min-h-0', RULER, STEP_VARS[step]]}>
         <button
           type="button"
-          class="flex size-full min-h-0 items-center gap-2 py-2 text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-black max-md:justify-center min-md:flex-col min-md:items-start min-md:py-1 min-md:pl-6"
+          class="flex size-full min-h-0 items-center gap-2 py-2 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-black max-md:justify-center min-md:flex-col min-md:items-start min-md:py-1 min-md:pl-6"
           aria-current={step === active ? 'step' : undefined}
           onclick={() => {
             onselect(step)
@@ -40,19 +41,16 @@
         >
           <span
             class={[
-              'font-head text-[1.3rem] leading-none font-extrabold oldstyle-nums',
-              step === active ? 'text-black' : 'text-gray-600',
+              'font-alt flex min-h-0 items-baseline gap-2 overflow-hidden text-[0.72rem] leading-none tracking-[0.05em] whitespace-nowrap uppercase min-md:[writing-mode:vertical-rl]',
+              step === active ? 'font-bold text-(--step-ink)' : 'text-gray-600',
             ]}
           >
-            {step}
-          </span>
-          <span
-            class={[
-              'font-alt min-h-0 overflow-hidden text-[0.62rem] leading-none tracking-[0.06em] text-ellipsis whitespace-nowrap uppercase max-md:sr-only min-md:rotate-180 min-md:[writing-mode:vertical-rl]',
-              step === active ? 'font-bold text-black' : 'text-gray-700',
-            ]}
-          >
-            {tp(STEP_TITLES[step])}
+            <span
+              class="font-head text-[1.2rem] font-extrabold tracking-normal oldstyle-nums"
+            >
+              {step}
+            </span>
+            <span class="max-md:sr-only">{tp(STEP_TITLES[step])}</span>
           </span>
         </button>
         <span

@@ -29,9 +29,9 @@
   import {
     ERROR_BOX,
     FIELD_LABEL,
+    SMALL_BLUE_OUTLINE_BUTTON,
     SMALL_OUTLINE_BUTTON,
     SMALL_PRIMARY_BUTTON,
-    TEXT_BUTTON,
   } from './styles'
 
   type Props = {
@@ -175,7 +175,7 @@
                   href={$order.balikovnaPoint.detailUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class={TEXT_BUTTON}
+                  class={SMALL_BLUE_OUTLINE_BUTTON}
                 >
                   {tp('Detail výdejního místa')}
                   <span class="sr-only">({tp('otevře se v novém okně')})</span>

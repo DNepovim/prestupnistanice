@@ -20,7 +20,7 @@
   {#each lines as { book, count, total }, index (book.slug)}
     <li
       style={`--c1:${book.color}`}
-      class="group/item relative grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 px-3 py-4 transition-colors focus-within:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] min-sm:grid-cols-[4.5rem_minmax(0,1fr)_auto] motion-reduce:transition-none"
+      class="group/item relative grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 px-3 py-4 not-first:border-t not-first:border-dashed not-first:border-gray-300 transition-colors focus-within:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] hover:bg-[color-mix(in_srgb,var(--c1)_9%,transparent)] min-sm:grid-cols-[4.5rem_minmax(0,1fr)_auto] motion-reduce:transition-none"
     >
       <ItemMarks isFirst={index === 0} isLast={index === lines.length - 1} />
       <img
@@ -55,7 +55,7 @@
       </div>
       <button
         type="button"
-        class="border-error text-error hover:bg-error focus-visible:bg-error focus-visible:outline-error absolute top-0 right-0 z-10 flex size-6 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border bg-white text-[0.8rem] transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
+        class="border-gray-300 text-gray-500 hover:border-error hover:bg-error focus-visible:border-error focus-visible:bg-error focus-visible:outline-error absolute top-0 right-0 z-10 flex size-6 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border bg-white text-[0.8rem] transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
         aria-label={`${tp('Odebrat')}: ${book.title}`}
         onclick={() => {
           removeFromCart(book.slug)

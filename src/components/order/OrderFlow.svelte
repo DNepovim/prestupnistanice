@@ -137,7 +137,7 @@
   <OrderEmpty />
 {:else}
   <div
-    class="flex flex-col gap-x-8 gap-y-8 min-md:grid min-md:grid-cols-[3.2rem_minmax(0,1fr)] min-lg:grid-cols-[3.2rem_minmax(0,1fr)_16rem]"
+    class="flex flex-col gap-x-8 gap-y-8 min-md:grid min-md:grid-cols-[3.8rem_minmax(0,1fr)] min-lg:grid-cols-[3.8rem_minmax(0,1fr)_16rem]"
   >
     <OrderStepper
       active={activeStep}
@@ -172,7 +172,6 @@
 
     <div class="min-md:col-span-2 min-lg:col-span-1">
       <OrderCalculation
-        {lines}
         {totals}
         {issues}
         {isReady}

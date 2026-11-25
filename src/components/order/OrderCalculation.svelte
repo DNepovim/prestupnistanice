@@ -2,8 +2,9 @@
   import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, PICKUP_LOCATIONS } from '@/configs/shipping'
   import { order, type OrderStep } from '@/stores/order'
   import { formatPrice } from '@/utils/formatPrice'
-  import type { OrderLine, OrderTotals } from '@/utils/order/totals'
+  import type { OrderTotals } from '@/utils/order/totals'
   import type { FieldKey } from '@/utils/order/validation'
+  import { pluralize } from '@/utils/pluralize'
   import { tp } from '@/utils/tp'
 
   import { FIELD_LABELS } from './fieldLabels'
@@ -16,7 +17,6 @@
   }
 
   type Props = {
-    lines: OrderLine[]
     totals: OrderTotals
     issues: Issue[]
     isReady: boolean
@@ -25,17 +25,17 @@
     onfix: (key: FieldKey) => void
   }
 
-  const { lines, totals, issues, isReady, step, onsubmit, onfix }: Props = $props()
+  const { totals, issues, isReady, step, onsubmit, onfix }: Props = $props()
+
+  const BOOK_UNITS = ['kniha', 'knihy', 'knih'] as const
 
   const COLOR_TRANSITION = 'transition-colors duration-500 motion-reduce:transition-none'
 
   const deliveryName = $derived(
-    $order.delivery === null
-      ? 'Doprava nevybrána'
-      : DELIVERY_OPTIONS[$order.delivery].name,
+    $order.delivery === null ? 'Zatím nevybráno' : DELIVERY_OPTIONS[$order.delivery].name,
   )
   const paymentName = $derived(
-    $order.payment === null ? 'Platba nevybrána' : PAYMENT_OPTIONS[$order.payment].name,
+    $order.payment === null ? 'Zatím nevybráno' : PAYMENT_OPTIONS[$order.payment].name,
   )
   const handover = $derived(
     $order.delivery === 'osobni-prevzeti' && $order.pickupLocation !== null
@@ -82,40 +82,38 @@
     {tp('Souhrn')}
   </h2>
 
-  <ul class="font-alt flex flex-col gap-2 text-[0.8rem] leading-[1.3]">
-    {#each lines as { book, count, total } (book.slug)}
-      <li class="flex items-baseline gap-2">
-        <span class="min-w-0">{tp(book.title)} × {count}</span>
+  <dl class="font-alt flex flex-col gap-3 text-[0.8rem] leading-[1.3]">
+    <div class="flex flex-col gap-1">
+      <div class="flex items-baseline gap-2">
+        <dt class="min-w-0">{tp(pluralize(totals.booksCount, BOOK_UNITS))}</dt>
         <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
-        <b class="font-head text-[0.9rem] whitespace-nowrap lining-nums"
-          >{formatPrice(total)}</b
-        >
-      </li>
-    {/each}
-  </ul>
-
-  <dl
-    class={[
-      'font-alt flex flex-col gap-2 border-t border-dashed border-(--step)/60 pt-4 text-[0.8rem] leading-[1.3]',
-      COLOR_TRANSITION,
-    ]}
-  >
-    <div class="flex items-baseline gap-2">
-      <dt class="min-w-0">{tp(deliveryName)}</dt>
-      <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
-      <dd class="font-head text-[0.9rem] font-bold whitespace-nowrap lining-nums">
-        {formatPrice(totals.deliveryPrice)}
-      </dd>
+        <dd class="font-head text-[0.9rem] font-bold whitespace-nowrap lining-nums">
+          {formatPrice(totals.booksTotal)}
+        </dd>
+      </div>
     </div>
-    {#if handover !== undefined}
-      <p class="text-[0.75rem] text-gray-700">{tp(handover)}</p>
-    {/if}
-    <div class="flex items-baseline gap-2">
-      <dt class="min-w-0">{tp(paymentName)}</dt>
-      <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
-      <dd class="font-head text-[0.9rem] font-bold whitespace-nowrap lining-nums">
-        {formatPrice(totals.paymentPrice)}
-      </dd>
+    <div class="flex flex-col gap-1">
+      <div class="flex items-baseline gap-2">
+        <dt class="min-w-0">{tp('Doprava')}</dt>
+        <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
+        <dd class="font-head text-[0.9rem] font-bold whitespace-nowrap lining-nums">
+          {formatPrice(totals.deliveryPrice)}
+        </dd>
+      </div>
+      <p class="text-[0.75rem] text-gray-700">{tp(deliveryName)}</p>
+      {#if handover !== undefined}
+        <p class="text-[0.75rem] text-gray-700">{tp(handover)}</p>
+      {/if}
+    </div>
+    <div class="flex flex-col gap-1">
+      <div class="flex items-baseline gap-2">
+        <dt class="min-w-0">{tp('Platba')}</dt>
+        <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
+        <dd class="font-head text-[0.9rem] font-bold whitespace-nowrap lining-nums">
+          {formatPrice(totals.paymentPrice)}
+        </dd>
+      </div>
+      <p class="text-[0.75rem] text-gray-700">{tp(paymentName)}</p>
     </div>
     <div
       class={[
@@ -123,7 +121,7 @@
         COLOR_TRANSITION,
       ]}
     >
-      <dt class="min-w-0">{tp('Celkem k úhradě')}</dt>
+      <dt class="min-w-0">{tp('Celkem')}</dt>
       <i class={[leader, COLOR_TRANSITION]} aria-hidden="true"></i>
       <dd
         class="font-head text-[1.4rem] font-extrabold whitespace-nowrap text-black lining-nums"

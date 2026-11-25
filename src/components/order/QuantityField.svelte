@@ -44,7 +44,7 @@
     autocomplete="off"
     maxlength="2"
     aria-label={`${tp('Počet kusů')}: ${title}`}
-    class="w-8 bg-transparent text-center text-sm text-black lining-nums focus-visible:outline-2 focus-visible:outline-(--step)"
+    class="mx-1 w-8 bg-transparent text-right text-sm text-black lining-nums focus-visible:outline-2 focus-visible:outline-(--step)"
     value={draft}
     oninput={(event) => {
       draft = event.currentTarget.value.replace(/\D/g, '')
