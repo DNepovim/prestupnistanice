@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/knihy/ben-a-velryba",
+      "destination": "/knihy/ben-a-velryby",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

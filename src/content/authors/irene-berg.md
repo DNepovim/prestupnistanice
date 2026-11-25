@@ -9,7 +9,7 @@ firstnameSeventh: Irene
 surnameSeventh: Berg
 gender: female
 image: ../images/authors/berg.jpg
-claim: 'Jihoafrická ilustrátorka a hudebnice, pro niž je Ben a velryba prvotinou.'
+claim: 'Jihoafrická ilustrátorka a hudebnice, pro niž je Ben a velryby prvotinou.'
 ---
 
 Irene Berg se narodila a vyrostla v Kapském Městě v Jižní Africe. Po studiu hudby na Univerzitě ve Stellenboschu a na Vysoké škole hudby a dramatického umění ve Frankfurtu nad Mohanem absolvovala dálkové studium grafického designu. „Ben a velryby“ je její první obrázková kniha.
