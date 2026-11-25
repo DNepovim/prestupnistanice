@@ -64,7 +64,7 @@
     }}
     {onblur}
   />
-  <div class="relative min-h-[2.2rem] overflow-hidden">
+  <div class="relative min-h-[1.3rem] overflow-hidden">
     <p
       id={`e-${name}`}
       class={[

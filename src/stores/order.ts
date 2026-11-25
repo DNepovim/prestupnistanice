@@ -2,10 +2,12 @@ import { persistentAtom } from '@nanostores/persistent'
 import { isOneOf } from 'narrowland'
 
 import {
+  BALIKOVNA_DETAIL_URL,
   DELIVERY_IDS,
   isPaymentAvailable,
   PAYMENT_IDS,
   PICKUP_IDS,
+  POSTA_DETAIL_URL,
   type DeliveryId,
   type PaymentId,
   type PickupId,
@@ -19,6 +21,7 @@ export type BalikovnaPoint = {
   id: string
   name: string
   address?: string
+  detailUrl?: string
 }
 
 export type Customer = {
@@ -104,11 +107,16 @@ const isPaymentId = (value: unknown): value is PaymentId => isOneOf(value, PAYME
 
 const isPickupId = (value: unknown): value is PickupId => isOneOf(value, PICKUP_IDS)
 
+const isDetailUrl = (value: unknown) =>
+  typeof value === 'string' &&
+  (value.startsWith(BALIKOVNA_DETAIL_URL) || value.startsWith(POSTA_DETAIL_URL))
+
 const isBalikovnaPoint = (value: unknown): value is BalikovnaPoint =>
   isRecord(value) &&
   typeof value.id === 'string' &&
   typeof value.name === 'string' &&
-  (value.address === undefined || typeof value.address === 'string')
+  (value.address === undefined || typeof value.address === 'string') &&
+  (value.detailUrl === undefined || isDetailUrl(value.detailUrl))
 
 const isCustomer = (value: unknown): value is Customer =>
   isRecord(value) &&

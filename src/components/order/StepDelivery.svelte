@@ -31,6 +31,7 @@
     FIELD_LABEL,
     SMALL_OUTLINE_BUTTON,
     SMALL_PRIMARY_BUTTON,
+    TEXT_BUTTON,
   } from './styles'
 
   type Props = {
@@ -131,7 +132,7 @@
             <div class="flex min-w-0 flex-1 items-start gap-3">
               <iconify-icon
                 icon="ph:map-pin-fill"
-                class="text-ink-red mt-0.5 shrink-0 text-2xl"
+                class="text-ink-blue mt-0.5 shrink-0 text-2xl"
                 aria-hidden="true"
               ></iconify-icon>
               <p
@@ -155,17 +156,32 @@
                 {/if}
               </p>
             </div>
-            <button
-              type="button"
-              class={[
-                $order.balikovnaPoint ? SMALL_OUTLINE_BUTTON : SMALL_PRIMARY_BUTTON,
-                'shrink-0',
-              ]}
-              aria-haspopup="dialog"
-              onclick={openWidget}
-            >
-              {$order.balikovnaPoint ? tp('Změnit výdejní místo') : tp('Vybrat výdejnu')}
-            </button>
+            <div class="flex shrink-0 flex-col items-end gap-2">
+              <button
+                type="button"
+                class={[
+                  $order.balikovnaPoint ? SMALL_OUTLINE_BUTTON : SMALL_PRIMARY_BUTTON,
+                  'shrink-0',
+                ]}
+                aria-haspopup="dialog"
+                onclick={openWidget}
+              >
+                {$order.balikovnaPoint
+                  ? tp('Změnit výdejní místo')
+                  : tp('Vybrat výdejnu')}
+              </button>
+              {#if $order.balikovnaPoint?.detailUrl !== undefined}
+                <a
+                  href={$order.balikovnaPoint.detailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={TEXT_BUTTON}
+                >
+                  {tp('Detail výdejního místa')}
+                  <span class="sr-only">({tp('otevře se v novém okně')})</span>
+                </a>
+              {/if}
+            </div>
           </div>
         </Reveal>
       {/if}
@@ -205,7 +221,7 @@
               {/each}
             </div>
             <p class="font-alt text-[0.8rem] leading-snug text-gray-700 italic">
-              {tp('Na čase převzetí se s vámi domluvíme.')}
+              {tp('Na termínu předání se domluvíme po odeslání objednávky.')}
             </p>
           </fieldset>
         </Reveal>
@@ -336,7 +352,7 @@
           >
             <iconify-icon
               icon="ph:map-pin-fill"
-              class="text-ink-red absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl"
+              class="text-ink-blue absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl"
             ></iconify-icon>
           </div>
         </div>

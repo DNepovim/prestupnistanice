@@ -1,5 +1,6 @@
 <script lang="ts">
   import { order, updateCustomer, type Customer } from '@/stores/order'
+  import { formatPostcode } from '@/utils/order/format'
   import { requiresAddress, type FieldKey } from '@/utils/order/validation'
   import { tp } from '@/utils/tp'
 
@@ -29,10 +30,11 @@
       FieldKey,
   ) => ({
     name: key,
-    value: $order.customer[key],
+    value:
+      key === 'postcode' ? formatPostcode($order.customer[key]) : $order.customer[key],
     error: errorOf(key),
     oninput: (value: string) => {
-      updateCustomer({ [key]: value })
+      updateCustomer({ [key]: key === 'postcode' ? formatPostcode(value) : value })
     },
     onblur: () => {
       touch(key)
@@ -41,7 +43,7 @@
 </script>
 
 <div class="flex flex-col">
-  <div class="grid gap-x-4 gap-y-5 min-sm:grid-cols-2">
+  <div class="grid gap-x-4 gap-y-1 min-sm:grid-cols-2">
     <TextField {...textProps('firstname')} label="Jméno" autocomplete="given-name" />
     <TextField {...textProps('surname')} label="Příjmení" autocomplete="family-name" />
     <TextField
@@ -61,7 +63,7 @@
     />
   </div>
 
-  <div class="flex flex-wrap gap-x-8 gap-y-3 pt-8">
+  <div class="flex flex-wrap gap-x-8 gap-y-3 pt-4">
     <label class={CHECKBOX_ROW}>
       <input
         type="checkbox"
@@ -96,8 +98,8 @@
   </div>
 
   <Reveal open={needsAddress}>
-    <fieldset class="grid gap-x-4 gap-y-5 pt-8 min-sm:grid-cols-2">
-      <legend class={[FIELD_LABEL, 'mb-4']}>{tp('Adresa')}</legend>
+    <fieldset class="grid gap-x-4 gap-y-1 pt-4 min-sm:grid-cols-2">
+      <legend class="sr-only">{tp('Adresa')}</legend>
       <TextField
         {...textProps('street')}
         label="Ulice a číslo"
@@ -115,7 +117,7 @@
   </Reveal>
 
   <Reveal open={$order.customer.needsInvoice && $order.customer.isCompany}>
-    <div class="grid gap-x-4 gap-y-5 pt-8 min-sm:grid-cols-2">
+    <div class="grid gap-x-4 gap-y-1 pt-4 min-sm:grid-cols-2">
       <TextField
         {...textProps('companyName')}
         label="Název firmy"
@@ -127,7 +129,7 @@
     </div>
   </Reveal>
 
-  <div class="flex flex-col gap-2 pt-8">
+  <div class="flex flex-col gap-2 pt-4">
     <label class={FIELD_LABEL} for="f-note">
       {tp('Poznámka k objednávce')}
       <span class="text-gray-600 normal-case">({tp('nepovinné')})</span>

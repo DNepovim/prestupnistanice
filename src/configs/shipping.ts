@@ -92,3 +92,8 @@ export const getPaymentPrice = (payment: PaymentId | null) =>
 
 export const isPaymentAvailable = (payment: PaymentId, delivery: DeliveryId | null) =>
   delivery !== null && PAYMENT_OPTIONS[payment].deliveries.some((id) => id === delivery)
+
+export const BALIKOVNA_DETAIL_URL =
+  'https://www.balikovna.cz/cs/vyhledat-balikovnu/-/psc/'
+export const POSTA_DETAIL_URL =
+  'https://www.postaonline.cz/detail-pobocky/-/pobocky/detail/'
